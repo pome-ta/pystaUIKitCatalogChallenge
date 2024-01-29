@@ -1,3 +1,16 @@
+# 📝 2024/01/29
+
+
+[UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Base.lproj/Main.storyboard)](https://github.com/pome-ta/pystaUIKitCatalogChallenge/blob/main/UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Base.lproj/Main.storyboard)
+
+
+## `Main.storyboard`
+
+- Navigation Controller が2つ？
+  - 「UIKitCatalog」と書かれるView
+  - OutLine で出すView 
+
+
 # 📝 2024/01/28
 
 - `./captureSampleImage/` に、xcode 実行時のキャプチャを追加
