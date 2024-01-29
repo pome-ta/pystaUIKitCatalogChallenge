@@ -7,8 +7,9 @@
 ## `Main.storyboard`
 
 - Navigation Controller が2つ？
-  - 「UIKitCatalog」と書かれるView
-  - OutLine で出すView 
+  - View (Controller) ごとに分ける？
+    - 「UIKitCatalog」と書かれるView
+    - OutLine で出すView
 
 
 # 📝 2024/01/28
