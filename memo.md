@@ -1,13 +1,11 @@
 # 📝 2024/01/30
 
 - 最初から、左肩にViewController を生やすのか
-
+- xcode からディレクトリツリーのキャプチャーを取って載せようとしたけど、GitHub クライアントからうまくうpできなかったので断念
 
 # 📝 2024/01/29
 
-
 [UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Base.lproj/Main.storyboard](https://github.com/pome-ta/pystaUIKitCatalogChallenge/blob/main/UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Base.lproj/Main.storyboard)
-
 
 ## `Main.storyboard`
 
@@ -35,5 +33,3 @@
   - `.storyboard` か、、、`.xml` として読み解く
     - `navigationController` のカラーとかある
     - `.xml` をPython 的に処理する？
-
-
