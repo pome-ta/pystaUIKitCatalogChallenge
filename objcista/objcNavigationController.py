@@ -1,9 +1,7 @@
 from objc_util import ObjCClass, ObjCInstance, create_objc_class, on_main_thread
 
+from ._classes import *
 from ._controller import _Controller
-
-UINavigationController = ObjCClass('UINavigationController')
-UIViewController = ObjCClass('UIViewController')
 
 
 class ObjcNavigationController(_Controller):

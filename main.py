@@ -1,11 +1,10 @@
-from dataclasses import dataclass
-
 from objc_util import ObjCClass, ObjCInstance, create_objc_class, on_main_thread
 from objc_util import sel, CGRect
 
-#import objcista
+
+from objcista import *
 from objcista.constants import UIRectEdge, UIModalPresentationStyle
-from objcista.objcNavigationController import *
+from objcista.objcNavigationController import ObjcNavigationController
 
 import pdbg
 
@@ -50,5 +49,5 @@ class PlainNavigationController(ObjcNavigationController):
 
 
 if __name__ == "__main__":
-  pass
+  nav = PlainNavigationController()
 

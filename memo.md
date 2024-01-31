@@ -4,6 +4,10 @@
 
 とりあえず、`main.py` が肥大するから、module 化した
 
+### `_classes.py`で全部ストック？
+
+`ObjCClass` で呼ぶものとかをまるっと入れてみる
+
 # 📝 2024/01/30
 
 - 最初から、左肩にViewController を生やすのか
