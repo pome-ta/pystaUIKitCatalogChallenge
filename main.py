@@ -3,34 +3,10 @@ from dataclasses import dataclass
 from objc_util import ObjCClass, ObjCInstance, create_objc_class, on_main_thread
 from objc_util import sel, CGRect
 
+#import objcista
+from objcista.constants import UIRectEdge, UIModalPresentationStyle
+
 import pdbg
-
-
-@dataclass
-class UIRectEdge:
-  # ref: [UIRectEdge | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uirectedge?language=objc)
-  none: int = 0
-  top: int = 1 << 0
-  left: int = 1 << 1
-  bottom: int = 1 << 2
-  right: int = 1 << 3
-  all: int = top | left | bottom | right
-
-
-@dataclass
-class UIModalPresentationStyle:
-  # ref: [UIModalPresentationStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uimodalpresentationstyle)
-  automatic: int = -2
-  none: int = -1
-  fullScreen: int = 0
-  pageSheet: int = 1
-  formSheet: int = 2
-  currentContext: int = 3
-  custom: int = 4
-  overFullScreen: int = 5
-  overCurrentContext: int = 6
-  popover: int = 7
-  blurOverFullScreen: int = 8
 
 
 @on_main_thread
