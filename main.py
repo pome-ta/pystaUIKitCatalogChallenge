@@ -7,6 +7,17 @@ import pdbg
 
 
 @dataclass
+class UIRectEdge:
+  # ref: [UIRectEdge | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uirectedge?language=objc)
+  none: int = 0
+  top: int = 1 << 0
+  left: int = 1 << 1
+  bottom: int = 1 << 2
+  right: int = 1 << 3
+  all: int = top | left | bottom | right
+
+
+@dataclass
 class UIModalPresentationStyle:
   # ref: [UIModalPresentationStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uimodalpresentationstyle)
   automatic: int = -2
@@ -91,11 +102,12 @@ class ObjcMetaView:
     return _cls._init()
 
 
-# --- navigation
+UIViewController = ObjCClass('UIViewController')
 UINavigationController = ObjCClass("UINavigationController")
 UINavigationBarAppearance = ObjCClass("UINavigationBarAppearance")
 
 
+# --- navigation
 class ObjcNavigationController(ObjcController):
 
   def _override_controller(self):
@@ -175,9 +187,6 @@ class ObjcNavigationController(ObjcController):
           is_main_thread: bool = False) -> ObjCInstance:
     _cls = cls()
     return _cls._init_controller(viewController, is_main_thread)
-
-
-UIViewController = ObjCClass('UIViewController')
 
 
 class ObjcViewController(ObjcController):
@@ -263,6 +272,26 @@ class ObjcViewController(ObjcController):
   def new(cls, *args, **kwargs) -> ObjCInstance:
     _cls = cls(*args, **kwargs)
     return _cls._init_controller()
+
+
+class PlainNavigationController(ObjcNavigationController):
+
+  def willShowViewController(self,
+                             navigationController: UINavigationController,
+                             viewController: UIViewController, animated: bool):
+    # --- appearance
+    appearance = UINavigationBarAppearance.alloc()
+    appearance.configureWithDefaultBackground()
+
+    # --- navigationBar
+    navigationBar = navigationController.navigationBar()
+
+    navigationBar.standardAppearance = appearance
+    navigationBar.scrollEdgeAppearance = appearance
+    navigationBar.compactAppearance = appearance
+    navigationBar.compactScrollEdgeAppearance = appearance
+
+    viewController.setEdgesForExtendedLayout_(0)
 
 
 if __name__ == "__main__":
