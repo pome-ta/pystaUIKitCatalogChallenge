@@ -83,3 +83,12 @@ class UIBarButtonItem_SystemItem:
   pageCurl = 23  # Deprecated
   close = 24
 
+
+@dataclass
+class NSTextAlignment:
+  # ref: [NSTextAlignment | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/nstextalignment?language=objc)
+  left = 0
+  right = 2
+  center = 1
+  justified = 3
+  natural = 4
