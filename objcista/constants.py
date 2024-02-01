@@ -54,3 +54,32 @@ class UITableViewCell_AccessoryType:
   detailDisclosureButton: int = 2
   checkmark: int = 3
   detailButton: int = 4
+
+
+@dataclass
+class UIBarButtonItem_SystemItem:
+  # ref: [UIBarButtonSystemItem | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uibarbuttonsystemitem?language=objc)
+  done = 0
+  cancel = 1
+  edit = 2
+  add = 4
+  flexibleSpace = 5
+  fixedSpace = 6
+  compose = 7
+  reply = 8
+  action = 9
+  organize = 10
+  bookmarks = 11
+  search = 12
+  refresh = 13
+  stop = 14
+  trash = 16
+  play = 17
+  pause = 18
+  rewind = 19
+  fastForward = 20
+  undo = 21
+  redo = 22
+  pageCurl = 23  # Deprecated
+  close = 24
+
