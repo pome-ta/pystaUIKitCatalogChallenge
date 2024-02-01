@@ -57,6 +57,9 @@ class TopViewController(ObjcViewController):
 
   def didLoad(self, this: UIViewController):
     view = this.view()
+    background_color = UIColor.systemBackgroundColor()
+    view.setBackgroundColor_(background_color)
+
     label_kwargs = {
       'text': self.main_text,
       'LAYOUT_DEBUG': LAYOUT_DEBUG,
