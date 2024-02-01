@@ -84,3 +84,25 @@ class ObjcNavigationController(_Controller):
     _cls = cls()
     return _cls._init_controller(viewController, is_main_thread)
 
+
+class PlainNavigationController(ObjcNavigationController):
+
+  def willShowViewController(self,
+                             navigationController: UINavigationController,
+                             viewController: UIViewController, animated: bool):
+    # --- appearance
+    appearance = UINavigationBarAppearance.alloc()
+    appearance.configureWithDefaultBackground()
+
+    # --- navigationBar
+    navigationBar = navigationController.navigationBar()
+
+    navigationBar.standardAppearance = appearance
+    navigationBar.scrollEdgeAppearance = appearance
+    navigationBar.compactAppearance = appearance
+    navigationBar.compactScrollEdgeAppearance = appearance
+
+    edge = UIRectEdge.none
+
+    viewController.setEdgesForExtendedLayout_(edge)
+

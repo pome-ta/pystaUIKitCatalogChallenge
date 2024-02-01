@@ -1,33 +1,10 @@
-from objc_util import ObjCClass, ObjCInstance, create_objc_class, on_main_thread
-from objc_util import sel, CGRect
+from objc_util import ObjCInstance, sel
 
 from objcista import *
-from objcista.constants import UIRectEdge, UIModalPresentationStyle
-from objcista.objcNavigationController import ObjcNavigationController
+from objcista.objcNavigationController import PlainNavigationController
+from objcista.objcViewController import ObjcViewController
 
 import pdbg
-
-
-class PlainNavigationController(ObjcNavigationController):
-
-  def willShowViewController(self,
-                             navigationController: UINavigationController,
-                             viewController: UIViewController, animated: bool):
-    # --- appearance
-    appearance = UINavigationBarAppearance.alloc()
-    appearance.configureWithDefaultBackground()
-
-    # --- navigationBar
-    navigationBar = navigationController.navigationBar()
-
-    navigationBar.standardAppearance = appearance
-    navigationBar.scrollEdgeAppearance = appearance
-    navigationBar.compactAppearance = appearance
-    navigationBar.compactScrollEdgeAppearance = appearance
-
-    edge = UIRectEdge.none
-
-    viewController.setEdgesForExtendedLayout_(edge)
 
 
 class TopNavigationController(PlainNavigationController):
@@ -72,6 +49,14 @@ class TopNavigationController(PlainNavigationController):
     navigationItem.rightBarButtonItem = done_btn
 
 
+class TopViewController(ObjcViewController):
+
+  def __init__(self, *args, **kwargs):
+    super().__init__(*args, **kwargs)
+
+
 if __name__ == "__main__":
-  nav = PlainNavigationController()
+  tvc = TopViewController.new()
+  tnc = TopNavigationController.new(tvc, True)
+  run_controller(tnc)
 

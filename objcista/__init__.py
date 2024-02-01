@@ -2,6 +2,7 @@ __version__ = '0.0.0'
 
 from objc_util import on_main_thread
 from ._classes import *
+from .constants import *
 
 
 @on_main_thread
