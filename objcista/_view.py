@@ -1,6 +1,8 @@
 from objc_util import ObjCInstance
 from objc_util import CGRect
 
+from ._classes import *
+
 
 class _View:
 
@@ -12,8 +14,7 @@ class _View:
 
   def _init(self):
     if self.IS_LAYOUT_DEBUG:
-      from objc_util import ObjCClass
-      color = ObjCClass('UIColor').systemRedColor()
+      color = UIColor.systemRedColor()
       self.instance.layer().setBorderWidth_(1.0)
       self.instance.layer().setBorderColor_(color.cgColor())
     self.instance.setTranslatesAutoresizingMaskIntoConstraints_(False)

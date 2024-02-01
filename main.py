@@ -58,8 +58,10 @@ class TopNavigationController(PlainNavigationController):
     navigationBar.compactAppearance = appearance
     navigationBar.compactScrollEdgeAppearance = appearance
 
+    systemItem = UIBarButtonItem_SystemItem.done
     done_btn = UIBarButtonItem.alloc(
-    ).initWithBarButtonSystemItem_target_action_(0, navigationController,
+    ).initWithBarButtonSystemItem_target_action_(systemItem,
+                                                 navigationController,
                                                  sel('doneButtonTapped:'))
 
     visibleViewController = navigationController.visibleViewController()
@@ -68,8 +70,6 @@ class TopNavigationController(PlainNavigationController):
     navigationItem = visibleViewController.navigationItem()
 
     navigationItem.rightBarButtonItem = done_btn
-
-
 
 
 if __name__ == "__main__":

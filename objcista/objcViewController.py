@@ -1,7 +1,7 @@
-from objc_util import ObjCClass, ObjCInstance, create_objc_class
-from ._controller import _Controller
+from objc_util import ObjCInstance, create_objc_class
 
-UIViewController = ObjCClass('UIViewController')
+from ._classes import *
+from ._controller import _Controller
 
 
 class ObjcViewController(_Controller):

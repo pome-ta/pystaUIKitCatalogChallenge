@@ -1,4 +1,4 @@
-from objc_util import ObjCClass, ObjCInstance, create_objc_class, on_main_thread
+from objc_util import ObjCInstance, create_objc_class, on_main_thread
 
 from ._classes import *
 from ._controller import _Controller
