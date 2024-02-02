@@ -103,6 +103,7 @@ class PlainNavigationController(ObjcNavigationController):
     navigationBar.compactScrollEdgeAppearance = appearance
 
     edge = UIRectEdge.none
+    print('f')
 
     viewController.setEdgesForExtendedLayout_(edge)
 

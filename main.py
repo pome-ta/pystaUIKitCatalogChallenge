@@ -11,6 +11,7 @@ import pdbg
 class TopNavigationController(PlainNavigationController):
 
   def __init__(self):
+    super().__init__()
     self.override()
 
   def override(self):
@@ -26,6 +27,7 @@ class TopNavigationController(PlainNavigationController):
                              navigationController: UINavigationController,
                              viewController: UIViewController, animated: bool):
 
+    '''
     appearance = UINavigationBarAppearance.alloc()
     appearance.configureWithDefaultBackground()
     # --- navigationBar
@@ -35,6 +37,9 @@ class TopNavigationController(PlainNavigationController):
     navigationBar.scrollEdgeAppearance = appearance
     navigationBar.compactAppearance = appearance
     navigationBar.compactScrollEdgeAppearance = appearance
+    '''
+    #super().willShowViewController(navigationController,viewController,animated)
+    
 
     systemItem = UIBarButtonItem_SystemItem.done
     done_btn = UIBarButtonItem.alloc(
@@ -82,7 +87,7 @@ class TopViewController(ObjcViewController):
 
 if __name__ == "__main__":
   LAYOUT_DEBUG = True
-  LAYOUT_DEBUG = False
+  #LAYOUT_DEBUG = False
   tvc = TopViewController.new()
   tnc = TopNavigationController.new(tvc, True)
   run_controller(tnc)
