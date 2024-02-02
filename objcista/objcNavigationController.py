@@ -1,6 +1,7 @@
 from objc_util import ObjCInstance, create_objc_class, on_main_thread
 
 from ._classes import *
+from .constants import *
 from ._controller import _Controller
 
 
@@ -103,7 +104,5 @@ class PlainNavigationController(ObjcNavigationController):
     navigationBar.compactScrollEdgeAppearance = appearance
 
     edge = UIRectEdge.none
-    print('f')
-
     viewController.setEdgesForExtendedLayout_(edge)
 
