@@ -1,11 +1,19 @@
 from objc_util import ObjCInstance, sel
 
 from objcista import *
+#from objcista._controller import _Controller
 from objcista.objcNavigationController import PlainNavigationController
 from objcista.objcViewController import ObjcViewController
 from objcista.objcLabel import ObjcLabel
 
 import pdbg
+
+
+# todo: まずはここで作りつつ、モジュール化するケアも考慮
+class ObjcTableViewController:
+
+  def __init__(self, *args, **kwargs):
+    pass
 
 
 class TopNavigationController(PlainNavigationController):

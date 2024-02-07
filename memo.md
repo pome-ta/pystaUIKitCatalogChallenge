@@ -5,6 +5,11 @@ UISplitViewController ちょっと面倒だから、他サンプル機能を実�
 モジュールの読み込み的に、直下に書いていく
 
 
+[UIToolTipInteraction | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uitooltipinteraction)
+
+あとで考える
+
+
 # 📝 2024/02/02
 
 nav 系の詳細設定忘れたから、後にする
