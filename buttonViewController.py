@@ -42,7 +42,7 @@ class TopNavigationController(PlainNavigationController):
     navigationItem.rightBarButtonItem = done_btn
 
 
-class TopViewController(ObjcViewController):
+class ButtonViewController(ObjcViewController):
 
   def __init__(self, *args, **kwargs):
     super().__init__(*args, **kwargs)
@@ -76,7 +76,7 @@ class TopViewController(ObjcViewController):
 if __name__ == "__main__":
   LAYOUT_DEBUG = True
   #LAYOUT_DEBUG = False
-  tvc = TopViewController.new()
-  tnc = TopNavigationController.new(tvc, True)
-  run_controller(tnc)
+  vc = ButtonViewController.new()
+  nv = TopNavigationController.new(vc, True)
+  run_controller(nv)
 
