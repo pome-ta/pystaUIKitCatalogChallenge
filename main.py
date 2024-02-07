@@ -25,17 +25,7 @@ class TopNavigationController(PlainNavigationController):
   def willShowViewController(self,
                              navigationController: UINavigationController,
                              viewController: UIViewController, animated: bool):
-    '''
-    appearance = UINavigationBarAppearance.alloc()
-    appearance.configureWithDefaultBackground()
-    # --- navigationBar
-    navigationBar = navigationController.navigationBar()
 
-    navigationBar.standardAppearance = appearance
-    navigationBar.scrollEdgeAppearance = appearance
-    navigationBar.compactAppearance = appearance
-    navigationBar.compactScrollEdgeAppearance = appearance
-    '''
     super().willShowViewController(navigationController, viewController,
                                    animated)
 
