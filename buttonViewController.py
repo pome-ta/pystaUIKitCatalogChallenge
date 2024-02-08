@@ -9,6 +9,26 @@ from objcista.objcLabel import ObjcLabel
 import pdbg
 
 
+class CaseElement:
+
+  def __init__(self, title: str, cellID: str, configHandler):
+    # xxx: ガバガバ
+    # セルの視覚的なタイトル (テーブル セクションのヘッダー タイトル)
+    self.title = title
+    # nib ファイル内でセルを検索するためのテーブルビューのセルの識別子。
+    self.cellID = cellID
+    # セルのサブビューを設定するための構成ハンドラー。
+    self.configHandler = configHandler
+
+  @staticmethod
+  def targetView(cell):
+    #return cell.contentView.subviews[0] if cell != None else None
+    print(cell)
+    
+c = CaseElement('h','f','p')
+c.targetView('a')
+
+
 # todo: まずはここで作りつつ、モジュール化するケアも考慮
 class ObjcTableViewController:
 
