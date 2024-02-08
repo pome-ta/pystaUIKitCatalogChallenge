@@ -24,8 +24,9 @@ class CaseElement:
   def targetView(cell):
     #return cell.contentView.subviews[0] if cell != None else None
     print(cell)
-    
-c = CaseElement('h','f','p')
+
+
+c = CaseElement('h', 'f', 'p')
 c.targetView('a')
 
 
