@@ -16,6 +16,7 @@ extension ButtonViewController: UIToolTipInteractionDelegate {
     }
     func configureSystemDetailDisclosureButton(_ button: UIButton) {
         // Nothing particular to set here, it's all been done in the storyboard.
+        // ここでは特に設定するものはなく、すべてストーリーボードで行われます。
         button.addTarget(self, action: #selector(ButtonViewController.buttonClicked(_:)), for: .touchUpInside)
     }
     func configureSystemContactAddButton(_ button: UIButton) {
