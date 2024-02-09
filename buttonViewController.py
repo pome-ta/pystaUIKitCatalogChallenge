@@ -56,14 +56,18 @@ class ObjcTableViewController:
       tableView = ObjCInstance(_tableView)
       indexPath = ObjCInstance(_indexPath)
       cell = tableView.dequeueReusableCellWithIdentifier(
-        None, forIndexPath=indexPath)
+        self.cell_identifier, forIndexPath=indexPath)
 
-      #pdbg.state(cell.contentView().subviews().objectAtIndexedSubscript_(0))
+      pdbg.state(cell.contentView().subviews().objectAtIndexedSubscript_(0))
+      
 
       return cell.ptr
 
-    #_methods = [tableView_numberOfRowsInSection_,tableView_cellForRowAtIndexPath_,]
-    _methods=[]
+    _methods = [
+      tableView_numberOfRowsInSection_,
+      tableView_cellForRowAtIndexPath_,
+    ]
+    #_methods=[]
     create_kwargs = {
       'name': '_vc',
       'superclass': UITableViewController,
@@ -142,8 +146,12 @@ class ObjcTableViewController:
     '''
 
     vc = self.controller_instance.new().autorelease()
+    #UITableViewCell
+    #registerClass_forCellReuseIdentifier_
+    vc.view().registerClass_forCellReuseIdentifier_(UITableViewCell,
+                                                    self.cell_identifier)
 
-    pdbg.state(vc)
+    #pdbg.state(vc.view())
     return vc
 
   @classmethod

@@ -6,6 +6,7 @@ UINavigationController = ObjCClass('UINavigationController')
 UINavigationBarAppearance = ObjCClass('UINavigationBarAppearance')
 
 UITableViewController = ObjCClass('UITableViewController')
+UITableViewCell = ObjCClass('UITableViewCell')
 
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
 
