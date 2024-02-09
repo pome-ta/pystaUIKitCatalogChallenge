@@ -1,4 +1,4 @@
-from objc_util import ObjCInstance, sel
+from objc_util import ObjCInstance, sel, create_objc_class
 
 from objcista import *
 #from objcista._controller import _Controller
@@ -26,15 +26,43 @@ class CaseElement:
     print(cell)
 
 
-c = CaseElement('h', 'f', 'p')
-c.targetView('a')
-
-
 # todo: まずはここで作りつつ、モジュール化するケアも考慮
+#
 class ObjcTableViewController:
 
   def __init__(self, *args, **kwargs):
+    self._msgs: list['def'] = []  # xxx: 型名ちゃんとやる
+    self.controller_instance: ObjCInstance
+
+  def override(self):
+    # todo: objc で独自にmethod 生やしたいときなど
+    # todo: この関数内に関数を作り`@self.add_msg`
     pass
+
+  def add_msg(self, msg):
+    if not (hasattr(self, '_msgs')):
+      self._msgs: list['def'] = []
+    self._msgs.append(msg)
+
+  def _override_controller(self):
+    # todo: 既存method と独自追加method をシュッと持ちたい
+    # if self._msgs: _methods.extend(self._msgs)
+    pass
+
+  def _init_controller(self):
+    _methods = []
+    create_kwargs = {
+      'name': '_vc',
+      'superclass': UITableViewController,
+      'methods': _methods,
+    }
+    _vc = create_objc_class(**create_kwargs)
+    self.controller_instance = _vc
+
+  @classmethod
+  def new(cls, *args, **kwargs) -> ObjCInstance:
+    _cls = cls(*args, **kwargs)
+    return _cls._init_controller()
 
 
 class TopNavigationController(PlainNavigationController):
@@ -105,7 +133,11 @@ class ButtonViewController(ObjcViewController):
 if __name__ == "__main__":
   LAYOUT_DEBUG = True
   #LAYOUT_DEBUG = False
-  vc = ButtonViewController.new()
-  nv = TopNavigationController.new(vc, True)
-  run_controller(nv)
+  #vc = ButtonViewController.new()
+  tv = ObjcTableViewController.new()
+  nv = TopNavigationController.new(tv, True)
+  #style = UIModalPresentationStyle.pageSheet
+  #style = UIModalPresentationStyle.fullScreen
+
+  run_controller(nv, -2)
 
