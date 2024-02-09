@@ -47,6 +47,9 @@ class ObjcTableViewController:
   def _override_controller(self):
     # todo: 既存method と独自追加method をシュッと持ちたい
     # if self._msgs: _methods.extend(self._msgs)
+    def tableView_numberOfRowsInSection_(_self, _cmd, _tableView, _section):
+      
+      return 1
     _methods = []
     create_kwargs = {
       'name': '_vc',
@@ -56,9 +59,75 @@ class ObjcTableViewController:
     _vc = create_objc_class(**create_kwargs)
     self.controller_instance = _vc
 
+  def create_table_extensions(self):
+    # --- `UITableViewDataSource` Methods
+    def tableView_numberOfRowsInSection_(_self, _cmd, _tableView, _section):
+      return 1
+
+    def tableView_cellForRowAtIndexPath_(_self, _cmd, _tableView, _indexPath):
+      tableView = ObjCInstance(_tableView)
+      indexPath = ObjCInstance(_indexPath)
+      cell = tableView.dequeueReusableCellWithIdentifier(
+        self.cell_identifier, forIndexPath=indexPath)
+
+      #pdbg.state(cell.contentView().subviews().objectAtIndexedSubscript_(0))
+      pdbg.state(cell.contentView())
+      items = self.grep_items if self.grep_items else self.all_items
+
+      cell_text = items[indexPath.row()]
+      cell_image = UIImage.systemImageNamed(cell_text)
+
+      content = cell.defaultContentConfiguration()
+      content.textProperties().setNumberOfLines(1)
+      content.setText(cell_text)
+      content.setImage(cell_image)
+
+      cell.setContentConfiguration_(content)
+
+      return cell.ptr
+
+    def numberOfSectionsInTableView_(_self, _cmd, _tableView):
+      # xxx: とりあえずの`1`
+      return 1
+
+    # --- `UITableViewDelegate` Methods
+    def tableView_didSelectRowAtIndexPath_(_self, _cmd, _tableView,
+                                           _indexPath):
+      indexPath = ObjCInstance(_indexPath)
+      items = self.grep_items if self.grep_items else self.all_items
+      item = items[indexPath.row()]
+      print(f'{indexPath}: {item}')
+
+    # --- `UITableViewDataSource` & `UITableViewDelegate` set up
+    _methods = [
+      tableView_numberOfRowsInSection_,
+      #tableView_cellForRowAtIndexPath_,
+      #numberOfSectionsInTableView_,
+      #tableView_didSelectRowAtIndexPath_,
+    ]
+    _protocols = [
+      'UITableViewDataSource',
+      'UITableViewDelegate',
+    ]
+
+    create_kwargs = {
+      'name': 'table_extensions',
+      'methods': _methods,
+      'protocols': _protocols,
+    }
+
+    table_extensions = create_objc_class(**create_kwargs)
+    return table_extensions.new()
+  
+  
   def _init_controller(self):
     self._override_controller()
+    extensions=self.create_table_extensions()
     vc = self.controller_instance.new().autorelease()
+    vc.view().setDataSource_(extensions)
+    vc.view().setDelegate_(extensions)
+    
+    #pdbg.state(vc.view())
     return vc
     
 
