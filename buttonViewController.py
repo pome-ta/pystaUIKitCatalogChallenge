@@ -32,6 +32,7 @@ class ObjcTableViewController:
 
   def __init__(self, *args, **kwargs):
     self._msgs: list['def'] = []  # xxx: 型名ちゃんとやる
+    self.cell_identifier = 'cell'
     self.controller_instance: ObjCInstance
 
   def override(self):
@@ -48,9 +49,21 @@ class ObjcTableViewController:
     # todo: 既存method と独自追加method をシュッと持ちたい
     # if self._msgs: _methods.extend(self._msgs)
     def tableView_numberOfRowsInSection_(_self, _cmd, _tableView, _section):
-      
+
       return 1
-    _methods = []
+
+    def tableView_cellForRowAtIndexPath_(_self, _cmd, _tableView, _indexPath):
+      tableView = ObjCInstance(_tableView)
+      indexPath = ObjCInstance(_indexPath)
+      cell = tableView.dequeueReusableCellWithIdentifier(
+        None, forIndexPath=indexPath)
+
+      #pdbg.state(cell.contentView().subviews().objectAtIndexedSubscript_(0))
+
+      return cell.ptr
+
+    #_methods = [tableView_numberOfRowsInSection_,tableView_cellForRowAtIndexPath_,]
+    _methods=[]
     create_kwargs = {
       'name': '_vc',
       'superclass': UITableViewController,
@@ -118,18 +131,20 @@ class ObjcTableViewController:
 
     table_extensions = create_objc_class(**create_kwargs)
     return table_extensions.new()
-  
-  
+
   def _init_controller(self):
     self._override_controller()
-    extensions=self.create_table_extensions()
+    '''
+    extensions = self.create_table_extensions()
     vc = self.controller_instance.new().autorelease()
     vc.view().setDataSource_(extensions)
     vc.view().setDelegate_(extensions)
-    
-    #pdbg.state(vc.view())
+    '''
+
+    vc = self.controller_instance.new().autorelease()
+
+    pdbg.state(vc)
     return vc
-    
 
   @classmethod
   def new(cls, *args, **kwargs) -> ObjCInstance:
