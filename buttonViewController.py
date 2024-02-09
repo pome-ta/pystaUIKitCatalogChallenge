@@ -27,7 +27,7 @@ class CaseElement:
 
 
 # todo: まずはここで作りつつ、モジュール化するケアも考慮
-#
+#UITableViewController
 class ObjcTableViewController:
 
   def __init__(self, *args, **kwargs):
@@ -47,9 +47,6 @@ class ObjcTableViewController:
   def _override_controller(self):
     # todo: 既存method と独自追加method をシュッと持ちたい
     # if self._msgs: _methods.extend(self._msgs)
-    pass
-
-  def _init_controller(self):
     _methods = []
     create_kwargs = {
       'name': '_vc',
@@ -58,6 +55,12 @@ class ObjcTableViewController:
     }
     _vc = create_objc_class(**create_kwargs)
     self.controller_instance = _vc
+
+  def _init_controller(self):
+    self._override_controller()
+    vc = self.controller_instance.new().autorelease()
+    return vc
+    
 
   @classmethod
   def new(cls, *args, **kwargs) -> ObjCInstance:
@@ -134,10 +137,10 @@ if __name__ == "__main__":
   LAYOUT_DEBUG = True
   #LAYOUT_DEBUG = False
   #vc = ButtonViewController.new()
-  tv = ObjcTableViewController.new()
-  nv = TopNavigationController.new(tv, True)
-  #style = UIModalPresentationStyle.pageSheet
+  vc = ObjcTableViewController.new()
+  nv = TopNavigationController.new(vc, True)
+  style = UIModalPresentationStyle.pageSheet
   #style = UIModalPresentationStyle.fullScreen
 
-  run_controller(nv, -2)
+  run_controller(nv, style)
 
