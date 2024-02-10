@@ -27,6 +27,10 @@ class CaseElement:
     print(cell)
 
 
+
+
+
+
 class CstmUITableViewCell:
 
   def __init__(self):
