@@ -59,7 +59,6 @@ class ObjcTableViewController:
         self.cell_identifier, forIndexPath=indexPath)
 
       pdbg.state(cell.contentView().subviews().objectAtIndexedSubscript_(0))
-      
 
       return cell.ptr
 

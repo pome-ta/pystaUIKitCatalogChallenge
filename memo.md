@@ -1,3 +1,27 @@
+# 📝 2024/02/10
+
+`ButtonViewController` をやるために`BaseTableViewController` の処理をする
+
+そのために、`CaseElement` の挙動が必要
+
+
+`CaseElement` の`configHandler` は、`ButtonViewController+Configs` で振り分けしたbutton 処理の関数情報を持ってる
+
+
+つまり、、、？
+- `BaseTableViewController` のセルごとの操作の時には、button の情報がある
+  - `cell!.contentView.subviews[0]` と、`subviews` を待ち望んでいるので
+- table は、button につき1つづつのbutton 情報しか持たない？
+  - 事前に情報を持たせておく必要あり？
+
+
+## 階層整理
+
+- `UITableViewCell` のsubclass を作る
+- `subviews` へアクセスするため
+- 事前につくる？
+
+
 # 📝 2024/02/07
 
 UISplitViewController ちょっと面倒だから、他サンプル機能を実装していく
