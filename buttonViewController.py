@@ -29,7 +29,7 @@ class CaseElement:
 
 
 
-
+NSObject = ObjCClass('NSObject')
 
 class CstmUITableViewCell:
 
@@ -38,11 +38,16 @@ class CstmUITableViewCell:
 
   def _override_tableViewCell(self):
     def initWithStyle_reuseIdentifier_(_self, _cmd, _style, _reuseIdentifier):
+      this = ObjCInstance(_self)
+      
       #this = ObjCInstance(_self)
-      #style = ObjCInstance(_style)
+      style = ObjCInstance(_style)
       reuseIdentifier = ObjCInstance(_reuseIdentifier)
-      this.initWithStyle_reuseIdentifier_(style, reuseIdentifier)
-      _self = UITableViewCell.alloc().initWithStyle_reuseIdentifier_(style, reuseIdentifier).ptr
+      #this.initWithStyle_reuseIdentifier_(style, reuseIdentifier)
+      #_self = UITableViewCell.alloc().initWithStyle_reuseIdentifier_(style, reuseIdentifier).ptr
+      selector = sel('initWithStyle:reuseIdentifier:')
+      func = UITableViewCell.instanceMethodForSelector_(selector)
+      func(this, selector, style,reuseIdentifier)
       
     
     def initWithCoder_(_self, _cmd, _coder):
@@ -50,9 +55,10 @@ class CstmUITableViewCell:
     
       
     
+    #_methods=[initWithStyle_reuseIdentifier_,initWithCoder_,]
     _methods=[initWithStyle_reuseIdentifier_,initWithCoder_,]
     #_methods =[initWithCoder_]
-    _methods=[]
+    #_methods=[]
     create_kwargs = {
       'name': '_tvc',
       'superclass': UITableViewCell,
