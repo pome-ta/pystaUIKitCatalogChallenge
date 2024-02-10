@@ -15,6 +15,12 @@
   - 事前に情報を持たせておく必要あり？
 
 
+[コードベースでカスタムTableViewCellを作る #Swift - Qiita](https://qiita.com/Hyperbolic_____/items/e35cdac1c6b537202151)
+
+これか？
+
+
+
 ## 階層整理
 
 - `UITableViewCell` のsubclass を作る
