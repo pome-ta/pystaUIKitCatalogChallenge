@@ -1,4 +1,6 @@
-from objc_util import ObjCInstance, sel, create_objc_class
+#from ctypes
+
+from objc_util import ObjCInstance, sel, create_objc_class,class_getSuperclass
 
 from objcista import *
 #from objcista._controller import _Controller
@@ -29,7 +31,7 @@ class CaseElement:
 
 
 
-NSObject = ObjCClass('NSObject')
+#NSObject = ObjCClass('NSObject')
 
 class CstmUITableViewCell:
 
@@ -58,7 +60,7 @@ class CstmUITableViewCell:
     #_methods=[initWithStyle_reuseIdentifier_,initWithCoder_,]
     _methods=[initWithStyle_reuseIdentifier_,initWithCoder_,]
     #_methods =[initWithCoder_]
-    #_methods=[]
+    _methods=[]
     create_kwargs = {
       'name': '_tvc',
       'superclass': UITableViewCell,
@@ -99,6 +101,9 @@ class ObjcTableViewController:
   def _override_controller(self):
     # todo: 既存method と独自追加method をシュッと持ちたい
     # if self._msgs: _methods.extend(self._msgs)
+    
+    def viewDidLoad(_self, _cmd):
+      print('h')
     def tableView_numberOfRowsInSection_(_self, _cmd, _tableView, _section):
 
       return 1
@@ -110,11 +115,12 @@ class ObjcTableViewController:
         self.cell_identifier, forIndexPath=indexPath)
 
       #pdbg.state(cell.contentView().subviews().objectAtIndexedSubscript_(0))
-      pdbg.state(cell)
+      #pdbg.state(cell)
 
       return cell.ptr
 
     _methods = [
+      viewDidLoad,
       tableView_numberOfRowsInSection_,
       tableView_cellForRowAtIndexPath_,
     ]
@@ -186,9 +192,14 @@ if __name__ == "__main__":
   #LAYOUT_DEBUG = False
   #vc = ButtonViewController.new()
   vc = ObjcTableViewController.new()
+  pdbg.state(vc)
   nv = TopNavigationController.new(vc, True)
   style = UIModalPresentationStyle.pageSheet
   #style = UIModalPresentationStyle.fullScreen
+  
 
-  run_controller(nv, style)
+  #run_controller(nv, style)
+  ctv = CstmUITableViewCell.this()
+  sc = class_getSuperclass(ctv.ptr)
+  #print(ObjCInstance(sc))
 
