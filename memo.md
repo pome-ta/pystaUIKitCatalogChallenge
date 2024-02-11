@@ -1,3 +1,15 @@
+# 📝 2024/02/11
+
+
+UITableViewCell の`super` を呼びたいが、、、
+
+オーバーライドできないから、個別で作る？
+
+
+[UIKit/UITableViewCell.m at master · enormego/UIKit](https://github.com/enormego/UIKit/blob/master/UITableViewCell.m)
+
+かなり古いから、新しいの見つけたい
+
 # 📝 2024/02/10
 
 `ButtonViewController` をやるために`BaseTableViewController` の処理をする
