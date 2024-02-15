@@ -48,8 +48,6 @@ class CaseElement:
     print(cell)
 
 
-
-
 class CstmUITableViewCell:
 
   def __init__(self):
@@ -62,12 +60,18 @@ class CstmUITableViewCell:
       super_struct = objc_super(_self, super_cls)
       super_sel = sel('initWithStyle:reuseIdentifier:')
 
-      _this = objc_msgSendSuper(ctypes.byref(super_struct), super_sel, _style,
-                                _reuseIdentifier)
+      args = [
+        ctypes.byref(super_struct),
+        super_sel,
+        _style,
+        _reuseIdentifier,
+      ]
 
-      this = ObjCInstance(_this)
+      _self = objc_msgSendSuper(*args)
+
+      this = ObjCInstance(_self)
       pdbg.state(this)
-      return _this
+      return _self
 
     _methods = [
       initWithStyle_reuseIdentifier_,
@@ -90,7 +94,6 @@ class CstmUITableViewCell:
     return _cls._init_tableViewCell()
 
 
-#pdbg.state(CstmUITableViewCell.this())
 # todo: まずはここで作りつつ、モジュール化するケアも考慮
 #UITableViewController
 class ObjcTableViewController:
@@ -120,7 +123,7 @@ class ObjcTableViewController:
       view.registerClass_forCellReuseIdentifier_(CstmUITableViewCell.this(),
                                                  self.cell_identifier)
 
-    # todo: UITableViewDelegate
+    # --- UITableViewDelegate
     def tableView_numberOfRowsInSection_(_self, _cmd, _tableView, _section):
 
       return 1
