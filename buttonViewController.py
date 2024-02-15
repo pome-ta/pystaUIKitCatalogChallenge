@@ -140,7 +140,7 @@ class ObjcTableViewController:
       indexPath = ObjCInstance(_indexPath)
       cell = tableView.dequeueReusableCellWithIdentifier(
         self.cell_identifier, forIndexPath=indexPath)
-      pdbg.state(cell)
+      #pdbg.state(cell)
       return cell.ptr
 
     _methods = [
@@ -206,7 +206,6 @@ if __name__ == "__main__":
   #LAYOUT_DEBUG = False
   #vc = ButtonViewController.new()
   vc = ObjcTableViewController.new()
-  pdbg.state(vc)
   nv = TopNavigationController.new(vc, True)
   style = UIModalPresentationStyle.pageSheet
   #style = UIModalPresentationStyle.fullScreen

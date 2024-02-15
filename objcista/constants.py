@@ -92,3 +92,16 @@ class NSTextAlignment:
   center = 1
   justified = 3
   natural = 4
+
+
+@dataclass
+class UIButton_ButtonType:
+  custom = 0
+  system = 1
+  detailDisclosure = 2
+  infoLight = 3
+  infoDark = 4
+  contactAdd = 5
+  plain = 6
+  close = 7
+
