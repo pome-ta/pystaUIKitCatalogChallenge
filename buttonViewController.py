@@ -52,6 +52,10 @@ class CstmUITableViewCell:
 
   def __init__(self):
     self.tableViewCell_instance: None
+    
+  # todo: 変数名とか諸々考える
+  def init_cell(self, cell:UITableViewCell):
+    pass
 
   def _override_tableViewCell(self):
 
@@ -68,6 +72,7 @@ class CstmUITableViewCell:
       ]
       _this = objc_msgSendSuper(*_args)
       this = ObjCInstance(_this)
+      self.init_cell(this)
       return _this
 
     _methods = [
@@ -99,6 +104,7 @@ class ObjcTableViewController:
     self._msgs: list['def'] = []  # xxx: 型名ちゃんとやる
     self.cell_identifier = 'cell1'
     self.controller_instance: ObjCInstance
+    self.storyboard_templates:list[dict]
 
   def override(self):
     # todo: objc で独自にmethod 生やしたいときなど
