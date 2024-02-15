@@ -1,6 +1,6 @@
-#from ctypes
+import ctypes
 
-from objc_util import ObjCInstance, sel, create_objc_class,class_getSuperclass
+from objc_util import ObjCInstance, sel, create_objc_class, class_getSuperclass, c
 
 from objcista import *
 #from objcista._controller import _Controller
@@ -10,6 +10,25 @@ from objcista.objcLabel import ObjcLabel
 
 import pdbg
 #pdbg.state(UITableViewCell)
+
+# todo: 後ほど関数化
+objc_msgSendSuper = c.objc_msgSendSuper
+objc_msgSendSuper.argtypes = [
+  ctypes.c_void_p,  # super
+  ctypes.c_void_p,  # selector
+  ctypes.c_void_p,
+  ctypes.c_void_p,
+]
+objc_msgSendSuper.restype = ctypes.c_void_p
+
+
+class objc_super(ctypes.Structure):
+  #ref: [id | Apple Developer Documentation](https://developer.apple.com/documentation/objectivec/id?language=objc)
+  # ref: [Class | Apple Developer Documentation](https://developer.apple.com/documentation/objectivec/class?language=objc)
+  _fields_ = [
+    ('receiver', ctypes.c_void_p),  # encoding(b"@")
+    ('super_class', ctypes.c_void_p),  # encoding(b"#")
+  ]
 
 
 class CaseElement:
@@ -31,36 +50,28 @@ class CaseElement:
 
 
 
-#NSObject = ObjCClass('NSObject')
-
 class CstmUITableViewCell:
 
   def __init__(self):
     self.tableViewCell_instance: None
 
   def _override_tableViewCell(self):
+
     def initWithStyle_reuseIdentifier_(_self, _cmd, _style, _reuseIdentifier):
-      this = ObjCInstance(_self)
-      
-      #this = ObjCInstance(_self)
-      style = ObjCInstance(_style)
-      reuseIdentifier = ObjCInstance(_reuseIdentifier)
-      #this.initWithStyle_reuseIdentifier_(style, reuseIdentifier)
-      #_self = UITableViewCell.alloc().initWithStyle_reuseIdentifier_(style, reuseIdentifier).ptr
-      selector = sel('initWithStyle:reuseIdentifier:')
-      func = UITableViewCell.instanceMethodForSelector_(selector)
-      func(this, selector, style,reuseIdentifier)
-      
-    
-    def initWithCoder_(_self, _cmd, _coder):
-      print('h')
-    
-      
-    
-    #_methods=[initWithStyle_reuseIdentifier_,initWithCoder_,]
-    _methods=[initWithStyle_reuseIdentifier_,initWithCoder_,]
-    #_methods =[initWithCoder_]
-    _methods=[]
+      super_cls = class_getSuperclass(self.tableViewCell_instance)
+      super_struct = objc_super(_self, super_cls)
+      super_sel = sel('initWithStyle:reuseIdentifier:')
+
+      _this = objc_msgSendSuper(ctypes.byref(super_struct), super_sel, _style,
+                                _reuseIdentifier)
+
+      this = ObjCInstance(_this)
+      pdbg.state(this)
+      return _this
+
+    _methods = [
+      initWithStyle_reuseIdentifier_,
+    ]
     create_kwargs = {
       'name': '_tvc',
       'superclass': UITableViewCell,
@@ -72,11 +83,12 @@ class CstmUITableViewCell:
   def _init_tableViewCell(self):
     self._override_tableViewCell()
     return self.tableViewCell_instance
-    
+
   @classmethod
   def this(cls, *args, **kwargs) -> ObjCInstance:
     _cls = cls(*args, **kwargs)
     return _cls._init_tableViewCell()
+
 
 #pdbg.state(CstmUITableViewCell.this())
 # todo: まずはここで作りつつ、モジュール化するケアも考慮
@@ -101,9 +113,14 @@ class ObjcTableViewController:
   def _override_controller(self):
     # todo: 既存method と独自追加method をシュッと持ちたい
     # if self._msgs: _methods.extend(self._msgs)
-    
+
     def viewDidLoad(_self, _cmd):
-      print('h')
+      this = ObjCInstance(_self)
+      view = this.view()
+      view.registerClass_forCellReuseIdentifier_(CstmUITableViewCell.this(),
+                                                 self.cell_identifier)
+
+    # todo: UITableViewDelegate
     def tableView_numberOfRowsInSection_(_self, _cmd, _tableView, _section):
 
       return 1
@@ -113,10 +130,6 @@ class ObjcTableViewController:
       indexPath = ObjCInstance(_indexPath)
       cell = tableView.dequeueReusableCellWithIdentifier(
         self.cell_identifier, forIndexPath=indexPath)
-
-      #pdbg.state(cell.contentView().subviews().objectAtIndexedSubscript_(0))
-      #pdbg.state(cell)
-
       return cell.ptr
 
     _methods = [
@@ -124,7 +137,6 @@ class ObjcTableViewController:
       tableView_numberOfRowsInSection_,
       tableView_cellForRowAtIndexPath_,
     ]
-    #_methods=[]
     create_kwargs = {
       'name': '_vc',
       'superclass': UITableViewController,
@@ -135,16 +147,7 @@ class ObjcTableViewController:
 
   def _init_controller(self):
     self._override_controller()
-
     vc = self.controller_instance.new().autorelease()
-    #UITableViewCell
-    #registerClass_forCellReuseIdentifier_
-    
-    #CstmUITableViewCell
-    #vc.view().registerClass_forCellReuseIdentifier_(UITableViewCell,self.cell_identifier)
-    vc.view().registerClass_forCellReuseIdentifier_(CstmUITableViewCell.this(),self.cell_identifier)
-
-    #pdbg.state(vc.view())
     return vc
 
   @classmethod
@@ -196,10 +199,6 @@ if __name__ == "__main__":
   nv = TopNavigationController.new(vc, True)
   style = UIModalPresentationStyle.pageSheet
   #style = UIModalPresentationStyle.fullScreen
-  
 
-  #run_controller(nv, style)
-  ctv = CstmUITableViewCell.this()
-  sc = class_getSuperclass(ctv.ptr)
-  #print(ObjCInstance(sc))
+  run_controller(nv, style)
 
