@@ -60,18 +60,15 @@ class CstmUITableViewCell:
       super_struct = objc_super(_self, super_cls)
       super_sel = sel('initWithStyle:reuseIdentifier:')
 
-      args = [
+      _args = [
         ctypes.byref(super_struct),
         super_sel,
         _style,
         _reuseIdentifier,
       ]
-
-      _self = objc_msgSendSuper(*args)
-
-      this = ObjCInstance(_self)
-      pdbg.state(this)
-      return _self
+      _this = objc_msgSendSuper(*_args)
+      this = ObjCInstance(_this)
+      return _this
 
     _methods = [
       initWithStyle_reuseIdentifier_,
@@ -100,7 +97,7 @@ class ObjcTableViewController:
 
   def __init__(self, *args, **kwargs):
     self._msgs: list['def'] = []  # xxx: 型名ちゃんとやる
-    self.cell_identifier = 'cell'
+    self.cell_identifier = 'cell1'
     self.controller_instance: ObjCInstance
 
   def override(self):
@@ -120,8 +117,12 @@ class ObjcTableViewController:
     def viewDidLoad(_self, _cmd):
       this = ObjCInstance(_self)
       view = this.view()
-      view.registerClass_forCellReuseIdentifier_(CstmUITableViewCell.this(),
-                                                 self.cell_identifier)
+
+      _args = [
+        CstmUITableViewCell.this(),
+        self.cell_identifier,
+      ]
+      view.registerClass_forCellReuseIdentifier_(*_args)
 
     # --- UITableViewDelegate
     def tableView_numberOfRowsInSection_(_self, _cmd, _tableView, _section):
@@ -133,6 +134,7 @@ class ObjcTableViewController:
       indexPath = ObjCInstance(_indexPath)
       cell = tableView.dequeueReusableCellWithIdentifier(
         self.cell_identifier, forIndexPath=indexPath)
+      pdbg.state(cell)
       return cell.ptr
 
     _methods = [
