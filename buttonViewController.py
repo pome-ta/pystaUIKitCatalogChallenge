@@ -54,17 +54,18 @@ class CstmUITableViewCell:
 
   # todo: 変数名とか諸々考える
   def init_cell(self, cell: UITableViewCell):
-    contactAdd = UIButton_ButtonType.contactAdd
-    button = UIButton.buttonWithType_(contactAdd)
+    detailDisclosure = UIButton_ButtonType.detailDisclosure
+    button = UIButton.buttonWithType_(detailDisclosure)
     button.setTranslatesAutoresizingMaskIntoConstraints_(False)
-
-    cell.contentView().addSubview_(button)
-    '''
+    contentView = cell.contentView()
+    contentView.addSubview_(button)
 
     NSLayoutConstraint.activateConstraints_([
-      button.centerXAnchor().constraintEqualToAnchor_(cell.centerXAnchor()),
-      button.centerYAnchor().constraintEqualToAnchor_(cell.centerYAnchor()),
-    ])'''
+      button.centerXAnchor().constraintEqualToAnchor_(
+        contentView.centerXAnchor()),
+      button.centerYAnchor().constraintEqualToAnchor_(
+        contentView.centerYAnchor()),
+    ])
 
   def _override_tableViewCell(self):
 
@@ -111,14 +112,34 @@ class ButtonSystemAddContact(CstmUITableViewCell):
     contactAdd = UIButton_ButtonType.contactAdd
     button = UIButton.buttonWithType_(contactAdd)
     button.setTranslatesAutoresizingMaskIntoConstraints_(False)
-
-    cell.addSubview_(button)
+    contentView = cell.contentView()
+    contentView.addSubview_(button)
 
     NSLayoutConstraint.activateConstraints_([
-      button.centerXAnchor().constraintEqualToAnchor_(cell.centerXAnchor()),
-      button.centerYAnchor().constraintEqualToAnchor_(cell.centerYAnchor()),
+      button.centerXAnchor().constraintEqualToAnchor_(
+        contentView.centerXAnchor()),
+      button.centerYAnchor().constraintEqualToAnchor_(
+        contentView.centerYAnchor()),
     ])
 
+
+class ButtonDetailDisclosure(CstmUITableViewCell):
+
+  def init_cell(self, cell: UITableViewCell):
+    detailDisclosure = UIButton_ButtonType.detailDisclosure
+    button = UIButton.buttonWithType_(detailDisclosure)
+    button.setTranslatesAutoresizingMaskIntoConstraints_(False)
+    contentView = cell.contentView()
+    contentView.addSubview_(button)
+
+    NSLayoutConstraint.activateConstraints_([
+      button.centerXAnchor().constraintEqualToAnchor_(
+        contentView.centerXAnchor()),
+      button.centerYAnchor().constraintEqualToAnchor_(
+        contentView.centerYAnchor()),
+    ])
+
+#buttonStyleGray
 
 # todo: まずはここで作りつつ、モジュール化するケアも考慮
 #UITableViewController
@@ -132,7 +153,11 @@ class ObjcTableViewController:
     self.prototypes = [
       {
         'cellClass': ButtonSystemAddContact,
-        'identifier': ''
+        'identifier': 'buttonSystemAddContact'
+      },
+      {
+        'cellClass': ButtonDetailDisclosure,
+        'identifier': 'buttonDetailDisclosure'
       },
     ]
 
@@ -170,7 +195,7 @@ class ObjcTableViewController:
       indexPath = ObjCInstance(_indexPath)
       cell = tableView.dequeueReusableCellWithIdentifier(
         self.cell_identifier, forIndexPath=indexPath)
-      pdbg.state(cell.contentView().subviews())
+      #pdbg.state(cell.contentView().subviews())
       return cell.ptr
 
     _methods = [

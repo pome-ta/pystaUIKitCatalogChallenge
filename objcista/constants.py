@@ -105,3 +105,15 @@ class UIButton_ButtonType:
   plain = 6
   close = 7
 
+
+@dataclass
+class UIControlState:
+  # ref: [UIControlState | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uicontrolstate?language=objc)
+  normal = 0
+  highlighted = 1 << 0
+  disabled = 1 << 1
+  selected = 1 << 2
+  focused = 1 << 3
+  application = 0x00FF0000
+  reserved = 0xFF000000
+
