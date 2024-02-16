@@ -17,4 +17,5 @@ UIBarButtonItem = ObjCClass('UIBarButtonItem')
 UIView = ObjCClass('UIView')
 UILabel = ObjCClass('UILabel')
 UIButton = ObjCClass('UIButton')
+UIButtonConfiguration = ObjCClass('UIButtonConfiguration')
 
