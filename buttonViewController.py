@@ -9,7 +9,7 @@ from objcista.objcViewController import ObjcViewController
 from objcista.objcLabel import ObjcLabel
 
 import pdbg
-#pdbg.state(UITableViewCell)
+
 
 # todo: 後ほど関数化
 objc_msgSendSuper = c.objc_msgSendSuper
@@ -29,6 +29,8 @@ class objc_super(ctypes.Structure):
     ('receiver', ctypes.c_void_p),  # encoding(b"@")
     ('super_class', ctypes.c_void_p),  # encoding(b"#")
   ]
+
+
 
 
 class CaseElement:
@@ -55,7 +57,12 @@ class CstmUITableViewCell:
     
   # todo: 変数名とか諸々考える
   def init_cell(self, cell:UITableViewCell):
-    pass
+    contactAdd=UIButton_ButtonType.contactAdd
+    button = UIButton.buttonWithType_(contactAdd)
+    button.setTranslatesAutoresizingMaskIntoConstraints_(False)
+    
+    pdbg.state(button)
+    cell.addSubview_(button)
 
   def _override_tableViewCell(self):
 
