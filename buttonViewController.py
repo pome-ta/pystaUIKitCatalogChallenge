@@ -10,7 +10,6 @@ from objcista.objcLabel import ObjcLabel
 
 import pdbg
 
-
 # todo: 後ほど関数化
 objc_msgSendSuper = c.objc_msgSendSuper
 objc_msgSendSuper.argtypes = [
@@ -29,8 +28,6 @@ class objc_super(ctypes.Structure):
     ('receiver', ctypes.c_void_p),  # encoding(b"@")
     ('super_class', ctypes.c_void_p),  # encoding(b"#")
   ]
-
-
 
 
 class CaseElement:
@@ -54,15 +51,20 @@ class CstmUITableViewCell:
 
   def __init__(self):
     self.tableViewCell_instance: None
-    
+
   # todo: 変数名とか諸々考える
-  def init_cell(self, cell:UITableViewCell):
-    contactAdd=UIButton_ButtonType.contactAdd
+  def init_cell(self, cell: UITableViewCell):
+    contactAdd = UIButton_ButtonType.contactAdd
     button = UIButton.buttonWithType_(contactAdd)
     button.setTranslatesAutoresizingMaskIntoConstraints_(False)
-    
-    pdbg.state(button)
+
+    #pdbg.state(button)
     cell.addSubview_(button)
+
+    NSLayoutConstraint.activateConstraints_([
+      button.centerXAnchor().constraintEqualToAnchor_(cell.centerXAnchor()),
+      button.centerYAnchor().constraintEqualToAnchor_(cell.centerYAnchor()),
+    ])
 
   def _override_tableViewCell(self):
 
@@ -111,7 +113,7 @@ class ObjcTableViewController:
     self._msgs: list['def'] = []  # xxx: 型名ちゃんとやる
     self.cell_identifier = 'cell1'
     self.controller_instance: ObjCInstance
-    self.storyboard_templates:list[dict]
+    self.storyboard_templates: list[dict]
 
   def override(self):
     # todo: objc で独自にmethod 生やしたいときなど
