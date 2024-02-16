@@ -58,13 +58,13 @@ class CstmUITableViewCell:
     button = UIButton.buttonWithType_(contactAdd)
     button.setTranslatesAutoresizingMaskIntoConstraints_(False)
 
-    #pdbg.state(button)
-    cell.addSubview_(button)
+    cell.contentView().addSubview_(button)
+    '''
 
     NSLayoutConstraint.activateConstraints_([
       button.centerXAnchor().constraintEqualToAnchor_(cell.centerXAnchor()),
       button.centerYAnchor().constraintEqualToAnchor_(cell.centerYAnchor()),
-    ])
+    ])'''
 
   def _override_tableViewCell(self):
 
@@ -105,6 +105,21 @@ class CstmUITableViewCell:
     return _cls._init_tableViewCell()
 
 
+class ButtonSystemAddContact(CstmUITableViewCell):
+
+  def init_cell(self, cell: UITableViewCell):
+    contactAdd = UIButton_ButtonType.contactAdd
+    button = UIButton.buttonWithType_(contactAdd)
+    button.setTranslatesAutoresizingMaskIntoConstraints_(False)
+
+    cell.addSubview_(button)
+
+    NSLayoutConstraint.activateConstraints_([
+      button.centerXAnchor().constraintEqualToAnchor_(cell.centerXAnchor()),
+      button.centerYAnchor().constraintEqualToAnchor_(cell.centerYAnchor()),
+    ])
+
+
 # todo: まずはここで作りつつ、モジュール化するケアも考慮
 #UITableViewController
 class ObjcTableViewController:
@@ -114,6 +129,12 @@ class ObjcTableViewController:
     self.cell_identifier = 'cell1'
     self.controller_instance: ObjCInstance
     self.storyboard_templates: list[dict]
+    self.prototypes = [
+      {
+        'cellClass': ButtonSystemAddContact,
+        'identifier': ''
+      },
+    ]
 
   def override(self):
     # todo: objc で独自にmethod 生やしたいときなど
@@ -149,7 +170,7 @@ class ObjcTableViewController:
       indexPath = ObjCInstance(_indexPath)
       cell = tableView.dequeueReusableCellWithIdentifier(
         self.cell_identifier, forIndexPath=indexPath)
-      #pdbg.state(cell)
+      pdbg.state(cell.contentView().subviews())
       return cell.ptr
 
     _methods = [
@@ -212,8 +233,10 @@ class TopNavigationController(PlainNavigationController):
 
 if __name__ == "__main__":
   LAYOUT_DEBUG = True
+
   #LAYOUT_DEBUG = False
   #vc = ButtonViewController.new()
+  #buttonSystemAddContact
   vc = ObjcTableViewController.new()
   nv = TopNavigationController.new(vc, True)
   style = UIModalPresentationStyle.pageSheet

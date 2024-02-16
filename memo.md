@@ -1,3 +1,9 @@
+# 📝 2024/02/16
+
+
+[【UIKit】Cellに直接addSubviewしてはいけない #Swift - Qiita](https://qiita.com/yusame0308/items/c7aee4190057f99b7bf4)
+
+
 # 📝 2024/02/15
 
 
