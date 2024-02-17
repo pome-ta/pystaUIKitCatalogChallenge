@@ -1,6 +1,6 @@
 import ctypes
 
-from objc_util import ObjCInstance, sel, create_objc_class, class_getSuperclass, c
+from objc_util import ObjCInstance, sel, create_objc_class, class_getSuperclass, c, ObjCClass
 
 from objcista import *
 #from objcista._controller import _Controller
@@ -112,6 +112,7 @@ class CstmUITableViewCell:
     return _cls._init_tableViewCell()
 
 
+# --- prototypes
 class ButtonSystemAddContact(CstmUITableViewCell):
 
   def init_cell(self, cell: UITableViewCell):
@@ -138,8 +139,8 @@ class ButtonSystemAddContact(CstmUITableViewCell):
 class ButtonDetailDisclosure(CstmUITableViewCell):
 
   def init_cell(self, cell: UITableViewCell):
-    type = UIButton_ButtonType.type
-    button = UIButton.buttonWithType_(detailDisclosure)
+    type = UIButton_ButtonType.detailDisclosure
+    button = UIButton.buttonWithType_(type)
     button.setTranslatesAutoresizingMaskIntoConstraints_(False)
     contentView = cell.contentView()
     contentView.addSubview_(button)
@@ -405,6 +406,7 @@ class ButtonToggle(CstmUITableViewCell):
     type = UIButton_ButtonType.system
     button = UIButton.buttonWithType_(type)
     config = UIButtonConfiguration.plainButtonConfiguration()
+    config.setTitle_('Toggle')
     button.setConfiguration_(config)
 
     button.setTranslatesAutoresizingMaskIntoConstraints_(False)
@@ -715,7 +717,6 @@ class ObjcTableViewController:
 
   def __init__(self, *args, **kwargs):
     self._msgs: list['def'] = []  # xxx: 型名ちゃんとやる
-    self.cell_identifier = 'cell1'
     self.controller_instance: ObjCInstance
 
     self.prototypes = prototypes
@@ -748,27 +749,21 @@ class ObjcTableViewController:
         ]
         view.registerClass_forCellReuseIdentifier_(*_args)
 
-      #print(self.identifiers)
-      _args = [
-        CstmUITableViewCell.this(),
-        self.cell_identifier,
-      ]
-      #view.registerClass_forCellReuseIdentifier_(*_args)
-
     # --- UITableViewDelegate
     def tableView_numberOfRowsInSection_(_self, _cmd, _tableView, _section):
-      #return 1
 
-      #return len(self.identifiers)
-      return 2
+      return 1  #len(self.identifiers)
+
+    def numberOfSectionsInTableView_(_self, _cmd, _tableView):
+      return len(self.identifiers)
 
     def tableView_cellForRowAtIndexPath_(_self, _cmd, _tableView, _indexPath):
       tableView = ObjCInstance(_tableView)
       indexPath = ObjCInstance(_indexPath)
-      #pdbg.state(indexPath)
+      pdbg.state(indexPath)
       #print(indexPath)
       #pdbg.state(indexPath)
-      cell_identifier = self.identifiers[indexPath.row()]
+      cell_identifier = self.identifiers[indexPath.section()]
       cell = tableView.dequeueReusableCellWithIdentifier(
         cell_identifier, forIndexPath=indexPath)
       #pdbg.state(cell.contentView().subviews())
@@ -778,6 +773,7 @@ class ObjcTableViewController:
     _methods = [
       viewDidLoad,
       tableView_numberOfRowsInSection_,
+      numberOfSectionsInTableView_,
       tableView_cellForRowAtIndexPath_,
     ]
     create_kwargs = {
@@ -799,41 +795,42 @@ class ObjcTableViewController:
     return _cls._init_controller()
 
 
-class TopNavigationController(PlainNavigationController):
-
-  def __init__(self):
-    self.override()
-
-  def override(self):
-
-    @self.add_msg
-    def doneButtonTapped_(_self, _cmd, _sender):
-      this = ObjCInstance(_self)
-      visibleViewController = this.visibleViewController()
-      visibleViewController.dismissViewControllerAnimated_completion_(
-        True, None)
-
-  def willShowViewController(self,
-                             navigationController: UINavigationController,
-                             viewController: UIViewController, animated: bool):
-
-    super().willShowViewController(navigationController, viewController,
-                                   animated)
-
-    systemItem = UIBarButtonItem_SystemItem.done
-    done_btn = UIBarButtonItem.alloc(
-    ).initWithBarButtonSystemItem_target_action_(systemItem,
-                                                 navigationController,
-                                                 sel('doneButtonTapped:'))
-
-    visibleViewController = navigationController.visibleViewController()
-
-    # --- navigationItem
-    navigationItem = visibleViewController.navigationItem()
-    navigationItem.rightBarButtonItem = done_btn
-
-
 if __name__ == "__main__":
+
+  class TopNavigationController(PlainNavigationController):
+
+    def __init__(self):
+      self.override()
+
+    def override(self):
+
+      @self.add_msg
+      def doneButtonTapped_(_self, _cmd, _sender):
+        this = ObjCInstance(_self)
+        visibleViewController = this.visibleViewController()
+        visibleViewController.dismissViewControllerAnimated_completion_(
+          True, None)
+
+    def willShowViewController(self,
+                               navigationController: UINavigationController,
+                               viewController: UIViewController,
+                               animated: bool):
+
+      super().willShowViewController(navigationController, viewController,
+                                     animated)
+
+      systemItem = UIBarButtonItem_SystemItem.done
+      done_btn = UIBarButtonItem.alloc(
+      ).initWithBarButtonSystemItem_target_action_(systemItem,
+                                                   navigationController,
+                                                   sel('doneButtonTapped:'))
+
+      visibleViewController = navigationController.visibleViewController()
+
+      # --- navigationItem
+      navigationItem = visibleViewController.navigationItem()
+      navigationItem.rightBarButtonItem = done_btn
+
   LAYOUT_DEBUG = True
 
   #LAYOUT_DEBUG = False
