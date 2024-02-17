@@ -291,7 +291,6 @@ class AddToCartButton(CstmUITableViewCell):
     return name
 
 
-
 class ButtonMultiTitle(CstmUITableViewCell):
 
   def init_cell(self, cell: UITableViewCell):
@@ -317,7 +316,6 @@ class ButtonMultiTitle(CstmUITableViewCell):
     name = 'buttonMultiTitle'
     cls.reuseIdentifier = name
     return name
-
 
 
 class ButtonSystem(CstmUITableViewCell):
@@ -374,7 +372,6 @@ class ButtonTitleColor(CstmUITableViewCell):
     return name
 
 
-
 class ButtonUpdateHandler(CstmUITableViewCell):
 
   def init_cell(self, cell: UITableViewCell):
@@ -402,7 +399,6 @@ class ButtonUpdateHandler(CstmUITableViewCell):
     return name
 
 
-
 class ButtonToggle(CstmUITableViewCell):
 
   def init_cell(self, cell: UITableViewCell):
@@ -427,8 +423,6 @@ class ButtonToggle(CstmUITableViewCell):
     name = 'buttonToggle'
     cls.reuseIdentifier = name
     return name
-
-
 
 
 class ButtonImageUpdateHandler(CstmUITableViewCell):
@@ -458,6 +452,261 @@ class ButtonImageUpdateHandler(CstmUITableViewCell):
     return name
 
 
+class ButtonTextSymbol(CstmUITableViewCell):
+
+  def init_cell(self, cell: UITableViewCell):
+    type = UIButton_ButtonType.system
+    button = UIButton.buttonWithType_(type)
+    config = UIButtonConfiguration.plainButtonConfiguration()
+    config.setTitle_('Button')
+    button.setConfiguration_(config)
+
+    button.setTranslatesAutoresizingMaskIntoConstraints_(False)
+    contentView = cell.contentView()
+    contentView.addSubview_(button)
+
+    NSLayoutConstraint.activateConstraints_([
+      button.centerXAnchor().constraintEqualToAnchor_(
+        contentView.centerXAnchor()),
+      button.centerYAnchor().constraintEqualToAnchor_(
+        contentView.centerYAnchor()),
+    ])
+
+  @classmethod
+  def reuseIdentifier_name(cls) -> str:
+    name = 'buttonTextSymbol'
+    cls.reuseIdentifier = name
+    return name
+
+
+class ButtonSymbolText(CstmUITableViewCell):
+
+  def init_cell(self, cell: UITableViewCell):
+    type = UIButton_ButtonType.system
+    button = UIButton.buttonWithType_(type)
+    config = UIButtonConfiguration.plainButtonConfiguration()
+    config.setTitle_('Button')
+    button.setConfiguration_(config)
+
+    button.setTranslatesAutoresizingMaskIntoConstraints_(False)
+    contentView = cell.contentView()
+    contentView.addSubview_(button)
+
+    NSLayoutConstraint.activateConstraints_([
+      button.centerXAnchor().constraintEqualToAnchor_(
+        contentView.centerXAnchor()),
+      button.centerYAnchor().constraintEqualToAnchor_(
+        contentView.centerYAnchor()),
+    ])
+
+  @classmethod
+  def reuseIdentifier_name(cls) -> str:
+    name = 'buttonSymbolText'
+    cls.reuseIdentifier = name
+    return name
+
+
+class ButtonBackground(CstmUITableViewCell):
+
+  def init_cell(self, cell: UITableViewCell):
+    type = UIButton_ButtonType.system
+    button = UIButton.buttonWithType_(type)
+    config = UIButtonConfiguration.plainButtonConfiguration()
+    config.setTitle_('Button')
+    button.setConfiguration_(config)
+
+    button.setTranslatesAutoresizingMaskIntoConstraints_(False)
+    contentView = cell.contentView()
+    contentView.addSubview_(button)
+
+    NSLayoutConstraint.activateConstraints_([
+      button.centerXAnchor().constraintEqualToAnchor_(
+        contentView.centerXAnchor()),
+      button.centerYAnchor().constraintEqualToAnchor_(
+        contentView.centerYAnchor()),
+    ])
+
+  @classmethod
+  def reuseIdentifier_name(cls) -> str:
+    name = 'buttonBackground'
+    cls.reuseIdentifier = name
+    return name
+
+
+class ButtonClose(CstmUITableViewCell):
+
+  def init_cell(self, cell: UITableViewCell):
+    type = UIButton_ButtonType.close
+    button = UIButton.buttonWithType_(type)
+    button.setTranslatesAutoresizingMaskIntoConstraints_(False)
+    contentView = cell.contentView()
+    contentView.addSubview_(button)
+
+    NSLayoutConstraint.activateConstraints_([
+      button.centerXAnchor().constraintEqualToAnchor_(
+        contentView.centerXAnchor()),
+      button.centerYAnchor().constraintEqualToAnchor_(
+        contentView.centerYAnchor()),
+    ])
+
+  @classmethod
+  def reuseIdentifier_name(cls) -> str:
+    name = 'buttonClose'
+    cls.reuseIdentifier = name
+    return name
+
+
+class ButtonLargeSymbol(CstmUITableViewCell):
+
+  def init_cell(self, cell: UITableViewCell):
+    type = UIButton_ButtonType.system
+    button = UIButton.buttonWithType_(type)
+    button.setTranslatesAutoresizingMaskIntoConstraints_(False)
+    contentView = cell.contentView()
+    contentView.addSubview_(button)
+
+    NSLayoutConstraint.activateConstraints_([
+      button.centerXAnchor().constraintEqualToAnchor_(
+        contentView.centerXAnchor()),
+      button.centerYAnchor().constraintEqualToAnchor_(
+        contentView.centerYAnchor()),
+    ])
+
+  @classmethod
+  def reuseIdentifier_name(cls) -> str:
+    name = 'buttonLargeSymbol'
+    cls.reuseIdentifier = name
+    return name
+
+
+class ButtonStyleTinted(CstmUITableViewCell):
+
+  def init_cell(self, cell: UITableViewCell):
+    type = UIButton_ButtonType.system
+    button = UIButton.buttonWithType_(type)
+    config = UIButtonConfiguration.plainButtonConfiguration()
+    config.setTitle_('Button')
+    button.setConfiguration_(config)
+
+    button.setTranslatesAutoresizingMaskIntoConstraints_(False)
+    contentView = cell.contentView()
+    contentView.addSubview_(button)
+
+    NSLayoutConstraint.activateConstraints_([
+      button.centerXAnchor().constraintEqualToAnchor_(
+        contentView.centerXAnchor()),
+      button.centerYAnchor().constraintEqualToAnchor_(
+        contentView.centerYAnchor()),
+    ])
+
+  @classmethod
+  def reuseIdentifier_name(cls) -> str:
+    name = 'buttonStyleTinted'
+    cls.reuseIdentifier = name
+    return name
+
+
+class ButtonStyleFilled(CstmUITableViewCell):
+
+  def init_cell(self, cell: UITableViewCell):
+    type = UIButton_ButtonType.system
+    button = UIButton.buttonWithType_(type)
+    config = UIButtonConfiguration.plainButtonConfiguration()
+    config.setTitle_('Button')
+    button.setConfiguration_(config)
+
+    button.setTranslatesAutoresizingMaskIntoConstraints_(False)
+    contentView = cell.contentView()
+    contentView.addSubview_(button)
+
+    NSLayoutConstraint.activateConstraints_([
+      button.centerXAnchor().constraintEqualToAnchor_(
+        contentView.centerXAnchor()),
+      button.centerYAnchor().constraintEqualToAnchor_(
+        contentView.centerYAnchor()),
+    ])
+
+  @classmethod
+  def reuseIdentifier_name(cls) -> str:
+    name = 'buttonStyleFilled'
+    cls.reuseIdentifier = name
+    return name
+
+
+class ButtonImage(CstmUITableViewCell):
+
+  def init_cell(self, cell: UITableViewCell):
+    type = UIButton_ButtonType.system
+    button = UIButton.buttonWithType_(type)
+    button.setTranslatesAutoresizingMaskIntoConstraints_(False)
+    contentView = cell.contentView()
+    contentView.addSubview_(button)
+
+    NSLayoutConstraint.activateConstraints_([
+      button.centerXAnchor().constraintEqualToAnchor_(
+        contentView.centerXAnchor()),
+      button.centerYAnchor().constraintEqualToAnchor_(
+        contentView.centerYAnchor()),
+    ])
+
+  @classmethod
+  def reuseIdentifier_name(cls) -> str:
+    name = 'buttonImage'
+    cls.reuseIdentifier = name
+    return name
+
+
+class ButtonCornerStyle(CstmUITableViewCell):
+
+  def init_cell(self, cell: UITableViewCell):
+    type = UIButton_ButtonType.system
+    button = UIButton.buttonWithType_(type)
+    config = UIButtonConfiguration.plainButtonConfiguration()
+    config.setTitle_('Button')
+    button.setConfiguration_(config)
+
+    button.setTranslatesAutoresizingMaskIntoConstraints_(False)
+    contentView = cell.contentView()
+    contentView.addSubview_(button)
+
+    NSLayoutConstraint.activateConstraints_([
+      button.centerXAnchor().constraintEqualToAnchor_(
+        contentView.centerXAnchor()),
+      button.centerYAnchor().constraintEqualToAnchor_(
+        contentView.centerYAnchor()),
+    ])
+
+  @classmethod
+  def reuseIdentifier_name(cls) -> str:
+    name = 'buttonCornerStyle'
+    cls.reuseIdentifier = name
+    return name
+
+
+prototypes = [
+  ButtonSystemAddContact,
+  ButtonDetailDisclosure,
+  ButtonStyleGray,
+  ButtonUpdateActivityHandler,
+  ButtonAttrText,
+  ButtonSymbol,
+  AddToCartButton,
+  ButtonMultiTitle,
+  ButtonSystem,
+  ButtonTitleColor,
+  ButtonUpdateHandler,
+  ButtonToggle,
+  ButtonImageUpdateHandler,
+  ButtonTextSymbol,
+  ButtonSymbolText,
+  ButtonBackground,
+  ButtonClose,
+  ButtonLargeSymbol,
+  ButtonStyleTinted,
+  ButtonStyleFilled,
+  ButtonImage,
+  ButtonCornerStyle,
+]
 
 
 # todo: まずはここで作りつつ、モジュール化するケアも考慮
@@ -468,17 +717,9 @@ class ObjcTableViewController:
     self._msgs: list['def'] = []  # xxx: 型名ちゃんとやる
     self.cell_identifier = 'cell1'
     self.controller_instance: ObjCInstance
-    self.storyboard_templates: list[dict]
-    self.prototypes = [
-      {
-        'cellClass': ButtonSystemAddContact,
-        'identifier': 'buttonSystemAddContact'
-      },
-      {
-        'cellClass': ButtonDetailDisclosure,
-        'identifier': 'buttonDetailDisclosure'
-      },
-    ]
+
+    self.prototypes = prototypes
+    self.identifiers = []
 
   def override(self):
     # todo: objc で独自にmethod 生やしたいときなど
@@ -498,22 +739,38 @@ class ObjcTableViewController:
       this = ObjCInstance(_self)
       view = this.view()
 
+      for proto in self.prototypes:
+        _name = proto.reuseIdentifier_name()
+        self.identifiers.append(_name)
+        _args = [
+          proto.this(),
+          _name,
+        ]
+        view.registerClass_forCellReuseIdentifier_(*_args)
+
+      #print(self.identifiers)
       _args = [
         CstmUITableViewCell.this(),
         self.cell_identifier,
       ]
-      view.registerClass_forCellReuseIdentifier_(*_args)
+      #view.registerClass_forCellReuseIdentifier_(*_args)
 
     # --- UITableViewDelegate
     def tableView_numberOfRowsInSection_(_self, _cmd, _tableView, _section):
+      #return 1
 
-      return 1
+      #return len(self.identifiers)
+      return 2
 
     def tableView_cellForRowAtIndexPath_(_self, _cmd, _tableView, _indexPath):
       tableView = ObjCInstance(_tableView)
       indexPath = ObjCInstance(_indexPath)
+      #pdbg.state(indexPath)
+      #print(indexPath)
+      #pdbg.state(indexPath)
+      cell_identifier = self.identifiers[indexPath.row()]
       cell = tableView.dequeueReusableCellWithIdentifier(
-        self.cell_identifier, forIndexPath=indexPath)
+        cell_identifier, forIndexPath=indexPath)
       #pdbg.state(cell.contentView().subviews())
       #pdbg.state(cell.contentView())
       return cell.ptr
