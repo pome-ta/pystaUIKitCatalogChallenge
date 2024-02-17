@@ -56,9 +56,11 @@ class CstmUITableViewCell:
   def init_cell(self, cell: UITableViewCell):
     type = UIButton_ButtonType.system
     button = UIButton.buttonWithType_(type)
+    #button.setSelected_(True)
     config = UIButtonConfiguration.plainButtonConfiguration()
-    config.setTitle_('Button')
+    #config.setTitle_('Button')
     button.setConfiguration_(config)
+
     button.setTranslatesAutoresizingMaskIntoConstraints_(False)
     contentView = cell.contentView()
     contentView.addSubview_(button)
@@ -163,6 +165,89 @@ class ButtonStyleGray(CstmUITableViewCell):
     ])
 
 
+class ButtonUpdateActivityHandler(CstmUITableViewCell):
+
+  def init_cell(self, cell: UITableViewCell):
+    type = UIButton_ButtonType.system
+    button = UIButton.buttonWithType_(type)
+    button.setSelected_(True)
+    config = UIButtonConfiguration.plainButtonConfiguration()
+    config.setTitle_('Button')
+    button.setConfiguration_(config)
+
+    button.setTranslatesAutoresizingMaskIntoConstraints_(False)
+    contentView = cell.contentView()
+    contentView.addSubview_(button)
+
+    NSLayoutConstraint.activateConstraints_([
+      button.centerXAnchor().constraintEqualToAnchor_(
+        contentView.centerXAnchor()),
+      button.centerYAnchor().constraintEqualToAnchor_(
+        contentView.centerYAnchor()),
+    ])
+
+
+class ButtonAttrText(CstmUITableViewCell):
+
+  def init_cell(self, cell: UITableViewCell):
+    type = UIButton_ButtonType.system
+    button = UIButton.buttonWithType_(type)
+    config = UIButtonConfiguration.plainButtonConfiguration()
+    config.setTitle_('Button')
+    button.setConfiguration_(config)
+
+    button.setTranslatesAutoresizingMaskIntoConstraints_(False)
+    contentView = cell.contentView()
+    contentView.addSubview_(button)
+
+    NSLayoutConstraint.activateConstraints_([
+      button.centerXAnchor().constraintEqualToAnchor_(
+        contentView.centerXAnchor()),
+      button.centerYAnchor().constraintEqualToAnchor_(
+        contentView.centerYAnchor()),
+    ])
+
+
+class ButtonSymbol(CstmUITableViewCell):
+
+  def init_cell(self, cell: UITableViewCell):
+    type = UIButton_ButtonType.system
+    button = UIButton.buttonWithType_(type)
+    config = UIButtonConfiguration.plainButtonConfiguration()
+    button.setConfiguration_(config)
+
+    button.setTranslatesAutoresizingMaskIntoConstraints_(False)
+    contentView = cell.contentView()
+    contentView.addSubview_(button)
+
+    NSLayoutConstraint.activateConstraints_([
+      button.centerXAnchor().constraintEqualToAnchor_(
+        contentView.centerXAnchor()),
+      button.centerYAnchor().constraintEqualToAnchor_(
+        contentView.centerYAnchor()),
+    ])
+
+
+class AddToCartButton(CstmUITableViewCell):
+
+  def init_cell(self, cell: UITableViewCell):
+    type = UIButton_ButtonType.system
+    button = UIButton.buttonWithType_(type)
+    config = UIButtonConfiguration.plainButtonConfiguration()
+    button.setConfiguration_(config)
+
+    button.setTranslatesAutoresizingMaskIntoConstraints_(False)
+    contentView = cell.contentView()
+    contentView.addSubview_(button)
+
+    NSLayoutConstraint.activateConstraints_([
+      button.centerXAnchor().constraintEqualToAnchor_(
+        contentView.centerXAnchor()),
+      button.centerYAnchor().constraintEqualToAnchor_(
+        contentView.centerYAnchor()),
+    ])
+
+
 # todo: まずはここで作りつつ、モジュール化するケアも考慮
 #UITableViewController
 class ObjcTableViewController:
@@ -218,7 +303,7 @@ class ObjcTableViewController:
       cell = tableView.dequeueReusableCellWithIdentifier(
         self.cell_identifier, forIndexPath=indexPath)
       #pdbg.state(cell.contentView().subviews())
-      pdbg.state(cell.contentView())
+      #pdbg.state(cell.contentView())
       return cell.ptr
 
     _methods = [
