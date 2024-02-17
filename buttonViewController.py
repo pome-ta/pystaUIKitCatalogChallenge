@@ -291,6 +291,175 @@ class AddToCartButton(CstmUITableViewCell):
     return name
 
 
+
+class ButtonMultiTitle(CstmUITableViewCell):
+
+  def init_cell(self, cell: UITableViewCell):
+    type = UIButton_ButtonType.system
+    button = UIButton.buttonWithType_(type)
+    config = UIButtonConfiguration.plainButtonConfiguration()
+    config.setTitle_('Button')
+    button.setConfiguration_(config)
+
+    button.setTranslatesAutoresizingMaskIntoConstraints_(False)
+    contentView = cell.contentView()
+    contentView.addSubview_(button)
+
+    NSLayoutConstraint.activateConstraints_([
+      button.centerXAnchor().constraintEqualToAnchor_(
+        contentView.centerXAnchor()),
+      button.centerYAnchor().constraintEqualToAnchor_(
+        contentView.centerYAnchor()),
+    ])
+
+  @classmethod
+  def reuseIdentifier_name(cls) -> str:
+    name = 'buttonMultiTitle'
+    cls.reuseIdentifier = name
+    return name
+
+
+
+class ButtonSystem(CstmUITableViewCell):
+
+  def init_cell(self, cell: UITableViewCell):
+    type = UIButton_ButtonType.system
+    button = UIButton.buttonWithType_(type)
+    config = UIButtonConfiguration.plainButtonConfiguration()
+    config.setTitle_('Button')
+    button.setConfiguration_(config)
+
+    button.setTranslatesAutoresizingMaskIntoConstraints_(False)
+    contentView = cell.contentView()
+    contentView.addSubview_(button)
+
+    NSLayoutConstraint.activateConstraints_([
+      button.centerXAnchor().constraintEqualToAnchor_(
+        contentView.centerXAnchor()),
+      button.centerYAnchor().constraintEqualToAnchor_(
+        contentView.centerYAnchor()),
+    ])
+
+  @classmethod
+  def reuseIdentifier_name(cls) -> str:
+    name = 'buttonSystem'
+    cls.reuseIdentifier = name
+    return name
+
+
+class ButtonTitleColor(CstmUITableViewCell):
+
+  def init_cell(self, cell: UITableViewCell):
+    type = UIButton_ButtonType.system
+    button = UIButton.buttonWithType_(type)
+    config = UIButtonConfiguration.plainButtonConfiguration()
+    config.setTitle_('Button')
+    button.setConfiguration_(config)
+
+    button.setTranslatesAutoresizingMaskIntoConstraints_(False)
+    contentView = cell.contentView()
+    contentView.addSubview_(button)
+
+    NSLayoutConstraint.activateConstraints_([
+      button.centerXAnchor().constraintEqualToAnchor_(
+        contentView.centerXAnchor()),
+      button.centerYAnchor().constraintEqualToAnchor_(
+        contentView.centerYAnchor()),
+    ])
+
+  @classmethod
+  def reuseIdentifier_name(cls) -> str:
+    name = 'buttonTitleColor'
+    cls.reuseIdentifier = name
+    return name
+
+
+
+class ButtonUpdateHandler(CstmUITableViewCell):
+
+  def init_cell(self, cell: UITableViewCell):
+    type = UIButton_ButtonType.system
+    button = UIButton.buttonWithType_(type)
+    config = UIButtonConfiguration.plainButtonConfiguration()
+    config.setTitle_('Button')
+    button.setConfiguration_(config)
+
+    button.setTranslatesAutoresizingMaskIntoConstraints_(False)
+    contentView = cell.contentView()
+    contentView.addSubview_(button)
+
+    NSLayoutConstraint.activateConstraints_([
+      button.centerXAnchor().constraintEqualToAnchor_(
+        contentView.centerXAnchor()),
+      button.centerYAnchor().constraintEqualToAnchor_(
+        contentView.centerYAnchor()),
+    ])
+
+  @classmethod
+  def reuseIdentifier_name(cls) -> str:
+    name = 'buttonUpdateHandler'
+    cls.reuseIdentifier = name
+    return name
+
+
+
+class ButtonToggle(CstmUITableViewCell):
+
+  def init_cell(self, cell: UITableViewCell):
+    type = UIButton_ButtonType.system
+    button = UIButton.buttonWithType_(type)
+    config = UIButtonConfiguration.plainButtonConfiguration()
+    button.setConfiguration_(config)
+
+    button.setTranslatesAutoresizingMaskIntoConstraints_(False)
+    contentView = cell.contentView()
+    contentView.addSubview_(button)
+
+    NSLayoutConstraint.activateConstraints_([
+      button.centerXAnchor().constraintEqualToAnchor_(
+        contentView.centerXAnchor()),
+      button.centerYAnchor().constraintEqualToAnchor_(
+        contentView.centerYAnchor()),
+    ])
+
+  @classmethod
+  def reuseIdentifier_name(cls) -> str:
+    name = 'buttonToggle'
+    cls.reuseIdentifier = name
+    return name
+
+
+
+
+class ButtonImageUpdateHandler(CstmUITableViewCell):
+
+  def init_cell(self, cell: UITableViewCell):
+    type = UIButton_ButtonType.system
+    button = UIButton.buttonWithType_(type)
+    config = UIButtonConfiguration.plainButtonConfiguration()
+    config.setTitle_('Toggle')
+    button.setConfiguration_(config)
+
+    button.setTranslatesAutoresizingMaskIntoConstraints_(False)
+    contentView = cell.contentView()
+    contentView.addSubview_(button)
+
+    NSLayoutConstraint.activateConstraints_([
+      button.centerXAnchor().constraintEqualToAnchor_(
+        contentView.centerXAnchor()),
+      button.centerYAnchor().constraintEqualToAnchor_(
+        contentView.centerYAnchor()),
+    ])
+
+  @classmethod
+  def reuseIdentifier_name(cls) -> str:
+    name = 'buttonImageUpdateHandler'
+    cls.reuseIdentifier = name
+    return name
+
+
+
+
 # todo: まずはここで作りつつ、モジュール化するケアも考慮
 #UITableViewController
 class ObjcTableViewController:
