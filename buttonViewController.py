@@ -51,6 +51,7 @@ class CstmUITableViewCell:
 
   def __init__(self):
     self.tableViewCell_instance: None
+    self.reuseIdentifier: str = ''
 
   # todo: 変数名とか諸々考える
   def init_cell(self, cell: UITableViewCell):
@@ -127,6 +128,12 @@ class ButtonSystemAddContact(CstmUITableViewCell):
         contentView.centerYAnchor()),
     ])
 
+  @classmethod
+  def reuseIdentifier_name(cls) -> str:
+    name = 'buttonSystemAddContact'
+    cls.reuseIdentifier = name
+    return name
+
 
 class ButtonDetailDisclosure(CstmUITableViewCell):
 
@@ -143,6 +150,12 @@ class ButtonDetailDisclosure(CstmUITableViewCell):
       button.centerYAnchor().constraintEqualToAnchor_(
         contentView.centerYAnchor()),
     ])
+
+  @classmethod
+  def reuseIdentifier_name(cls) -> str:
+    name = 'buttonDetailDisclosure'
+    cls.reuseIdentifier = name
+    return name
 
 
 class ButtonStyleGray(CstmUITableViewCell):
@@ -163,6 +176,12 @@ class ButtonStyleGray(CstmUITableViewCell):
       button.centerYAnchor().constraintEqualToAnchor_(
         contentView.centerYAnchor()),
     ])
+
+  @classmethod
+  def reuseIdentifier_name(cls) -> str:
+    name = 'buttonStyleGray'
+    cls.reuseIdentifier = name
+    return name
 
 
 class ButtonUpdateActivityHandler(CstmUITableViewCell):
@@ -186,6 +205,12 @@ class ButtonUpdateActivityHandler(CstmUITableViewCell):
         contentView.centerYAnchor()),
     ])
 
+  @classmethod
+  def reuseIdentifier_name(cls) -> str:
+    name = 'buttonUpdateActivityHandler'
+    cls.reuseIdentifier = name
+    return name
+
 
 class ButtonAttrText(CstmUITableViewCell):
 
@@ -207,6 +232,12 @@ class ButtonAttrText(CstmUITableViewCell):
         contentView.centerYAnchor()),
     ])
 
+  @classmethod
+  def reuseIdentifier_name(cls) -> str:
+    name = 'buttonAttrText'
+    cls.reuseIdentifier = name
+    return name
+
 
 class ButtonSymbol(CstmUITableViewCell):
 
@@ -227,6 +258,12 @@ class ButtonSymbol(CstmUITableViewCell):
         contentView.centerYAnchor()),
     ])
 
+  @classmethod
+  def reuseIdentifier_name(cls) -> str:
+    name = 'buttonSymbol'
+    cls.reuseIdentifier = name
+    return name
+
 
 class AddToCartButton(CstmUITableViewCell):
 
@@ -246,6 +283,12 @@ class AddToCartButton(CstmUITableViewCell):
       button.centerYAnchor().constraintEqualToAnchor_(
         contentView.centerYAnchor()),
     ])
+
+  @classmethod
+  def reuseIdentifier_name(cls) -> str:
+    name = 'addToCartButton'
+    cls.reuseIdentifier = name
+    return name
 
 
 # todo: まずはここで作りつつ、モジュール化するケアも考慮
