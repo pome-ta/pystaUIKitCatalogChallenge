@@ -55,23 +55,7 @@ class CstmUITableViewCell:
 
   # todo: 変数名とか諸々考える
   def init_cell(self, cell: UITableViewCell):
-    type = UIButton_ButtonType.system
-    button = UIButton.buttonWithType_(type)
-    #button.setSelected_(True)
-    config = UIButtonConfiguration.plainButtonConfiguration()
-    #config.setTitle_('Button')
-    button.setConfiguration_(config)
-
-    button.setTranslatesAutoresizingMaskIntoConstraints_(False)
-    contentView = cell.contentView()
-    contentView.addSubview_(button)
-
-    NSLayoutConstraint.activateConstraints_([
-      button.centerXAnchor().constraintEqualToAnchor_(
-        contentView.centerXAnchor()),
-      button.centerYAnchor().constraintEqualToAnchor_(
-        contentView.centerYAnchor()),
-    ])
+    pass
 
   def _override_tableViewCell(self):
 
