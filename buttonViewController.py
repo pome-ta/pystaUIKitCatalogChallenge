@@ -751,8 +751,7 @@ class ObjcTableViewController:
 
     # --- UITableViewDelegate
     def tableView_numberOfRowsInSection_(_self, _cmd, _tableView, _section):
-
-      return 1  #len(self.identifiers)
+      return 1
 
     def numberOfSectionsInTableView_(_self, _cmd, _tableView):
       return len(self.identifiers)
@@ -760,7 +759,7 @@ class ObjcTableViewController:
     def tableView_cellForRowAtIndexPath_(_self, _cmd, _tableView, _indexPath):
       tableView = ObjCInstance(_tableView)
       indexPath = ObjCInstance(_indexPath)
-      pdbg.state(indexPath)
+      #pdbg.state(indexPath)
       #print(indexPath)
       #pdbg.state(indexPath)
       cell_identifier = self.identifiers[indexPath.section()]
