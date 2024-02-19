@@ -41,9 +41,29 @@ class ObjcTableViewController:
     # todo: objc で独自にmethod 生やしたいときなど
     # todo: この関数内に関数を作り`@self.add_msg`
     @self.add_msg
+    def buttonClicked_(_self, _cmd, _sender):
+      print('Button was clicked.')
+    
+    @self.add_msg
     def configureSystemTextButton_(_self, _cmd, _button):
+      #this = ObjCInstance(_self)
       button = ObjCInstance(_button)
-      print(button)
+      state = UIControl_State.normal
+      button.setTitle_forState_('Button', state)
+      
+      selector = sel('buttonClicked:')
+      event=UIControl_Event.touchUpOutside
+      
+      
+      button.addTarget_action_forControlEvents_(_self,selector,)
+      pdbg.state(button)
+      
+      '''
+      pdbg.state(button
+      addTarget_action_',
+ 'addTarget_action_forControlEvents_',
+ 'addTarget_action_forEvents_',)
+      '''
 
   def add_msg(self, msg):
     if not (hasattr(self, '_msgs')):

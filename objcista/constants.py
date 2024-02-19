@@ -107,7 +107,7 @@ class UIButton_ButtonType:
 
 
 @dataclass
-class UIControlState:
+class UIControl_State:
   # ref: [UIControlState | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uicontrolstate?language=objc)
   normal = 0
   highlighted = 1 << 0
@@ -116,4 +116,30 @@ class UIControlState:
   focused = 1 << 3
   application = 0x00FF0000
   reserved = 0xFF000000
+
+
+@dataclass
+class UIControl_Event:
+  # ref: [UIControlEvents | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uicontrolevents?language=objc)
+  touchDown = 1 << 0
+  touchDownRepeat = 1 << 1
+  touchDragInside = 1 << 2
+  touchDragOutside = 1 << 3
+  touchDragEnter = 1 << 4
+  touchDragExit = 1 << 5
+  touchUpInside = 1 << 6
+  touchUpOutside = 1 << 7
+  touchCancel = 1 << 8
+  valueChanged = 1 << 12
+  menuActionTriggered = 1 << 14
+  primaryActionTriggered = 1 << 13
+  editingDidBegin = 1 << 16
+  editingChanged = 1 << 17
+  editingDidEnd = 1 << 18
+  editingDidEndOnExit = 1 << 19
+  allTouchEvents = 0x00000FFF
+  allEditingEvents = 0x000F0000
+  applicationReserved = 0x0F000000
+  systemReserved = 0xF0000000
+  allEvents = 0xFFFFFFFF
 
