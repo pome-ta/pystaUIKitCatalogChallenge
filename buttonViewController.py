@@ -700,16 +700,21 @@ prototypes = [
 class ObjcTableViewController:
 
   def __init__(self, *args, **kwargs):
+
     self._msgs: list['def'] = []  # xxx: 型名ちゃんとやる
     self.controller_instance: ObjCInstance
 
     self.prototypes = prototypes
     self.identifiers = []
 
+    self.testCells = []
+
   def override(self):
     # todo: objc で独自にmethod 生やしたいときなど
     # todo: この関数内に関数を作り`@self.add_msg`
-    pass
+    @self.add_msg
+    def configureSystemTextButton_(_self, _cmd, _button):
+      pass
 
   def add_msg(self, msg):
     if not (hasattr(self, '_msgs')):
@@ -723,6 +728,7 @@ class ObjcTableViewController:
     def viewDidLoad(_self, _cmd):
       this = ObjCInstance(_self)
       view = this.view()
+      pdbg.state(this)
 
       for proto in self.prototypes:
         _name = proto.reuseIdentifier_name()
@@ -733,14 +739,17 @@ class ObjcTableViewController:
         ]
         view.registerClass_forCellReuseIdentifier_(*_args)
 
+      #self.testCells.append()
+
     # --- UITableViewDelegate
     def tableView_numberOfRowsInSection_(_self, _cmd, _tableView, _section):
       return 1
 
     def numberOfSectionsInTableView_(_self, _cmd, _tableView):
-      return len(self.identifiers)
+      return 1  #len(self.identifiers)
 
     def tableView_cellForRowAtIndexPath_(_self, _cmd, _tableView, _indexPath):
+      #pdbg.state(ObjCInstance(_self))
       tableView = ObjCInstance(_tableView)
       indexPath = ObjCInstance(_indexPath)
       #pdbg.state(indexPath)
@@ -759,6 +768,11 @@ class ObjcTableViewController:
       numberOfSectionsInTableView_,
       tableView_cellForRowAtIndexPath_,
     ]
+
+    self.override()
+    if self._msgs: _methods.extend(self._msgs)
+    #print(self._msgs)
+
     create_kwargs = {
       'name': '_vc',
       'superclass': UITableViewController,
