@@ -700,7 +700,6 @@ prototypes = [
 class ObjcTableViewController:
 
   def __init__(self, *args, **kwargs):
-
     self._msgs: list['def'] = []  # xxx: 型名ちゃんとやる
     self.controller_instance: ObjCInstance
 
@@ -723,8 +722,6 @@ class ObjcTableViewController:
 
   def _override_controller(self):
     # todo: 既存method と独自追加method をシュッと持ちたい
-    # if self._msgs: _methods.extend(self._msgs)
-
     def viewDidLoad(_self, _cmd):
       this = ObjCInstance(_self)
       view = this.view()
