@@ -1,7 +1,4 @@
-import ctypes
-
-from objc_util import ObjCInstance, sel, create_objc_class, class_getSuperclass, c, ObjCClass
-
+from objc_util import ObjCInstance, sel, create_objc_class
 from objcista import *
 #from objcista._controller import _Controller
 from objcista.objcNavigationController import PlainNavigationController
@@ -11,7 +8,6 @@ from objcista.objcLabel import ObjcLabel
 from storyboard_ButtonViewController import prototypes
 
 import pdbg
-
 
 
 class CaseElement:
@@ -27,11 +23,8 @@ class CaseElement:
 
   @staticmethod
   def targetView(cell):
-    #return cell.contentView.subviews[0] if cell != None else None
-    print(cell)
-
-
-
+    return cell.contentView().subviews().objectAtIndexedSubscript_(
+      0) if cell != None else None
 
 
 # todo: まずはここで作りつつ、モジュール化するケアも考慮
@@ -41,10 +34,7 @@ class ObjcTableViewController:
   def __init__(self, *args, **kwargs):
     self._msgs: list['def'] = []  # xxx: 型名ちゃんとやる
     self.controller_instance: ObjCInstance
-
     self.prototypes = prototypes
-    self.identifiers = []
-
     self.testCells = []
 
   def override(self):
@@ -52,7 +42,8 @@ class ObjcTableViewController:
     # todo: この関数内に関数を作り`@self.add_msg`
     @self.add_msg
     def configureSystemTextButton_(_self, _cmd, _button):
-      pass
+      button = ObjCInstance(_button)
+      print(button)
 
   def add_msg(self, msg):
     if not (hasattr(self, '_msgs')):
@@ -64,18 +55,16 @@ class ObjcTableViewController:
     def viewDidLoad(_self, _cmd):
       this = ObjCInstance(_self)
       view = this.view()
-      pdbg.state(this)
-
       for proto in self.prototypes:
-        _name = proto.reuseIdentifier_name()
-        self.identifiers.append(_name)
         _args = [
           proto.this(),
-          _name,
+          proto.reuseIdentifier_name(),
         ]
         view.registerClass_forCellReuseIdentifier_(*_args)
 
-      #self.testCells.append()
+      self.testCells.append(
+        CaseElement('DefaultTitle', 'buttonSystem',
+                    this.configureSystemTextButton_))
 
     # --- UITableViewDelegate
     def tableView_numberOfRowsInSection_(_self, _cmd, _tableView, _section):
@@ -85,17 +74,17 @@ class ObjcTableViewController:
       return 1  #len(self.identifiers)
 
     def tableView_cellForRowAtIndexPath_(_self, _cmd, _tableView, _indexPath):
-      #pdbg.state(ObjCInstance(_self))
       tableView = ObjCInstance(_tableView)
       indexPath = ObjCInstance(_indexPath)
-      #pdbg.state(indexPath)
-      #print(indexPath)
-      #pdbg.state(indexPath)
-      cell_identifier = self.identifiers[indexPath.section()]
+
+      #cell_identifier = self.identifiers[indexPath.section()]
+      cellTest = self.testCells[indexPath.section()]
+
       cell = tableView.dequeueReusableCellWithIdentifier(
-        cell_identifier, forIndexPath=indexPath)
-      #pdbg.state(cell.contentView().subviews())
-      #pdbg.state(cell.contentView())
+        cellTest.cellID, forIndexPath=indexPath)
+
+      if (view := cellTest.targetView(cell)):
+        cellTest.configHandler(view)
       return cell.ptr
 
     _methods = [
