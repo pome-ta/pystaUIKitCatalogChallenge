@@ -60,6 +60,7 @@ extension ButtonViewController: UIToolTipInteractionDelegate {
         }
         
         // The following will make the button title red and background a lighter red.
+        // 次の例では、ボタンのタイトルが赤になり、背景が明るい赤になります。
         config.baseBackgroundColor = .systemRed
         config.baseForegroundColor = .systemRed
         
