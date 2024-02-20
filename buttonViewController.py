@@ -126,6 +126,27 @@ class ObjcTableViewController:
       button.addTarget_action_forControlEvents_(this, selector, event)
 
     @self.extension
+    # todo: `@available(iOS 15.0, *)`
+    def configureCornerStyleButton_(_self, _cmd, _button):
+      this = ObjCInstance(_self)
+      button = ObjCInstance(_button)
+
+      # todo: `if traitCollection.userInterfaceIdiom == .mac`
+      config = UIButtonConfiguration.grayButtonConfiguration()
+      cornerStyle = UIButton_Configuration_CornerStyle.capsule
+      config.setCornerStyle_(cornerStyle)
+
+      button.setConfiguration_(config)
+
+      state = UIControl_State.normal
+      button.setTitle_forState_('Button', state)
+      button.setToolTip_('CapsuleStyleButtonToolTipTitle')
+
+      selector = sel('buttonClicked:')
+      event = UIControl_Event.touchUpInside
+      button.addTarget_action_forControlEvents_(this, selector, event)
+
+    @self.extension
     def configureSystemTextButton_(_self, _cmd, _button):
       this = ObjCInstance(_self)
       button = ObjCInstance(_button)
@@ -168,8 +189,8 @@ class ObjcTableViewController:
                     this.configureSystemTextButton_))
       '''
       self.testCells.append(
-        CaseElement('FilledTitle', 'buttonStyleFilled',
-                    this.configureStyleFilledButton_))
+        CaseElement('CornerStyleTitle', 'buttonCornerStyle',
+                    this.configureCornerStyleButton_))
 
     # --- UITableViewDelegate
     def tableView_numberOfRowsInSection_(_self, _cmd, _tableView, _section):

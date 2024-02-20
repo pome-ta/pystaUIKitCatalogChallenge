@@ -143,3 +143,15 @@ class UIControl_Event:
   systemReserved = 0xF0000000
   allEvents = 0xFFFFFFFF
 
+
+@dataclass
+class UIButton_Configuration_CornerStyle:
+  # ref: [UIButtonConfigurationCornerStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uibuttonconfigurationcornerstyle?language=objc)
+  # todo: `Enumeration Case` に値表記が無いので独自に調査
+  dynamic = 0
+  fixed = -1
+  capsule = 4
+  large = 3
+  medium = 2
+  small = 1
+
