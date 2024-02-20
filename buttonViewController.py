@@ -11,7 +11,6 @@ from storyboard_ButtonViewController import prototypes
 import pdbg
 
 
-
 # todo: まずはここで作りつつ、モジュール化するケアも考慮
 #UITableViewController
 class ObjcTableViewController:
@@ -24,7 +23,66 @@ class ObjcTableViewController:
 
   def add_extensions(self):
     # todo: objc で独自にmethod 生やしたいときなど
-    # todo: この関数内に関数を作り`@self.add_msg`
+    # todo: この関数内に関数を作り`@self.extension`
+
+    @self.extension
+    def configureSystemTextButton_(_self, _cmd, _button):
+      this = ObjCInstance(_self)
+      button = ObjCInstance(_button)
+
+      state = UIControl_State.normal
+      button.setTitle_forState_('Button', state)
+
+      selector = sel('buttonClicked:')
+      event = UIControl_Event.touchUpInside
+      button.addTarget_action_forControlEvents_(this, selector, event)
+
+    @self.extension
+    def configureSystemDetailDisclosureButton_(_self, _cmd, _button):
+      this = ObjCInstance(_self)
+      button = ObjCInstance(_button)
+
+      selector = sel('buttonClicked:')
+      event = UIControl_Event.touchUpInside
+      button.addTarget_action_forControlEvents_(this, selector, event)
+
+    @self.extension
+    def configureSystemContactAddButton_(_self, _cmd, _button):
+      this = ObjCInstance(_self)
+      button = ObjCInstance(_button)
+
+      selector = sel('buttonClicked:')
+      event = UIControl_Event.touchUpInside
+      button.addTarget_action_forControlEvents_(this, selector, event)
+
+    @self.extension
+    def configureCloseButton_(_self, _cmd, _button):
+      this = ObjCInstance(_self)
+      button = ObjCInstance(_button)
+
+      selector = sel('buttonClicked:')
+      event = UIControl_Event.touchUpInside
+      button.addTarget_action_forControlEvents_(this, selector, event)
+
+    @self.extension
+    # todo: `@available(iOS 15.0, *)`
+    # xxx: あとでやる
+    def configureStyleGrayButton_(_self, _cmd, _button):
+      this = ObjCInstance(_self)
+      button = ObjCInstance(_button)
+
+      config = UIButtonConfiguration.grayButtonConfiguration()
+      button.setConfiguration_(config)
+      #pdbg.state(config)
+      state = UIControl_State.normal
+      button.setTitle_forState_('Button', state)
+      button.setToolTip_('GrayStyleButtonToolTipTitle')
+      #pdbg.state(button)
+
+      selector = sel('buttonClicked:')
+      event = UIControl_Event.touchUpInside
+      button.addTarget_action_forControlEvents_(this, selector, event)
+
     @self.extension
     def configureSystemTextButton_(_self, _cmd, _button):
       this = ObjCInstance(_self)
@@ -62,10 +120,14 @@ class ObjcTableViewController:
           proto.reuseIdentifier_name(),
         ]
         view.registerClass_forCellReuseIdentifier_(*_args)
-
+      '''
       self.testCells.append(
         CaseElement('DefaultTitle', 'buttonSystem',
                     this.configureSystemTextButton_))
+      '''
+      self.testCells.append(
+        CaseElement('GrayTitle', 'buttonStyleGray',
+                    this.configureStyleGrayButton_))
 
     # --- UITableViewDelegate
     def tableView_numberOfRowsInSection_(_self, _cmd, _tableView, _section):
