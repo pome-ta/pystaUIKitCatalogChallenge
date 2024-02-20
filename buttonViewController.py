@@ -5,26 +5,11 @@ from objcista.objcNavigationController import PlainNavigationController
 from objcista.objcViewController import ObjcViewController
 from objcista.objcLabel import ObjcLabel
 
+from caseElement import CaseElement
 from storyboard_ButtonViewController import prototypes
 
 import pdbg
 
-
-class CaseElement:
-
-  def __init__(self, title: str, cellID: str, configHandler):
-    # xxx: ガバガバ
-    # セルの視覚的なタイトル (テーブル セクションのヘッダー タイトル)
-    self.title = title
-    # nib ファイル内でセルを検索するためのテーブルビューのセルの識別子。
-    self.cellID = cellID
-    # セルのサブビューを設定するための構成ハンドラー。
-    self.configHandler = configHandler
-
-  @staticmethod
-  def targetView(cell):
-    return cell.contentView().subviews().objectAtIndexedSubscript_(
-      0) if cell != None else None
 
 
 # todo: まずはここで作りつつ、モジュール化するケアも考慮
