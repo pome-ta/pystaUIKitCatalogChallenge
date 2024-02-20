@@ -9,7 +9,7 @@ UITableViewController = ObjCClass('UITableViewController')
 UITableViewCell = ObjCClass('UITableViewCell')
 
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
-
+UITraitCollection = ObjCClass('UITraitCollection')
 UIColor = ObjCClass('UIColor')
 UIFont = ObjCClass('UIFont')
 UIBarButtonItem = ObjCClass('UIBarButtonItem')

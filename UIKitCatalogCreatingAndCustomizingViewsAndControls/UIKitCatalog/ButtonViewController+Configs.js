@@ -53,6 +53,8 @@ extension ButtonViewController: UIToolTipInteractionDelegate {
             Available in macOS 12 or later (Mac Catalyst 15.0 or later).
             Use this for controls that need to look the same between iOS and macOS.
         */
+        // iOS と macOS で見た目を同じにするには:
+        // Mac Catalyst で色付きの色を機能させるには、UIBehavioralStyle を「.pad」として使用します。macOS 12 以降 (Mac Catalyst 15.0 以降) で使用できます。 iOS と macOS の間で同じように見える必要があるコントロールにこれを使用します。
         if traitCollection.userInterfaceIdiom == .mac {
             button.preferredBehavioralStyle = .pad
         }

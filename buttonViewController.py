@@ -73,15 +73,37 @@ class ObjcTableViewController:
 
       config = UIButtonConfiguration.grayButtonConfiguration()
       button.setConfiguration_(config)
-      #pdbg.state(config)
       state = UIControl_State.normal
       button.setTitle_forState_('Button', state)
       button.setToolTip_('GrayStyleButtonToolTipTitle')
-      #pdbg.state(button)
 
       selector = sel('buttonClicked:')
       event = UIControl_Event.touchUpInside
       button.addTarget_action_forControlEvents_(this, selector, event)
+
+    @self.extension
+    # todo: `@available(iOS 15.0, *)`
+    def configureStyleTintedButton_(_self, _cmd, _button):
+      this = ObjCInstance(_self)
+      button = ObjCInstance(_button)
+
+      config = UIButtonConfiguration.tintedButtonConfiguration()
+      # todo: `if traitCollection.userInterfaceIdiom == .mac`
+      # xxx: あとでやる
+      systemRed = UIColor.systemRedColor()
+      config.setBaseBackgroundColor_(systemRed)
+      config.setBaseForegroundColor_(systemRed)
+      
+      state = UIControl_State.normal
+      button.setTitle_forState_('Button', state)
+      button.setToolTip_('TintedStyleButtonToolTipTitle')
+      button.setConfiguration_(config)
+
+      selector = sel('buttonClicked:')
+      event = UIControl_Event.touchUpInside
+      button.addTarget_action_forControlEvents_(this, selector, event)
+
+
 
     @self.extension
     def configureSystemTextButton_(_self, _cmd, _button):
@@ -126,8 +148,8 @@ class ObjcTableViewController:
                     this.configureSystemTextButton_))
       '''
       self.testCells.append(
-        CaseElement('GrayTitle', 'buttonStyleGray',
-                    this.configureStyleGrayButton_))
+        CaseElement('TintedTitle', 'buttonStyleTinted',
+                    this.configureStyleTintedButton_))
 
     # --- UITableViewDelegate
     def tableView_numberOfRowsInSection_(_self, _cmd, _tableView, _section):
