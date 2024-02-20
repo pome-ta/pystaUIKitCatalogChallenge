@@ -22,10 +22,10 @@ class ObjcTableViewController:
     self.prototypes = prototypes
     self.testCells = []
 
-  def override(self):
+  def add_extensions(self):
     # todo: objc で独自にmethod 生やしたいときなど
     # todo: この関数内に関数を作り`@self.add_msg`
-    @self.add_msg
+    @self.extension
     def configureSystemTextButton_(_self, _cmd, _button):
       this = ObjCInstance(_self)
       button = ObjCInstance(_button)
@@ -37,16 +37,16 @@ class ObjcTableViewController:
       event = UIControl_Event.touchUpInside
       button.addTarget_action_forControlEvents_(this, selector, event)
 
-    @self.add_msg
+    @self.extension
     def buttonClicked_(_self, _cmd, _sender):
       print('Button was clicked.')
 
-    @self.add_msg
+    @self.extension
     def toggleButtonClicked_(_self, _cmd, _sender):
       sender = ObjCInstance(_sender)
       print(f'Toggle action: {sender}')
 
-  def add_msg(self, msg):
+  def extension(self, msg):
     if not (hasattr(self, '_msgs')):
       self._msgs: list['def'] = []
     self._msgs.append(msg)
@@ -95,7 +95,7 @@ class ObjcTableViewController:
       tableView_cellForRowAtIndexPath_,
     ]
 
-    self.override()
+    self.add_extensions()
     if self._msgs: _methods.extend(self._msgs)
     #print(self._msgs)
 
