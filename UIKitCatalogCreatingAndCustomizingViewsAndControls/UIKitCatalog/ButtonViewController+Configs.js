@@ -32,6 +32,7 @@ extension ButtonViewController: UIToolTipInteractionDelegate {
     @available(iOS 15.0, *)
     func configureStyleGrayButton(_ button: UIButton) {
         // Note this can be also be done in the storyboard for this button.
+        // これは、このボタンのストーリーボードでも実行できることに注意してください。
         let config = UIButton.Configuration.gray()
         button.configuration = config
 
