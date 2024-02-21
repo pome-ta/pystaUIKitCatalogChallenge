@@ -108,6 +108,8 @@ extension ButtonViewController: UIToolTipInteractionDelegate {
 
     func configureImageButton(_ button: UIButton) {
         // To create this button in code you can use `UIButton.init(type: .system)`.
+        // コードでこのボタンを作成するには、「UIButton.init(type: .system)」を使用します。
+
 
         // Set the tint color to the button's image.
         if let image = UIImage(systemName: "xmark") {
@@ -116,6 +118,7 @@ extension ButtonViewController: UIToolTipInteractionDelegate {
         }
                 
         // Since this button title is just an image, add an accessibility label.
+        // このボタンのタイトルは単なるイメージであるため、アクセシビリティ ラベルを追加します。
         button.accessibilityLabel = NSLocalizedString("X", comment: "")
         
         if #available(iOS 15, *) {

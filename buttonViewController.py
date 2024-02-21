@@ -147,6 +147,26 @@ class ObjcTableViewController:
       button.addTarget_action_forControlEvents_(this, selector, event)
 
     @self.extension
+    def configureImageButton_(_self, _cmd, _button):
+      this = ObjCInstance(_self)
+      button = ObjCInstance(_button)
+
+      image = UIImage.systemImageNamed('xmark')
+
+      systemPurple = UIColor.systemPurpleColor()
+      imageButtonNormalImage = image.imageWithTintColor_(systemPurple)
+      state = UIControl_State.normal
+      button.setImage_forState_(imageButtonNormalImage, state)
+
+      # todo: `if traitCollection.userInterfaceIdiom == .mac`
+
+      button.setToolTip_('XButtonToolTipTitle')
+
+      selector = sel('buttonClicked:')
+      event = UIControl_Event.touchUpInside
+      button.addTarget_action_forControlEvents_(this, selector, event)
+
+    @self.extension
     def configureSystemTextButton_(_self, _cmd, _button):
       this = ObjCInstance(_self)
       button = ObjCInstance(_button)
@@ -189,8 +209,7 @@ class ObjcTableViewController:
                     this.configureSystemTextButton_))
       '''
       self.testCells.append(
-        CaseElement('CornerStyleTitle', 'buttonCornerStyle',
-                    this.configureCornerStyleButton_))
+        CaseElement('ImageTitle', 'buttonImage', this.configureImageButton_))
 
     # --- UITableViewDelegate
     def tableView_numberOfRowsInSection_(_self, _cmd, _tableView, _section):
@@ -203,7 +222,6 @@ class ObjcTableViewController:
       tableView = ObjCInstance(_tableView)
       indexPath = ObjCInstance(_indexPath)
 
-      #cell_identifier = self.identifiers[indexPath.section()]
       cellTest = self.testCells[indexPath.section()]
 
       cell = tableView.dequeueReusableCellWithIdentifier(
@@ -222,7 +240,6 @@ class ObjcTableViewController:
 
     self.add_extensions()
     if self._msgs: _methods.extend(self._msgs)
-    #print(self._msgs)
 
     create_kwargs = {
       'name': '_vc',

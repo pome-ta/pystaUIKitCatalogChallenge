@@ -18,4 +18,5 @@ UIView = ObjCClass('UIView')
 UILabel = ObjCClass('UILabel')
 UIButton = ObjCClass('UIButton')
 UIButtonConfiguration = ObjCClass('UIButtonConfiguration')
+UIImage = ObjCClass('UIImage')
 
