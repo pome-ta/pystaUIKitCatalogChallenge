@@ -1,4 +1,4 @@
-from objc_util import ObjCInstance, sel, create_objc_class,ns
+from objc_util import ObjCInstance, sel, create_objc_class, ns
 from objcista import *
 #from objcista._controller import _Controller
 from objcista.objcNavigationController import PlainNavigationController
@@ -170,17 +170,38 @@ class ObjcTableViewController:
     def configureAttributedTextSystemButton_(_self, _cmd, _button):
       this = ObjCInstance(_self)
       button = ObjCInstance(_button)
-      
+
       buttonTitle = 'Button'
       #NSAttributedString
       #pdbg.state(NSAttributedString.new())
       #initWithAttributedString_
-      
-      normalTitleAttributes = ns([NSUnderlineStyle.single])
-      normalAttributedTitle = NSAttributedString.alloc().initWithString_attributes_(buttonTitle, normalTitleAttributes)
-      #initWithString_attributes_
 
-      
+      #normalTitleAttributes = ns([NSUnderlineStyle.single])
+      normalTitleAttributes = {
+        'NSStrikethroughStyleAttributeName': NSUnderlineStyle.single,
+      }
+      normalAttributedTitle = NSAttributedString.alloc(
+      ).initWithString_attributes_(buttonTitle, normalTitleAttributes)
+
+      #pdbg.state(normalAttributedTitle)
+      #initWithString_attributes_
+      state = UIControl_State.normal
+      #button.attributedTitleForState_(state)
+      button.setAttributedTitle_forState_(normalAttributedTitle, state)
+      #pdbg.state(UIColor.systemGreenColor())
+
+      highlightedTitleAttributes = {
+        'NSForegroundColorAttributeName': UIColor.systemGreenColor(),
+        'NSStrikethroughStyleAttributeName': NSUnderlineStyle.thick,
+      }
+
+      highlightedAttributedTitle = NSAttributedString.alloc(
+      ).initWithString_attributes_(buttonTitle, highlightedTitleAttributes)
+
+      state = UIControl_State.highlighted
+      #button.attributedTitleForState_(state)
+      button.setAttributedTitle_forState_(highlightedAttributedTitle, state)
+      pdbg.state(button)
 
       selector = sel('buttonClicked:')
       event = UIControl_Event.touchUpInside
