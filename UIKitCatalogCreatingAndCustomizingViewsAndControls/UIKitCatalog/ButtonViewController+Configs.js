@@ -132,6 +132,7 @@ extension ButtonViewController: UIToolTipInteractionDelegate {
         let buttonTitle = NSLocalizedString("Button", comment: "")
         
         // Set the button's title for normal state.
+        // 通常状態のボタンのタイトルを設定します。
         let normalTitleAttributes: [NSAttributedString.Key: Any] = [
             NSAttributedString.Key.strikethroughStyle: NSUnderlineStyle.single.rawValue
         ]

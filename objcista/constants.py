@@ -155,3 +155,18 @@ class UIButton_Configuration_CornerStyle:
   medium = 2
   small = 1
 
+
+@dataclass
+class NSUnderlineStyle:
+  # ref: [NSUnderlineStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/nsunderlinestyle?language=objc)
+  none = 0x00  # ref: [NSUnderlineStyleNone | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/nsunderlinestyle/nsunderlinestylenone?language=objc)
+  single = 0x01
+  thick = 0x02
+  double = 0x09
+  patternSolid = 0x0000  # xxx: ?
+  patternDot = 0x0100
+  patternDash = 0x0200
+  patternDashDot = 0x0300
+  patternDashDotDot = 0x0400
+  byWord = 0x8000
+

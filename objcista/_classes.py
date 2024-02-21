@@ -14,6 +14,8 @@ UIColor = ObjCClass('UIColor')
 UIFont = ObjCClass('UIFont')
 UIBarButtonItem = ObjCClass('UIBarButtonItem')
 
+NSAttributedString = ObjCClass('NSAttributedString')
+
 UIView = ObjCClass('UIView')
 UILabel = ObjCClass('UILabel')
 UIButton = ObjCClass('UIButton')

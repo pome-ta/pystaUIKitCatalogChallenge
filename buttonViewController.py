@@ -1,4 +1,4 @@
-from objc_util import ObjCInstance, sel, create_objc_class
+from objc_util import ObjCInstance, sel, create_objc_class,ns
 from objcista import *
 #from objcista._controller import _Controller
 from objcista.objcNavigationController import PlainNavigationController
@@ -172,7 +172,13 @@ class ObjcTableViewController:
       button = ObjCInstance(_button)
       
       buttonTitle = 'Button'
+      #NSAttributedString
+      #pdbg.state(NSAttributedString.new())
+      #initWithAttributedString_
       
+      normalTitleAttributes = ns([NSUnderlineStyle.single])
+      normalAttributedTitle = NSAttributedString.alloc().initWithString_attributes_(buttonTitle, normalTitleAttributes)
+      #initWithString_attributes_
 
       
 
