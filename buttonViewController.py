@@ -167,6 +167,20 @@ class ObjcTableViewController:
       button.addTarget_action_forControlEvents_(this, selector, event)
 
     @self.extension
+    def configureAttributedTextSystemButton_(_self, _cmd, _button):
+      this = ObjCInstance(_self)
+      button = ObjCInstance(_button)
+      
+      buttonTitle = 'Button'
+      
+
+      
+
+      selector = sel('buttonClicked:')
+      event = UIControl_Event.touchUpInside
+      button.addTarget_action_forControlEvents_(this, selector, event)
+
+    @self.extension
     def configureSystemTextButton_(_self, _cmd, _button):
       this = ObjCInstance(_self)
       button = ObjCInstance(_button)
@@ -209,7 +223,8 @@ class ObjcTableViewController:
                     this.configureSystemTextButton_))
       '''
       self.testCells.append(
-        CaseElement('ImageTitle', 'buttonImage', this.configureImageButton_))
+        CaseElement('AttributedStringTitle', 'buttonAttrText',
+                    this.configureAttributedTextSystemButton_))
 
     # --- UITableViewDelegate
     def tableView_numberOfRowsInSection_(_self, _cmd, _tableView, _section):

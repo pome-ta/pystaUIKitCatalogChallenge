@@ -140,6 +140,7 @@ extension ButtonViewController: UIToolTipInteractionDelegate {
         button.setAttributedTitle(normalAttributedTitle, for: .normal)
         
         // Set the button's title for highlighted state (note this is not supported in Mac Catalyst).
+        // ボタンのタイトルを強調表示状態に設定します (これは Mac Catalyst ではサポートされていないことに注意してください)。
         let highlightedTitleAttributes: [NSAttributedString.Key: Any] = [
             NSAttributedString.Key.foregroundColor: UIColor.systemGreen,
             NSAttributedString.Key.strikethroughStyle: NSUnderlineStyle.thick.rawValue
