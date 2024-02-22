@@ -1,4 +1,5 @@
-from objc_util import ObjCInstance, sel, create_objc_class, ns, ObjCClass, NSRange, on_main_thread
+import ctypes
+from objc_util import ObjCInstance, sel, create_objc_class, c
 
 from objcista import *
 #from objcista._controller import _Controller
@@ -10,6 +11,12 @@ from caseElement import CaseElement
 from storyboard_ButtonViewController import prototypes
 
 import pdbg
+
+
+# ref: [Picker wheel for lists (not just dates) | omz:forum](https://forum.omz-software.com/topic/4592/picker-wheel-for-lists-not-just-dates/2)
+# [Pythonista/_2017/picker-wheel-for-lists.py at 3e082d53b6b9b501a3c8cf3251a8ad4c8be9c2ad · tdamdouni/Pythonista · GitHub](https://github.com/tdamdouni/Pythonista/blob/3e082d53b6b9b501a3c8cf3251a8ad4c8be9c2ad/_2017/picker-wheel-for-lists.py#L24)
+def _str_symbol(name):
+  return ObjCInstance(ctypes.c_void_p.in_dll(c, name))
 
 
 # todo: まずはここで作りつつ、モジュール化するケアも考慮
@@ -174,47 +181,34 @@ class ObjcTableViewController:
       button = ObjCInstance(_button)
 
       buttonTitle = 'Buttonnn'
+      NSStrikethroughStyleAttributeName = _str_symbol(
+        'NSStrikethroughStyleAttributeName')
 
       normalTitleAttributes = {
-        ns('NSStrikethroughStyleAttributeName'): NSUnderlineStyle.single,
+        NSStrikethroughStyleAttributeName: NSUnderlineStyle.single,
       }
-      #normalAttributedTitle = NSMutableAttributedString.alloc().initWithString_attributes_(buttonTitle, normalTitleAttributes)
+
       normalAttributedTitle = NSAttributedString.alloc(
       ).initWithString_attributes_(buttonTitle, normalTitleAttributes)
 
-      #pdbg.state(normalTitleAttributes)
-      #pdbg.state(NSAttributedString.new().mutableCopy())
-      #pdbg.state(NSMutableAttributedString.new())
-      #pdbg.state(normalAttributedTitle)
-      '''
-      NSDictionary = ObjCClass('NSDictionary')
-      #NSRange = ObjCClass('NSRange')
-
-      t = NSMutableAttributedString.alloc().initWithString_(buttonTitle)
-      red = UIColor.redColor()
-      d = NSDictionary.alloc().initWithObjects_forKeys_(
-        (red, ), ('NSForegroundColorAttributeName', ))
-
-      t.setAttributes_range_(d, NSRange(1, 3))
-      #pdbg.state(t)
-      state = UIControl_State.normal
-      button.setAttributedTitle_forState_(t, state)
-      '''
-
       state = UIControl_State.normal
       button.setAttributedTitle_forState_(normalAttributedTitle, state)
-      '''
+
+      NSForegroundColorAttributeName = _str_symbol(
+        'NSForegroundColorAttributeName')
+      NSStrikethroughStyleAttributeName = _str_symbol(
+        'NSStrikethroughStyleAttributeName')
+
       highlightedTitleAttributes = {
-        'NSForegroundColorAttributeName': UIColor.systemGreenColor(),
-        'NSStrikethroughStyleAttributeName': NSUnderlineStyle.thick,
+        NSForegroundColorAttributeName: UIColor.systemGreenColor(),
+        NSStrikethroughStyleAttributeName: NSUnderlineStyle.thick,
       }
 
-      #highlightedAttributedTitle = NSMutableAttributedString.alloc().initWithString_attributes_(buttonTitle, highlightedTitleAttributes)
-      highlightedAttributedTitle = NSAttributedString.alloc().initWithString_attributes_(buttonTitle, highlightedTitleAttributes)
+      highlightedAttributedTitle = NSAttributedString.alloc(
+      ).initWithString_attributes_(buttonTitle, highlightedTitleAttributes)
 
       state = UIControl_State.highlighted
       button.setAttributedTitle_forState_(highlightedAttributedTitle, state)
-      '''
 
       selector = sel('buttonClicked:')
       event = UIControl_Event.touchUpInside
