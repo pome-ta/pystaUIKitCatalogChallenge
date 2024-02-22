@@ -205,8 +205,8 @@ class ButtonSymbol(CstmUITableViewCell):
   def init_cell(self, cell: UITableViewCell):
     type = UIButton_ButtonType.system
     button = UIButton.buttonWithType_(type)
-    config = UIButtonConfiguration.plainButtonConfiguration()
-    button.setConfiguration_(config)
+    #config = UIButtonConfiguration.plainButtonConfiguration()
+    #button.setConfiguration_(config)
 
     button.setTranslatesAutoresizingMaskIntoConstraints_(False)
     contentView = cell.contentView()

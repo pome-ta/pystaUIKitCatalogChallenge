@@ -157,6 +157,7 @@ extension ButtonViewController: UIToolTipInteractionDelegate {
         
         if #available(iOS 15, *) {
             // For iOS 15 use the UIButtonConfiguration to set the image.
+            // iOS 15 の場合は、UIButtonConfiguration を使用して画像を設定します。
             var buttonConfig = UIButton.Configuration.plain()
             buttonConfig.image = buttonImage
             button.configuration = buttonConfig
@@ -170,6 +171,7 @@ extension ButtonViewController: UIToolTipInteractionDelegate {
         button.setPreferredSymbolConfiguration(config, forImageIn: .normal)
         
         // Since this button title is just an image, add an accessibility label.
+        // このボタンのタイトルは単なるイメージであるため、アクセシビリティ ラベルを追加します。
         button.accessibilityLabel = NSLocalizedString("Person", comment: "")
         
         button.addTarget(self, action: #selector(ButtonViewController.buttonClicked(_:)), for: .touchUpInside)

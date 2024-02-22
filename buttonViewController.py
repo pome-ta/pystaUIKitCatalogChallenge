@@ -215,6 +215,17 @@ class ObjcTableViewController:
       button.addTarget_action_forControlEvents_(this, selector, event)
 
     @self.extension
+    def configureSymbolButton_(_self, _cmd, _button):
+      this = ObjCInstance(_self)
+      button = ObjCInstance(_button)
+
+      buttonImage = UIImage.systemImageNamed('person')
+      buttonConfig = UIButtonConfiguration.plainButtonConfiguration()
+      buttonConfig.setImage_(buttonImage)
+      #pdbg.state(config)
+      button.setConfiguration_(buttonConfig)
+
+    @self.extension
     def configureSystemTextButton_(_self, _cmd, _button):
       this = ObjCInstance(_self)
       button = ObjCInstance(_button)
@@ -257,8 +268,8 @@ class ObjcTableViewController:
                     this.configureSystemTextButton_))
       '''
       self.testCells.append(
-        CaseElement('AttributedStringTitle', 'buttonAttrText',
-                    this.configureAttributedTextSystemButton_))
+        CaseElement('SymbolTitle', 'buttonSymbol',
+                    this.configureSymbolButton_))
 
     # --- UITableViewDelegate
     def tableView_numberOfRowsInSection_(_self, _cmd, _tableView, _section):
