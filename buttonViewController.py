@@ -1,4 +1,4 @@
-from objc_util import ObjCInstance, sel, create_objc_class, ns
+from objc_util import ObjCInstance, sel, create_objc_class, ns, ObjCClass,NSRange,on_main_thread
 from objcista import *
 #from objcista._controller import _Controller
 from objcista.objcNavigationController import PlainNavigationController
@@ -167,28 +167,39 @@ class ObjcTableViewController:
       button.addTarget_action_forControlEvents_(this, selector, event)
 
     @self.extension
+    #@on_main_thread
     def configureAttributedTextSystemButton_(_self, _cmd, _button):
       this = ObjCInstance(_self)
       button = ObjCInstance(_button)
 
       buttonTitle = 'Buttonnn'
-      
+
       normalTitleAttributes = ns({
         'NSStrikethroughStyleAttributeName': 3,
       })
       #normalAttributedTitle = NSMutableAttributedString.alloc().initWithString_attributes_(buttonTitle, normalTitleAttributes)
-      normalAttributedTitle = NSMutableAttributedString.alloc().initWithString_attributes_(buttonTitle, normalTitleAttributes)
-      
+      normalAttributedTitle = NSMutableAttributedString.alloc(
+      ).initWithString_attributes_(buttonTitle, normalTitleAttributes)
+
       #pdbg.state(normalTitleAttributes)
       #pdbg.state(NSAttributedString.new().mutableCopy())
       #pdbg.state(NSMutableAttributedString.new())
-      pdbg.state(normalAttributedTitle)
+      #pdbg.state(normalAttributedTitle)
+      NSDictionary = ObjCClass('NSDictionary')
+      #NSRange = ObjCClass('NSRange')
 
-      
+      t = NSMutableAttributedString.alloc().initWithString_(buttonTitle)
+      red = UIColor.redColor()
+      d = NSDictionary.alloc().initWithObjects_forKeys_(
+        (red, ), ('NSForegroundColorAttributeName', ))
+
+      t.setAttributes_range_(d, NSRange(1, 3))
+      #pdbg.state(t)
       state = UIControl_State.normal
-      button.setAttributedTitle_forState_(normalAttributedTitle, state)
+      button.setAttributedTitle_forState_(t, state)
 
-
+      #button.setAttributedTitle_forState_(normalAttributedTitle, state)
+      '''
       highlightedTitleAttributes = {
         'NSForegroundColorAttributeName': UIColor.systemGreenColor(),
         'NSStrikethroughStyleAttributeName': NSUnderlineStyle.thick,
@@ -199,6 +210,7 @@ class ObjcTableViewController:
 
       state = UIControl_State.highlighted
       button.setAttributedTitle_forState_(highlightedAttributedTitle, state)
+      '''
 
       selector = sel('buttonClicked:')
       event = UIControl_Event.touchUpInside
