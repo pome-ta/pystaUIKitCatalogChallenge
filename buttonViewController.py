@@ -1,4 +1,5 @@
-from objc_util import ObjCInstance, sel, create_objc_class, ns, ObjCClass,NSRange,on_main_thread
+from objc_util import ObjCInstance, sel, create_objc_class, ns, ObjCClass, NSRange, on_main_thread
+
 from objcista import *
 #from objcista._controller import _Controller
 from objcista.objcNavigationController import PlainNavigationController
@@ -174,17 +175,18 @@ class ObjcTableViewController:
 
       buttonTitle = 'Buttonnn'
 
-      normalTitleAttributes = ns({
-        'NSStrikethroughStyleAttributeName': 3,
-      })
+      normalTitleAttributes = {
+        ns('NSStrikethroughStyleAttributeName'): NSUnderlineStyle.single,
+      }
       #normalAttributedTitle = NSMutableAttributedString.alloc().initWithString_attributes_(buttonTitle, normalTitleAttributes)
-      normalAttributedTitle = NSMutableAttributedString.alloc(
+      normalAttributedTitle = NSAttributedString.alloc(
       ).initWithString_attributes_(buttonTitle, normalTitleAttributes)
 
       #pdbg.state(normalTitleAttributes)
       #pdbg.state(NSAttributedString.new().mutableCopy())
       #pdbg.state(NSMutableAttributedString.new())
       #pdbg.state(normalAttributedTitle)
+      '''
       NSDictionary = ObjCClass('NSDictionary')
       #NSRange = ObjCClass('NSRange')
 
@@ -197,8 +199,10 @@ class ObjcTableViewController:
       #pdbg.state(t)
       state = UIControl_State.normal
       button.setAttributedTitle_forState_(t, state)
+      '''
 
-      #button.setAttributedTitle_forState_(normalAttributedTitle, state)
+      state = UIControl_State.normal
+      button.setAttributedTitle_forState_(normalAttributedTitle, state)
       '''
       highlightedTitleAttributes = {
         'NSForegroundColorAttributeName': UIColor.systemGreenColor(),

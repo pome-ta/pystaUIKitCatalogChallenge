@@ -1,3 +1,8 @@
+# 📝 2024/02/22
+
+
+[https://github.com/tdamdouni/Pythonista/blob/master/_2017/picker-wheel-for-lists.py](https://github.com/tdamdouni/Pythonista/blob/master/_2017/picker-wheel-for-lists.py)
+
 # 📝 2024/02/19
 
 storyboard を終え、`ButtonKind` での実装
