@@ -171,7 +171,7 @@ class ObjcTableViewController:
       this = ObjCInstance(_self)
       button = ObjCInstance(_button)
 
-      buttonTitle = 'Button'
+      buttonTitle = 'Buttonnn'
       #NSAttributedString
       #pdbg.state(NSAttributedString.new())
       #initWithAttributedString_
@@ -180,10 +180,10 @@ class ObjcTableViewController:
       normalTitleAttributes = {
         'NSStrikethroughStyleAttributeName': NSUnderlineStyle.single,
       }
-      normalAttributedTitle = NSAttributedString.alloc(
+      normalAttributedTitle = NSMutableAttributedString.alloc(
       ).initWithString_attributes_(buttonTitle, normalTitleAttributes)
 
-      #pdbg.state(normalAttributedTitle)
+      pdbg.state(normalAttributedTitle)
       #initWithString_attributes_
       state = UIControl_State.normal
       #button.attributedTitleForState_(state)
@@ -195,13 +195,13 @@ class ObjcTableViewController:
         'NSStrikethroughStyleAttributeName': NSUnderlineStyle.thick,
       }
 
-      highlightedAttributedTitle = NSAttributedString.alloc(
+      highlightedAttributedTitle = NSMutableAttributedString.alloc(
       ).initWithString_attributes_(buttonTitle, highlightedTitleAttributes)
 
       state = UIControl_State.highlighted
       #button.attributedTitleForState_(state)
       button.setAttributedTitle_forState_(highlightedAttributedTitle, state)
-      pdbg.state(button)
+      #pdbg.state(button)
 
       selector = sel('buttonClicked:')
       event = UIControl_Event.touchUpInside
