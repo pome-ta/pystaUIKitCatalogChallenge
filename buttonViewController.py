@@ -172,36 +172,33 @@ class ObjcTableViewController:
       button = ObjCInstance(_button)
 
       buttonTitle = 'Buttonnn'
-      #NSAttributedString
-      #pdbg.state(NSAttributedString.new())
-      #initWithAttributedString_
-
-      #normalTitleAttributes = ns([NSUnderlineStyle.single])
-      normalTitleAttributes = {
-        'NSStrikethroughStyleAttributeName': NSUnderlineStyle.single,
-      }
-      normalAttributedTitle = NSMutableAttributedString.alloc(
-      ).initWithString_attributes_(buttonTitle, normalTitleAttributes)
-
+      
+      normalTitleAttributes = ns({
+        'NSStrikethroughStyleAttributeName': 3,
+      })
+      #normalAttributedTitle = NSMutableAttributedString.alloc().initWithString_attributes_(buttonTitle, normalTitleAttributes)
+      normalAttributedTitle = NSMutableAttributedString.alloc().initWithString_attributes_(buttonTitle, normalTitleAttributes)
+      
+      #pdbg.state(normalTitleAttributes)
+      #pdbg.state(NSAttributedString.new().mutableCopy())
+      #pdbg.state(NSMutableAttributedString.new())
       pdbg.state(normalAttributedTitle)
-      #initWithString_attributes_
+
+      
       state = UIControl_State.normal
-      #button.attributedTitleForState_(state)
       button.setAttributedTitle_forState_(normalAttributedTitle, state)
-      #pdbg.state(UIColor.systemGreenColor())
+
 
       highlightedTitleAttributes = {
         'NSForegroundColorAttributeName': UIColor.systemGreenColor(),
         'NSStrikethroughStyleAttributeName': NSUnderlineStyle.thick,
       }
 
-      highlightedAttributedTitle = NSMutableAttributedString.alloc(
-      ).initWithString_attributes_(buttonTitle, highlightedTitleAttributes)
+      #highlightedAttributedTitle = NSMutableAttributedString.alloc().initWithString_attributes_(buttonTitle, highlightedTitleAttributes)
+      highlightedAttributedTitle = NSAttributedString.alloc().initWithString_attributes_(buttonTitle, highlightedTitleAttributes)
 
       state = UIControl_State.highlighted
-      #button.attributedTitleForState_(state)
       button.setAttributedTitle_forState_(highlightedAttributedTitle, state)
-      #pdbg.state(button)
 
       selector = sel('buttonClicked:')
       event = UIControl_Event.touchUpInside
