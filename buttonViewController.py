@@ -219,28 +219,33 @@ class ObjcTableViewController:
       this = ObjCInstance(_self)
       button = ObjCInstance(_button)
 
-      buttonImage = UIImage.systemImageNamed('person')
-      
-      pdbg.state(UIImage)
-      
-      
-      buttonConfig = UIButtonConfiguration.plainButtonConfiguration()
-      buttonConfig.setImage_(buttonImage)
-      button.setConfiguration_(buttonConfig)
-      button.setToolTip_('PersonButtonToolTipTitle')
-
+      #buttonImage = UIImage.systemImageNamed('person')
       UIFontTextStyleBody = _str_symbol('UIFontTextStyleBody')
       #pdbg.state(UIFontTextStyleBody)
       scale = UIImage_SymbolScale.large
 
       config = UIImageSymbolConfiguration.configurationWithTextStyle_scale_(
         UIFontTextStyleBody, scale)
+      buttonImage=systemImageNamed_withConfiguration_('person',config)
+      
+      pdbg.state(buttonImage)
+      
+      
+      buttonConfig = UIButtonConfiguration.plainButtonConfiguration()
+      buttonConfig.setImage_(buttonImage)
+      button.setConfiguration_(buttonConfig)
+      #pdbg.state(button)
+      button.setToolTip_('PersonButtonToolTipTitle')
+
+      
 
       state = UIControl_State.normal
+      #button.setImage_forState_(buttonImage, state)
       button.setPreferredSymbolConfiguration_forImageInState_(config, state)
       #pdbg.state(button)
       #pdbg.state(UIImageSymbolConfiguration.new())
       #pdbg.state(config)
+      #button.setImage_forState_(buttonImage, state)
 
       #pdbg.state(UIImageSymbolConfiguration.configurationWithTextStyle_scale_)
 
