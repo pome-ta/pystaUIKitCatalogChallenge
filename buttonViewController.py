@@ -234,7 +234,8 @@ class ObjcTableViewController:
 
       state = UIControl_State.normal
       button.setPreferredSymbolConfiguration_forImageInState_(config, state)
-      pdbg.state(button)
+      #pdbg.state(button)
+      pdbg.state(config)
 
       #pdbg.state(UIImageSymbolConfiguration.configurationWithTextStyle_scale_)
 
