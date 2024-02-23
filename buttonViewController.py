@@ -220,6 +220,10 @@ class ObjcTableViewController:
       button = ObjCInstance(_button)
 
       buttonImage = UIImage.systemImageNamed('person')
+      
+      pdbg.state(UIImage)
+      
+      
       buttonConfig = UIButtonConfiguration.plainButtonConfiguration()
       buttonConfig.setImage_(buttonImage)
       button.setConfiguration_(buttonConfig)
@@ -235,7 +239,8 @@ class ObjcTableViewController:
       state = UIControl_State.normal
       button.setPreferredSymbolConfiguration_forImageInState_(config, state)
       #pdbg.state(button)
-      pdbg.state(config)
+      #pdbg.state(UIImageSymbolConfiguration.new())
+      #pdbg.state(config)
 
       #pdbg.state(UIImageSymbolConfiguration.configurationWithTextStyle_scale_)
 
