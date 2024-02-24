@@ -271,6 +271,14 @@ class ObjcTableViewController:
       event = UIControl_Event.touchUpInside
       button.addTarget_action_forControlEvents_(this, selector, event)
 
+
+    @self.extension
+    def configureSymbolTextButton_(_self, _cmd, _button):
+      this = ObjCInstance(_self)
+      button = ObjCInstance(_button)
+
+
+
     @self.extension
     def configureSystemTextButton_(_self, _cmd, _button):
       this = ObjCInstance(_self)
@@ -314,8 +322,8 @@ class ObjcTableViewController:
                     this.configureSystemTextButton_))
       '''
       self.testCells.append(
-        CaseElement('LargeSymbolTitle', 'buttonLargeSymbol',
-                    this.configureLargeSymbolButton_))
+        CaseElement('SymbolStringTitle', 'buttonSymbolText',
+                    this.configureSymbolTextButton_))
 
     # --- UITableViewDelegate
     def tableView_numberOfRowsInSection_(_self, _cmd, _tableView, _section):

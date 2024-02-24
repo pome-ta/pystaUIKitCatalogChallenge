@@ -198,6 +198,7 @@ extension ButtonViewController: UIToolTipInteractionDelegate {
     
     func configureSymbolTextButton(_ button: UIButton) {
         // Button with image to the left of the title.
+        // タイトルの左側にある画像付きのボタン。
         
         let buttonImage = UIImage(systemName: "person")
 
