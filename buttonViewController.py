@@ -216,35 +216,33 @@ class ObjcTableViewController:
 
     @self.extension
     def configureSymbolButton_(_self, _cmd, _button):
+      # xxx: 合ってる説ある？
       this = ObjCInstance(_self)
       button = ObjCInstance(_button)
 
-      #buttonImage = UIImage.systemImageNamed('person')
+      buttonImage = UIImage.systemImageNamed('person')
+      state = UIControl_State.normal
+      if True:  # xxx: `available(iOS 15, *)`
+        buttonConfig = UIButtonConfiguration.plainButtonConfiguration()
+        buttonConfig.setImage_(buttonImage)
+        button.setConfiguration_(buttonConfig)
+        button.setToolTip_('PersonButtonToolTipTitle')
+      else:
+        button.setImage_forState_(buttonImage, state)
+
       UIFontTextStyleBody = _str_symbol('UIFontTextStyleBody')
-      #pdbg.state(UIFontTextStyleBody)
       scale = UIImage_SymbolScale.large
 
       config = UIImageSymbolConfiguration.configurationWithTextStyle_scale_(
         UIFontTextStyleBody, scale)
-      buttonImage = UIImage.systemImageNamed_withConfiguration_('person', config)
 
-      pdbg.state(buttonImage)
-
-      buttonConfig = UIButtonConfiguration.plainButtonConfiguration()
-      buttonConfig.setImage_(buttonImage)
-      button.setConfiguration_(buttonConfig)
-      #pdbg.state(button)
-      button.setToolTip_('PersonButtonToolTipTitle')
-
-      state = UIControl_State.normal
-      #button.setImage_forState_(buttonImage, state)
       button.setPreferredSymbolConfiguration_forImageInState_(config, state)
-      #pdbg.state(button)
-      #pdbg.state(UIImageSymbolConfiguration.new())
-      #pdbg.state(config)
-      #button.setImage_forState_(buttonImage, state)
 
-      #pdbg.state(UIImageSymbolConfiguration.configurationWithTextStyle_scale_)
+      # todo: `button.accessibilityLabel = NSLocalizedString("Person", comment: "")`
+
+      selector = sel('buttonClicked:')
+      event = UIControl_Event.touchUpInside
+      button.addTarget_action_forControlEvents_(this, selector, event)
 
     @self.extension
     def configureSystemTextButton_(_self, _cmd, _button):
