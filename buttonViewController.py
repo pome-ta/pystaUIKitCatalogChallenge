@@ -245,6 +245,33 @@ class ObjcTableViewController:
       button.addTarget_action_forControlEvents_(this, selector, event)
 
     @self.extension
+    def configureLargeSymbolButton_(_self, _cmd, _button):
+      this = ObjCInstance(_self)
+      button = ObjCInstance(_button)
+      buttonImage = UIImage.systemImageNamed('person')
+      if True:  # xxx: `available(iOS 15, *)`
+        buttonConfig = UIButtonConfiguration.plainButtonConfiguration()
+
+        UIFontTextStyleLargeTitle = _str_symbol('UIFontTextStyleLargeTitle')
+
+        _symbolConfiguration = UIImageSymbolConfiguration.configurationWithTextStyle_(
+          UIFontTextStyleLargeTitle)
+
+        buttonConfig.setPreferredSymbolConfigurationForImage_(
+          _symbolConfiguration)
+        buttonConfig.setImage_(buttonImage)
+        button.setConfiguration_(buttonConfig)
+      else:
+        state = UIControl_State.normal
+        button.setImage_forState_(buttonImage, state)
+
+      # todo: `button.accessibilityLabel = NSLocalizedString("Person", comment: "")`
+
+      selector = sel('buttonClicked:')
+      event = UIControl_Event.touchUpInside
+      button.addTarget_action_forControlEvents_(this, selector, event)
+
+    @self.extension
     def configureSystemTextButton_(_self, _cmd, _button):
       this = ObjCInstance(_self)
       button = ObjCInstance(_button)
@@ -287,8 +314,8 @@ class ObjcTableViewController:
                     this.configureSystemTextButton_))
       '''
       self.testCells.append(
-        CaseElement('SymbolTitle', 'buttonSymbol',
-                    this.configureSymbolButton_))
+        CaseElement('LargeSymbolTitle', 'buttonLargeSymbol',
+                    this.configureLargeSymbolButton_))
 
     # --- UITableViewDelegate
     def tableView_numberOfRowsInSection_(_self, _cmd, _tableView, _section):
