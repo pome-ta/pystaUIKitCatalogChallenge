@@ -265,6 +265,13 @@ class ObjcTableViewController:
         state = UIControl_State.normal
         button.setImage_forState_(buttonImage, state)
 
+        UIFontTextStyleBody = _str_symbol('UIFontTextStyleBody')
+        scale = UIImage_SymbolScale.small
+
+        config = UIImageSymbolConfiguration.configurationWithTextStyle_scale_(
+          UIFontTextStyleBody, scale)
+        button.setPreferredSymbolConfiguration_forImageInState_(config, state)
+
       # todo: `button.accessibilityLabel = NSLocalizedString("Person", comment: "")`
 
       selector = sel('buttonClicked:')
