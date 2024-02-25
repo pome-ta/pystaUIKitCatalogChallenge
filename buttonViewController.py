@@ -271,13 +271,24 @@ class ObjcTableViewController:
       event = UIControl_Event.touchUpInside
       button.addTarget_action_forControlEvents_(this, selector, event)
 
-
     @self.extension
     def configureSymbolTextButton_(_self, _cmd, _button):
       this = ObjCInstance(_self)
       button = ObjCInstance(_button)
+      buttonImage = UIImage.systemImageNamed('person')
+      if True:  # xxx: `available(iOS 15, *)`
+        buttonConfig = UIButtonConfiguration.plainButtonConfiguration()
+        UIFontTextStyleBody = _str_symbol('UIFontTextStyleBody')
+        _symbolConfiguration = UIImageSymbolConfiguration.configurationWithTextStyle_(
+          UIFontTextStyleBody)
 
-
+        buttonConfig.setPreferredSymbolConfigurationForImage_(
+          _symbolConfiguration)
+        buttonConfig.setImage_(buttonImage)
+        button.setConfiguration_(buttonConfig)
+      else:
+        state = UIControl_State.normal
+        button.setImage_forState_(buttonImage, state)
 
     @self.extension
     def configureSystemTextButton_(_self, _cmd, _button):
