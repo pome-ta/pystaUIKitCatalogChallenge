@@ -1,4 +1,6 @@
-from objc_util import ObjCClass
+from objc_util import ObjCClass, NSData
+
+UIScreen = ObjCClass('UIScreen')
 
 UIViewController = ObjCClass('UIViewController')
 

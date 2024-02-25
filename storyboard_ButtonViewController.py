@@ -484,9 +484,11 @@ class ButtonBackground(CstmUITableViewCell):
   def init_cell(self, cell: UITableViewCell):
     type = UIButton_ButtonType.system
     button = UIButton.buttonWithType_(type)
-    config = UIButtonConfiguration.plainButtonConfiguration()
-    config.setTitle_('Button')
-    button.setConfiguration_(config)
+    state = UIControl_State.normal
+    button.setTitle_forState_('Button', state)
+    #config = UIButtonConfiguration.plainButtonConfiguration()
+    #config.setTitle_('Button')
+    #button.setConfiguration_(config)
 
     button.setTranslatesAutoresizingMaskIntoConstraints_(False)
     contentView = cell.contentView()

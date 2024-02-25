@@ -1,5 +1,7 @@
+from pathlib import Path
+
 import ctypes
-from objc_util import ObjCInstance, sel, create_objc_class, c
+from objc_util import ObjCInstance, sel, create_objc_class, c, nsurl
 
 from objcista import *
 #from objcista._controller import _Controller
@@ -17,6 +19,21 @@ import pdbg
 # [Pythonista/_2017/picker-wheel-for-lists.py at 3e082d53b6b9b501a3c8cf3251a8ad4c8be9c2ad · tdamdouni/Pythonista · GitHub](https://github.com/tdamdouni/Pythonista/blob/3e082d53b6b9b501a3c8cf3251a8ad4c8be9c2ad/_2017/picker-wheel-for-lists.py#L24)
 def _str_symbol(name):
   return ObjCInstance(ctypes.c_void_p.in_dll(c, name))
+
+
+def get_absolutepath(path):
+  # xxx: かなり意味ないので、要検討
+  _path = Path(path)
+  if (_path.exists()):
+    return str(_path.absolute())
+  else:
+    print('画像が見つかりません')
+    raise
+
+
+def get_dataWithContentsOfURL(path: str) -> NSData:
+  _nsurl = nsurl(get_absolutepath(path))
+  return NSData.dataWithContentsOfURL_(_nsurl)
 
 
 # todo: まずはここで作りつつ、モジュール化するケアも考慮
@@ -386,6 +403,41 @@ class ObjcTableViewController:
       button.addTarget_action_forControlEvents_(this, selector, event)
 
     @self.extension
+    def configureBackgroundButton_(_self, _cmd, _button):
+      # Note: Only for iOS the title's color can be changed.
+      this = ObjCInstance(_self)
+      button = ObjCInstance(_button)
+
+      # todo: [iphone - Retina display and [UIImage initWithData] - Stack Overflow](https://stackoverflow.com/questions/3289286/retina-display-and-uiimage-initwithdata)
+      # xxx: scale 指定これでいいのかな？
+      scale = int(UIScreen.mainScreen().scale())
+
+      normal_str = f'./UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/background.imageset/stepper_and_segment_background_{scale}x.png'
+      highlighted_str = f'./UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/background_highlighted.imageset/stepper_and_segment_background_highlighted_{scale}x.png'
+      disabled_str = f'./UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/background_disabled.imageset/stepper_and_segment_background_disabled_{scale}x.png'
+
+      normal_data = get_dataWithContentsOfURL(normal_str)
+      highlighted_data = get_dataWithContentsOfURL(highlighted_str)
+      disabled_data = get_dataWithContentsOfURL(disabled_str)
+
+      normal_img = UIImage.alloc().initWithData_scale_(normal_data, scale)
+      highlighted_img = UIImage.alloc().initWithData_scale_(
+        highlighted_data, scale)
+      disabled_img = UIImage.alloc().initWithData_scale_(disabled_data, scale)
+
+      normal = UIControl_State.normal
+      highlighted = UIControl_State.highlighted
+      disabled = UIControl_State.disabled
+
+      button.setBackgroundImage_forState_(normal_img, normal)
+      button.setBackgroundImage_forState_(highlighted_img, highlighted)
+      button.setBackgroundImage_forState_(disabled_img, disabled)
+
+      selector = sel('buttonClicked:')
+      event = UIControl_Event.touchUpInside
+      button.addTarget_action_forControlEvents_(this, selector, event)
+
+    @self.extension
     def configureSystemTextButton_(_self, _cmd, _button):
       this = ObjCInstance(_self)
       button = ObjCInstance(_button)
@@ -428,8 +480,8 @@ class ObjcTableViewController:
                     this.configureSystemTextButton_))
       '''
       self.testCells.append(
-        CaseElement('ButtonColorTitle', 'buttonTitleColor',
-                    this.configureTitleTextButton_))
+        CaseElement('BackgroundTitle', 'buttonBackground',
+                    this.configureBackgroundButton_))
 
     # --- UITableViewDelegate
     def tableView_numberOfRowsInSection_(_self, _cmd, _tableView, _section):
