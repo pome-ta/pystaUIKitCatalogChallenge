@@ -273,6 +273,7 @@ class ObjcTableViewController:
 
     @self.extension
     def configureSymbolTextButton_(_self, _cmd, _button):
+      # Button with image to the left of the title.
       this = ObjCInstance(_self)
       button = ObjCInstance(_button)
       buttonImage = UIImage.systemImageNamed('person')
@@ -289,6 +290,19 @@ class ObjcTableViewController:
       else:
         state = UIControl_State.normal
         button.setImage_forState_(buttonImage, state)
+
+      state = UIControl_State.normal
+      button.setTitle_forState_('Person', state)
+
+      # xxx: 正解かは不明
+      UIFontTextStyleBody = _str_symbol('UIFontTextStyleBody')
+      preferredFont = UIFont.preferredFontForTextStyle_(UIFontTextStyleBody)
+
+      button.titleLabel().setFont_(preferredFont)
+
+      selector = sel('buttonClicked:')
+      event = UIControl_Event.touchUpInside
+      button.addTarget_action_forControlEvents_(this, selector, event)
 
     @self.extension
     def configureSystemTextButton_(_self, _cmd, _button):
