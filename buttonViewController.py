@@ -361,6 +361,13 @@ class ObjcTableViewController:
       button.addTarget_action_forControlEvents_(this, selector, event)
 
     @self.extension
+    def configureToggleButton_(_self, _cmd, _button):
+      # This makes the button style a "toggle button".
+      #this = ObjCInstance(_self)
+      button = ObjCInstance(_button)
+      button.setChangesSelectionAsPrimaryAction_(True)
+
+    @self.extension
     def configureSystemTextButton_(_self, _cmd, _button):
       this = ObjCInstance(_self)
       button = ObjCInstance(_button)
@@ -403,8 +410,8 @@ class ObjcTableViewController:
                     this.configureSystemTextButton_))
       '''
       self.testCells.append(
-        CaseElement('MultiTitleTitle', 'buttonMultiTitle',
-                    this.configureMultiTitleButton_))
+        CaseElement('ToggleTitle', 'buttonToggle',
+                    this.configureToggleButton_))
 
     # --- UITableViewDelegate
     def tableView_numberOfRowsInSection_(_self, _cmd, _tableView, _section):

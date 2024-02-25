@@ -280,6 +280,7 @@ extension ButtonViewController: UIToolTipInteractionDelegate {
     @available(iOS 15.0, *)
     func configureToggleButton(button: UIButton) {
         button.changesSelectionAsPrimaryAction = true // This makes the button style a "toggle button".
+        // これにより、ボタンのスタイルが「トグル ボタン」になります。
     }
     
     func configureTitleTextButton(_ button: UIButton) {
