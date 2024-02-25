@@ -350,11 +350,11 @@ class ObjcTableViewController:
       button = ObjCInstance(_button)
 
       # todo: `,if traitCollection.userInterfaceIdiom == .mac`
-      state = UIControl_State.normal
-      button.setTitle_forState_('Button', state)
+      normal = UIControl_State.normal
+      highlighted = UIControl_State.highlighted
 
-      state = UIControl_State.highlighted
-      button.setTitle_forState_('Person', state)
+      button.setTitle_forState_('Button', normal)
+      button.setTitle_forState_('Person', highlighted)
 
       selector = sel('buttonClicked:')
       event = UIControl_Event.touchUpInside
@@ -366,6 +366,24 @@ class ObjcTableViewController:
       #this = ObjCInstance(_self)
       button = ObjCInstance(_button)
       button.setChangesSelectionAsPrimaryAction_(True)
+
+    @self.extension
+    def configureTitleTextButton_(_self, _cmd, _button):
+      # Note: Only for iOS the title's color can be changed.
+      this = ObjCInstance(_self)
+      button = ObjCInstance(_button)
+
+      normal = UIControl_State.normal
+      highlighted = UIControl_State.highlighted
+      systemGreen = UIColor.systemGreenColor()
+      systemRed = UIColor.systemRedColor()
+
+      button.setTitleColor_forState_(systemGreen, normal)
+      button.setTitleColor_forState_(systemRed, highlighted)
+
+      selector = sel('buttonClicked:')
+      event = UIControl_Event.touchUpInside
+      button.addTarget_action_forControlEvents_(this, selector, event)
 
     @self.extension
     def configureSystemTextButton_(_self, _cmd, _button):
@@ -410,8 +428,8 @@ class ObjcTableViewController:
                     this.configureSystemTextButton_))
       '''
       self.testCells.append(
-        CaseElement('ToggleTitle', 'buttonToggle',
-                    this.configureToggleButton_))
+        CaseElement('ButtonColorTitle', 'buttonTitleColor',
+                    this.configureTitleTextButton_))
 
     # --- UITableViewDelegate
     def tableView_numberOfRowsInSection_(_self, _cmd, _tableView, _section):

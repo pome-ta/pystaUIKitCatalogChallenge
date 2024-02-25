@@ -285,6 +285,7 @@ extension ButtonViewController: UIToolTipInteractionDelegate {
     
     func configureTitleTextButton(_ button: UIButton) {
         // Note: Only for iOS the title's color can be changed.
+        // 注: タイトルの色を変更できるのは iOS の場合のみです。
         button.setTitleColor(UIColor.systemGreen, for: [.normal])
         button.setTitleColor(UIColor.systemRed, for: [.highlighted])
         
