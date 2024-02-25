@@ -313,7 +313,7 @@ class ObjcTableViewController:
 
     @self.extension
     def configureTextSymbolButton_(_self, _cmd, _button):
-      # Button with image to the left of the title.
+      # Button with image to the right of the title.
       this = ObjCInstance(_self)
       button = ObjCInstance(_button)
 
@@ -339,6 +339,22 @@ class ObjcTableViewController:
       preferredFont = UIFont.preferredFontForTextStyle_(UIFontTextStyleBody)
 
       button.titleLabel().setFont_(preferredFont)
+
+      selector = sel('buttonClicked:')
+      event = UIControl_Event.touchUpInside
+      button.addTarget_action_forControlEvents_(this, selector, event)
+
+    @self.extension
+    def configureMultiTitleButton_(_self, _cmd, _button):
+      this = ObjCInstance(_self)
+      button = ObjCInstance(_button)
+
+      # todo: `,if traitCollection.userInterfaceIdiom == .mac`
+      state = UIControl_State.normal
+      button.setTitle_forState_('Button', state)
+
+      state = UIControl_State.highlighted
+      button.setTitle_forState_('Person', state)
 
       selector = sel('buttonClicked:')
       event = UIControl_Event.touchUpInside
@@ -387,8 +403,8 @@ class ObjcTableViewController:
                     this.configureSystemTextButton_))
       '''
       self.testCells.append(
-        CaseElement('StringSymbolTitle', 'buttonTextSymbol',
-                    this.configureTextSymbolButton_))
+        CaseElement('MultiTitleTitle', 'buttonMultiTitle',
+                    this.configureMultiTitleButton_))
 
     # --- UITableViewDelegate
     def tableView_numberOfRowsInSection_(_self, _cmd, _tableView, _section):
