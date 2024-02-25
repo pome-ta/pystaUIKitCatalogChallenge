@@ -180,3 +180,14 @@ class UIImage_SymbolScale:
   medium = 2
   large = 3
 
+
+@dataclass
+class NSDirectionalRectEdge:
+  # ref: [NSDirectionalRectEdge | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/nsdirectionalrectedge?language=objc)
+  none = 0  # ref: [NSDirectionalRectEdgeNone | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/nsdirectionalrectedge/nsdirectionalrectedgenone?language=objc)
+  top = 1 << 0
+  leading = 1 << 1
+  bottom = 1 << 2
+  trailing = 1 << 3
+  all = top | leading | bottom | trailing
+
