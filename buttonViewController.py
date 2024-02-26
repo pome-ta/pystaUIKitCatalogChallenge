@@ -1,7 +1,7 @@
 from pathlib import Path
 
 import ctypes
-from objc_util import ObjCInstance, sel, create_objc_class, c, nsurl
+from objc_util import ObjCInstance, sel, create_objc_class, c, nsurl, ObjCBlock, on_main_thread
 
 from objcista import *
 #from objcista._controller import _Controller
@@ -437,17 +437,16 @@ class ObjcTableViewController:
       event = UIControl_Event.touchUpInside
       button.addTarget_action_forControlEvents_(this, selector, event)
 
-
-    @self.extension
-    def activityUpdateHandler_(_self, _cmd,_button):
-      print(_button)
-
     @self.extension
     def configureUpdateActivityHandlerButton_(_self, _cmd, _button):
       this = ObjCInstance(_self)
       button = ObjCInstance(_button)
 
-
+      @on_main_thread
+      def activityUpdateHandler_(_cmd,_button):
+        print('s')
+        print(_button)
+        print('____ e')
 
       buttonConfig = UIButtonConfiguration.plainButtonConfiguration()
       buttonConfig.setImage_(UIImage.systemImageNamed('tray'))
@@ -471,11 +470,16 @@ class ObjcTableViewController:
       button.titleLabel().setFont_(preferredFont)
       # This turns on the toggle behavior.
       button.setChangesSelectionAsPrimaryAction_(True)
-      handler = sel('activityUpdateHandler:')
-      button.setConfigurationUpdateHandler_(handler)
-      #pdbg.state(button)
+      handler_block = ObjCBlock(activityUpdateHandler_,
+                                restype=ctypes.c_void_p,
+                                argtypes=[ctypes.c_void_p,ctypes.c_void_p])
+      #button.setConfigurationUpdateHandler_(handler_block)
+      button.configurationUpdateHandler = on_main_thread(lambda _cmd,_button: print('pass'))
+      #pdbg.state(button.configurationUpdateHandler)
+      #pdbg.state(handler_block(button))
 
       selector = sel('toggleButtonClicked:')
+      
       event = UIControl_Event.touchUpInside
       button.addTarget_action_forControlEvents_(this, selector, event)
 
