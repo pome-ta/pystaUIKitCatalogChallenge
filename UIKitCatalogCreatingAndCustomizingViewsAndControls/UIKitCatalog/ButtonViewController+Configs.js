@@ -336,7 +336,7 @@ extension ButtonViewController: UIToolTipInteractionDelegate {
         button.setTitle(NSLocalizedString("Button", comment: ""), for: [])
         button.titleLabel?.font = UIFont.preferredFont(forTextStyle: .body)
         
-        button.changesSelectionAsPrimaryAction = true // This turns on the toggle behavior.
+        button.changesSelectionAsPrimaryAction = true // This turns on the toggle behavior.  これにより、トグル動作がオンになります。
         button.configurationUpdateHandler = activityUpdateHandler
         
         // For this button to include an activity indicator next to the title, keep the iPad behavior.

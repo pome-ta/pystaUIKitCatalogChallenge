@@ -437,6 +437,48 @@ class ObjcTableViewController:
       event = UIControl_Event.touchUpInside
       button.addTarget_action_forControlEvents_(this, selector, event)
 
+
+    @self.extension
+    def activityUpdateHandler_(_self, _cmd,_button):
+      print(_button)
+
+    @self.extension
+    def configureUpdateActivityHandlerButton_(_self, _cmd, _button):
+      this = ObjCInstance(_self)
+      button = ObjCInstance(_button)
+
+
+
+      buttonConfig = UIButtonConfiguration.plainButtonConfiguration()
+      buttonConfig.setImage_(UIImage.systemImageNamed('tray'))
+      button.setConfiguration_(buttonConfig)
+
+      UIFontTextStyleBody = _str_symbol('UIFontTextStyleBody')
+      _symbolConfiguration = UIImageSymbolConfiguration.configurationWithTextStyle_(
+        UIFontTextStyleBody)
+      buttonConfig.setPreferredSymbolConfigurationForImage_(
+        _symbolConfiguration)
+
+      #pdbg.state(button.configuration())
+
+      state = UIControl_State.normal
+      button.setTitle_forState_('Button', state)
+
+      # xxx: 正解かは不明
+      UIFontTextStyleBody = _str_symbol('UIFontTextStyleBody')
+      preferredFont = UIFont.preferredFontForTextStyle_(UIFontTextStyleBody)
+
+      button.titleLabel().setFont_(preferredFont)
+      # This turns on the toggle behavior.
+      button.setChangesSelectionAsPrimaryAction_(True)
+      handler = sel('activityUpdateHandler:')
+      button.setConfigurationUpdateHandler_(handler)
+      #pdbg.state(button)
+
+      selector = sel('toggleButtonClicked:')
+      event = UIControl_Event.touchUpInside
+      button.addTarget_action_forControlEvents_(this, selector, event)
+
     @self.extension
     def configureSystemTextButton_(_self, _cmd, _button):
       this = ObjCInstance(_self)
@@ -480,8 +522,9 @@ class ObjcTableViewController:
                     this.configureSystemTextButton_))
       '''
       self.testCells.append(
-        CaseElement('BackgroundTitle', 'buttonBackground',
-                    this.configureBackgroundButton_))
+        CaseElement('UpdateActivityHandlerTitle',
+                    'buttonUpdateActivityHandler',
+                    this.configureUpdateActivityHandlerButton_))
 
     # --- UITableViewDelegate
     def tableView_numberOfRowsInSection_(_self, _cmd, _tableView, _section):
