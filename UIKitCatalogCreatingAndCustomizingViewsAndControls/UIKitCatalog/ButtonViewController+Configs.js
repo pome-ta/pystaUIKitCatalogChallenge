@@ -312,12 +312,16 @@ extension ButtonViewController: UIToolTipInteractionDelegate {
     }
     
     // This handler is called when this button needs updating.
+    // このハンドラーは、このボタンを更新する必要がある場合に呼び出されます。
     @available(iOS 15.0, *)
     func configureUpdateActivityHandlerButton(_ button: UIButton) {
         let activityUpdateHandler: (UIButton) -> Void = { button in
             /// Shows an activity indicator in place of an image. Its placement is controlled by the `imagePlacement` property.
+            // 画像の代わりにアクティビティ インジケーターを表示します。その配置は `imagePlacement` プロパティによって制御されます。
+
 
             // Start with the current button's configuration.
+            // 現在のボタンの設定から始めます。
             var config = button.configuration
             config?.showsActivityIndicator = button.isSelected ? false : true
             button.configuration = config
