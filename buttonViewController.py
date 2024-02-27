@@ -532,18 +532,10 @@ class ObjcTableViewController:
       event = UIControl_Event.touchUpInside
       button.addTarget_action_forControlEvents_(this, selector, event)
 
-    @self.extension
-    def configureSystemTextButton_(_self, _cmd, _button):
-      this = ObjCInstance(_self)
-      button = ObjCInstance(_button)
 
-      state = UIControl_State.normal
-      button.setTitle_forState_('Button', state)
-
-      selector = sel('buttonClicked:')
-      event = UIControl_Event.touchUpInside
-      button.addTarget_action_forControlEvents_(this, selector, event)
-
+    # MARK: - Add To Cart Button
+    
+    
     @self.extension
     def buttonClicked_(_self, _cmd, _sender):
       print('Button was clicked.')
