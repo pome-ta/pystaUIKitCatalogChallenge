@@ -439,18 +439,16 @@ class ObjcTableViewController:
 
     @self.extension
     def configureUpdateActivityHandlerButton_(_self, _cmd, _button):
+      # xxx: wip 後ほど実装
       this = ObjCInstance(_self)
       button = ObjCInstance(_button)
 
-      @on_main_thread
-      def activityUpdateHandler_(_cmd,_button):
-        print('s')
+      def activityUpdateHandler_(_cmd, _button):
         print(_button)
         print('____ e')
 
       buttonConfig = UIButtonConfiguration.plainButtonConfiguration()
       buttonConfig.setImage_(UIImage.systemImageNamed('tray'))
-      button.setConfiguration_(buttonConfig)
 
       UIFontTextStyleBody = _str_symbol('UIFontTextStyleBody')
       _symbolConfiguration = UIImageSymbolConfiguration.configurationWithTextStyle_(
@@ -458,7 +456,7 @@ class ObjcTableViewController:
       buttonConfig.setPreferredSymbolConfigurationForImage_(
         _symbolConfiguration)
 
-      #pdbg.state(button.configuration())
+      button.setConfiguration_(buttonConfig)
 
       state = UIControl_State.normal
       button.setTitle_forState_('Button', state)
@@ -470,16 +468,67 @@ class ObjcTableViewController:
       button.titleLabel().setFont_(preferredFont)
       # This turns on the toggle behavior.
       button.setChangesSelectionAsPrimaryAction_(True)
-      handler_block = ObjCBlock(activityUpdateHandler_,
-                                restype=ctypes.c_void_p,
-                                argtypes=[ctypes.c_void_p,ctypes.c_void_p])
+
+      #handler_block = ObjCBlock(activityUpdateHandler_, restype=ctypes.c_void_p,argtypes=[ctypes.c_void_p,ctypes.c_void_p])
       #button.setConfigurationUpdateHandler_(handler_block)
-      button.configurationUpdateHandler = on_main_thread(lambda _cmd,_button: print('pass'))
-      #pdbg.state(button.configurationUpdateHandler)
-      #pdbg.state(handler_block(button))
 
       selector = sel('toggleButtonClicked:')
-      
+      event = UIControl_Event.touchUpInside
+      button.addTarget_action_forControlEvents_(this, selector, event)
+
+    @self.extension
+    def configureUpdateHandlerButton_(_self, _cmd, _button):
+      # xxx: wip 後ほど実装
+      this = ObjCInstance(_self)
+      button = ObjCInstance(_button)
+
+      def colorUpdateHandler_(_cmd, _button):
+        print(_button)
+        print('____ e')
+
+      buttonConfig = UIButtonConfiguration.filledButtonConfiguration()
+      button.setConfiguration_(buttonConfig)
+
+      button.setChangesSelectionAsPrimaryAction_(True)
+
+      #handler_block = ObjCBlock(colorUpdateHandler_, restype=ctypes.c_void_p,argtypes=[ctypes.c_void_p,ctypes.c_void_p])
+      #button.setConfigurationUpdateHandler_(handler_block)
+
+      selector = sel('toggleButtonClicked:')
+      event = UIControl_Event.touchUpInside
+      button.addTarget_action_forControlEvents_(this, selector, event)
+
+    @self.extension
+    def configureUpdateImageHandlerButton_(_self, _cmd, _button):
+      # xxx: wip 後ほど実装
+      this = ObjCInstance(_self)
+      button = ObjCInstance(_button)
+
+      def colorUpdateHandler_(_cmd, _button):
+        print(_button)
+        print('____ e')
+
+      buttonConfig = UIButtonConfiguration.plainButtonConfiguration()
+      buttonConfig.setImage_(UIImage.systemImageNamed('cart'))
+
+      UIFontTextStyleLargeTitle = _str_symbol('UIFontTextStyleLargeTitle')
+      _symbolConfiguration = UIImageSymbolConfiguration.configurationWithTextStyle_(
+        UIFontTextStyleLargeTitle)
+      buttonConfig.setPreferredSymbolConfigurationForImage_(
+        _symbolConfiguration)
+
+      button.setConfiguration_(buttonConfig)
+
+      #handler_block = ObjCBlock(colorUpdateHandler_, restype=ctypes.c_void_p,argtypes=[ctypes.c_void_p,ctypes.c_void_p])
+      #button.setConfigurationUpdateHandler_(handler_block)
+
+      button.setChangesSelectionAsPrimaryAction_(True)
+
+      normal = UIControl_State.normal
+      button.setTitle_forState_('', normal)
+      button.setSelected_(False)
+
+      selector = sel('toggleButtonClicked:')
       event = UIControl_Event.touchUpInside
       button.addTarget_action_forControlEvents_(this, selector, event)
 
@@ -526,9 +575,8 @@ class ObjcTableViewController:
                     this.configureSystemTextButton_))
       '''
       self.testCells.append(
-        CaseElement('UpdateActivityHandlerTitle',
-                    'buttonUpdateActivityHandler',
-                    this.configureUpdateActivityHandlerButton_))
+        CaseElement('UpdateImageHandlerTitle', 'buttonImageUpdateHandler',
+                    this.configureUpdateImageHandlerButton_))
 
     # --- UITableViewDelegate
     def tableView_numberOfRowsInSection_(_self, _cmd, _tableView, _section):
