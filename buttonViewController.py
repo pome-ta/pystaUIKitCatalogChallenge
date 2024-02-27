@@ -1,7 +1,7 @@
 from pathlib import Path
 
 import ctypes
-from objc_util import ObjCInstance, sel, create_objc_class, c, nsurl, ObjCBlock, on_main_thread
+from objc_util import ObjCInstance, sel, create_objc_class, c, nsurl
 
 from objcista import *
 #from objcista._controller import _Controller
@@ -532,10 +532,8 @@ class ObjcTableViewController:
       event = UIControl_Event.touchUpInside
       button.addTarget_action_forControlEvents_(this, selector, event)
 
-
     # MARK: - Add To Cart Button
-    
-    
+
     @self.extension
     def buttonClicked_(_self, _cmd, _sender):
       print('Button was clicked.')
