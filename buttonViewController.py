@@ -533,6 +533,14 @@ class ObjcTableViewController:
       button.addTarget_action_forControlEvents_(this, selector, event)
 
     # MARK: - Add To Cart Button
+    @self.extension
+    def configureAddToCartButton_(_self, _cmd, _button):
+      this = ObjCInstance(_self)
+      button = ObjCInstance(_button)
+      config = UIButtonConfiguration.filledButtonConfiguration()
+      UIButtonConfigurationSizeLarge = _str_symbol('UIButtonConfigurationSizeLarge')
+      config.setButtonSize_(UIButtonConfigurationSizeLarge)
+      #pdbg.state(config)
 
     @self.extension
     def buttonClicked_(_self, _cmd, _sender):
@@ -565,8 +573,8 @@ class ObjcTableViewController:
                     this.configureSystemTextButton_))
       '''
       self.testCells.append(
-        CaseElement('UpdateImageHandlerTitle', 'buttonImageUpdateHandler',
-                    this.configureUpdateImageHandlerButton_))
+        CaseElement('AddToCartTitle', 'addToCartButton',
+                    this.configureAddToCartButton_))
 
     # --- UITableViewDelegate
     def tableView_numberOfRowsInSection_(_self, _cmd, _tableView, _section):
