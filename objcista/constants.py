@@ -157,6 +157,16 @@ class UIButton_Configuration_CornerStyle:
 
 
 @dataclass
+class UIButton_Configuration_Size:
+  # ref: [UIButtonConfigurationSize | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uibuttonconfigurationsize?language=objc)
+  # todo: `Enumeration Case` に値表記が無いので独自に調査
+  medium = 0
+  small = 1
+  mini = 2
+  large = 3
+
+
+@dataclass
 class NSUnderlineStyle:
   # ref: [NSUnderlineStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/nsunderlinestyle?language=objc)
   none = 0x00  # ref: [NSUnderlineStyleNone | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/nsunderlinestyle/nsunderlinestylenone?language=objc)

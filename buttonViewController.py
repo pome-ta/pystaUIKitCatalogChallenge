@@ -538,9 +538,10 @@ class ObjcTableViewController:
       this = ObjCInstance(_self)
       button = ObjCInstance(_button)
       config = UIButtonConfiguration.filledButtonConfiguration()
-      UIButtonConfigurationSizeLarge = _str_symbol('UIButtonConfigurationSizeLarge')
-      config.setButtonSize_(UIButtonConfigurationSizeLarge)
-      #pdbg.state(config)
+      #UIButtonConfigurationSizeLarge = _str_symbol('UIButtonConfigurationSizeLarge')
+      config.setButtonSize_(-1)
+      #pdbg.state(config.buttonSize())
+      pdbg.state(config)
 
     @self.extension
     def buttonClicked_(_self, _cmd, _sender):
