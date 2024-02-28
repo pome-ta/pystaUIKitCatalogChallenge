@@ -9,6 +9,7 @@ UINavigationBarAppearance = ObjCClass('UINavigationBarAppearance')
 
 UITableViewController = ObjCClass('UITableViewController')
 UITableViewCell = ObjCClass('UITableViewCell')
+UITableViewHeaderFooterView = ObjCClass('UITableViewHeaderFooterView')
 
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
 UITraitCollection = ObjCClass('UITraitCollection')

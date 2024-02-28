@@ -201,3 +201,11 @@ class NSDirectionalRectEdge:
   trailing = 1 << 3
   all = top | leading | bottom | trailing
 
+
+@dataclass
+class UITableViewStyle:
+  # ref: [UITableViewStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uitableviewstyle?language=objc)
+  plain = 0
+  grouped = 1
+  insetGrouped = 2
+

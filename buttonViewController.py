@@ -1,7 +1,7 @@
 from pathlib import Path
 
 import ctypes
-from objc_util import ObjCInstance, sel, create_objc_class, c, nsurl
+from objc_util import ObjCInstance, sel, create_objc_class, c, nsurl,ns
 
 from objcista import *
 #from objcista._controller import _Controller
@@ -549,7 +549,8 @@ class ObjcTableViewController:
       _color = UIColor.systemTealColor()
       config.setBaseBackgroundColor_(_color)
       button.setConfiguration_(config)
-      #pdbg.state(config)
+
+      button.setChangesSelectionAsPrimaryAction_(True)
 
     @self.extension
     def buttonClicked_(_self, _cmd, _sender):
@@ -568,8 +569,12 @@ class ObjcTableViewController:
   def _override_controller(self):
     # todo: 既存method と独自追加method をシュッと持ちたい
     def viewDidLoad(_self, _cmd):
+      headerView = UITableViewHeaderFooterView.new()
+      #pdbg.state(headerView.defaultContentConfiguration())
       this = ObjCInstance(_self)
       view = this.view()
+      style=UITableViewStyle.grouped
+      pdbg.state(view)
       for proto in self.prototypes:
         _args = [
           proto.this(),
@@ -586,11 +591,20 @@ class ObjcTableViewController:
                     this.configureAddToCartButton_))
 
     # --- UITableViewDelegate
+    def centeredHeaderView_title_(_self, _cmd, _title):
+      headerView = UITableViewHeaderFooterView.new()
+      headerView.setContentConfiguration_()
+
+    # MARK: - UITableViewDataSource
+    def tableView_titleForHeaderInSection_(_self, _cmd, _tableView, _section):
+      section = ObjCInstance(_section)
+      return ns(self.testCells[section].title)
+
     def tableView_numberOfRowsInSection_(_self, _cmd, _tableView, _section):
       return 1
 
     def numberOfSectionsInTableView_(_self, _cmd, _tableView):
-      return 1  #len(self.identifiers)
+      return len(self.testCells)
 
     def tableView_cellForRowAtIndexPath_(_self, _cmd, _tableView, _indexPath):
       tableView = ObjCInstance(_tableView)
@@ -607,6 +621,7 @@ class ObjcTableViewController:
 
     _methods = [
       viewDidLoad,
+      #tableView_titleForHeaderInSection_,
       tableView_numberOfRowsInSection_,
       numberOfSectionsInTableView_,
       tableView_cellForRowAtIndexPath_,
