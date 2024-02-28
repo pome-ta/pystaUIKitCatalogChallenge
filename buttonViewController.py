@@ -537,11 +537,19 @@ class ObjcTableViewController:
     def configureAddToCartButton_(_self, _cmd, _button):
       this = ObjCInstance(_self)
       button = ObjCInstance(_button)
+
       config = UIButtonConfiguration.filledButtonConfiguration()
-      #UIButtonConfigurationSizeLarge = _str_symbol('UIButtonConfigurationSizeLarge')
-      config.setButtonSize_(-1)
-      #pdbg.state(config.buttonSize())
-      pdbg.state(config)
+
+      _size = UIButton_Configuration_Size.large
+      config.setButtonSize_(_size)
+      config.setImage_(UIImage.systemImageNamed('cart.fill'))
+      config.setTitle_('Add to Cart')
+      _cornerStyle = UIButton_Configuration_CornerStyle.capsule
+      config.setCornerStyle_(_cornerStyle)
+      _color = UIColor.systemTealColor()
+      config.setBaseBackgroundColor_(_color)
+      button.setConfiguration_(config)
+      #pdbg.state(config)
 
     @self.extension
     def buttonClicked_(_self, _cmd, _sender):
