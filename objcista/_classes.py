@@ -27,3 +27,6 @@ UIButtonConfiguration = ObjCClass('UIButtonConfiguration')
 UIImage = ObjCClass('UIImage')
 UIImageSymbolConfiguration = ObjCClass('UIImageSymbolConfiguration')
 
+UIListContentConfiguration = ObjCClass('UIListContentConfiguration')
+UIListContentTextProperties = ObjCClass('UIListContentTextProperties')
+
