@@ -574,7 +574,7 @@ class ObjcTableViewController:
       this = ObjCInstance(_self)
       view = this.view()
       style=UITableViewStyle.grouped
-      pdbg.state(view)
+      #pdbg.state(view)
       for proto in self.prototypes:
         _args = [
           proto.this(),
@@ -641,6 +641,7 @@ class ObjcTableViewController:
   def _init_controller(self):
     self._override_controller()
     vc = self.controller_instance.new().autorelease()
+    pdbg.state(vc)
     return vc
 
   @classmethod
