@@ -1,7 +1,7 @@
 from pathlib import Path
 
 import ctypes
-from objc_util import ObjCInstance, sel, create_objc_class, c, nsurl,ns
+from objc_util import ObjCInstance, sel, create_objc_class, c, nsurl, ns
 
 from objcista import *
 #from objcista._controller import _Controller
@@ -572,8 +572,15 @@ class ObjcTableViewController:
       headerView = UITableViewHeaderFooterView.new()
       #pdbg.state(headerView.defaultContentConfiguration())
       this = ObjCInstance(_self)
-      view = this.view()
-      style=UITableViewStyle.grouped
+      #setView_
+
+      _view = this.view()
+      _frame = _view.frame()
+      style = UITableViewStyle.grouped
+      view = _view.initWithFrame_style_(_frame, style)
+      this.setView_(view)
+      #pdbg.state(_view)
+
       #pdbg.state(view)
       for proto in self.prototypes:
         _args = [
@@ -598,7 +605,8 @@ class ObjcTableViewController:
     # MARK: - UITableViewDataSource
     def tableView_titleForHeaderInSection_(_self, _cmd, _tableView, _section):
       section = ObjCInstance(_section)
-      return ns(self.testCells[section].title)
+      #return ns(self.testCells[section].title)
+      return 'a'
 
     def tableView_numberOfRowsInSection_(_self, _cmd, _tableView, _section):
       return 1
@@ -621,7 +629,7 @@ class ObjcTableViewController:
 
     _methods = [
       viewDidLoad,
-      #tableView_titleForHeaderInSection_,
+      tableView_titleForHeaderInSection_,
       tableView_numberOfRowsInSection_,
       numberOfSectionsInTableView_,
       tableView_cellForRowAtIndexPath_,
@@ -641,7 +649,7 @@ class ObjcTableViewController:
   def _init_controller(self):
     self._override_controller()
     vc = self.controller_instance.new().autorelease()
-    pdbg.state(vc)
+    #pdbg.state(vc)
     return vc
 
   @classmethod
