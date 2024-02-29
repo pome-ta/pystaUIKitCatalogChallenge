@@ -573,10 +573,10 @@ class ObjcTableViewController:
 
       _view = this.view()
       style = UITableViewStyle.grouped
-      
+
       view = _view.initWithFrame_style_(_view.frame(), style)
       this.setView_(view)
-      
+
       #headerView = this.centeredHeaderView_('centeredHeaderView')
       #a = this.centeredHeaderView_('centeredHeaderView')
       #print(a)
@@ -585,8 +585,6 @@ class ObjcTableViewController:
       #pdbg.state(this.tableView_numberOfRowsInSection_)
       #pdbg.state(this.numberOfSectionsInTableView_)
       #pdbg.state(this.configureUpdateImageHandlerButton_)
-      
-      
 
       for proto in self.prototypes:
         _args = [
@@ -606,7 +604,7 @@ class ObjcTableViewController:
     # --- UITableViewDelegate
     def centeredHeaderView_(_self, _cmd, _title):
       title = ObjCInstance(_title)
-      
+
       headerView = UITableViewHeaderFooterView.new()
       content = UIListContentConfiguration.groupedHeaderConfiguration()
       content.setText_(title)
@@ -620,12 +618,21 @@ class ObjcTableViewController:
     # MARK: - UITableViewDataSource
     def tableView_viewForHeaderInSection_(_self, _cmd, _tableView, _section):
       this = ObjCInstance(_self)
-      return this.centeredHeaderView_(self.testCells[section].title)
+      title = self.testCells[_section].title
+      headerView = UITableViewHeaderFooterView.new()
+      content = UIListContentConfiguration.groupedHeaderConfiguration()
+      content.setText_(title)
+      content.textProperties().setAlignment_(1)
+      headerView.setContentConfiguration_(content)
+
+      #return this.centeredHeaderView_(self.testCells[section].title)
+      return headerView.ptr
 
     def tableView_titleForHeaderInSection_(_self, _cmd, _tableView, _section):
       #section = ObjCInstance(_section)
       #return ns(self.testCells[section].title)
-      return 'centeredHeaderView'
+      #pdbg.state(ns(self.testCells[_section].title).ptr)
+      return ns(self.testCells[_section].title).ptr
 
     def tableView_numberOfRowsInSection_(_self, _cmd, _tableView, _section):
       return 1
@@ -649,9 +656,9 @@ class ObjcTableViewController:
     #pdbg.state(numberOfSectionsInTableView_)
     _methods = [
       viewDidLoad,
-      centeredHeaderView_,
+      #centeredHeaderView_,
       #tableView_viewForHeaderInSection_,
-      #tableView_titleForHeaderInSection_,
+      tableView_titleForHeaderInSection_,
       tableView_numberOfRowsInSection_,
       numberOfSectionsInTableView_,
       tableView_cellForRowAtIndexPath_,
