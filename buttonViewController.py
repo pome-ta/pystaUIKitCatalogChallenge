@@ -569,19 +569,25 @@ class ObjcTableViewController:
   def _override_controller(self):
     # todo: 既存method と独自追加method をシュッと持ちたい
     def viewDidLoad(_self, _cmd):
-      headerView = UITableViewHeaderFooterView.new()
-      #pdbg.state(headerView.defaultContentConfiguration())
       this = ObjCInstance(_self)
-      #setView_
 
       _view = this.view()
-      _frame = _view.frame()
       style = UITableViewStyle.grouped
-      view = _view.initWithFrame_style_(_frame, style)
+      
+      view = _view.initWithFrame_style_(_view.frame(), style)
       this.setView_(view)
-      #pdbg.state(_view)
+      
+      #headerView = this.centeredHeaderView_('centeredHeaderView')
+      #a = this.centeredHeaderView_('centeredHeaderView')
+      #print(a)
+      #pdbg.state(headerView)
+      #pdbg.state(this.centeredHeaderView_)
+      #pdbg.state(this.tableView_numberOfRowsInSection_)
+      #pdbg.state(this.numberOfSectionsInTableView_)
+      #pdbg.state(this.configureUpdateImageHandlerButton_)
+      
+      
 
-      #pdbg.state(view)
       for proto in self.prototypes:
         _args = [
           proto.this(),
@@ -598,15 +604,28 @@ class ObjcTableViewController:
                     this.configureAddToCartButton_))
 
     # --- UITableViewDelegate
-    def centeredHeaderView_title_(_self, _cmd, _title):
+    def centeredHeaderView_(_self, _cmd, _title):
+      title = ObjCInstance(_title)
+      
       headerView = UITableViewHeaderFooterView.new()
-      headerView.setContentConfiguration_()
+      content = UIListContentConfiguration.groupedHeaderConfiguration()
+      content.setText_(title)
+      #UIListContentTextAlignmentCenter
+      #content.textProperties().setAlignment_()
+      headerView.setContentConfiguration_(content)
+      #pdbg.state(headerView)
+      #return headerView.ptr
+      return 1
 
     # MARK: - UITableViewDataSource
+    def tableView_viewForHeaderInSection_(_self, _cmd, _tableView, _section):
+      this = ObjCInstance(_self)
+      return this.centeredHeaderView_(self.testCells[section].title)
+
     def tableView_titleForHeaderInSection_(_self, _cmd, _tableView, _section):
-      section = ObjCInstance(_section)
+      #section = ObjCInstance(_section)
       #return ns(self.testCells[section].title)
-      return 'a'
+      return 'centeredHeaderView'
 
     def tableView_numberOfRowsInSection_(_self, _cmd, _tableView, _section):
       return 1
@@ -627,9 +646,12 @@ class ObjcTableViewController:
         cellTest.configHandler(view)
       return cell.ptr
 
+    #pdbg.state(numberOfSectionsInTableView_)
     _methods = [
       viewDidLoad,
-      tableView_titleForHeaderInSection_,
+      centeredHeaderView_,
+      #tableView_viewForHeaderInSection_,
+      #tableView_titleForHeaderInSection_,
       tableView_numberOfRowsInSection_,
       numberOfSectionsInTableView_,
       tableView_cellForRowAtIndexPath_,
@@ -649,7 +671,6 @@ class ObjcTableViewController:
   def _init_controller(self):
     self._override_controller()
     vc = self.controller_instance.new().autorelease()
-    #pdbg.state(vc)
     return vc
 
   @classmethod
