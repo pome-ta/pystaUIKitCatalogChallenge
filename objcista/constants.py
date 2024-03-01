@@ -209,3 +209,12 @@ class UITableViewStyle:
   grouped = 1
   insetGrouped = 2
 
+
+@dataclass
+class UIListContentTextAlignment:
+  # ref: [UIListContentTextAlignment | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uilistcontenttextalignment)
+  # todo: `Enumeration Case` に値表記が無いので独自に調査
+  natural = 0
+  center = 1
+  justified = 2
+

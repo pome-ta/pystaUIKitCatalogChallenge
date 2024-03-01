@@ -577,15 +577,6 @@ class ObjcTableViewController:
       view = _view.initWithFrame_style_(_view.frame(), style)
       this.setView_(view)
 
-      #headerView = this.centeredHeaderView_('centeredHeaderView')
-      #a = this.centeredHeaderView_('centeredHeaderView')
-      #print(a)
-      #pdbg.state(headerView)
-      #pdbg.state(this.centeredHeaderView_)
-      #pdbg.state(this.tableView_numberOfRowsInSection_)
-      #pdbg.state(this.numberOfSectionsInTableView_)
-      #pdbg.state(this.configureUpdateImageHandlerButton_)
-
       for proto in self.prototypes:
         _args = [
           proto.this(),
@@ -602,36 +593,38 @@ class ObjcTableViewController:
                     this.configureAddToCartButton_))
 
     # --- UITableViewDelegate
+
+    # xxx: `return` ができないので、`tableView_viewForHeaderInSection_` で処理
+    '''
     def centeredHeaderView_(_self, _cmd, _title):
       title = ObjCInstance(_title)
+      alignment = UIListContentTextAlignment.center
 
       headerView = UITableViewHeaderFooterView.new()
       content = UIListContentConfiguration.groupedHeaderConfiguration()
       content.setText_(title)
-      #UIListContentTextAlignmentCenter
-      #content.textProperties().setAlignment_()
+      content.textProperties().setAlignment_(alignment)
       headerView.setContentConfiguration_(content)
-      #pdbg.state(headerView)
-      #return headerView.ptr
-      return 1
+      return headerView.ptr
+    '''
 
     # MARK: - UITableViewDataSource
     def tableView_viewForHeaderInSection_(_self, _cmd, _tableView, _section):
-      this = ObjCInstance(_self)
       title = self.testCells[_section].title
+      alignment = UIListContentTextAlignment.center
+
       headerView = UITableViewHeaderFooterView.new()
       content = UIListContentConfiguration.groupedHeaderConfiguration()
       content.setText_(title)
-      content.textProperties().setAlignment_(1)
+      content.textProperties().setAlignment_(alignment)
       headerView.setContentConfiguration_(content)
 
-      #return this.centeredHeaderView_(self.testCells[section].title)
+      # xxx: `return` ができないので、`tableView_viewForHeaderInSection_` で処理
+      #return ObjCInstance(_self).centeredHeaderView_(self.testCells[_section].title)
+
       return headerView.ptr
 
     def tableView_titleForHeaderInSection_(_self, _cmd, _tableView, _section):
-      #section = ObjCInstance(_section)
-      #return ns(self.testCells[section].title)
-      #pdbg.state(ns(self.testCells[_section].title).ptr)
       return ns(self.testCells[_section].title).ptr
 
     def tableView_numberOfRowsInSection_(_self, _cmd, _tableView, _section):
@@ -653,11 +646,10 @@ class ObjcTableViewController:
         cellTest.configHandler(view)
       return cell.ptr
 
-    #pdbg.state(numberOfSectionsInTableView_)
     _methods = [
       viewDidLoad,
       #centeredHeaderView_,
-      #tableView_viewForHeaderInSection_,
+      tableView_viewForHeaderInSection_,
       tableView_titleForHeaderInSection_,
       tableView_numberOfRowsInSection_,
       numberOfSectionsInTableView_,
