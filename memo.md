@@ -1,3 +1,14 @@
+# 📝 2024/03/01
+
+
+
+`Localizable.strings`, `Localizable.stringsdict` は、独自パーサーで書いてみる
+
+[GitHub - chrisballinger/python-localizable: Localizable.strings parser for Python](https://github.com/chrisballinger/python-localizable)
+
+こんなのはある
+
+
 # 📝 2024/02/23
 
 
