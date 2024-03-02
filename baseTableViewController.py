@@ -29,6 +29,7 @@ class PyLocalizedString:
     localizable_path = Path(url)
     splitlines_list = localizable_path.read_text(encoding='utf-8').splitlines()
 
+    # xxx: すごく雑に`Localizable.strings` format 確認してる
     pre_processing = [
       line for line in splitlines_list
       if len(line) and (line[0] == '"') and (line[-1] == ';')
@@ -52,7 +53,10 @@ class PyLocalizedString:
 if __name__ == "__main__":
   py_localizedString = PyLocalizedString.new(localizable_url)
   l = py_localizedString('VisualEffectTextContent')
+  ll = py_localizedString('AddContactTitle')
+  
+  
 
-  pyLocalizedString = PyLocalizedString()
+  #pyLocalizedString = PyLocalizedString()
 
 
