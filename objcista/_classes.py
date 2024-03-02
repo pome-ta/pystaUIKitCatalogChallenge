@@ -8,6 +8,7 @@ UINavigationController = ObjCClass('UINavigationController')
 UINavigationBarAppearance = ObjCClass('UINavigationBarAppearance')
 
 UITableViewController = ObjCClass('UITableViewController')
+UITableView = ObjCClass('UITableView')
 UITableViewCell = ObjCClass('UITableViewCell')
 UITableViewHeaderFooterView = ObjCClass('UITableViewHeaderFooterView')
 
