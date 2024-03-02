@@ -1,4 +1,5 @@
 import re
+from enum import Enum
 from pathlib import Path
 
 localizable_url = './UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Base.lproj/Localizable.strings'
@@ -21,6 +22,34 @@ localizable_dic = dict([
   if (reg_result := compile.findall(line))
 ])
 '''
+
+
+class ButtonKind(Enum):
+  buttonSystem = 'buttonSystem'
+  buttonDetailDisclosure = 'buttonDetailDisclosure'
+  buttonSystemAddContact = 'buttonSystemAddContact'
+  buttonClose = 'buttonClose'
+  buttonStyleGray = 'buttonStyleGray'
+  buttonStyleTinted = 'buttonStyleTinted'
+  buttonStyleFilled = 'buttonStyleFilled'
+  buttonCornerStyle = 'buttonCornerStyle'
+  buttonToggle = 'buttonToggle'
+  buttonTitleColor = 'buttonTitleColor'
+  buttonImage = 'buttonImage'
+  buttonAttrText = 'buttonAttrText'
+  buttonSymbol = 'buttonSymbol'
+  buttonLargeSymbol = 'buttonLargeSymbol'
+  buttonTextSymbol = 'buttonTextSymbol'
+  buttonSymbolText = 'buttonSymbolText'
+  buttonMultiTitle = 'buttonMultiTitle'
+  buttonBackground = 'buttonBackground'
+  addToCartButton = 'addToCartButton'
+  buttonUpdateActivityHandler = 'buttonUpdateActivityHandler'
+  buttonUpdateHandler = 'buttonUpdateHandler'
+  buttonImageUpdateHandler = 'buttonImageUpdateHandler'
+
+
+buttonKind = ButtonKind.addToCartButton.value
 
 
 class PyLocalizedString:
@@ -54,8 +83,6 @@ if __name__ == "__main__":
   py_localizedString = PyLocalizedString.new(localizable_url)
   l = py_localizedString('VisualEffectTextContent')
   ll = py_localizedString('AddContactTitle')
-  
-  
 
   #pyLocalizedString = PyLocalizedString()
 
