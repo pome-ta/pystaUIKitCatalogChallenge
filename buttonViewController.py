@@ -600,6 +600,12 @@ class ObjcTableViewController:
       self._msgs: list['def'] = []
     self._msgs.append(msg)
 
+  def set_prototypes(self, view: UITableView):
+    for proto in self.prototypes:
+      cellClass = proto.this()
+      identifier = proto.reuseIdentifier_name()
+      view.registerClass_forCellReuseIdentifier_(cellClass, identifier)
+
   def _override_controller(self):
     # todo: 既存method と独自追加method をシュッと持ちたい
     def viewDidLoad(_self, _cmd):
@@ -610,13 +616,7 @@ class ObjcTableViewController:
 
       view = _view.initWithFrame_style_(_view.frame(), style)
       this.setView_(view)
-
-      for proto in self.prototypes:
-        _args = [
-          proto.this(),
-          proto.reuseIdentifier_name(),
-        ]
-        view.registerClass_forCellReuseIdentifier_(*_args)
+      self.set_prototypes(view)
       '''
       self.testCells.append(
         CaseElement('DefaultTitle', 'buttonSystem',
