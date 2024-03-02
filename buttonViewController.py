@@ -105,6 +105,165 @@ class ObjcTableViewController:
     self.prototypes = prototypes
     self.testCells = []
 
+  def set_prototypes(self, view: UITableView):
+    for proto in self.prototypes:
+      cellClass = proto.this()
+      identifier = proto.reuseIdentifier_name()
+      view.registerClass_forCellReuseIdentifier_(cellClass, identifier)
+
+  def _override_controller(self):
+    # todo: 既存method と独自追加method をシュッと持ちたい
+    def viewDidLoad(_self, _cmd):
+      this = ObjCInstance(_self)
+
+      _view = this.view()
+      style = UITableViewStyle.grouped
+
+      view = _view.initWithFrame_style_(_view.frame(), style)
+      this.setView_(view)
+      self.set_prototypes(view)
+      '''
+      self.testCells.append(
+        CaseElement('DefaultTitle', 'buttonSystem',
+                    this.configureSystemTextButton_))
+      '''
+      '''
+      self.testCells.append(
+        CaseElement('AddToCartTitle', 'addToCartButton',
+                    this.configureAddToCartButton_))
+      '''
+      self.testCells.append(
+        CaseElement(title=pylocalizedString('DefaultTitle'),
+                    cellID=self.ButtonKind.buttonSystem.value,
+                    configHandler=this.configureSystemTextButton_))
+
+      self.testCells.append(
+        CaseElement(title=pylocalizedString('DetailDisclosureTitle'),
+                    cellID=self.ButtonKind.buttonDetailDisclosure.value,
+                    configHandler=this.configureSystemDetailDisclosureButton_))
+
+      self.testCells.append(
+        CaseElement(title=pylocalizedString('AddContactTitle'),
+                    cellID=self.ButtonKind.buttonSystemAddContact.value,
+                    configHandler=this.configureCloseButton_))
+
+      self.testCells.append(
+        CaseElement(title=pylocalizedString('CloseTitle'),
+                    cellID=self.ButtonKind.buttonClose.value,
+                    configHandler=this.configureSystemContactAddButton_))
+
+      # xxx: 'if #available(iOS 15, *)'
+      self.testCells.append(
+        CaseElement(title=pylocalizedString('GrayTitle'),
+                    cellID=self.ButtonKind.buttonStyleGray.value,
+                    configHandler=this.configureStyleGrayButton_))
+
+      self.testCells.append(
+        CaseElement(title=pylocalizedString('TintedTitle'),
+                    cellID=self.ButtonKind.buttonStyleTinted.value,
+                    configHandler=this.configureStyleTintedButton_))
+
+      self.testCells.append(
+        CaseElement(title=pylocalizedString('FilledTitle'),
+                    cellID=self.ButtonKind.buttonStyleFilled.value,
+                    configHandler=this.configureStyleFilledButton_))
+
+      self.testCells.append(
+        CaseElement(title=pylocalizedString('CornerStyleTitle'),
+                    cellID=self.ButtonKind.buttonCornerStyle.value,
+                    configHandler=this.configureCornerStyleButton_))
+
+      self.testCells.append(
+        CaseElement(title=pylocalizedString('ToggleTitle'),
+                    cellID=self.ButtonKind.buttonToggle.value,
+                    configHandler=this.configureToggleButton_))
+
+      # xxx: `if traitCollection.userInterfaceIdiom != .mac`
+      self.testCells.append(
+        CaseElement(title=pylocalizedString('ButtonColorTitle'),
+                    cellID=self.ButtonKind.buttonTitleColor.value,
+                    configHandler=this.configureTitleTextButton_))
+
+      self.testCells.append(
+        CaseElement(title=pylocalizedString('ImageTitle'),
+                    cellID=self.ButtonKind.buttonImage.value,
+                    configHandler=this.configureImageButton_))
+
+    # --- UITableViewDelegate
+
+    # xxx: `return` ができないので、`tableView_viewForHeaderInSection_` で処理
+    '''
+    def centeredHeaderView_(_self, _cmd, _title):
+      title = ObjCInstance(_title)
+      alignment = UIListContentTextAlignment.center
+
+      headerView = UITableViewHeaderFooterView.new()
+      content = UIListContentConfiguration.groupedHeaderConfiguration()
+      content.setText_(title)
+      content.textProperties().setAlignment_(alignment)
+      headerView.setContentConfiguration_(content)
+      return headerView.ptr
+    '''
+
+    # MARK: - UITableViewDataSource
+    def tableView_viewForHeaderInSection_(_self, _cmd, _tableView, _section):
+      title = self.testCells[_section].title
+      alignment = UIListContentTextAlignment.center
+
+      headerView = UITableViewHeaderFooterView.new()
+      content = UIListContentConfiguration.groupedHeaderConfiguration()
+      content.setText_(title)
+      content.textProperties().setAlignment_(alignment)
+      headerView.setContentConfiguration_(content)
+
+      # xxx: `return` ができないので、`tableView_viewForHeaderInSection_` で処理
+      #return ObjCInstance(_self).centeredHeaderView_(self.testCells[_section].title)
+
+      return headerView.ptr
+
+    def tableView_titleForHeaderInSection_(_self, _cmd, _tableView, _section):
+      return ns(self.testCells[_section].title).ptr
+
+    def tableView_numberOfRowsInSection_(_self, _cmd, _tableView, _section):
+      return 1
+
+    def numberOfSectionsInTableView_(_self, _cmd, _tableView):
+      return len(self.testCells)
+
+    def tableView_cellForRowAtIndexPath_(_self, _cmd, _tableView, _indexPath):
+      tableView = ObjCInstance(_tableView)
+      indexPath = ObjCInstance(_indexPath)
+
+      cellTest = self.testCells[indexPath.section()]
+
+      cell = tableView.dequeueReusableCellWithIdentifier(
+        cellTest.cellID, forIndexPath=indexPath)
+
+      if (view := cellTest.targetView(cell)):
+        cellTest.configHandler(view)
+      return cell.ptr
+
+    _methods = [
+      viewDidLoad,
+      #centeredHeaderView_,
+      tableView_viewForHeaderInSection_,
+      tableView_titleForHeaderInSection_,
+      tableView_numberOfRowsInSection_,
+      numberOfSectionsInTableView_,
+      tableView_cellForRowAtIndexPath_,
+    ]
+
+    self.add_extensions()
+    if self._msgs: _methods.extend(self._msgs)
+
+    create_kwargs = {
+      'name': '_vc',
+      'superclass': UITableViewController,
+      'methods': _methods,
+    }
+    _vc = create_objc_class(**create_kwargs)
+    self.controller_instance = _vc
+
   def add_extensions(self):
     # todo: objc で独自にmethod 生やしたいときなど
     # todo: この関数内に関数を作り`@self.extension`
@@ -624,122 +783,6 @@ class ObjcTableViewController:
     if not (hasattr(self, '_msgs')):
       self._msgs: list['def'] = []
     self._msgs.append(msg)
-
-  def set_prototypes(self, view: UITableView):
-    for proto in self.prototypes:
-      cellClass = proto.this()
-      identifier = proto.reuseIdentifier_name()
-      view.registerClass_forCellReuseIdentifier_(cellClass, identifier)
-
-  def _override_controller(self):
-    # todo: 既存method と独自追加method をシュッと持ちたい
-    def viewDidLoad(_self, _cmd):
-      this = ObjCInstance(_self)
-
-      _view = this.view()
-      style = UITableViewStyle.grouped
-
-      view = _view.initWithFrame_style_(_view.frame(), style)
-      this.setView_(view)
-      self.set_prototypes(view)
-      '''
-      self.testCells.append(
-        CaseElement('DefaultTitle', 'buttonSystem',
-                    this.configureSystemTextButton_))
-      '''
-      '''
-      self.testCells.append(
-        CaseElement('AddToCartTitle', 'addToCartButton',
-                    this.configureAddToCartButton_))
-      '''
-      self.testCells.append(
-        CaseElement(title=pylocalizedString('DefaultTitle'),
-                    cellID=self.ButtonKind.buttonSystem.value,
-                    configHandler=this.configureSystemTextButton_))
-
-      self.testCells.append(
-        CaseElement(title=pylocalizedString('DetailDisclosureTitle'),
-                    cellID=self.ButtonKind.buttonDetailDisclosure.value,
-                    configHandler=this.configureSystemDetailDisclosureButton_))
-      self.testCells.append(
-        CaseElement(title=pylocalizedString('AddContactTitle'),
-                    cellID=self.ButtonKind.buttonSystemAddContact.value,
-                    configHandler=this.configureSystemContactAddButton_))
-
-    # --- UITableViewDelegate
-
-    # xxx: `return` ができないので、`tableView_viewForHeaderInSection_` で処理
-    '''
-    def centeredHeaderView_(_self, _cmd, _title):
-      title = ObjCInstance(_title)
-      alignment = UIListContentTextAlignment.center
-
-      headerView = UITableViewHeaderFooterView.new()
-      content = UIListContentConfiguration.groupedHeaderConfiguration()
-      content.setText_(title)
-      content.textProperties().setAlignment_(alignment)
-      headerView.setContentConfiguration_(content)
-      return headerView.ptr
-    '''
-
-    # MARK: - UITableViewDataSource
-    def tableView_viewForHeaderInSection_(_self, _cmd, _tableView, _section):
-      title = self.testCells[_section].title
-      alignment = UIListContentTextAlignment.center
-
-      headerView = UITableViewHeaderFooterView.new()
-      content = UIListContentConfiguration.groupedHeaderConfiguration()
-      content.setText_(title)
-      content.textProperties().setAlignment_(alignment)
-      headerView.setContentConfiguration_(content)
-
-      # xxx: `return` ができないので、`tableView_viewForHeaderInSection_` で処理
-      #return ObjCInstance(_self).centeredHeaderView_(self.testCells[_section].title)
-
-      return headerView.ptr
-
-    def tableView_titleForHeaderInSection_(_self, _cmd, _tableView, _section):
-      return ns(self.testCells[_section].title).ptr
-
-    def tableView_numberOfRowsInSection_(_self, _cmd, _tableView, _section):
-      return 1
-
-    def numberOfSectionsInTableView_(_self, _cmd, _tableView):
-      return len(self.testCells)
-
-    def tableView_cellForRowAtIndexPath_(_self, _cmd, _tableView, _indexPath):
-      tableView = ObjCInstance(_tableView)
-      indexPath = ObjCInstance(_indexPath)
-
-      cellTest = self.testCells[indexPath.section()]
-
-      cell = tableView.dequeueReusableCellWithIdentifier(
-        cellTest.cellID, forIndexPath=indexPath)
-
-      if (view := cellTest.targetView(cell)):
-        cellTest.configHandler(view)
-      return cell.ptr
-
-    _methods = [
-      viewDidLoad,
-      #centeredHeaderView_,
-      tableView_viewForHeaderInSection_,
-      tableView_titleForHeaderInSection_,
-      tableView_numberOfRowsInSection_,
-      numberOfSectionsInTableView_,
-      tableView_cellForRowAtIndexPath_,
-    ]
-
-    self.add_extensions()
-    if self._msgs: _methods.extend(self._msgs)
-
-    create_kwargs = {
-      'name': '_vc',
-      'superclass': UITableViewController,
-      'methods': _methods,
-    }
-    _vc = create_objc_class(**create_kwargs)
-    self.controller_instance = _vc
 
   def _init_controller(self):
     self._override_controller()
