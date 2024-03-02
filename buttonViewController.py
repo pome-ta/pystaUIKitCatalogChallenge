@@ -1,3 +1,4 @@
+from enum import Enum
 import re
 from pathlib import Path
 
@@ -73,6 +74,30 @@ pylocalizedString = PyLocalizedString.new(localizable_url)
 # todo: まずはここで作りつつ、モジュール化するケアも考慮
 #UITableViewController
 class ObjcTableViewController:
+
+  class ButtonKind(Enum):
+    buttonSystem = 'buttonSystem'
+    buttonDetailDisclosure = 'buttonDetailDisclosure'
+    buttonSystemAddContact = 'buttonSystemAddContact'
+    buttonClose = 'buttonClose'
+    buttonStyleGray = 'buttonStyleGray'
+    buttonStyleTinted = 'buttonStyleTinted'
+    buttonStyleFilled = 'buttonStyleFilled'
+    buttonCornerStyle = 'buttonCornerStyle'
+    buttonToggle = 'buttonToggle'
+    buttonTitleColor = 'buttonTitleColor'
+    buttonImage = 'buttonImage'
+    buttonAttrText = 'buttonAttrText'
+    buttonSymbol = 'buttonSymbol'
+    buttonLargeSymbol = 'buttonLargeSymbol'
+    buttonTextSymbol = 'buttonTextSymbol'
+    buttonSymbolText = 'buttonSymbolText'
+    buttonMultiTitle = 'buttonMultiTitle'
+    buttonBackground = 'buttonBackground'
+    addToCartButton = 'addToCartButton'
+    buttonUpdateActivityHandler = 'buttonUpdateActivityHandler'
+    buttonUpdateHandler = 'buttonUpdateHandler'
+    buttonImageUpdateHandler = 'buttonImageUpdateHandler'
 
   def __init__(self, *args, **kwargs):
     self._msgs: list['def'] = []  # xxx: 型名ちゃんとやる
@@ -622,9 +647,24 @@ class ObjcTableViewController:
         CaseElement('DefaultTitle', 'buttonSystem',
                     this.configureSystemTextButton_))
       '''
+      '''
       self.testCells.append(
         CaseElement('AddToCartTitle', 'addToCartButton',
                     this.configureAddToCartButton_))
+      '''
+      self.testCells.append(
+        CaseElement(title=pylocalizedString('DefaultTitle'),
+                    cellID=self.ButtonKind.buttonSystem.value,
+                    configHandler=this.configureSystemTextButton_))
+
+      self.testCells.append(
+        CaseElement(title=pylocalizedString('DetailDisclosureTitle'),
+                    cellID=self.ButtonKind.buttonDetailDisclosure.value,
+                    configHandler=this.configureSystemDetailDisclosureButton_))
+      self.testCells.append(
+        CaseElement(title=pylocalizedString('AddContactTitle'),
+                    cellID=self.ButtonKind.buttonSystemAddContact.value,
+                    configHandler=this.configureSystemContactAddButton_))
 
     # --- UITableViewDelegate
 
