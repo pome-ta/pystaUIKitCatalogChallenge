@@ -122,16 +122,7 @@ class ObjcTableViewController:
       view = _view.initWithFrame_style_(_view.frame(), style)
       this.setView_(view)
       self.set_prototypes(view)
-      '''
-      self.testCells.append(
-        CaseElement('DefaultTitle', 'buttonSystem',
-                    this.configureSystemTextButton_))
-      '''
-      '''
-      self.testCells.append(
-        CaseElement('AddToCartTitle', 'addToCartButton',
-                    this.configureAddToCartButton_))
-      '''
+
       self.testCells.append(
         CaseElement(title=pylocalizedString('DefaultTitle'),
                     cellID=self.ButtonKind.buttonSystem.value,
