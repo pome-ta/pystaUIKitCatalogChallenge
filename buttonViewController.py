@@ -148,35 +148,32 @@ class ObjcTableViewController:
 
       # xxx: 'if #available(iOS 15, *)'
       # These button styles are available on iOS 15 or later.
-      self.testCells.append(
+      self.testCells.extend([
         # 4
         CaseElement(pylocalizedString('GrayTitle'),
                     ButtonKind.buttonStyleGray.value,
-                    configHandler=this.configureStyleGrayButton_))
+                    configHandler=this.configureStyleGrayButton_),
 
-      self.testCells.append(
         #5
         CaseElement(pylocalizedString('TintedTitle'),
                     ButtonKind.buttonStyleTinted.value,
-                    this.configureStyleTintedButton_))
+                    this.configureStyleTintedButton_),
 
-      self.testCells.append(
         # 6
         CaseElement(pylocalizedString('FilledTitle'),
                     ButtonKind.buttonStyleFilled.value,
-                    this.configureStyleFilledButton_))
+                    this.configureStyleFilledButton_),
 
-      self.testCells.append(
         # 7
         CaseElement(pylocalizedString('CornerStyleTitle'),
                     ButtonKind.buttonCornerStyle.value,
-                    this.configureCornerStyleButton_))
+                    this.configureCornerStyleButton_),
 
-      self.testCells.append(
         # 8
         CaseElement(pylocalizedString('ToggleTitle'),
                     ButtonKind.buttonToggle.value,
-                    this.configureToggleButton_))
+                    this.configureToggleButton_),
+      ])
 
       # xxx: `if traitCollection.userInterfaceIdiom != .mac`
       self.testCells.append(
