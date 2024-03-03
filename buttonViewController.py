@@ -229,7 +229,6 @@ class ObjcTableViewController:
                     this.configureBackgroundButton_),
 
         # Multi-title button: title for normal and highlight state, setTitle(.highlighted) is for iOS 15 and later.
-
         # 17
         CaseElement(pylocalizedString('MultiTitleTitle'),
                     ButtonKind.buttonMultiTitle.value,
@@ -243,7 +242,6 @@ class ObjcTableViewController:
                     this.configureAddToCartButton_),
 
         # UIButtonConfiguration with updateHandlers is available only on iOS 15 or later.
-
         # 19
         CaseElement(pylocalizedString('UpdateActivityHandlerTitle'),
                     ButtonKind.buttonUpdateActivityHandler.value,
