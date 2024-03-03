@@ -123,26 +123,29 @@ class ObjcTableViewController:
       this.setView_(view)
       self.set_prototypes(view)
 
-      self.testCells.append(
+      self.testCells.extend([
+        # 0
         CaseElement(title=pylocalizedString('DefaultTitle'),
                     cellID=self.ButtonKind.buttonSystem.value,
-                    configHandler=this.configureSystemTextButton_))
+                    configHandler=this.configureSystemTextButton_),
 
-      self.testCells.append(
-        CaseElement(title=pylocalizedString('DetailDisclosureTitle'),
-                    cellID=self.ButtonKind.buttonDetailDisclosure.value,
-                    configHandler=this.configureSystemDetailDisclosureButton_))
+        # 1
+        CaseElement(pylocalizedString('DetailDisclosureTitle'),
+                    self.ButtonKind.buttonDetailDisclosure.value,
+                    this.configureSystemDetailDisclosureButton_),
 
-      self.testCells.append(
+        # 2
         CaseElement(title=pylocalizedString('AddContactTitle'),
                     cellID=self.ButtonKind.buttonSystemAddContact.value,
-                    configHandler=this.configureCloseButton_))
+                    configHandler=this.configureCloseButton_),
 
-      self.testCells.append(
+        # 3
         CaseElement(title=pylocalizedString('CloseTitle'),
                     cellID=self.ButtonKind.buttonClose.value,
-                    configHandler=this.configureSystemContactAddButton_))
+                    configHandler=this.configureSystemContactAddButton_),
+      ])
 
+      # 4
       # xxx: 'if #available(iOS 15, *)'
       self.testCells.append(
         CaseElement(title=pylocalizedString('GrayTitle'),
