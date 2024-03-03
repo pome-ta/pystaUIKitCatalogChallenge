@@ -146,49 +146,58 @@ class ObjcTableViewController:
                     this.configureSystemContactAddButton_),
       ])
 
-      # 4
       # xxx: 'if #available(iOS 15, *)'
+      # These button styles are available on iOS 15 or later.
       self.testCells.append(
+        # 4
         CaseElement(pylocalizedString('GrayTitle'),
                     ButtonKind.buttonStyleGray.value,
                     configHandler=this.configureStyleGrayButton_))
 
       self.testCells.append(
+        #5
         CaseElement(pylocalizedString('TintedTitle'),
                     ButtonKind.buttonStyleTinted.value,
                     this.configureStyleTintedButton_))
 
       self.testCells.append(
+        # 6
         CaseElement(pylocalizedString('FilledTitle'),
                     ButtonKind.buttonStyleFilled.value,
                     this.configureStyleFilledButton_))
 
       self.testCells.append(
+        # 7
         CaseElement(pylocalizedString('CornerStyleTitle'),
                     ButtonKind.buttonCornerStyle.value,
                     this.configureCornerStyleButton_))
 
       self.testCells.append(
+        # 8
         CaseElement(pylocalizedString('ToggleTitle'),
                     ButtonKind.buttonToggle.value,
                     this.configureToggleButton_))
 
       # xxx: `if traitCollection.userInterfaceIdiom != .mac`
       self.testCells.append(
+        # 9
         CaseElement(pylocalizedString('ButtonColorTitle'),
                     ButtonKind.buttonTitleColor.value,
                     this.configureTitleTextButton_))
 
       self.testCells.append(
+        # 10
         CaseElement(pylocalizedString('ImageTitle'),
                     ButtonKind.buttonImage.value, this.configureImageButton_))
 
       self.testCells.append(
+        # 11
         CaseElement(pylocalizedString('AttributedStringTitle'),
                     ButtonKind.buttonAttrText.value,
                     this.configureAttributedTextSystemButton_))
 
       self.testCells.append(
+        # 12
         CaseElement(pylocalizedString('SymbolTitle'),
                     ButtonKind.buttonSymbol.value,
                     this.configureSymbolButton_))
@@ -196,50 +205,59 @@ class ObjcTableViewController:
       # xxx: `if #available(iOS 15, *)`
       # xxx: `if traitCollection.userInterfaceIdiom != .mac`
       self.testCells.append(
+        # 13
         CaseElement(pylocalizedString('LargeSymbolTitle'),
                     ButtonKind.buttonLargeSymbol.value,
                     this.configureLargeSymbolButton_))
 
       # xxx: `if #available(iOS 15, *)`
       self.testCells.append(
+        # 14
         CaseElement(pylocalizedString('StringSymbolTitle'),
                     ButtonKind.buttonTextSymbol.value,
                     this.configureTextSymbolButton_))
 
       self.testCells.append(
+        # 15
         CaseElement(pylocalizedString('SymbolStringTitle'),
                     ButtonKind.buttonSymbolText.value,
                     this.configureSymbolTextButton_))
 
       self.testCells.append(
+        # 16
         CaseElement(pylocalizedString('BackgroundTitle'),
                     ButtonKind.buttonBackground.value,
                     this.configureBackgroundButton_))
 
       # Multi-title button: title for normal and highlight state, setTitle(.highlighted) is for iOS 15 and later.
       self.testCells.append(
+        # 17
         CaseElement(pylocalizedString('MultiTitleTitle'),
                     ButtonKind.buttonMultiTitle.value,
                     this.configureMultiTitleButton_))
 
       # Various button effects done to the addToCartButton are available only on iOS 15 or later.
       self.testCells.append(
+        # 18
         CaseElement(pylocalizedString('AddToCartTitle'),
                     ButtonKind.addToCartButton.value,
                     this.configureAddToCartButton_))
 
       # UIButtonConfiguration with updateHandlers is available only on iOS 15 or later.
       self.testCells.append(
+        # 19
         CaseElement(pylocalizedString('UpdateActivityHandlerTitle'),
                     ButtonKind.buttonUpdateActivityHandler.value,
                     this.configureUpdateActivityHandlerButton_))
 
       self.testCells.append(
+        # 20
         CaseElement(pylocalizedString('UpdateHandlerTitle'),
                     ButtonKind.buttonUpdateHandler.value,
                     this.configureUpdateHandlerButton_))
 
       self.testCells.append(
+        # 21
         CaseElement(pylocalizedString('UpdateImageHandlerTitle'),
                     ButtonKind.buttonUpdateActivityHandler.value,
                     this.configureUpdateActivityHandlerButton_))
