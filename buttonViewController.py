@@ -189,6 +189,67 @@ class ObjcTableViewController:
                     cellID=self.ButtonKind.buttonImage.value,
                     configHandler=this.configureImageButton_))
 
+      self.testCells.append(
+        CaseElement(title=pylocalizedString('AttributedStringTitle'),
+                    cellID=self.ButtonKind.buttonAttrText.value,
+                    configHandler=this.configureAttributedTextSystemButton_))
+
+      self.testCells.append(
+        CaseElement(title=pylocalizedString('SymbolTitle'),
+                    cellID=self.ButtonKind.buttonSymbol.value,
+                    configHandler=this.configureSymbolButton_))
+
+      # xxx: `if #available(iOS 15, *)`
+      # xxx: `if traitCollection.userInterfaceIdiom != .mac`
+      self.testCells.append(
+        CaseElement(title=pylocalizedString('LargeSymbolTitle'),
+                    cellID=self.ButtonKind.buttonLargeSymbol.value,
+                    configHandler=this.configureLargeSymbolButton_))
+
+      # xxx: `if #available(iOS 15, *)`
+      self.testCells.append(
+        CaseElement(title=pylocalizedString('StringSymbolTitle'),
+                    cellID=self.ButtonKind.buttonTextSymbol.value,
+                    configHandler=this.configureTextSymbolButton_))
+
+      self.testCells.append(
+        CaseElement(title=pylocalizedString('SymbolStringTitle'),
+                    cellID=self.ButtonKind.buttonSymbolText.value,
+                    configHandler=this.configureSymbolTextButton_))
+
+      self.testCells.append(
+        CaseElement(title=pylocalizedString('BackgroundTitle'),
+                    cellID=self.ButtonKind.buttonBackground.value,
+                    configHandler=this.configureBackgroundButton_))
+
+      # Multi-title button: title for normal and highlight state, setTitle(.highlighted) is for iOS 15 and later.
+      self.testCells.append(
+        CaseElement(title=pylocalizedString('MultiTitleTitle'),
+                    cellID=self.ButtonKind.buttonMultiTitle.value,
+                    configHandler=this.configureMultiTitleButton_))
+
+      # Various button effects done to the addToCartButton are available only on iOS 15 or later.
+      self.testCells.append(
+        CaseElement(title=pylocalizedString('AddToCartTitle'),
+                    cellID=self.ButtonKind.addToCartButton.value,
+                    configHandler=this.configureAddToCartButton_))
+
+      # UIButtonConfiguration with updateHandlers is available only on iOS 15 or later.
+      self.testCells.append(
+        CaseElement(title=pylocalizedString('UpdateActivityHandlerTitle'),
+                    cellID=self.ButtonKind.buttonUpdateActivityHandler.value,
+                    configHandler=this.configureUpdateActivityHandlerButton_))
+
+      self.testCells.append(
+        CaseElement(title=pylocalizedString('UpdateHandlerTitle'),
+                    cellID=self.ButtonKind.buttonUpdateHandler.value,
+                    configHandler=this.configureUpdateHandlerButton_))
+
+      self.testCells.append(
+        CaseElement(title=pylocalizedString('UpdateImageHandlerTitle'),
+                    cellID=self.ButtonKind.buttonUpdateActivityHandler.value,
+                    configHandler=this.configureUpdateActivityHandlerButton_))
+
     # --- UITableViewDelegate
 
     # xxx: `return` ができないので、`tableView_viewForHeaderInSection_` で処理
