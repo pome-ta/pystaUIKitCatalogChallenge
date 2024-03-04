@@ -142,8 +142,7 @@ class ObjcTableViewController:
 
         # 3
         CaseElement(pylocalizedString('CloseTitle'),
-                    ButtonKind.buttonClose.value,
-                    this.configureCloseButton_),
+                    ButtonKind.buttonClose.value, this.configureCloseButton_),
       ])
 
       # xxx: 'if #available(iOS 15, *)'
@@ -152,7 +151,7 @@ class ObjcTableViewController:
         # 4
         CaseElement(pylocalizedString('GrayTitle'),
                     ButtonKind.buttonStyleGray.value,
-                    configHandler=this.configureStyleGrayButton_),
+                    this.configureStyleGrayButton_),
 
         #5
         CaseElement(pylocalizedString('TintedTitle'),
