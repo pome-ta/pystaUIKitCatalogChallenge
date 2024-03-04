@@ -253,8 +253,8 @@ class ObjcTableViewController:
 
         # 21
         CaseElement(pylocalizedString('UpdateImageHandlerTitle'),
-                    ButtonKind.buttonUpdateActivityHandler.value,
-                    this.configureUpdateActivityHandlerButton_),
+                    ButtonKind.buttonImageUpdateHandler.value,
+                    this.configureUpdateImageHandlerButton_),
       ])
 
     # --- UITableViewDelegate
@@ -698,7 +698,7 @@ class ObjcTableViewController:
       this = ObjCInstance(_self)
       button = ObjCInstance(_button)
 
-      # todo: [iphone - Retina display and [UIImage initWithData] - Stack Overflow](https://stackoverflow.com/questions/3289286/retina-display-and-uiimage-initwithdata)
+      # ref: [iphone - Retina display and [UIImage initWithData] - Stack Overflow](https://stackoverflow.com/questions/3289286/retina-display-and-uiimage-initwithdata)
       # xxx: scale 指定これでいいのかな？
       scale = int(UIScreen.mainScreen().scale())
 
