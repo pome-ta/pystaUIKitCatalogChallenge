@@ -138,12 +138,12 @@ class ObjcTableViewController:
         # 2
         CaseElement(pylocalizedString('AddContactTitle'),
                     ButtonKind.buttonSystemAddContact.value,
-                    this.configureCloseButton_),
+                    this.configureSystemContactAddButton_),
 
         # 3
         CaseElement(pylocalizedString('CloseTitle'),
                     ButtonKind.buttonClose.value,
-                    this.configureSystemContactAddButton_),
+                    this.configureCloseButton_),
       ])
 
       # xxx: 'if #available(iOS 15, *)'
