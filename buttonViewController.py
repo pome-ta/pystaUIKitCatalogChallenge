@@ -465,7 +465,11 @@ class ObjcTableViewController:
       image = UIImage.systemImageNamed('xmark')
 
       systemPurple = UIColor.systemPurpleColor()
-      imageButtonNormalImage = image.imageWithTintColor_(systemPurple)
+      renderingMode = UIImageRenderingMode.alwaysOriginal
+      # ref: [swift - iOS 13 `withTintColor` not obeying the color I assign - Stack Overflow](https://stackoverflow.com/questions/58867627/ios-13-withtintcolor-not-obeying-the-color-i-assign)
+      imageButtonNormalImage = image.imageWithTintColor_(
+        systemPurple).imageWithRenderingMode_(renderingMode)
+
       state = UIControl_State.normal
       button.setImage_forState_(imageButtonNormalImage, state)
 

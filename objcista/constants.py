@@ -218,3 +218,10 @@ class UIListContentTextAlignment:
   center = 1
   justified = 2
 
+
+@dataclass
+class UIImageRenderingMode:
+  automatic = 0
+  alwaysOriginal = 1
+  alwaysTemplate = 2
+
