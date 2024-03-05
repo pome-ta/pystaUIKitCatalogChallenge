@@ -11,11 +11,11 @@ import pdbg
 class TopNavigationController(PlainNavigationController):
 
   def __init__(self):
-    self.override()
+    self.add_extensions()
 
-  def override(self):
+  def add_extensions(self):
 
-    @self.add_msg
+    @self.extension
     def doneButtonTapped_(_self, _cmd, _sender):
       this = ObjCInstance(_self)
       visibleViewController = this.visibleViewController()

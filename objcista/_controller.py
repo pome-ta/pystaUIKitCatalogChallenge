@@ -7,12 +7,12 @@ class _Controller:
     self._msgs: list['Callable'] = []  # xxx: 型名ちゃんとやる
     self.controller_instance: ObjCInstance
 
-  def override(self):
+  def add_extensions(self):
     # todo: objc で独自にmethod 生やしたいときなど
     # todo: この関数内に関数を作り`@self.add_msg`
     pass
 
-  def add_msg(self, msg):
+  def extension(self, msg):
     if not (hasattr(self, '_msgs')):
       self._msgs: list['Callable'] = []
     self._msgs.append(msg)
