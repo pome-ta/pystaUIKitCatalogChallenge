@@ -1,6 +1,4 @@
 from enum import Enum
-import re
-from pathlib import Path
 
 import ctypes
 from objc_util import ObjCInstance, sel, create_objc_class, ns
@@ -13,40 +11,9 @@ from objcista.objcLabel import ObjcLabel
 
 from caseElement import CaseElement
 from storyboard_ButtonViewController import prototypes
+from pyLocalizedString import pylocalizedString
 
 import pdbg
-
-localizable_url = './UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Base.lproj/Localizable.strings'
-
-
-class PyLocalizedString:
-
-  def __init__(self, url: str | Path = localizable_url):
-    localizable_path = Path(url)
-    splitlines_list = localizable_path.read_text(encoding='utf-8').splitlines()
-
-    # xxx: すごく雑に`Localizable.strings` format 確認してる
-    pre_processing = [
-      line for line in splitlines_list
-      if len(line) and (line[0] == '"') and (line[-1] == ';')
-    ]
-    compile = re.compile('"(.*?)"')
-
-    self.localizable_dic = dict([
-      reg_result for line in pre_processing
-      if (reg_result := compile.findall(line))
-    ])
-
-  def __get_dict_value(self, key):
-    return self.localizable_dic.get(key, '🙅‍♀️')
-
-  @classmethod
-  def new(cls, url: str | Path = localizable_url):
-    this = cls(url)
-    return this.__get_dict_value
-
-
-pylocalizedString = PyLocalizedString.new(localizable_url)
 
 
 class ButtonKind(Enum):
@@ -892,5 +859,4 @@ if __name__ == "__main__":
   #style = UIModalPresentationStyle.fullScreen
 
   run_controller(nv, style)
-
 
