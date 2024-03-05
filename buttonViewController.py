@@ -17,7 +17,7 @@ from storyboard_ButtonViewController import prototypes
 import pdbg
 
 
-def get_absolutepath(path):
+'''def get_absolutepath(path):
   # xxx: かなり意味ないので、要検討
   _path = Path(path)
   if (_path.exists()):
@@ -29,7 +29,7 @@ def get_absolutepath(path):
 
 def get_dataWithContentsOfURL(path: str) -> NSData:
   _nsurl = nsurl(get_absolutepath(path))
-  return NSData.dataWithContentsOfURL_(_nsurl)
+  return NSData.dataWithContentsOfURL_(_nsurl)'''
 
 
 localizable_url = './UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Base.lproj/Localizable.strings'

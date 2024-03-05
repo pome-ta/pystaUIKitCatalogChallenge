@@ -1,6 +1,7 @@
 __version__ = '0.0.0'
-
-from objc_util import on_main_thread, c
+import ctypes
+from pathlib import Path
+from objc_util import c, ObjCInstance, on_main_thread, nsurl
 
 from ._classes import *
 from .constants import *
@@ -10,6 +11,21 @@ from .constants import *
 # [Pythonista/_2017/picker-wheel-for-lists.py at 3e082d53b6b9b501a3c8cf3251a8ad4c8be9c2ad · tdamdouni/Pythonista · GitHub](https://github.com/tdamdouni/Pythonista/blob/3e082d53b6b9b501a3c8cf3251a8ad4c8be9c2ad/_2017/picker-wheel-for-lists.py#L24)
 def globalVariable(name: str):
   return ObjCInstance(ctypes.c_void_p.in_dll(c, name))
+
+
+def get_absolutepath(path):
+  # xxx: かなり意味ないので、要検討
+  _path = Path(path)
+  if (_path.exists()):
+    return str(_path.absolute())
+  else:
+    print('画像が見つかりません')
+    raise
+
+
+def get_dataWithContentsOfURL(path: str) -> NSData:
+  _nsurl = nsurl(get_absolutepath(path))
+  return NSData.dataWithContentsOfURL_(_nsurl)
 
 
 @on_main_thread
