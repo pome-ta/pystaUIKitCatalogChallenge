@@ -3,7 +3,7 @@ import re
 from pathlib import Path
 
 import ctypes
-from objc_util import ObjCInstance, sel, create_objc_class, nsurl, ns
+from objc_util import ObjCInstance, sel, create_objc_class, ns
 
 from objcista import *
 #from objcista._controller import _Controller
@@ -15,22 +15,6 @@ from caseElement import CaseElement
 from storyboard_ButtonViewController import prototypes
 
 import pdbg
-
-
-'''def get_absolutepath(path):
-  # xxx: かなり意味ないので、要検討
-  _path = Path(path)
-  if (_path.exists()):
-    return str(_path.absolute())
-  else:
-    print('画像が見つかりません')
-    raise
-
-
-def get_dataWithContentsOfURL(path: str) -> NSData:
-  _nsurl = nsurl(get_absolutepath(path))
-  return NSData.dataWithContentsOfURL_(_nsurl)'''
-
 
 localizable_url = './UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Base.lproj/Localizable.strings'
 
