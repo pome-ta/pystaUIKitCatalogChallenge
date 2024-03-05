@@ -4,7 +4,7 @@ from objc_util import ObjCInstance
 class _Controller:
 
   def __init__(self, *args, **kwargs):
-    self._msgs: list['def'] = []  # xxx: 型名ちゃんとやる
+    self._msgs: list['Callable'] = []  # xxx: 型名ちゃんとやる
     self.controller_instance: ObjCInstance
 
   def override(self):
@@ -14,7 +14,7 @@ class _Controller:
 
   def add_msg(self, msg):
     if not (hasattr(self, '_msgs')):
-      self._msgs: list['def'] = []
+      self._msgs: list['Callable'] = []
     self._msgs.append(msg)
 
   def _override_controller(self):

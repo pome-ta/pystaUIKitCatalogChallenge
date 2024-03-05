@@ -46,7 +46,7 @@ class ButtonKind(Enum):
 class ObjcTableViewController:
 
   def __init__(self, *args, **kwargs):
-    self._msgs: list['def'] = []  # xxx: 型名ちゃんとやる
+    self._msgs: list['Callable'] = []  # xxx: 型名ちゃんとやる
     self.controller_instance: ObjCInstance
     self.prototypes = prototypes
     self.testCells = []
