@@ -3,7 +3,7 @@ import re
 from pathlib import Path
 
 import ctypes
-from objc_util import ObjCInstance, sel, create_objc_class, c, nsurl, ns
+from objc_util import ObjCInstance, sel, create_objc_class, nsurl, ns
 
 from objcista import *
 #from objcista._controller import _Controller
@@ -15,12 +15,6 @@ from caseElement import CaseElement
 from storyboard_ButtonViewController import prototypes
 
 import pdbg
-
-
-# ref: [Picker wheel for lists (not just dates) | omz:forum](https://forum.omz-software.com/topic/4592/picker-wheel-for-lists-not-just-dates/2)
-# [Pythonista/_2017/picker-wheel-for-lists.py at 3e082d53b6b9b501a3c8cf3251a8ad4c8be9c2ad · tdamdouni/Pythonista · GitHub](https://github.com/tdamdouni/Pythonista/blob/3e082d53b6b9b501a3c8cf3251a8ad4c8be9c2ad/_2017/picker-wheel-for-lists.py#L24)
-def _str_symbol(name):
-  return ObjCInstance(ctypes.c_void_p.in_dll(c, name))
 
 
 def get_absolutepath(path):
@@ -487,7 +481,7 @@ class ObjcTableViewController:
       button = ObjCInstance(_button)
 
       buttonTitle = 'Buttonnn'
-      NSStrikethroughStyleAttributeName = _str_symbol(
+      NSStrikethroughStyleAttributeName = globalVariable(
         'NSStrikethroughStyleAttributeName')
 
       normalTitleAttributes = {
@@ -500,9 +494,9 @@ class ObjcTableViewController:
       state = UIControl_State.normal
       button.setAttributedTitle_forState_(normalAttributedTitle, state)
 
-      NSForegroundColorAttributeName = _str_symbol(
+      NSForegroundColorAttributeName = globalVariable(
         'NSForegroundColorAttributeName')
-      NSStrikethroughStyleAttributeName = _str_symbol(
+      NSStrikethroughStyleAttributeName = globalVariable(
         'NSStrikethroughStyleAttributeName')
 
       highlightedTitleAttributes = {
@@ -536,7 +530,7 @@ class ObjcTableViewController:
       else:
         button.setImage_forState_(buttonImage, state)
 
-      UIFontTextStyleBody = _str_symbol('UIFontTextStyleBody')
+      UIFontTextStyleBody = globalVariable('UIFontTextStyleBody')
       scale = UIImage_SymbolScale.large
 
       config = UIImageSymbolConfiguration.configurationWithTextStyle_scale_(
@@ -558,7 +552,7 @@ class ObjcTableViewController:
       if True:  # xxx: `available(iOS 15, *)`
         buttonConfig = UIButtonConfiguration.plainButtonConfiguration()
 
-        UIFontTextStyleLargeTitle = _str_symbol('UIFontTextStyleLargeTitle')
+        UIFontTextStyleLargeTitle = globalVariable('UIFontTextStyleLargeTitle')
 
         _symbolConfiguration = UIImageSymbolConfiguration.configurationWithTextStyle_(
           UIFontTextStyleLargeTitle)
@@ -571,7 +565,7 @@ class ObjcTableViewController:
         state = UIControl_State.normal
         button.setImage_forState_(buttonImage, state)
 
-        UIFontTextStyleBody = _str_symbol('UIFontTextStyleBody')
+        UIFontTextStyleBody = globalVariable('UIFontTextStyleBody')
         scale = UIImage_SymbolScale.small
 
         config = UIImageSymbolConfiguration.configurationWithTextStyle_scale_(
@@ -593,7 +587,7 @@ class ObjcTableViewController:
       buttonImage = UIImage.systemImageNamed('person')
       if True:  # xxx: `available(iOS 15, *)`
         buttonConfig = UIButtonConfiguration.plainButtonConfiguration()
-        UIFontTextStyleBody = _str_symbol('UIFontTextStyleBody')
+        UIFontTextStyleBody = globalVariable('UIFontTextStyleBody')
         _symbolConfiguration = UIImageSymbolConfiguration.configurationWithTextStyle_(
           UIFontTextStyleBody)
 
@@ -609,7 +603,7 @@ class ObjcTableViewController:
       button.setTitle_forState_('Person', state)
 
       # xxx: 正解かは不明
-      UIFontTextStyleBody = _str_symbol('UIFontTextStyleBody')
+      UIFontTextStyleBody = globalVariable('UIFontTextStyleBody')
       preferredFont = UIFont.preferredFontForTextStyle_(UIFontTextStyleBody)
 
       button.titleLabel().setFont_(preferredFont)
@@ -628,7 +622,7 @@ class ObjcTableViewController:
       if True:  # xxx: `available(iOS 15, *)`
         buttonConfig = UIButtonConfiguration.plainButtonConfiguration()
 
-        UIFontTextStyleBody = _str_symbol('UIFontTextStyleBody')
+        UIFontTextStyleBody = globalVariable('UIFontTextStyleBody')
         _symbolConfiguration = UIImageSymbolConfiguration.configurationWithTextStyle_(
           UIFontTextStyleBody)
 
@@ -642,7 +636,7 @@ class ObjcTableViewController:
       button.setTitle_forState_('Person', state)
 
       # xxx: 正解かは不明
-      UIFontTextStyleBody = _str_symbol('UIFontTextStyleBody')
+      UIFontTextStyleBody = globalVariable('UIFontTextStyleBody')
       preferredFont = UIFont.preferredFontForTextStyle_(UIFontTextStyleBody)
 
       button.titleLabel().setFont_(preferredFont)
@@ -740,7 +734,7 @@ class ObjcTableViewController:
       buttonConfig = UIButtonConfiguration.plainButtonConfiguration()
       buttonConfig.setImage_(UIImage.systemImageNamed('tray'))
 
-      UIFontTextStyleBody = _str_symbol('UIFontTextStyleBody')
+      UIFontTextStyleBody = globalVariable('UIFontTextStyleBody')
       _symbolConfiguration = UIImageSymbolConfiguration.configurationWithTextStyle_(
         UIFontTextStyleBody)
       buttonConfig.setPreferredSymbolConfigurationForImage_(
@@ -752,7 +746,7 @@ class ObjcTableViewController:
       button.setTitle_forState_('Button', state)
 
       # xxx: 正解かは不明
-      UIFontTextStyleBody = _str_symbol('UIFontTextStyleBody')
+      UIFontTextStyleBody = globalVariable('UIFontTextStyleBody')
       preferredFont = UIFont.preferredFontForTextStyle_(UIFontTextStyleBody)
 
       button.titleLabel().setFont_(preferredFont)
@@ -801,7 +795,7 @@ class ObjcTableViewController:
       buttonConfig = UIButtonConfiguration.plainButtonConfiguration()
       buttonConfig.setImage_(UIImage.systemImageNamed('cart'))
 
-      UIFontTextStyleLargeTitle = _str_symbol('UIFontTextStyleLargeTitle')
+      UIFontTextStyleLargeTitle = globalVariable('UIFontTextStyleLargeTitle')
       _symbolConfiguration = UIImageSymbolConfiguration.configurationWithTextStyle_(
         UIFontTextStyleLargeTitle)
       buttonConfig.setPreferredSymbolConfigurationForImage_(
