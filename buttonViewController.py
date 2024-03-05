@@ -798,7 +798,7 @@ class ObjcTableViewController:
 
   def extension(self, msg):
     if not (hasattr(self, '_msgs')):
-      self._msgs: list['def'] = []
+      self._msgs: list['Callable'] = []
     self._msgs.append(msg)
 
   def _init_controller(self):
