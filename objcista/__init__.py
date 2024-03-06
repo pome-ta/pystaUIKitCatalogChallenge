@@ -14,6 +14,7 @@ def globalVariable(name: str):
 
 
 # todo: 後ほど関数化?
+# wip: 今後引数サイズを考慮する
 objc_msgSendSuper = c.objc_msgSendSuper
 objc_msgSendSuper.argtypes = [
   ctypes.c_void_p,  # super
