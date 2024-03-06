@@ -104,12 +104,60 @@ class ButtonMenuMultiAction(CstmUITableViewCell):
     return name
 
 
+class ButtonSubMenu(CstmUITableViewCell):
+
+  def init_cell(self, cell: UITableViewCell):
+    type = UIButton_ButtonType.system
+    button = UIButton.buttonWithType_(type)
+    state = UIControl_State.normal
+    button.setTitle_forState_('Drop Down Submenu', state)
+    button.setTranslatesAutoresizingMaskIntoConstraints_(False)
+    contentView = cell.contentView()
+    contentView.addSubview_(button)
+
+    NSLayoutConstraint.activateConstraints_([
+      button.centerXAnchor().constraintEqualToAnchor_(
+        contentView.centerXAnchor()),
+      button.centerYAnchor().constraintEqualToAnchor_(
+        contentView.centerYAnchor()),
+    ])
+
+  @classmethod
+  def reuseIdentifier_name(cls) -> str:
+    name = 'buttonSubMenu'
+    cls.reuseIdentifier = name
+    return name
+
+
+class ButtonMenuSelection(CstmUITableViewCell):
+
+  def init_cell(self, cell: UITableViewCell):
+    type = UIButton_ButtonType.system
+    button = UIButton.buttonWithType_(type)
+    state = UIControl_State.normal
+    button.setTitle_forState_('Drop Down', state)
+    button.setTranslatesAutoresizingMaskIntoConstraints_(False)
+    contentView = cell.contentView()
+    contentView.addSubview_(button)
+
+    NSLayoutConstraint.activateConstraints_([
+      button.centerXAnchor().constraintEqualToAnchor_(
+        contentView.centerXAnchor()),
+      button.centerYAnchor().constraintEqualToAnchor_(
+        contentView.centerYAnchor()),
+    ])
+
+  @classmethod
+  def reuseIdentifier_name(cls) -> str:
+    name = 'buttonMenuSelection'
+    cls.reuseIdentifier = name
+    return name
 
 
 prototypes = [
   ButtonMenuProgrammatic,
   ButtonMenuMultiAction,
-  
+  ButtonSubMenu,
+  ButtonMenuSelection,
 ]
-
 
