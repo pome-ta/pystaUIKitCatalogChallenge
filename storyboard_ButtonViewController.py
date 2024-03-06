@@ -1,27 +1,8 @@
 import ctypes
 
-from objc_util import ObjCInstance, create_objc_class, class_getSuperclass, sel, c
+from objc_util import ObjCInstance, create_objc_class, class_getSuperclass, sel
 
 from objcista import *
-
-# todo: 後ほど関数化
-objc_msgSendSuper = c.objc_msgSendSuper
-objc_msgSendSuper.argtypes = [
-  ctypes.c_void_p,  # super
-  ctypes.c_void_p,  # selector
-  ctypes.c_void_p,
-  ctypes.c_void_p,
-]
-objc_msgSendSuper.restype = ctypes.c_void_p
-
-
-class objc_super(ctypes.Structure):
-  #ref: [id | Apple Developer Documentation](https://developer.apple.com/documentation/objectivec/id?language=objc)
-  # ref: [Class | Apple Developer Documentation](https://developer.apple.com/documentation/objectivec/class?language=objc)
-  _fields_ = [
-    ('receiver', ctypes.c_void_p),  # encoding(b"@")
-    ('super_class', ctypes.c_void_p),  # encoding(b"#")
-  ]
 
 
 class CstmUITableViewCell:

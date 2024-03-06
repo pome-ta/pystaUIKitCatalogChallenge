@@ -13,6 +13,26 @@ def globalVariable(name: str):
   return ObjCInstance(ctypes.c_void_p.in_dll(c, name))
 
 
+# todo: 後ほど関数化?
+objc_msgSendSuper = c.objc_msgSendSuper
+objc_msgSendSuper.argtypes = [
+  ctypes.c_void_p,  # super
+  ctypes.c_void_p,  # selector
+  ctypes.c_void_p,
+  ctypes.c_void_p,
+]
+objc_msgSendSuper.restype = ctypes.c_void_p
+
+
+class objc_super(ctypes.Structure):
+  #ref: [id | Apple Developer Documentation](https://developer.apple.com/documentation/objectivec/id?language=objc)
+  # ref: [Class | Apple Developer Documentation](https://developer.apple.com/documentation/objectivec/class?language=objc)
+  _fields_ = [
+    ('receiver', ctypes.c_void_p),  # encoding(b"@")
+    ('super_class', ctypes.c_void_p),  # encoding(b"#")
+  ]
+
+
 def get_absolutepath(path):
   # xxx: かなり意味ないので、要検討
   _path = Path(path)
