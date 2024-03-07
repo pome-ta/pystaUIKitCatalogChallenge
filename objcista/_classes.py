@@ -31,3 +31,6 @@ UIImageSymbolConfiguration = ObjCClass('UIImageSymbolConfiguration')
 UIListContentConfiguration = ObjCClass('UIListContentConfiguration')
 UIListContentTextProperties = ObjCClass('UIListContentTextProperties')
 
+UIMenu = ObjCClass('UIMenu')
+UIAction = ObjCClass('UIAction')
+
