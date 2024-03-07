@@ -4,14 +4,19 @@ import ctypes
 from objc_util import ObjCInstance, sel, create_objc_class, ns
 
 from objcista import *
-#from objcista._controller import _Controller
-
 
 from caseElement import CaseElement
 from storyboard_ButtonViewController import prototypes
 from pyLocalizedString import pylocalizedString
 
 import pdbg
+
+
+class MenuButtonKind(Enum):
+  buttonMenuProgrammatic = 'buttonMenuProgrammatic'
+  buttonMenuMultiAction = 'buttonMenuMultiAction'
+  buttonSubMenu = 'buttonSubMenu'
+  buttonMenuSelection = 'buttonMenuSelection'
 
 
 class ButtonKind(Enum):
@@ -39,7 +44,7 @@ class ButtonKind(Enum):
   buttonImageUpdateHandler = 'buttonImageUpdateHandler'
 
 
-# todo: まずはここで作りつつ、モジュール化するケアも考慮
+# todo: まずはここで作りつつ、モジュール化するケアも考慮
 #UITableViewController
 class ObjcTableViewController:
 
@@ -280,6 +285,10 @@ class ObjcTableViewController:
     # todo: この関数内に関数を作り`@self.extension`
 
     @self.extension
+    def configureDropDownProgrammaticButton_(_self, cmd, _button):
+      pass
+
+    @self.extension
     def configureSystemTextButton_(_self, _cmd, _button):
       this = ObjCInstance(_self)
       button = ObjCInstance(_button)
@@ -320,7 +329,7 @@ class ObjcTableViewController:
 
     @self.extension
     # todo: `@available(iOS 15.0, *)`
-    # xxx: あとでやる
+    # xxx: あとでやる
     def configureStyleGrayButton_(_self, _cmd, _button):
       this = ObjCInstance(_self)
       button = ObjCInstance(_button)
@@ -343,7 +352,7 @@ class ObjcTableViewController:
 
       config = UIButtonConfiguration.tintedButtonConfiguration()
       # todo: `if traitCollection.userInterfaceIdiom == .mac`
-      # xxx: あとでやる
+      # xxx: あとでやる
       systemRed = UIColor.systemRedColor()
       config.setBaseBackgroundColor_(systemRed)
       config.setBaseForegroundColor_(systemRed)
@@ -465,7 +474,7 @@ class ObjcTableViewController:
 
     @self.extension
     def configureSymbolButton_(_self, _cmd, _button):
-      # xxx: 合ってる説ある？
+      # xxx: 合ってる説ある?
       this = ObjCInstance(_self)
       button = ObjCInstance(_button)
 
@@ -642,7 +651,7 @@ class ObjcTableViewController:
       button = ObjCInstance(_button)
 
       # ref: [iphone - Retina display and [UIImage initWithData] - Stack Overflow](https://stackoverflow.com/questions/3289286/retina-display-and-uiimage-initwithdata)
-      # xxx: scale 指定これでいいのかな？
+      # xxx: scale 指定これでいいのかな?
       scale = int(UIScreen.mainScreen().scale())
 
       normal_str = f'./UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/background.imageset/stepper_and_segment_background_{scale}x.png'
@@ -672,7 +681,7 @@ class ObjcTableViewController:
 
     @self.extension
     def configureUpdateActivityHandlerButton_(_self, _cmd, _button):
-      # xxx: wip 後ほど実装
+      # xxx: wip 後ほど実装
       this = ObjCInstance(_self)
       button = ObjCInstance(_button)
 
