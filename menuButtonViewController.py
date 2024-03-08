@@ -132,8 +132,8 @@ class ObjcTableViewController:
   def add_extensions(self):
     # todo: objc で独自にmethod 生やしたいときなど
     # todo: この関数内に関数を作り`@self.extension`
-
-    @self.extension
+    
+    #@self.extension
     def menuHandler_(_self, _cmd, _action):
       action = ObjCInstance(_action)
 
@@ -149,9 +149,18 @@ class ObjcTableViewController:
       #menuWithChildren_
       #pdbg.state(UIMenu)
       #item1
+      def menuHandlerr_(_cmd, _action):
+        action = ObjCInstance(_action)
+      #pdbg.state(menuHandler_)
+      _handler = ObjCBlock(menuHandlerr_, restype=None, argtypes=[ctypes.c_void_p, ctypes.c_void_p])
+      #pdbg.state(_handler)
+      handler = _handler
+      #handler = None
       action = UIAction.actionWithTitle_image_identifier_handler_(
-        pylocalizedString('ItemTitle'), None, 'item', None)
-      #pdbg.state(action.identifier())
+        pylocalizedString('ItemTitle'), None, 'item', handler)
+      #pdbg.state(action.handler())
+      
+      
       '''
       action = UIAction.new()
       action.setTitle_(pylocalizedString('ItemTitle'))
