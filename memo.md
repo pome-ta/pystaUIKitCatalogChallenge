@@ -1,13 +1,16 @@
+# 📝 2024/03/23
+
+rubicon ver としてmain ブランチを進める予定なので
+
+objc_util ブランチを切る
+
 # 📝 2024/03/03
 
 button 並べたけど、ズレ確認
 
 変な挙動のもピックアップしていく
 
-
 # 📝 2024/03/01
-
-
 
 `Localizable.strings`, `Localizable.stringsdict` は、独自パーサーで書いてみる
 
@@ -15,9 +18,7 @@ button 並べたけど、ズレ確認
 
 こんなのはある
 
-
 # 📝 2024/02/23
-
 
 ```
 <b'UIImage':
@@ -35,19 +36,13 @@ renderingMode=automatic(template)>>
 
 # 📝 2024/02/22
 
-
 [https://github.com/tdamdouni/Pythonista/blob/master/_2017/picker-wheel-for-lists.py](https://github.com/tdamdouni/Pythonista/blob/master/_2017/picker-wheel-for-lists.py)
 
 # 📝 2024/02/19
 
 storyboard を終え、`ButtonKind` での実装
 
-
-
-
-
 # 📝 2024/02/17
-
 
 - ButtonSystemAddContact
 - ButtonDetailDisclosure
@@ -72,17 +67,11 @@ storyboard を終え、`ButtonKind` での実装
 - ButtonImage
 - ButtonCornerStyle
 
-
-
-
 # 📝 2024/02/16
-
 
 [【UIKit】Cellに直接addSubviewしてはいけない #Swift - Qiita](https://qiita.com/yusame0308/items/c7aee4190057f99b7bf4)
 
-
 # 📝 2024/02/15
-
 
 ## `super` 処理
 
@@ -92,28 +81,21 @@ storyboard を終え、`ButtonKind` での実装
 
 [rubicon-objc/src/rubicon/objc/runtime.py at main · beeware/rubicon-objc · GitHub](https://github.com/beeware/rubicon-objc/blob/main/src/rubicon/objc/runtime.py#L863)
 
-
 [objc_msgSendSuper | Apple Developer Documentation](https://developer.apple.com/documentation/objectivec/1456716-objc_msgsendsuper)
 
 [objc_super | Apple Developer Documentation](https://developer.apple.com/documentation/objectivec/objc_super?language=objc)
 
-
 rubicon ありがたい
-
 
 ## `.storyboard` との考え方
 
 buttonSystemAddContact
 
-
-
 # 📝 2024/02/11
-
 
 UITableViewCell の`super` を呼びたいが、、、
 
 オーバーライドできないから、個別で作る？
-
 
 [UIKit/UITableViewCell.m at master · enormego/UIKit](https://github.com/enormego/UIKit/blob/master/UITableViewCell.m)
 
@@ -125,22 +107,18 @@ UITableViewCell の`super` を呼びたいが、、、
 
 そのために、`CaseElement` の挙動が必要
 
-
 `CaseElement` の`configHandler` は、`ButtonViewController+Configs` で振り分けしたbutton 処理の関数情報を持ってる
 
-
 つまり、、、？
+
 - `BaseTableViewController` のセルごとの操作の時には、button の情報がある
   - `cell!.contentView.subviews[0]` と、`subviews` を待ち望んでいるので
 - table は、button につき1つづつのbutton 情報しか持たない？
   - 事前に情報を持たせておく必要あり？
 
-
 [コードベースでカスタムTableViewCellを作る #Swift - Qiita](https://qiita.com/Hyperbolic_____/items/e35cdac1c6b537202151)
 
 これか？
-
-
 
 ## 階層整理
 
@@ -148,18 +126,15 @@ UITableViewCell の`super` を呼びたいが、、、
 - `subviews` へアクセスするため
 - 事前につくる？
 
-
 # 📝 2024/02/07
 
 UISplitViewController ちょっと面倒だから、他サンプル機能を実装していく
 
 モジュールの読み込み的に、直下に書いていく
 
-
 [UIToolTipInteraction | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uitooltipinteraction)
 
 あとで考える
-
 
 # 📝 2024/02/02
 
