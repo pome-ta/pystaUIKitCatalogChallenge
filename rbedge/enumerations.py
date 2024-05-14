@@ -55,3 +55,16 @@ class UIBarButtonSystemItem:
   pageCurl: int = 23  # Deprecated
   close: int = 24
 
+
+# ref: [UIButtonType | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uibuttontype?language=objc)
+@dataclass
+class UIButtonType:
+  custom: int = 0
+  system: int = 1
+  detailDisclosure: int = 2
+  infoLight: int = 3
+  infoDark: int = 4
+  contactAdd: int = 5
+  plain: int = 6
+  close: int = 7
+
