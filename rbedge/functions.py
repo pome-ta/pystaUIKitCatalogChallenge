@@ -10,4 +10,3 @@ def NSStringFromClass(cls: Class) -> ObjCInstance:
   _NSStringFromClass.argtypes = [Class]
   return ObjCInstance(_NSStringFromClass(cls))
 
-

@@ -54,4 +54,3 @@ def state(rubicon_obj):
   else:
     print(rubicon_obj)
 
-

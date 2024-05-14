@@ -1,7 +1,7 @@
 from pyrubicon.objc.api import ObjCClass, ObjCProtocol, objc_method
-from pyrubicon.objc.runtime import SEL, send_super
+from pyrubicon.objc.runtime import SEL
 
-from .enumerations import UIRectEdge, UIBarButtonItem_SystemItem
+from .enumerations import UIRectEdge, UIBarButtonSystemItem
 
 #ObjCClass.auto_rename = True
 
@@ -17,7 +17,6 @@ class RootNavigationController(UINavigationController,
 
   @objc_method
   def viewDidLoad(self):
-    send_super(__class__, self, 'viewDidLoad')
     appearance = UINavigationBarAppearance.new()
     appearance.configureWithDefaultBackground()
 
@@ -40,7 +39,7 @@ class RootNavigationController(UINavigationController,
     extendedLayout = UIRectEdge.none
     viewController.setEdgesForExtendedLayout_(extendedLayout)
 
-    barButtonSystemItem = UIBarButtonItem_SystemItem.done
+    barButtonSystemItem = UIBarButtonSystemItem.done
     doneButton = UIBarButtonItem.alloc(
     ).initWithBarButtonSystemItem_target_action_(barButtonSystemItem,
                                                  navigationController,
@@ -49,5 +48,4 @@ class RootNavigationController(UINavigationController,
 
     navigationItem = visibleViewController.navigationItem
     navigationItem.rightBarButtonItem = doneButton
-
 

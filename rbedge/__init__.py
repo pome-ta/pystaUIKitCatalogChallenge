@@ -2,12 +2,11 @@ __version__ = '0.0.0'
 from pyrubicon.objc.api import ObjCClass
 
 from .enumerations import UIModalPresentationStyle
-from .mainThread import onMainThread
+from .objcMainThread import onMainThread
 
 ObjCClass.auto_rename = True
 
-# todo: アノテーション呼び出し用
-UIViewController = ObjCClass('UIViewController')
+UIViewController = ObjCClass('UIViewController')  # todo: アノテーション用
 
 
 @onMainThread
