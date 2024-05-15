@@ -51,8 +51,6 @@ class TableViewControllerTest(UITableViewController):
       self.tableView.registerClass_forCellReuseIdentifier_(
         cellClass, identifier)
 
-    #self.tableView.registerClass_forCellReuseIdentifier_(prototypes[0]['cellClass'], self.cell_identifier)
-
   # --- UITableViewDataSource
   @objc_method
   def tableView_numberOfRowsInSection_(self, tableView,
