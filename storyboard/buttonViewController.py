@@ -11,7 +11,10 @@ from rbedge import pdbr
 #ObjCClass.auto_rename = True # xxx: ここ含めて全部呼び出し？
 
 UITableViewCell = ObjCClass('UITableViewCell')
+
 UIButton = ObjCClass('UIButton')
+UIButtonConfiguration = ObjCClass('UIButtonConfiguration')
+
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
 
 
@@ -74,6 +77,27 @@ class ButtonDetailDisclosure(CustomTableViewCell):
     ])
 
 
+class ButtonStyleGray(CustomTableViewCell):
+
+  @objc_method
+  def initCell(self):
+    type = UIButtonType.system
+    button = UIButton.buttonWithType_(type)
+    config = UIButtonConfiguration.plainButtonConfiguration()
+    config.title = 'Button'
+    button.configuration = config
+
+    button.translatesAutoresizingMaskIntoConstraints = False
+
+    contentView = self.contentView
+    contentView.addSubview_(button)
+
+    NSLayoutConstraint.activateConstraints_([
+      button.centerXAnchor.constraintEqualToAnchor_(contentView.centerXAnchor),
+      button.centerYAnchor.constraintEqualToAnchor_(contentView.centerYAnchor),
+    ])
+
+
 def create_reuse_dict(cellClass: UITableViewCell, identifier: str) -> dict:
   return {
     'cellClass': cellClass,
@@ -84,5 +108,6 @@ def create_reuse_dict(cellClass: UITableViewCell, identifier: str) -> dict:
 prototypes = [
   create_reuse_dict(ButtonSystemAddContact, 'buttonSystemAddContact'),
   create_reuse_dict(ButtonDetailDisclosure, 'buttonDetailDisclosure'),
+  create_reuse_dict(ButtonStyleGray, 'buttonStyleGray')
 ]
 

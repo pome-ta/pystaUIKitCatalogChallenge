@@ -6,12 +6,11 @@ sys.path.append(str(pathlib.Path(__file__, '../' * parent_level).resolve()))
 
 try:
   import ctypes
+
   from pyrubicon.objc.api import ObjCClass, ObjCProtocol, objc_method, objc_property
-  #from pyrubicon.objc.runtime import send_super
   from pyrubicon.objc.types import NSInteger, CGRectMake
 
   from rbedge.functions import NSStringFromClass
-  #from rbedge.enumerations import UITableViewStyle
   from rbedge import present_viewController
   from rbedge import pdbr
 except Exception as e:
@@ -32,13 +31,6 @@ UITableViewCell = ObjCClass('UITableViewCell')
 
 
 class TableViewControllerTest(UITableViewController):
-
-  '''
-  @objc_method
-  def init(self):
-    self.cell_identifier = 'customCell'
-    return self
-  '''
 
   @objc_method
   def viewDidLoad(self):
@@ -67,26 +59,16 @@ class TableViewControllerTest(UITableViewController):
                                        section: NSInteger) -> NSInteger:
 
     return len(prototypes)
-    #return 1
 
   @objc_method
   def tableView_cellForRowAtIndexPath_(self, tableView,
                                        indexPath) -> ctypes.c_void_p:
 
     identifier = prototypes[indexPath.row]['identifier']
-    #print(indexPath.row)
 
     cell = tableView.dequeueReusableCellWithIdentifier_forIndexPath_(
       identifier, indexPath)
 
-    #cell = tableView.dequeueReusableCellWithIdentifier_forIndexPath_(self.cell_identifier, indexPath)
-
-    content = cell.defaultContentConfiguration()
-    #print('h')
-    #content.text = 'symbol_name'
-    #content.textProperties.numberOfLines = 1
-
-    #cell.contentConfiguration = content
     return cell.ptr
 
 
