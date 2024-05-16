@@ -40,6 +40,13 @@ test_prototypes = _test_p if isinstance(_test_p, list) else [_test_p]
 
 と、無理やり感で`test_prototypes` を読ませるようにしてみてる
 
+
+### `UIControlState`
+
+sample では、`UIButtonConfiguration` じゃないっぽいから、直接やってみるか？
+
+
+
 # 📝 2024/05/15
 
 
