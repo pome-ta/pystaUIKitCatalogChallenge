@@ -226,3 +226,269 @@ class ButtonMultiTitle(CustomTableViewCell):
       button.centerYAnchor.constraintEqualToAnchor_(contentView.centerYAnchor),
     ])
 
+
+@add_prototype('buttonSystem')
+class ButtonSymbol(CustomTableViewCell):
+
+  @objc_method
+  def overrideCell(self):
+    type = UIButtonType.system
+    button = UIButton.buttonWithType_(type)
+
+    title = 'Button'
+    state = UIControlState.normal
+    button.setTitle_forState_(title, state)
+
+    button.translatesAutoresizingMaskIntoConstraints = False
+
+    contentView = self.contentView
+    contentView.addSubview_(button)
+
+    NSLayoutConstraint.activateConstraints_([
+      button.centerXAnchor.constraintEqualToAnchor_(contentView.centerXAnchor),
+      button.centerYAnchor.constraintEqualToAnchor_(contentView.centerYAnchor),
+    ])
+
+
+@add_prototype('buttonTitleColor')
+class ButtonTitleColor(CustomTableViewCell):
+
+  @objc_method
+  def overrideCell(self):
+    type = UIButtonType.system
+    button = UIButton.buttonWithType_(type)
+
+    title = 'Button'
+    state = UIControlState.normal
+    button.setTitle_forState_(title, state)
+
+    button.translatesAutoresizingMaskIntoConstraints = False
+
+    contentView = self.contentView
+    contentView.addSubview_(button)
+
+    NSLayoutConstraint.activateConstraints_([
+      button.centerXAnchor.constraintEqualToAnchor_(contentView.centerXAnchor),
+      button.centerYAnchor.constraintEqualToAnchor_(contentView.centerYAnchor),
+    ])
+
+
+@add_prototype('buttonUpdateHandler')
+class ButtonUpdateHandler(CustomTableViewCell):
+
+  @objc_method
+  def overrideCell(self):
+    type = UIButtonType.system
+    button = UIButton.buttonWithType_(type)
+
+    title = 'Button'
+    state = UIControlState.normal
+    button.setTitle_forState_(title, state)
+
+    button.translatesAutoresizingMaskIntoConstraints = False
+
+    contentView = self.contentView
+    contentView.addSubview_(button)
+
+    NSLayoutConstraint.activateConstraints_([
+      button.centerXAnchor.constraintEqualToAnchor_(contentView.centerXAnchor),
+      button.centerYAnchor.constraintEqualToAnchor_(contentView.centerYAnchor),
+    ])
+
+
+@add_prototype('buttonToggle')
+class ButtonToggle(CustomTableViewCell):
+
+  @objc_method
+  def overrideCell(self):
+    type = UIButtonType.system
+    button = UIButton.buttonWithType_(type)
+
+    title = 'Toggle'
+    state = UIControlState.normal
+    button.setTitle_forState_(title, state)
+
+    button.translatesAutoresizingMaskIntoConstraints = False
+
+    contentView = self.contentView
+    contentView.addSubview_(button)
+
+    NSLayoutConstraint.activateConstraints_([
+      button.centerXAnchor.constraintEqualToAnchor_(contentView.centerXAnchor),
+      button.centerYAnchor.constraintEqualToAnchor_(contentView.centerYAnchor),
+    ])
+
+
+@add_prototype('buttonImageUpdateHandler')
+class ButtonImageUpdateHandler(CustomTableViewCell):
+
+  @objc_method
+  def overrideCell(self):
+    type = UIButtonType.system
+    button = UIButton.buttonWithType_(type)
+
+    title = 'Toggle'
+    state = UIControlState.normal
+    button.setTitle_forState_(title, state)
+
+    button.translatesAutoresizingMaskIntoConstraints = False
+
+    contentView = self.contentView
+    contentView.addSubview_(button)
+
+    NSLayoutConstraint.activateConstraints_([
+      button.centerXAnchor.constraintEqualToAnchor_(contentView.centerXAnchor),
+      button.centerYAnchor.constraintEqualToAnchor_(contentView.centerYAnchor),
+    ])
+
+
+@add_prototype('buttonTextSymbol')
+class ButtonTextSymbol(CustomTableViewCell):
+
+  @objc_method
+  def overrideCell(self):
+    type = UIButtonType.system
+    button = UIButton.buttonWithType_(type)
+
+    title = 'Button'
+    state = UIControlState.normal
+    button.setTitle_forState_(title, state)
+
+    button.translatesAutoresizingMaskIntoConstraints = False
+
+    contentView = self.contentView
+    contentView.addSubview_(button)
+
+    NSLayoutConstraint.activateConstraints_([
+      button.centerXAnchor.constraintEqualToAnchor_(contentView.centerXAnchor),
+      button.centerYAnchor.constraintEqualToAnchor_(contentView.centerYAnchor),
+    ])
+
+
+@add_prototype('buttonSymbolText')
+class ButtonSymbolText(CustomTableViewCell):
+
+  @objc_method
+  def overrideCell(self):
+    type = UIButtonType.system
+    button = UIButton.buttonWithType_(type)
+
+    title = 'Button'
+    state = UIControlState.normal
+    button.setTitle_forState_(title, state)
+
+    button.translatesAutoresizingMaskIntoConstraints = False
+
+    contentView = self.contentView
+    contentView.addSubview_(button)
+
+    NSLayoutConstraint.activateConstraints_([
+      button.centerXAnchor.constraintEqualToAnchor_(contentView.centerXAnchor),
+      button.centerYAnchor.constraintEqualToAnchor_(contentView.centerYAnchor),
+    ])
+
+
+@add_prototype('buttonBackground')
+class ButtonBackground(CustomTableViewCell):
+
+  @objc_method
+  def overrideCell(self):
+    type = UIButtonType.system
+    button = UIButton.buttonWithType_(type)
+
+    title = 'Button'
+    state = UIControlState.normal
+    button.setTitle_forState_(title, state)
+
+    button.translatesAutoresizingMaskIntoConstraints = False
+
+    contentView = self.contentView
+    contentView.addSubview_(button)
+
+    NSLayoutConstraint.activateConstraints_([
+      button.centerXAnchor.constraintEqualToAnchor_(contentView.centerXAnchor),
+      button.centerYAnchor.constraintEqualToAnchor_(contentView.centerYAnchor),
+    ])
+
+
+@add_prototype('buttonClose')
+class ButtonClose(CustomTableViewCell):
+
+  @objc_method
+  def overrideCell(self):
+    type = UIButtonType.close
+    button = UIButton.buttonWithType_(type)
+    button.translatesAutoresizingMaskIntoConstraints = False
+
+    contentView = self.contentView
+    contentView.addSubview_(button)
+
+    NSLayoutConstraint.activateConstraints_([
+      button.centerXAnchor.constraintEqualToAnchor_(contentView.centerXAnchor),
+      button.centerYAnchor.constraintEqualToAnchor_(contentView.centerYAnchor),
+    ])
+
+
+@add_prototype('buttonLargeSymbol')
+class ButtonLargeSymbol(CustomTableViewCell):
+
+  @objc_method
+  def overrideCell(self):
+    type = UIButtonType.system
+    button = UIButton.buttonWithType_(type)
+    button.translatesAutoresizingMaskIntoConstraints = False
+
+    contentView = self.contentView
+    contentView.addSubview_(button)
+
+    NSLayoutConstraint.activateConstraints_([
+      button.centerXAnchor.constraintEqualToAnchor_(contentView.centerXAnchor),
+      button.centerYAnchor.constraintEqualToAnchor_(contentView.centerYAnchor),
+    ])
+
+
+@add_prototype('buttonStyleTinted')
+class ButtonStyleTinted(CustomTableViewCell):
+
+  @objc_method
+  def overrideCell(self):
+    type = UIButtonType.system
+    button = UIButton.buttonWithType_(type)
+
+    title = 'Button'
+    state = UIControlState.normal
+    button.setTitle_forState_(title, state)
+
+    button.translatesAutoresizingMaskIntoConstraints = False
+
+    contentView = self.contentView
+    contentView.addSubview_(button)
+
+    NSLayoutConstraint.activateConstraints_([
+      button.centerXAnchor.constraintEqualToAnchor_(contentView.centerXAnchor),
+      button.centerYAnchor.constraintEqualToAnchor_(contentView.centerYAnchor),
+    ])
+
+
+@add_prototype('buttonStyleFilled')
+class ButtonStyleFilled(CustomTableViewCell):
+
+  @objc_method
+  def overrideCell(self):
+    type = UIButtonType.system
+    button = UIButton.buttonWithType_(type)
+
+    title = 'Button'
+    state = UIControlState.normal
+    button.setTitle_forState_(title, state)
+
+    button.translatesAutoresizingMaskIntoConstraints = False
+
+    contentView = self.contentView
+    contentView.addSubview_(button)
+
+    NSLayoutConstraint.activateConstraints_([
+      button.centerXAnchor.constraintEqualToAnchor_(contentView.centerXAnchor),
+      button.centerYAnchor.constraintEqualToAnchor_(contentView.centerYAnchor),
+    ])
+
