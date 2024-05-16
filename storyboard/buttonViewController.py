@@ -17,12 +17,18 @@ UIButtonConfiguration = ObjCClass('UIButtonConfiguration')
 
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
 
+prototypes: list = []
 
-def create_reuse_dict(cellClass: UITableViewCell, identifier: str) -> dict:
-  return {
-    'cellClass': cellClass,
-    'identifier': identifier,
-  }
+
+def add_prototype(identifier: str):
+
+  def _create_reuse_dict(cellClass: UITableViewCell):
+    prototypes.append({
+      'cellClass': cellClass,
+      'identifier': identifier,
+    })
+
+  return _create_reuse_dict
 
 
 class CustomTableViewCell(UITableViewCell):
@@ -52,6 +58,7 @@ class CustomTableViewCell(UITableViewCell):
     pass
 
 
+@add_prototype('buttonSystemAddContact')
 class ButtonSystemAddContact(CustomTableViewCell):
 
   @objc_method
@@ -69,6 +76,7 @@ class ButtonSystemAddContact(CustomTableViewCell):
     ])
 
 
+@add_prototype('buttonDetailDisclosure')
 class ButtonDetailDisclosure(CustomTableViewCell):
 
   @objc_method
@@ -86,6 +94,7 @@ class ButtonDetailDisclosure(CustomTableViewCell):
     ])
 
 
+@add_prototype('buttonStyleGray')
 class ButtonStyleGray(CustomTableViewCell):
 
   @objc_method
@@ -109,6 +118,7 @@ class ButtonStyleGray(CustomTableViewCell):
     ])
 
 
+@add_prototype('buttonUpdateActivityHandler')
 class ButtonUpdateActivityHandler(CustomTableViewCell):
 
   @objc_method
@@ -129,24 +139,4 @@ class ButtonUpdateActivityHandler(CustomTableViewCell):
       button.centerXAnchor.constraintEqualToAnchor_(contentView.centerXAnchor),
       button.centerYAnchor.constraintEqualToAnchor_(contentView.centerYAnchor),
     ])
-
-
-prototypes = [
-  create_reuse_dict(
-    ButtonSystemAddContact,
-    'buttonSystemAddContact',
-  ),
-  create_reuse_dict(
-    ButtonDetailDisclosure,
-    'buttonDetailDisclosure',
-  ),
-  create_reuse_dict(
-    ButtonStyleGray,
-    'buttonStyleGray',
-  ),
-  create_reuse_dict(
-    ButtonUpdateActivityHandler,
-    'buttonUpdateActivityHandler',
-  ),
-]
 
