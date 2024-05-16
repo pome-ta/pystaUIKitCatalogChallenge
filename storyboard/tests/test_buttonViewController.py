@@ -20,6 +20,9 @@ except Exception as e:
 # --- test modules
 from storyboard.buttonViewController import prototypes
 
+_test_p = prototypes
+test_prototypes = _test_p if isinstance(_test_p, list) else [_test_p]
+
 #ObjCClass.auto_rename = True
 #ObjCProtocol.auto_rename = True # xxx: `__init__.py` にやるかも
 
@@ -45,7 +48,7 @@ class TableViewControllerTest(UITableViewController):
   @objc_method
   def tableSetup(self):
 
-    for prototype in prototypes:
+    for prototype in test_prototypes:
       cellClass = prototype['cellClass']
       identifier = prototype['identifier']
       self.tableView.registerClass_forCellReuseIdentifier_(
@@ -56,13 +59,13 @@ class TableViewControllerTest(UITableViewController):
   def tableView_numberOfRowsInSection_(self, tableView,
                                        section: NSInteger) -> NSInteger:
 
-    return len(prototypes)
+    return len(test_prototypes)
 
   @objc_method
   def tableView_cellForRowAtIndexPath_(self, tableView,
                                        indexPath) -> ctypes.c_void_p:
 
-    identifier = prototypes[indexPath.row]['identifier']
+    identifier = test_prototypes[indexPath.row]['identifier']
 
     cell = tableView.dequeueReusableCellWithIdentifier_forIndexPath_(
       identifier, indexPath)

@@ -1,6 +1,10 @@
 # 📝 2024/05/16
 
 
+## storyboard
+
+### デコレータ
+
 [Python Tips: デコレータに引数を渡したい](https://www.lifewithpython.com/2016/09/python-decorator-with-arguments.html)
 
 ```.py
@@ -20,6 +24,21 @@ def add_prototype(identifier: str):
 
 `@add_prototype('buttonSystemAddContact')` で、辞書として格納
 
+
+
+### 単体のテスト
+
+一つだけ挙動確認。みたいのをできるようにしたいので
+
+```.py
+from storyboard.buttonViewController import prototypes
+
+_test_p = prototypes
+test_prototypes = _test_p if isinstance(_test_p, list) else [_test_p]
+```
+
+
+と、無理やり感で`test_prototypes` を読ませるようにしてみてる
 
 # 📝 2024/05/15
 
