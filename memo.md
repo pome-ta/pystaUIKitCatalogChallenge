@@ -1,3 +1,26 @@
+# 📝 2024/05/16
+
+
+[Python Tips: デコレータに引数を渡したい](https://www.lifewithpython.com/2016/09/python-decorator-with-arguments.html)
+
+```.py
+prototypes: list = []
+
+
+def add_prototype(identifier: str):
+
+  def _create_reuse_dict(cellClass: UITableViewCell):
+    prototypes.append({
+      'cellClass': cellClass,
+      'identifier': identifier,
+    })
+
+  return _create_reuse_dict
+```
+
+`@add_prototype('buttonSystemAddContact')` で、辞書として格納
+
+
 # 📝 2024/05/15
 
 

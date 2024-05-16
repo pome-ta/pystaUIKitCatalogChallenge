@@ -17,7 +17,7 @@ UIButtonConfiguration = ObjCClass('UIButtonConfiguration')
 
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
 
-prototypes: list = []
+prototypes: list[dict[UITableViewCell, str]] = []
 
 
 def add_prototype(identifier: str):
