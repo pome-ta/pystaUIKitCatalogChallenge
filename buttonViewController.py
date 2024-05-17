@@ -1,3 +1,4 @@
+import ctypes
 from enum import Enum
 
 from pyrubicon.objc.api import ObjCClass, objc_method, objc_property
@@ -17,7 +18,8 @@ UITableViewHeaderFooterView = ObjCClass('UITableViewHeaderFooterView')
 
 class BaseTableViewController(UITableViewController):
 
-  testCells: list = objc_property()
+  #testCells = objc_property()
+  testCells: list[CaseElement] = []
 
   @objc_method
   def centeredHeaderView_title_(self, title):
@@ -28,11 +30,24 @@ class BaseTableViewController(UITableViewController):
   def tableView_numberOfRowsInSection_(self, tableView,
                                        section: NSInteger) -> NSInteger:
 
-    return 1
+    return len(self.testCells)
 
   @objc_method
-  def numberOfSectionsInTableView_(self, tableView):
-    return 1
+  def tableView_cellForRowAtIndexPath_(self, tableView,
+                                       indexPath) -> ctypes.c_void_p:
+    cellTest = self.testCells[indexPath.row]
+    cell = tableView.dequeueReusableCellWithIdentifier_forIndexPath_(
+      cellTest.cellID, indexPath)
+
+    if (view := cellTest.targetView(cell)):
+      cellTest.configHandler(view)
+
+    #print(cellTest)
+    #print(cell)
+    #pdbr.state(cell.contentView.subviews)
+    #print(cell.contentView.subviews()[0])
+
+    return cell.ptr
 
 
 class ButtonKind(Enum):
@@ -86,6 +101,30 @@ class ButtonViewController(BaseTableViewController):
     self.navigationItem.title = title
 
     self.initPrototype()
+
+    self.testCells.extend([
+      # 0
+      CaseElement(localizedString('DefaultTitle'),
+                  ButtonKind.buttonSystem.value,
+                  self.configureSystemTextButton_),
+
+      # 1
+      #CaseElement(localizedString('DetailDisclosureTitle'),ButtonKind.buttonDetailDisclosure.value,self.configureSystemDetailDisclosureButton_),
+    ])
+
+    #print(self.testCells)
+
+    #self.testCells.extend(['hoge'])
+
+  @objc_method
+  def configureSystemTextButton_(self, button):
+    print('configureSystemTextButton')
+    print(button)
+
+  @objc_method
+  def configureSystemDetailDisclosureButton_(self, button):
+    print('configureSystemDetailDisclosureButton')
+    print(button)
 
 
 if __name__ == '__main__':
