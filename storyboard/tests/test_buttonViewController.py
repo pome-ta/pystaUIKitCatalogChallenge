@@ -11,7 +11,7 @@ try:
   from pyrubicon.objc.types import NSInteger, CGRectMake
 
   from rbedge.functions import NSStringFromClass
-  from rbedge import present_viewController
+  
 
 except Exception as e:
   # xxx: `(ModuleNotFoundError, LookupError)`
@@ -74,6 +74,7 @@ class TableViewControllerTest(UITableViewController):
 
 
 if __name__ == '__main__':
+  from rbedge import present_viewController
   from rbedge import pdbr
   vc = TableViewControllerTest.new()
   present_viewController(vc)
