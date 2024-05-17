@@ -12,7 +12,7 @@ try:
 
   from rbedge.functions import NSStringFromClass
   from rbedge import present_viewController
-  from rbedge import pdbr
+
 except Exception as e:
   # xxx: `(ModuleNotFoundError, LookupError)`
   print(f'{e}: error')
@@ -74,6 +74,7 @@ class TableViewControllerTest(UITableViewController):
 
 
 if __name__ == '__main__':
+  from rbedge import pdbr
   vc = TableViewControllerTest.new()
   present_viewController(vc)
 

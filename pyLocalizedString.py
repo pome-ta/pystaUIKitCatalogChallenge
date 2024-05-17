@@ -23,7 +23,7 @@ class PyLocalizedString:
     ])
 
   def __get_dict_value(self, key):
-    # xxx: 特定の文字記号は置き換え
+    # xxx: 特定の文字記号は置き換えを考えておく
     value = self.localizable_dic.get(key, '🙅‍♀️')
     return value
 

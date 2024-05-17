@@ -1,3 +1,18 @@
+# 📝 2024/05/17
+
+
+## ユーティリティ的な
+
+### `pyLocalizedString.py`
+
+## `BaseTableViewController`
+
+ベースを作るより先に`ButtonViewController` を作る。そこから分割
+
+
+
+
+
 # 📝 2024/05/16
 
 
