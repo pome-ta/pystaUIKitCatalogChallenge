@@ -82,11 +82,18 @@ class ButtonViewController(BaseTableViewController):
 
   @objc_method
   def initPrototype(self):
+    '''
     for prototype in prototypes:
       cellClass = prototype['cellClass']
       identifier = prototype['identifier']
       self.tableView.registerClass_forCellReuseIdentifier_(
         cellClass, identifier)
+    '''
+    [
+      self.tableView.registerClass_forCellReuseIdentifier_(
+        prototype['cellClass'], prototype['identifier'])
+      for prototype in prototypes
+    ]
 
   @objc_method
   def viewDidLoad(self):
@@ -111,6 +118,7 @@ class ButtonViewController(BaseTableViewController):
 
   @objc_method
   def configureSystemTextButton_(self, button):
+    # todo: 冗長、差し替えを容易にしたい為
     title = localizedString('Button')
     state = UIControlState.normal
     button.setTitle_forState_(title, state)
@@ -119,7 +127,6 @@ class ButtonViewController(BaseTableViewController):
     action = SEL('buttonClicked:')
     controlEvents = UIControlEvents.touchUpInside
     button.addTarget_action_forControlEvents_(target, action, controlEvents)
-    
 
   @objc_method
   def configureSystemDetailDisclosureButton_(self, button):
@@ -134,8 +141,12 @@ class ButtonViewController(BaseTableViewController):
 
 
 if __name__ == '__main__':
+  from rbedge.enumerations import UIModalPresentationStyle
   from rbedge import present_viewController
   from rbedge import pdbr
   bvc = ButtonViewController.new()
-  present_viewController(bvc)
+
+  style = UIModalPresentationStyle.pageSheet
+  #style = UIModalPresentationStyle.fullScreen
+  present_viewController(bvc, style)
 
