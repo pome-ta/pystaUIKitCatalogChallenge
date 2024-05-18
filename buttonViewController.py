@@ -2,9 +2,10 @@ import ctypes
 from enum import Enum
 
 from pyrubicon.objc.api import ObjCClass, objc_method, objc_property
-from pyrubicon.objc.runtime import send_super
+from pyrubicon.objc.runtime import SEL, send_super
 from pyrubicon.objc.types import NSInteger
 
+from rbedge.enumerations import UIControlState, UIControlEvents
 from rbedge.functions import NSStringFromClass
 
 from caseElement import CaseElement
@@ -98,9 +99,9 @@ class ButtonViewController(BaseTableViewController):
 
     self.testCells.extend([
       # 0
-      CaseElement(title=localizedString('DefaultTitle'),
-                  cellID=ButtonKind.buttonSystem.value,
-                  configHandler=self.configureSystemTextButton_),
+      CaseElement(localizedString('DefaultTitle'),
+                  ButtonKind.buttonSystem.value,
+                  self.configureSystemTextButton_),
 
       # 1
       #CaseElement(localizedString('DetailDisclosureTitle'),ButtonKind.buttonDetailDisclosure.value,self.configureSystemDetailDisclosureButton_),
@@ -110,16 +111,26 @@ class ButtonViewController(BaseTableViewController):
 
   @objc_method
   def configureSystemTextButton_(self, button):
-    #print('configureSystemTextButton')
-    #print(button)
-    print(localizedString('Button'))
+    title = localizedString('Button')
+    state = UIControlState.normal
+    button.setTitle_forState_(title, state)
+
+    target = self
+    action = SEL('buttonClicked:')
+    controlEvents = UIControlEvents.touchUpInside
+    button.addTarget_action_forControlEvents_(target, action, controlEvents)
+    
 
   @objc_method
   def configureSystemDetailDisclosureButton_(self, button):
+
     print('configureSystemDetailDisclosureButton')
     print(button)
 
   # MARK: - Button Actions
+  @objc_method
+  def buttonClicked_(self, sender):
+    print(f'Button was clicked.{sender}')
 
 
 if __name__ == '__main__':

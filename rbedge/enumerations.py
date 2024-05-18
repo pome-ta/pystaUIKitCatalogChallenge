@@ -80,3 +80,29 @@ class UIControlState:
   application: int = 0x00FF0000
   reserved: int = 0xFF000000
 
+
+# ref: [UIControlEvents | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uicontrolevents?language=objc)
+@dataclass
+class UIControlEvents:
+  touchDown: int = 1 << 0
+  touchDownRepeat: int = 1 << 1
+  touchDragInside: int = 1 << 2
+  touchDragOutside: int = 1 << 3
+  touchDragEnter: int = 1 << 4
+  touchDragExit: int = 1 << 5
+  touchUpInside: int = 1 << 6
+  touchUpOutside: int = 1 << 7
+  touchCancel: int = 1 << 8
+  valueChanged: int = 1 << 12
+  menuActionTriggered: int = 1 << 14
+  primaryActionTriggered: int = 1 << 13
+  editingDidBegin: int = 1 << 16
+  editingChanged: int = 1 << 17
+  editingDidEnd: int = 1 << 18
+  editingDidEndOnExit: int = 1 << 19
+  allTouchEvents: int = 0x00000FFF
+  allEditingEvents: int = 0x000F0000
+  applicationReserved: int = 0x0F000000
+  systemReserved: int = 0xF0000000
+  allEvents: int = 0xFFFFFFFF
+
