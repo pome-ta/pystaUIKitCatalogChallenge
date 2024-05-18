@@ -18,7 +18,6 @@ UITableViewHeaderFooterView = ObjCClass('UITableViewHeaderFooterView')
 
 class BaseTableViewController(UITableViewController):
 
-  #testCells = objc_property()
   testCells: list[CaseElement] = []
 
   @objc_method
@@ -35,18 +34,13 @@ class BaseTableViewController(UITableViewController):
   @objc_method
   def tableView_cellForRowAtIndexPath_(self, tableView,
                                        indexPath) -> ctypes.c_void_p:
+
     cellTest = self.testCells[indexPath.row]
     cell = tableView.dequeueReusableCellWithIdentifier_forIndexPath_(
       cellTest.cellID, indexPath)
 
     if (view := cellTest.targetView(cell)):
       cellTest.configHandler(view)
-
-    #print(cellTest)
-    #print(cell)
-    #pdbr.state(cell.contentView.subviews)
-    #print(cell.contentView.subviews()[0])
-
     return cell.ptr
 
 
@@ -104,27 +98,28 @@ class ButtonViewController(BaseTableViewController):
 
     self.testCells.extend([
       # 0
-      CaseElement(localizedString('DefaultTitle'),
-                  ButtonKind.buttonSystem.value,
-                  self.configureSystemTextButton_),
+      CaseElement(title=localizedString('DefaultTitle'),
+                  cellID=ButtonKind.buttonSystem.value,
+                  configHandler=self.configureSystemTextButton_),
 
       # 1
       #CaseElement(localizedString('DetailDisclosureTitle'),ButtonKind.buttonDetailDisclosure.value,self.configureSystemDetailDisclosureButton_),
     ])
 
-    #print(self.testCells)
-
-    #self.testCells.extend(['hoge'])
+  # --- extension
 
   @objc_method
   def configureSystemTextButton_(self, button):
-    print('configureSystemTextButton')
-    print(button)
+    #print('configureSystemTextButton')
+    #print(button)
+    print(localizedString('Button'))
 
   @objc_method
   def configureSystemDetailDisclosureButton_(self, button):
     print('configureSystemDetailDisclosureButton')
     print(button)
+
+  # MARK: - Button Actions
 
 
 if __name__ == '__main__':
