@@ -104,13 +104,6 @@ class ButtonViewController(BaseTableViewController):
 
   @objc_method
   def initPrototype(self):
-    '''
-    for prototype in prototypes:
-      cellClass = prototype['cellClass']
-      identifier = prototype['identifier']
-      self.tableView.registerClass_forCellReuseIdentifier_(
-        cellClass, identifier)
-    '''
     [
       self.tableView.registerClass_forCellReuseIdentifier_(
         prototype['cellClass'], prototype['identifier'])
