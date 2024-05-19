@@ -23,7 +23,7 @@ class BaseTableViewController(UITableViewController):
   testCells: list[CaseElement] = []
 
   @objc_method
-  def centeredHeaderView_title_(self, title) -> ctypes.c_void_p:
+  def centeredHeaderView_(self, title) -> ctypes.c_void_p:
     headerView = UITableViewHeaderFooterView.new()
 
     content = UIListContentConfiguration.groupedHeaderConfiguration()
@@ -36,11 +36,11 @@ class BaseTableViewController(UITableViewController):
   # MARK: - UITableViewDataSource
   @objc_method
   def tableView_viewForHeaderInSection_(self, _cmd, tableView,
-                                        section: int) -> ctypes.c_void_p:
-    return self.centeredHeaderView(testCells[section].title).ptr
+                                        section: NSInteger) -> ctypes.c_void_p:
+    return self.centeredHeaderView_(testCells[section].title).ptr
 
   @objc_method
-  def tableView_titleForHeaderInSection_(_self, _cmd, _tableView, _section):
+  def tableView_titleForHeaderInSection_(self, tableView, section: NSInteger):
     return ns(self.testCells[_section].title).ptr
 
   @objc_method
