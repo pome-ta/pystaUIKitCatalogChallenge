@@ -1,11 +1,11 @@
 import ctypes
 from enum import Enum
 
-from pyrubicon.objc.api import ObjCClass, objc_method, objc_property
-from pyrubicon.objc.runtime import SEL, send_super
+from pyrubicon.objc.api import ObjCClass, ObjCInstance, objc_method, objc_property, at
+from pyrubicon.objc.runtime import SEL, send_super, objc_id
 from pyrubicon.objc.types import NSInteger
 
-from rbedge.enumerations import UIControlState, UIControlEvents
+from rbedge.enumerations import UIControlState, UIControlEvents, UIListContentTextAlignment
 from rbedge.functions import NSStringFromClass
 
 from caseElement import CaseElement
@@ -34,34 +34,31 @@ class BaseTableViewController(UITableViewController):
     return headerView.ptr
 
   # MARK: - UITableViewDataSource
+
   @objc_method
-  def tableView_viewForHeaderInSection_(self, _cmd, tableView,
+  def tableView_viewForHeaderInSection_(self, tableView,
                                         section: NSInteger) -> ctypes.c_void_p:
-    return self.centeredHeaderView_(testCells[section].title).ptr
+    return self.centeredHeaderView_(self.testCells[section].title).ptr
 
   @objc_method
-  def tableView_titleForHeaderInSection_(self, tableView, section: NSInteger):
-    return ns(self.testCells[_section].title).ptr
-
-  @objc_method
-  def tableView_numberOfRowsInSection_(_self, _cmd, _tableView, _section):
-    return 1
-
-  @objc_method
-  def numberOfSectionsInTableView_(_self, _cmd, _tableView):
-    return len(self.testCells)
+  def tableView_titleForHeaderInSection_(
+      self, tableView, section: NSInteger) -> ctypes.c_void_p:
+    return objc_id(self.testCells[section].title).ptr
 
   @objc_method
   def tableView_numberOfRowsInSection_(self, tableView,
                                        section: NSInteger) -> NSInteger:
+    return 1
 
+  @objc_method
+  def numberOfSectionsInTableView_(self, tableView) -> NSInteger:
     return len(self.testCells)
 
   @objc_method
   def tableView_cellForRowAtIndexPath_(self, tableView,
                                        indexPath) -> ctypes.c_void_p:
 
-    cellTest = self.testCells[indexPath.row]
+    cellTest = self.testCells[indexPath.section]
     cell = tableView.dequeueReusableCellWithIdentifier_forIndexPath_(
       cellTest.cellID, indexPath)
 
