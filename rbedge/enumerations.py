@@ -106,3 +106,12 @@ class UIControlEvents:
   systemReserved: int = 0xF0000000
   allEvents: int = 0xFFFFFFFF
 
+
+# ref: [UIListContentTextAlignment | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uilistcontenttextalignment)
+@dataclass
+class UIListContentTextAlignment:
+  # todo: `Enumeration Case` に値表記が無いので独自に調査
+  natural: int = 0
+  center: int = 1
+  justified: int = 2
+

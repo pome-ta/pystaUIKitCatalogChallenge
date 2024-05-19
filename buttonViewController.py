@@ -15,6 +15,7 @@ from storyboard.buttonViewController import prototypes
 
 UITableViewController = ObjCClass('UITableViewController')
 UITableViewHeaderFooterView = ObjCClass('UITableViewHeaderFooterView')
+UIListContentConfiguration = ObjCClass('UIListContentConfiguration')
 
 
 class BaseTableViewController(UITableViewController):
@@ -22,10 +23,34 @@ class BaseTableViewController(UITableViewController):
   testCells: list[CaseElement] = []
 
   @objc_method
-  def centeredHeaderView_title_(self, title):
-    pass
+  def centeredHeaderView_title_(self, title) -> ctypes.c_void_p:
+    headerView = UITableViewHeaderFooterView.new()
+
+    content = UIListContentConfiguration.groupedHeaderConfiguration()
+    content.text = title
+    content.textProperties.alignment = UIListContentTextAlignment.center
+    headerView.contentConfiguration = content
+
+    return headerView.ptr
 
   # MARK: - UITableViewDataSource
+  @objc_method
+  def tableView_viewForHeaderInSection_(self, _cmd, tableView,
+                                        section: int) -> ctypes.c_void_p:
+    return self.centeredHeaderView(testCells[section].title).ptr
+
+  @objc_method
+  def tableView_titleForHeaderInSection_(_self, _cmd, _tableView, _section):
+    return ns(self.testCells[_section].title).ptr
+
+  @objc_method
+  def tableView_numberOfRowsInSection_(_self, _cmd, _tableView, _section):
+    return 1
+
+  @objc_method
+  def numberOfSectionsInTableView_(_self, _cmd, _tableView):
+    return len(self.testCells)
+
   @objc_method
   def tableView_numberOfRowsInSection_(self, tableView,
                                        section: NSInteger) -> NSInteger:
@@ -125,6 +150,7 @@ class ButtonViewController(BaseTableViewController):
 
     target = self
     action = SEL('buttonClicked:')
+    #action = self.buttonClicked_
     controlEvents = UIControlEvents.touchUpInside
     button.addTarget_action_forControlEvents_(target, action, controlEvents)
 
