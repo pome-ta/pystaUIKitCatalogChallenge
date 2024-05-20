@@ -1,3 +1,34 @@
+# 📝 2024/05/20
+
+
+## `UITableViewDataSource` 実行順
+
+要素としては、1つだけ
+
+
+`tableView_viewForHeaderInSection_` を除く
+
+```
+numberOfSectionsInTableView
+numberOfSectionsInTableView
+numberOfRowsInSection
+numberOfSectionsInTableView
+numberOfRowsInSection
+titleForHeaderInSection
+numberOfRowsInSection
+numberOfSectionsInTableView
+titleForHeaderInSection
+numberOfRowsInSection
+numberOfSectionsInTableView
+titleForHeaderInSection
+numberOfRowsInSection
+cellForRowAtIndexPath
+titleForHeaderInSection
+titleForHeaderInSection
+titleForHeaderInSection
+```
+
+
 # 📝 2024/05/17
 
 
