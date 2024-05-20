@@ -30,11 +30,11 @@ class BaseTableViewController(UITableViewController):
     content.text = title
     content.textProperties.alignment = UIListContentTextAlignment.center
     headerView.contentConfiguration = content
-    
-    #print(headerView)
+    print(title)
+    print(headerView)
     #pdbr.state(self.tableView)
 
-    return headerView.ptr
+    return headerView
 
   # MARK: - UITableViewDataSource
   '''
@@ -45,34 +45,45 @@ class BaseTableViewController(UITableViewController):
   '''
 
   @objc_method
+  def tableView_viewForHeaderInSection_(self, tableView,
+                                        section: NSInteger) -> ctypes.c_void_p:
+    #return self.centeredHeaderView_(self.testCells[section].title).ptr
+    headerView = UITableViewHeaderFooterView.new()
+
+    content = UIListContentConfiguration.groupedHeaderConfiguration()
+    content.text = self.testCells[section].title
+    content.textProperties.alignment = UIListContentTextAlignment.center
+    headerView.contentConfiguration = content
+    return at(headerView).ptr
+
+  @objc_method
   def tableView_titleForHeaderInSection_(
       self, tableView, section: NSInteger) -> ctypes.c_void_p:
-    #self.centeredHeaderView_(self.testCells[section].title)
-    print('titleForHeaderInSection')
     return at(self.testCells[section].title).ptr
 
   @objc_method
   def tableView_numberOfRowsInSection_(self, tableView,
                                        section: NSInteger) -> NSInteger:
-    print('numberOfRowsInSection')
+    #print('numberOfRowsInSection')
     return 1
 
   @objc_method
   def numberOfSectionsInTableView_(self, tableView) -> NSInteger:
-    print('numberOfSectionsInTableView')
+    #print('numberOfSectionsInTableView')
     return len(self.testCells)
 
   @objc_method
   def tableView_cellForRowAtIndexPath_(self, tableView,
                                        indexPath) -> ctypes.c_void_p:
 
-    print('cellForRowAtIndexPath')
+    #print('cellForRowAtIndexPath')
     cellTest = self.testCells[indexPath.section]
     cell = tableView.dequeueReusableCellWithIdentifier_forIndexPath_(
       cellTest.cellID, indexPath)
 
     if (view := cellTest.targetView(cell)):
       cellTest.configHandler(view)
+    #self.centeredHeaderView_('hoge')
     return cell.ptr
 
 
