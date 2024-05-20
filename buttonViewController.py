@@ -17,6 +17,8 @@ UITableViewController = ObjCClass('UITableViewController')
 UITableViewHeaderFooterView = ObjCClass('UITableViewHeaderFooterView')
 UIListContentConfiguration = ObjCClass('UIListContentConfiguration')
 
+NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
+
 
 class BaseTableViewController(UITableViewController):
 
@@ -54,7 +56,15 @@ class BaseTableViewController(UITableViewController):
     content.text = self.testCells[section].title
     content.textProperties.alignment = UIListContentTextAlignment.center
     headerView.contentConfiguration = content
-    return at(headerView).ptr
+    
+    NSLayoutConstraint.activateConstraints_([
+      
+      headerView.widthAnchor.constraintEqualToAnchor_multiplier_(self.tableView.widthAnchor, 1.0),
+      headerView.heightAnchor.constraintEqualToAnchor_multiplier_(self.tableView.heightAnchor, 1.0),
+    ])
+    
+    
+    return headerView.ptr
 
   @objc_method
   def tableView_titleForHeaderInSection_(
