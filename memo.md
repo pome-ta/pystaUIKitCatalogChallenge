@@ -12,6 +12,29 @@
 `dequeueReusableHeaderFooterViewWithIdentifier_`
 
 
+
+[viewForHeaderInSectionがめっちゃ呼ばれる | anz blog](https://blog.anzfactory.xyz/articles/20190423/swift-call-view-for-header-in-section-every-scroll/)
+
+
+```
+numberOfSectionsInTableView
+numberOfSectionsInTableView
+numberOfRowsInSection
+numberOfSectionsInTableView
+numberOfRowsInSection
+numberOfRowsInSection
+numberOfSectionsInTableView
+numberOfRowsInSection
+numberOfSectionsInTableView
+numberOfRowsInSection
+cellForRowAtIndexPath
+viewForHeaderInSection
+titleForHeaderInSection
+
+```
+
+
+
 # 📝 2024/05/20
 
 

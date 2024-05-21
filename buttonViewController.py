@@ -23,8 +23,16 @@ class BaseTableViewController(UITableViewController):
   testCells: list[CaseElement] = []
 
   @objc_method
-  def centeredHeaderView_(self, title)->ctypes.c_char_p:
-    headerView = UITableViewHeaderFooterView.new()
+  def viewDidLoad(self):
+    send_super(__class__, self, 'viewDidLoad')
+    self.tableView.registerClass_forHeaderFooterViewReuseIdentifier_(
+      UITableViewHeaderFooterView, 'customHeaderFooterView')
+
+  @objc_method
+  def centeredHeaderView_(self, title) -> ctypes.c_void_p:
+    #headerView = UITableViewHeaderFooterView.new()
+    headerView = self.tableView.dequeueReusableHeaderFooterViewWithIdentifier_(
+      'customHeaderFooterView')
 
     content = UIListContentConfiguration.groupedHeaderConfiguration()
     content.text = title
@@ -39,43 +47,48 @@ class BaseTableViewController(UITableViewController):
     return headerView.ptr
 
   # MARK: - UITableViewDataSource
-  '''
+
   @objc_method
   def tableView_viewForHeaderInSection_(self, tableView,
                                         section: NSInteger) -> ctypes.c_void_p:
-    return self.centeredHeaderView_(self.testCells[section].title).ptr
-  '''
+    #return self.centeredHeaderView_(self.testCells[section].title).ptr
+    print('viewForHeaderInSection')
+    headerView = tableView.dequeueReusableHeaderFooterViewWithIdentifier_(
+      'customHeaderFooterView')
+    title = self.testCells[section].title
+    content = UIListContentConfiguration.groupedHeaderConfiguration()
+    content.text = title
+    content.textProperties.alignment = UIListContentTextAlignment.center
+    headerView.contentConfiguration = content
+    return headerView.ptr
 
   @objc_method
   def tableView_titleForHeaderInSection_(self, tableView, section: NSInteger):
-    #t = self.testCells[section].title
-    #h = self.centeredHeaderView_(t)
-    #print((h))
+    print('titleForHeaderInSection')
     return self.testCells[section].title
 
   @objc_method
   def tableView_numberOfRowsInSection_(self, tableView,
                                        section: NSInteger) -> NSInteger:
-    #print('numberOfRowsInSection')
+    print('numberOfRowsInSection')
     return 1
 
   @objc_method
   def numberOfSectionsInTableView_(self, tableView) -> NSInteger:
-    #print('numberOfSectionsInTableView')
+    print('numberOfSectionsInTableView')
     return len(self.testCells)
 
   @objc_method
   def tableView_cellForRowAtIndexPath_(self, tableView,
                                        indexPath) -> ctypes.c_void_p:
 
-    #print('cellForRowAtIndexPath')
+    print('cellForRowAtIndexPath')
     cellTest = self.testCells[indexPath.section]
     cell = tableView.dequeueReusableCellWithIdentifier_forIndexPath_(
       cellTest.cellID, indexPath)
 
     if (view := cellTest.targetView(cell)):
       cellTest.configHandler(view)
-    pdbr.state(tableView)
     return cell.ptr
 
 
@@ -116,6 +129,7 @@ class ButtonViewController(BaseTableViewController):
 
   @objc_method
   def initPrototype(self):
+
     [
       self.tableView.registerClass_forCellReuseIdentifier_(
         prototype['cellClass'], prototype['identifier'])
