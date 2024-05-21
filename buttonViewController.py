@@ -18,8 +18,6 @@ UITableViewHeaderFooterView = ObjCClass('UITableViewHeaderFooterView')
 UIListContentConfiguration = ObjCClass('UIListContentConfiguration')
 
 
-
-
 class BaseTableViewController(UITableViewController):
 
   testCells: list[CaseElement] = []
@@ -46,12 +44,9 @@ class BaseTableViewController(UITableViewController):
     return self.centeredHeaderView_(self.testCells[section].title).ptr
   '''
 
-  
-
   @objc_method
-  def tableView_titleForHeaderInSection_(
-      self, tableView, section: NSInteger) -> ctypes.c_void_p:
-    return at(self.testCells[section].title).ptr
+  def tableView_titleForHeaderInSection_(self, tableView, section: NSInteger):
+    return self.testCells[section].title
 
   @objc_method
   def tableView_numberOfRowsInSection_(self, tableView,
