@@ -1,3 +1,17 @@
+# 📝 2024/05/21
+
+## 各自セルの`UITableViewHeaderFooterView`
+
+[UITableViewHeaderFooterViewをxibで生成する #iOS - Qiita](https://qiita.com/KikurageChan/items/e1847b54535df393d893)
+
+
+[【Swift】UITableViewのセクションヘッダーに独自のViewを表示する|Hiromiick Tech Blog](https://hiromiick.com/swift-uitableview-custome-section-header-impl/)
+
+`registerClass_forHeaderFooterViewReuseIdentifier_` 必要？
+
+`dequeueReusableHeaderFooterViewWithIdentifier_`
+
+
 # 📝 2024/05/20
 
 

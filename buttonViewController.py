@@ -23,18 +23,20 @@ class BaseTableViewController(UITableViewController):
   testCells: list[CaseElement] = []
 
   @objc_method
-  def centeredHeaderView_(self, title) -> ctypes.c_void_p:
+  def centeredHeaderView_(self, title)->ctypes.c_char_p:
     headerView = UITableViewHeaderFooterView.new()
 
     content = UIListContentConfiguration.groupedHeaderConfiguration()
     content.text = title
     content.textProperties.alignment = UIListContentTextAlignment.center
     headerView.contentConfiguration = content
-    print(title)
-    print(headerView)
+    #print(dir(headerView))
+    #print(headerView._as_parameter_)
+    #print(headerView)
     #pdbr.state(self.tableView)
 
-    return headerView
+    #return headerView
+    return headerView.ptr
 
   # MARK: - UITableViewDataSource
   '''
@@ -46,6 +48,9 @@ class BaseTableViewController(UITableViewController):
 
   @objc_method
   def tableView_titleForHeaderInSection_(self, tableView, section: NSInteger):
+    #t = self.testCells[section].title
+    #h = self.centeredHeaderView_(t)
+    #print((h))
     return self.testCells[section].title
 
   @objc_method
@@ -70,7 +75,7 @@ class BaseTableViewController(UITableViewController):
 
     if (view := cellTest.targetView(cell)):
       cellTest.configHandler(view)
-    #self.centeredHeaderView_('hoge')
+    pdbr.state(tableView)
     return cell.ptr
 
 
