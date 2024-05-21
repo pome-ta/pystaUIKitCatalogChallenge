@@ -17,7 +17,7 @@ UITableViewController = ObjCClass('UITableViewController')
 UITableViewHeaderFooterView = ObjCClass('UITableViewHeaderFooterView')
 UIListContentConfiguration = ObjCClass('UIListContentConfiguration')
 
-NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
+
 
 
 class BaseTableViewController(UITableViewController):
@@ -46,25 +46,7 @@ class BaseTableViewController(UITableViewController):
     return self.centeredHeaderView_(self.testCells[section].title).ptr
   '''
 
-  @objc_method
-  def tableView_viewForHeaderInSection_(self, tableView,
-                                        section: NSInteger) -> ctypes.c_void_p:
-    #return self.centeredHeaderView_(self.testCells[section].title).ptr
-    headerView = UITableViewHeaderFooterView.new()
-
-    content = UIListContentConfiguration.groupedHeaderConfiguration()
-    content.text = self.testCells[section].title
-    content.textProperties.alignment = UIListContentTextAlignment.center
-    headerView.contentConfiguration = content
-    
-    NSLayoutConstraint.activateConstraints_([
-      
-      headerView.widthAnchor.constraintEqualToAnchor_multiplier_(self.tableView.widthAnchor, 1.0),
-      headerView.heightAnchor.constraintEqualToAnchor_multiplier_(self.tableView.heightAnchor, 1.0),
-    ])
-    
-    
-    return headerView.ptr
+  
 
   @objc_method
   def tableView_titleForHeaderInSection_(
