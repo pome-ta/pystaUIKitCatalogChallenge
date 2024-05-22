@@ -1,8 +1,8 @@
 import ctypes
 from enum import Enum
 
-from pyrubicon.objc.api import ObjCClass, ObjCInstance, objc_method, objc_property, at
-from pyrubicon.objc.runtime import SEL, send_super, objc_id
+from pyrubicon.objc.api import ObjCClass, objc_method, objc_property
+from pyrubicon.objc.runtime import SEL, send_super
 from pyrubicon.objc.types import NSInteger
 
 from rbedge.enumerations import UIControlState, UIControlEvents, UIListContentTextAlignment
@@ -29,8 +29,8 @@ class BaseTableViewController(UITableViewController):
       UITableViewHeaderFooterView, 'customHeaderFooterView')
 
   @objc_method
-  def centeredHeaderView_(self, title) -> ctypes.c_void_p:
-    #headerView = UITableViewHeaderFooterView.new()
+  def centeredHeaderView_(self, title):
+    # todo: let headerView: UITableViewHeaderFooterView = UITableViewHeaderFooterView()
     headerView = self.tableView.dequeueReusableHeaderFooterViewWithIdentifier_(
       'customHeaderFooterView')
 
@@ -38,51 +38,32 @@ class BaseTableViewController(UITableViewController):
     content.text = title
     content.textProperties.alignment = UIListContentTextAlignment.center
     headerView.contentConfiguration = content
-    #print(dir(headerView))
-    #print(headerView._as_parameter_)
-    #print(headerView)
-    #pdbr.state(self.tableView)
 
-    #return headerView
-    return headerView.ptr
+    return headerView
 
   # MARK: - UITableViewDataSource
 
   @objc_method
   def tableView_viewForHeaderInSection_(self, tableView,
                                         section: NSInteger) -> ctypes.c_void_p:
-    #return self.centeredHeaderView_(self.testCells[section].title).ptr
-    print('viewForHeaderInSection')
-    headerView = tableView.dequeueReusableHeaderFooterViewWithIdentifier_(
-      'customHeaderFooterView')
-    title = self.testCells[section].title
-    content = UIListContentConfiguration.groupedHeaderConfiguration()
-    content.text = title
-    content.textProperties.alignment = UIListContentTextAlignment.center
-    headerView.contentConfiguration = content
-    return headerView.ptr
+    return self.centeredHeaderView_(self.testCells[section].title).ptr
 
   @objc_method
   def tableView_titleForHeaderInSection_(self, tableView, section: NSInteger):
-    print('titleForHeaderInSection')
     return self.testCells[section].title
 
   @objc_method
   def tableView_numberOfRowsInSection_(self, tableView,
                                        section: NSInteger) -> NSInteger:
-    print('numberOfRowsInSection')
     return 1
 
   @objc_method
   def numberOfSectionsInTableView_(self, tableView) -> NSInteger:
-    print('numberOfSectionsInTableView')
     return len(self.testCells)
 
   @objc_method
   def tableView_cellForRowAtIndexPath_(self, tableView,
                                        indexPath) -> ctypes.c_void_p:
-
-    print('cellForRowAtIndexPath')
     cellTest = self.testCells[indexPath.section]
     cell = tableView.dequeueReusableCellWithIdentifier_forIndexPath_(
       cellTest.cellID, indexPath)
@@ -166,7 +147,6 @@ class ButtonViewController(BaseTableViewController):
 
     target = self
     action = SEL('buttonClicked:')
-    #action = self.buttonClicked_
     controlEvents = UIControlEvents.touchUpInside
     button.addTarget_action_forControlEvents_(target, action, controlEvents)
 
