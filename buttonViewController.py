@@ -135,9 +135,17 @@ class ButtonViewController(BaseTableViewController):
       CaseElement(localizedString('DetailDisclosureTitle'),
                   ButtonKind.buttonDetailDisclosure.value,
                   self.configureSystemDetailDisclosureButton_),
+      # 2
+      CaseElement(localizedString('AddContactTitle'),
+                  ButtonKind.buttonSystemAddContact.value,
+                  self.configureSystemContactAddButton_),
+      # 3
+      CaseElement(localizedString('CloseTitle'), ButtonKind.buttonClose.value,
+                  self.configureCloseButton_),
     ])
 
   # --- extension
+  # 0
   @objc_method
   def configureSystemTextButton_(self, button):
     # todo: 冗長、差し替えを容易にしたい為
@@ -150,8 +158,25 @@ class ButtonViewController(BaseTableViewController):
     controlEvents = UIControlEvents.touchUpInside
     button.addTarget_action_forControlEvents_(target, action, controlEvents)
 
+  # 1
   @objc_method
   def configureSystemDetailDisclosureButton_(self, button):
+    target = self
+    action = SEL('buttonClicked:')
+    controlEvents = UIControlEvents.touchUpInside
+    button.addTarget_action_forControlEvents_(target, action, controlEvents)
+
+  # 2
+  @objc_method
+  def configureSystemContactAddButton_(self, button):
+    target = self
+    action = SEL('buttonClicked:')
+    controlEvents = UIControlEvents.touchUpInside
+    button.addTarget_action_forControlEvents_(target, action, controlEvents)
+
+  # 3
+  @objc_method
+  def configureCloseButton_(self, button):
     target = self
     action = SEL('buttonClicked:')
     controlEvents = UIControlEvents.touchUpInside
@@ -169,7 +194,7 @@ if __name__ == '__main__':
   from rbedge import pdbr
   bvc = ButtonViewController.new()
 
-  style = UIModalPresentationStyle.pageSheet
-  #style = UIModalPresentationStyle.fullScreen
+  #style = UIModalPresentationStyle.pageSheet
+  style = UIModalPresentationStyle.fullScreen
   present_viewController(bvc, style)
 
