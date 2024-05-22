@@ -28,6 +28,7 @@ class BaseTableViewController(UITableViewController):
     self.tableView.registerClass_forHeaderFooterViewReuseIdentifier_(
       UITableViewHeaderFooterView, 'customHeaderFooterView')
 
+  '''
   @objc_method
   def centeredHeaderView_(self, title):
     # todo: let headerView: UITableViewHeaderFooterView = UITableViewHeaderFooterView()
@@ -51,7 +52,7 @@ class BaseTableViewController(UITableViewController):
   @objc_method
   def tableView_titleForHeaderInSection_(self, tableView, section: NSInteger):
     return self.testCells[section].title
-
+  '''
   @objc_method
   def tableView_numberOfRowsInSection_(self, tableView,
                                        section: NSInteger) -> NSInteger:
@@ -70,6 +71,8 @@ class BaseTableViewController(UITableViewController):
 
     if (view := cellTest.targetView(cell)):
       cellTest.configHandler(view)
+    
+    pdbr.state(cell.contentView)
     return cell.ptr
 
 
@@ -132,16 +135,12 @@ class ButtonViewController(BaseTableViewController):
                   self.configureSystemTextButton_),
 
       # 1
-      CaseElement(localizedString('DetailDisclosureTitle'),
-                  ButtonKind.buttonDetailDisclosure.value,
-                  self.configureSystemDetailDisclosureButton_),
+
+      #CaseElement(localizedString('DetailDisclosureTitle'),ButtonKind.buttonDetailDisclosure.value,self.configureSystemDetailDisclosureButton_),
       # 2
-      CaseElement(localizedString('AddContactTitle'),
-                  ButtonKind.buttonSystemAddContact.value,
-                  self.configureSystemContactAddButton_),
+      #CaseElement(localizedString('AddContactTitle'),ButtonKind.buttonSystemAddContact.value,self.configureSystemContactAddButton_),
       # 3
-      CaseElement(localizedString('CloseTitle'), ButtonKind.buttonClose.value,
-                  self.configureCloseButton_),
+      #CaseElement(localizedString('CloseTitle'), ButtonKind.buttonClose.value,self.configureCloseButton_),
     ])
 
   # --- extension

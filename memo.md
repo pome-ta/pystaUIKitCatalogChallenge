@@ -1,3 +1,22 @@
+# 📝 2024/05/22
+
+## cell の色
+
+グレーぽいのって、何の設定だっけか？
+
+
+`headerView.contentConfiguration`
+
+```
+ObjCInstance: UIListContentConfiguration at 0x122030580: <UIListContentConfiguration: 0x3036b8d20; text = 'Default'; Base Style = Grouped Header; directionalLayoutMargins = {17, 8, 6, 8}; axesPreservingSuperviewLayoutMargins = [Horizontal]; imageToTextPadding = 16; textToSecondaryTextVerticalPadding = 3>>
+
+```
+
+```
+ 
+<b'UIListContentConfiguration': <UIListContentConfiguration: 0x3020ed570; text = 'D...t' (length = 7); Base Style = Grouped Header; directionalLayoutMargins = {17, 8, 6, 8}; axesPreservingSuperviewLayoutMargins = [Horizontal]; imageToTextPadding = 16; textToSecondaryTextVerticalPadding = 3>>
+```
+
 # 📝 2024/05/21
 
 ## 各自セルの`UITableViewHeaderFooterView`
