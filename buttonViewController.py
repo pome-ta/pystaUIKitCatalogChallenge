@@ -110,7 +110,6 @@ class ButtonViewController(BaseTableViewController):
 
   @objc_method
   def initPrototype(self):
-
     [
       self.tableView.registerClass_forCellReuseIdentifier_(
         prototype['cellClass'], prototype['identifier'])
@@ -133,11 +132,12 @@ class ButtonViewController(BaseTableViewController):
                   self.configureSystemTextButton_),
 
       # 1
-      #CaseElement(localizedString('DetailDisclosureTitle'),ButtonKind.buttonDetailDisclosure.value,self.configureSystemDetailDisclosureButton_),
+      CaseElement(localizedString('DetailDisclosureTitle'),
+                  ButtonKind.buttonDetailDisclosure.value,
+                  self.configureSystemDetailDisclosureButton_),
     ])
 
   # --- extension
-
   @objc_method
   def configureSystemTextButton_(self, button):
     # todo: 冗長、差し替えを容易にしたい為
@@ -152,9 +152,10 @@ class ButtonViewController(BaseTableViewController):
 
   @objc_method
   def configureSystemDetailDisclosureButton_(self, button):
-
-    print('configureSystemDetailDisclosureButton')
-    print(button)
+    target = self
+    action = SEL('buttonClicked:')
+    controlEvents = UIControlEvents.touchUpInside
+    button.addTarget_action_forControlEvents_(target, action, controlEvents)
 
   # MARK: - Button Actions
   @objc_method
