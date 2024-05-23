@@ -1,3 +1,7 @@
+# 📝 2024/05/23
+
+`self.view == self.tableView`
+
 # 📝 2024/05/22
 
 ## cell の色

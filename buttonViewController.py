@@ -17,6 +17,8 @@ UITableViewController = ObjCClass('UITableViewController')
 UITableViewHeaderFooterView = ObjCClass('UITableViewHeaderFooterView')
 UIListContentConfiguration = ObjCClass('UIListContentConfiguration')
 
+UIColor = ObjCClass('UIColor')
+
 
 class BaseTableViewController(UITableViewController):
 
@@ -72,7 +74,7 @@ class BaseTableViewController(UITableViewController):
     if (view := cellTest.targetView(cell)):
       cellTest.configHandler(view)
     
-    pdbr.state(cell.contentView)
+    #pdbr.state(cell.contentView)
     return cell.ptr
 
 
@@ -125,6 +127,15 @@ class ButtonViewController(BaseTableViewController):
 
     title = NSStringFromClass(__class__)
     self.navigationItem.title = title
+    
+    
+    
+    #self.view.backgroundColor = UIColor.systemGreenColor()
+    #self.tableView.backgroundColor = UIColor.systemRedColor()
+    #print(self.view)
+    #print(self.tableView)
+    #print(self.view == self.tableView)
+    #pdbr.state(self)
 
     self.initPrototype()
 
@@ -142,6 +153,11 @@ class ButtonViewController(BaseTableViewController):
       # 3
       #CaseElement(localizedString('CloseTitle'), ButtonKind.buttonClose.value,self.configureCloseButton_),
     ])
+    
+  @objc_method
+  def viewDidDisappear_(self, animated: bool):
+    send_super(__class__, self, 'viewDidDisappear:')
+    pdbr.state(self.tableView)
 
   # --- extension
   # 0
@@ -193,7 +209,7 @@ if __name__ == '__main__':
   from rbedge import pdbr
   bvc = ButtonViewController.new()
 
-  #style = UIModalPresentationStyle.pageSheet
-  style = UIModalPresentationStyle.fullScreen
+  style = UIModalPresentationStyle.pageSheet
+  #style = UIModalPresentationStyle.fullScreen
   present_viewController(bvc, style)
 
