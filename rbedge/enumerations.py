@@ -115,3 +115,11 @@ class UIListContentTextAlignment:
   center: int = 1
   justified: int = 2
 
+
+# ref: [UITableViewStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uitableviewstyle?language=objc)
+@dataclass
+class UITableViewStyle:
+  plain: int = 0
+  grouped: int = 1
+  insetGrouped: int = 2
+

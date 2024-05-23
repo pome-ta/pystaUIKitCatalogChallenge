@@ -1,6 +1,18 @@
 # 📝 2024/05/23
 
+
+
+## view
+
 `self.view == self.tableView`
+
+## style
+
+- `init` の中で、`initWithStyle_` を呼ぶ
+- storyboard で`style` 設定があるので
+- `.new()` で、style が定義されている状況
+
+
 
 # 📝 2024/05/22
 

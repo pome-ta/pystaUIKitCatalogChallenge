@@ -5,7 +5,7 @@ from pyrubicon.objc.api import ObjCClass, objc_method, objc_property
 from pyrubicon.objc.runtime import SEL, send_super
 from pyrubicon.objc.types import NSInteger
 
-from rbedge.enumerations import UIControlState, UIControlEvents, UIListContentTextAlignment
+from rbedge.enumerations import UIControlState, UIControlEvents, UIListContentTextAlignment, UITableViewStyle
 from rbedge.functions import NSStringFromClass
 
 from caseElement import CaseElement
@@ -17,8 +17,6 @@ UITableViewController = ObjCClass('UITableViewController')
 UITableViewHeaderFooterView = ObjCClass('UITableViewHeaderFooterView')
 UIListContentConfiguration = ObjCClass('UIListContentConfiguration')
 
-UIColor = ObjCClass('UIColor')
-
 
 class BaseTableViewController(UITableViewController):
 
@@ -26,11 +24,10 @@ class BaseTableViewController(UITableViewController):
 
   @objc_method
   def viewDidLoad(self):
-    send_super(__class__, self, 'viewDidLoad')
+    send_super(__class__, self, 'viewDidLoad')  # xxx: 不要？
     self.tableView.registerClass_forHeaderFooterViewReuseIdentifier_(
       UITableViewHeaderFooterView, 'customHeaderFooterView')
 
-  '''
   @objc_method
   def centeredHeaderView_(self, title):
     # todo: let headerView: UITableViewHeaderFooterView = UITableViewHeaderFooterView()
@@ -45,7 +42,6 @@ class BaseTableViewController(UITableViewController):
     return headerView
 
   # MARK: - UITableViewDataSource
-
   @objc_method
   def tableView_viewForHeaderInSection_(self, tableView,
                                         section: NSInteger) -> ctypes.c_void_p:
@@ -54,7 +50,7 @@ class BaseTableViewController(UITableViewController):
   @objc_method
   def tableView_titleForHeaderInSection_(self, tableView, section: NSInteger):
     return self.testCells[section].title
-  '''
+
   @objc_method
   def tableView_numberOfRowsInSection_(self, tableView,
                                        section: NSInteger) -> NSInteger:
@@ -73,8 +69,7 @@ class BaseTableViewController(UITableViewController):
 
     if (view := cellTest.targetView(cell)):
       cellTest.configHandler(view)
-    
-    #pdbr.state(cell.contentView)
+
     return cell.ptr
 
 
@@ -108,9 +103,13 @@ class ButtonViewController(BaseTableViewController):
 
   @objc_method
   def init(self):
-    send_super(__class__, self, 'init')
+    send_super(__class__, self, 'init')  # xxx: 不要？
+    tableViewStyle = UITableViewStyle.grouped
+    self.initWithStyle_(tableViewStyle)
+
     self.testCells = []
     self.cartItemCount = 0
+
     return self
 
   @objc_method
@@ -123,19 +122,10 @@ class ButtonViewController(BaseTableViewController):
 
   @objc_method
   def viewDidLoad(self):
-    send_super(__class__, self, 'viewDidLoad')
+    send_super(__class__, self, 'viewDidLoad')  # xxx: 不要？
 
     title = NSStringFromClass(__class__)
     self.navigationItem.title = title
-    
-    
-    
-    #self.view.backgroundColor = UIColor.systemGreenColor()
-    #self.tableView.backgroundColor = UIColor.systemRedColor()
-    #print(self.view)
-    #print(self.tableView)
-    #print(self.view == self.tableView)
-    #pdbr.state(self)
 
     self.initPrototype()
 
@@ -144,20 +134,22 @@ class ButtonViewController(BaseTableViewController):
       CaseElement(localizedString('DefaultTitle'),
                   ButtonKind.buttonSystem.value,
                   self.configureSystemTextButton_),
-
       # 1
-
-      #CaseElement(localizedString('DetailDisclosureTitle'),ButtonKind.buttonDetailDisclosure.value,self.configureSystemDetailDisclosureButton_),
+      CaseElement(localizedString('DetailDisclosureTitle'),
+                  ButtonKind.buttonDetailDisclosure.value,
+                  self.configureSystemDetailDisclosureButton_),
       # 2
-      #CaseElement(localizedString('AddContactTitle'),ButtonKind.buttonSystemAddContact.value,self.configureSystemContactAddButton_),
+      CaseElement(localizedString('AddContactTitle'),
+                  ButtonKind.buttonSystemAddContact.value,
+                  self.configureSystemContactAddButton_),
       # 3
-      #CaseElement(localizedString('CloseTitle'), ButtonKind.buttonClose.value,self.configureCloseButton_),
+      CaseElement(localizedString('CloseTitle'), ButtonKind.buttonClose.value,
+                  self.configureCloseButton_),
     ])
-    
+
   @objc_method
   def viewDidDisappear_(self, animated: bool):
     send_super(__class__, self, 'viewDidDisappear:')
-    pdbr.state(self.tableView)
 
   # --- extension
   # 0
@@ -207,6 +199,7 @@ if __name__ == '__main__':
   from rbedge.enumerations import UIModalPresentationStyle
   from rbedge import present_viewController
   from rbedge import pdbr
+
   bvc = ButtonViewController.new()
 
   style = UIModalPresentationStyle.pageSheet
