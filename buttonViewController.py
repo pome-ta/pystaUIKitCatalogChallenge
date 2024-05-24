@@ -172,6 +172,10 @@ class ButtonViewController(BaseTableViewController):
       CaseElement(localizedString('FilledTitle'),
                   ButtonKind.buttonStyleFilled.value,
                   self.configureStyleFilledButton_),
+      # 07
+      CaseElement(localizedString('CornerStyleTitle'),
+                  ButtonKind.buttonCornerStyle.value,
+                  self.configureCornerStyleButton_),
     ])
 
   @objc_method
@@ -269,8 +273,6 @@ class ButtonViewController(BaseTableViewController):
   def configureStyleFilledButton_(self, button):
     config = UIButtonConfiguration.filledButtonConfiguration()
 
-    # todo: `if traitCollection.userInterfaceIdiom == .mac`
-    # xxx: あとでやる
     systemRed = UIColor.systemRedColor()
     config.background.backgroundColor = systemRed
 
@@ -291,15 +293,16 @@ class ButtonViewController(BaseTableViewController):
   # todo: `@available(iOS 15.0, *)`
   @objc_method
   def configureCornerStyleButton_(self, button):
-    #To keep the look the same betwen iOS and macOS: For cornerStyle to work in Mac Catalyst, use UIBehavioralStyle as ".pad", Available in macOS 12 or later (Mac Catalyst 15.0 or later). Use this for controls that need to look the same between iOS and macOS.
+    # To keep the look the same betwen iOS and macOS:
+    # For cornerStyle to work in Mac Catalyst, use UIBehavioralStyle as ".pad", Available in macOS 12 or later (Mac Catalyst 15.0 or later). Use this for controls that need to look the same between iOS and macOS.
     # > iOS と macOS の間で外観を同じにするには: CornerStyle を Mac Catalyst で機能させるには、UIBehavioralStyle を「.pad」として使用します。macOS 12 以降 (Mac Catalyst 15.0 以降) で使用できます。 iOS と macOS の間で同じように見える必要があるコントロールにこれを使用します。
 
     config = UIButtonConfiguration.grayButtonConfiguration()
 
     # todo: `if traitCollection.userInterfaceIdiom == .mac`
     # xxx: あとでやる
-    systemRed = UIColor.systemRedColor()
-    config.background.backgroundColor = systemRed
+    cornerStyle = UIButtonConfigurationCornerStyle.capsule
+    config.cornerStyle = cornerStyle
 
     button.configuration = config
 
@@ -307,7 +310,7 @@ class ButtonViewController(BaseTableViewController):
     state = UIControlState.normal
     button.setTitle_forState_(title, state)
 
-    button.toolTip = localizedString('FilledStyleButtonToolTipTitle')
+    button.toolTip = localizedString('CapsuleStyleButtonToolTipTitle')
 
     target = self
     action = SEL('buttonClicked:')
