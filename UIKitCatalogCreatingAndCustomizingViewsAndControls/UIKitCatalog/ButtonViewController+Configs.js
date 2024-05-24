@@ -10,25 +10,30 @@ import UIKit
 
 extension ButtonViewController: UIToolTipInteractionDelegate {
     
+    // 00
     func configureSystemTextButton(_ button: UIButton) {
         button.setTitle(NSLocalizedString("Button", comment: ""), for: [])
         button.addTarget(self, action: #selector(ButtonViewController.buttonClicked(_:)), for: .touchUpInside)
     }
+    // 01
     func configureSystemDetailDisclosureButton(_ button: UIButton) {
         // Nothing particular to set here, it's all been done in the storyboard.
         // ここでは特に設定するものはなく、すべてストーリーボードで行われます。
         button.addTarget(self, action: #selector(ButtonViewController.buttonClicked(_:)), for: .touchUpInside)
     }
+    // 02
     func configureSystemContactAddButton(_ button: UIButton) {
         // Nothing particular to set here, it's all been done in the storyboard.
         button.addTarget(self, action: #selector(ButtonViewController.buttonClicked(_:)), for: .touchUpInside)
     }
     
+    // 03
     func configureCloseButton(_ button: UIButton) {
         // Nothing particular to set here, it's all been done in the storyboard.
         button.addTarget(self, action: #selector(ButtonViewController.buttonClicked(_:)), for: .touchUpInside)
     }
     
+    // 04
     @available(iOS 15.0, *)
     func configureStyleGrayButton(_ button: UIButton) {
         // Note this can be also be done in the storyboard for this button.
@@ -42,6 +47,7 @@ extension ButtonViewController: UIToolTipInteractionDelegate {
         button.addTarget(self, action: #selector(ButtonViewController.buttonClicked(_:)), for: .touchUpInside)
     }
 
+    // 05
     @available(iOS 15.0, *)
     func configureStyleTintedButton(_ button: UIButton) {
         // Note this can be also be done in the storyboard for this button.
@@ -72,6 +78,7 @@ extension ButtonViewController: UIToolTipInteractionDelegate {
         button.addTarget(self, action: #selector(ButtonViewController.buttonClicked(_:)), for: .touchUpInside)
     }
 
+    // 06
     @available(iOS 15.0, *)
     func configureStyleFilledButton(_ button: UIButton) {
         // Note this can be also be done in the storyboard for this button.
@@ -85,6 +92,7 @@ extension ButtonViewController: UIToolTipInteractionDelegate {
         button.addTarget(self, action: #selector(ButtonViewController.buttonClicked(_:)), for: .touchUpInside)
     }
     
+    // 07
     @available(iOS 15.0, *)
     func configureCornerStyleButton(_ button: UIButton) {
         /** To keep the look the same betwen iOS and macOS:
@@ -106,6 +114,7 @@ extension ButtonViewController: UIToolTipInteractionDelegate {
         button.addTarget(self, action: #selector(ButtonViewController.buttonClicked(_:)), for: .touchUpInside)
     }
 
+    // 08
     func configureImageButton(_ button: UIButton) {
         // To create this button in code you can use `UIButton.init(type: .system)`.
         // コードでこのボタンを作成するには、「UIButton.init(type: .system)」を使用します。
@@ -128,6 +137,7 @@ extension ButtonViewController: UIToolTipInteractionDelegate {
         button.addTarget(self, action: #selector(ButtonViewController.buttonClicked(_:)), for: .touchUpInside)
     }
 
+    // 09
     func configureAttributedTextSystemButton(_ button: UIButton) {
         let buttonTitle = NSLocalizedString("Button", comment: "")
         
@@ -152,6 +162,7 @@ extension ButtonViewController: UIToolTipInteractionDelegate {
         button.addTarget(self, action: #selector(ButtonViewController.buttonClicked(_:)), for: .touchUpInside)
     }
     
+    // 10
     func configureSymbolButton(_ button: UIButton) {
         let buttonImage = UIImage(systemName: "person")
         
@@ -177,6 +188,7 @@ extension ButtonViewController: UIToolTipInteractionDelegate {
         button.addTarget(self, action: #selector(ButtonViewController.buttonClicked(_:)), for: .touchUpInside)
     }
     
+    // 11
     func configureLargeSymbolButton(_ button: UIButton) {
         let buttonImage = UIImage(systemName: "person")
         
@@ -196,6 +208,7 @@ extension ButtonViewController: UIToolTipInteractionDelegate {
         button.addTarget(self, action: #selector(ButtonViewController.buttonClicked(_:)), for: .touchUpInside)
     }
     
+    // 12
     func configureSymbolTextButton(_ button: UIButton) {
         // Button with image to the left of the title.
         // タイトルの左側にある画像付きのボタン。
@@ -226,6 +239,7 @@ extension ButtonViewController: UIToolTipInteractionDelegate {
         button.addTarget(self, action: #selector(ButtonViewController.buttonClicked(_:)), for: .touchUpInside)
     }
     
+    // 13
     func configureTextSymbolButton(_ button: UIButton) {
         // Button with image to the right of the title.
         
@@ -260,6 +274,7 @@ extension ButtonViewController: UIToolTipInteractionDelegate {
         button.addTarget(self, action: #selector(ButtonViewController.buttonClicked(_:)), for: .touchUpInside)
     }
     
+    // 14
     @available(iOS 15.0, *)
     func configureMultiTitleButton(_ button: UIButton) {
         /** To keep the look the same betwen iOS and macOS:
@@ -277,12 +292,14 @@ extension ButtonViewController: UIToolTipInteractionDelegate {
         button.addTarget(self, action: #selector(ButtonViewController.buttonClicked(_:)), for: .touchUpInside)
     }
     
+    // 15
     @available(iOS 15.0, *)
     func configureToggleButton(button: UIButton) {
         button.changesSelectionAsPrimaryAction = true // This makes the button style a "toggle button".
         // これにより、ボタンのスタイルが「トグル ボタン」になります。
     }
     
+    // 16
     func configureTitleTextButton(_ button: UIButton) {
         // Note: Only for iOS the title's color can be changed.
         // 注: タイトルの色を変更できるのは iOS の場合のみです。
@@ -292,6 +309,7 @@ extension ButtonViewController: UIToolTipInteractionDelegate {
         button.addTarget(self, action: #selector(ButtonViewController.buttonClicked(_:)), for: .touchUpInside)
     }
     
+    // 17
     func configureBackgroundButton(_ button: UIButton) {
         if #available(iOS 15, *) {
             /** To keep the look the same betwen iOS and macOS:
@@ -313,6 +331,7 @@ extension ButtonViewController: UIToolTipInteractionDelegate {
     
     // This handler is called when this button needs updating.
     // このハンドラーは、このボタンを更新する必要がある場合に呼び出されます。
+    // 18
     @available(iOS 15.0, *)
     func configureUpdateActivityHandlerButton(_ button: UIButton) {
         let activityUpdateHandler: (UIButton) -> Void = { button in
@@ -347,6 +366,7 @@ extension ButtonViewController: UIToolTipInteractionDelegate {
         button.addTarget(self, action: #selector(ButtonViewController.toggleButtonClicked(_:)), for: .touchUpInside)
     }
     
+    // 19
     @available(iOS 15.0, *)
     func configureUpdateHandlerButton(_ button: UIButton) {
         // This is called when a button needs an update.
@@ -370,6 +390,7 @@ extension ButtonViewController: UIToolTipInteractionDelegate {
         button.addTarget(self, action: #selector(ButtonViewController.toggleButtonClicked(_:)), for: .touchUpInside)
     }
     
+    // 20
     @available(iOS 15.0, *)
     func configureUpdateImageHandlerButton(_ button: UIButton) {
         // This is called when a button needs an update.
@@ -411,6 +432,7 @@ extension ButtonViewController: UIToolTipInteractionDelegate {
         return UIToolTipConfiguration(toolTip: resultString)
     }
     
+    // 21
     @available(iOS 15.0, *)
     func addToCart(action: UIAction) {
         cartItemCount = cartItemCount > 0 ? 0 : 12
@@ -419,6 +441,7 @@ extension ButtonViewController: UIToolTipInteractionDelegate {
         }
     }
     
+    // 22
     @available(iOS 15.0, *)
     func configureAddToCartButton(_ button: UIButton) {
         var config = UIButton.Configuration.filled()

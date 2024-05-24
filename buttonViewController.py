@@ -281,6 +281,33 @@ class ButtonViewController(BaseTableViewController):
     controlEvents = UIControlEvents.touchUpInside
     button.addTarget_action_forControlEvents_(target, action, controlEvents)
 
+
+  # 06
+  # todo: `@available(iOS 15.0, *)`
+  @objc_method
+  def configureStyleFilledButton_(self, button):
+    config = UIButtonConfiguration.filledButtonConfiguration()
+
+    # todo: `if traitCollection.userInterfaceIdiom == .mac`
+    # xxx: あとでやる
+    systemRed = UIColor.systemRedColor()
+    config.background.backgroundColor = systemRed
+
+    button.configuration = config
+
+    title = localizedString('Button')
+    state = UIControlState.normal
+    button.setTitle_forState_(title, state)
+
+    button.toolTip = localizedString('FilledStyleButtonToolTipTitle')
+
+    target = self
+    action = SEL('buttonClicked:')
+    controlEvents = UIControlEvents.touchUpInside
+    button.addTarget_action_forControlEvents_(target, action, controlEvents)
+
+
+
   # MARK: - Button Actions
   @objc_method
   def buttonClicked_(self, sender):
