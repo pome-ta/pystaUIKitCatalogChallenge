@@ -13,6 +13,8 @@ from pyLocalizedString import localizedString
 
 from storyboard.buttonViewController import prototypes
 
+UIColor = ObjCClass('UIColor')
+
 UITableViewController = ObjCClass('UITableViewController')
 UITableViewHeaderFooterView = ObjCClass('UITableViewHeaderFooterView')
 UIListContentConfiguration = ObjCClass('UIListContentConfiguration')
@@ -133,29 +135,33 @@ class ButtonViewController(BaseTableViewController):
     self.initPrototype()
 
     self.testCells.extend([
-      # 0
+      # 00
       CaseElement(localizedString('DefaultTitle'),
                   ButtonKind.buttonSystem.value,
                   self.configureSystemTextButton_),
-      # 1
+      # 01
       CaseElement(localizedString('DetailDisclosureTitle'),
                   ButtonKind.buttonDetailDisclosure.value,
                   self.configureSystemDetailDisclosureButton_),
-      # 2
+      # 02
       CaseElement(localizedString('AddContactTitle'),
                   ButtonKind.buttonSystemAddContact.value,
                   self.configureSystemContactAddButton_),
-      # 3
+      # 03
       CaseElement(localizedString('CloseTitle'), ButtonKind.buttonClose.value,
                   self.configureCloseButton_),
     ])
     # xxx: 'if #available(iOS 15, *)'
     # These button styles are available on iOS 15 or later.
     self.testCells.extend([
-      # 4
+      # 04
       CaseElement(localizedString('GrayTitle'),
                   ButtonKind.buttonStyleGray.value,
                   self.configureStyleGrayButton_),
+      # 05
+      CaseElement(localizedString('TintedTitle'),
+                  ButtonKind.buttonStyleTinted.value,
+                  self.configureStyleTintedButton_),
     ])
 
   @objc_method
@@ -164,7 +170,7 @@ class ButtonViewController(BaseTableViewController):
 
   # --- extension
   # xxx: extension 別にしたい
-  # 0
+  # 00
   @objc_method
   def configureSystemTextButton_(self, button):
     # Nothing particular to set here, it's all been done in the storyboard.
@@ -179,7 +185,7 @@ class ButtonViewController(BaseTableViewController):
     controlEvents = UIControlEvents.touchUpInside
     button.addTarget_action_forControlEvents_(target, action, controlEvents)
 
-  # 1
+  # 01
   @objc_method
   def configureSystemDetailDisclosureButton_(self, button):
     target = self
@@ -187,7 +193,7 @@ class ButtonViewController(BaseTableViewController):
     controlEvents = UIControlEvents.touchUpInside
     button.addTarget_action_forControlEvents_(target, action, controlEvents)
 
-  # 2
+  # 02
   @objc_method
   def configureSystemContactAddButton_(self, button):
     target = self
@@ -195,7 +201,7 @@ class ButtonViewController(BaseTableViewController):
     controlEvents = UIControlEvents.touchUpInside
     button.addTarget_action_forControlEvents_(target, action, controlEvents)
 
-  # 3
+  # 03
   @objc_method
   def configureCloseButton_(self, button):
     target = self
@@ -203,7 +209,7 @@ class ButtonViewController(BaseTableViewController):
     controlEvents = UIControlEvents.touchUpInside
     button.addTarget_action_forControlEvents_(target, action, controlEvents)
 
-  # 4
+  # 04
   # todo: `@available(iOS 15.0, *)`
   # xxx: あとでやる
   @objc_method
@@ -214,7 +220,34 @@ class ButtonViewController(BaseTableViewController):
     title = localizedString('Button')
     state = UIControlState.normal
     button.setTitle_forState_(title, state)
+
+    # xxx: `toolTip` 挙動未確認
     button.toolTip = localizedString('GrayStyleButtonToolTipTitle')
+
+    target = self
+    action = SEL('buttonClicked:')
+    controlEvents = UIControlEvents.touchUpInside
+    button.addTarget_action_forControlEvents_(target, action, controlEvents)
+
+  # 05
+  # todo: `@available(iOS 15.0, *)`
+  @objc_method
+  def configureStyleTintedButton_(self, button):
+    config = UIButtonConfiguration.tintedButtonConfiguration()
+    button.configuration = config
+    # todo: `if traitCollection.userInterfaceIdiom == .mac`
+    # xxx: あとでやる
+    systemRed = UIColor.systemRedColor()
+    config.baseBackgroundColor = systemRed
+    config.baseForegroundColor = systemRed
+
+    button.configuration = config
+
+    title = localizedString('Button')
+    state = UIControlState.normal
+    button.setTitle_forState_(title, state)
+
+    button.toolTip = localizedString('TintedStyleButtonToolTipTitle')
 
     target = self
     action = SEL('buttonClicked:')
