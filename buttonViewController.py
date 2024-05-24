@@ -11,6 +11,7 @@ from rbedge.enumerations import (
   UIListContentTextAlignment,
   UITableViewStyle,
   UIButtonConfigurationCornerStyle,
+  UIImageRenderingMode,
 )
 from rbedge.functions import NSStringFromClass
 
@@ -19,7 +20,7 @@ from pyLocalizedString import localizedString
 
 from storyboard.buttonViewController import prototypes
 
-UIColor = ObjCClass('UIColor')
+
 
 UITableViewController = ObjCClass('UITableViewController')
 UITableViewHeaderFooterView = ObjCClass('UITableViewHeaderFooterView')
@@ -27,6 +28,8 @@ UIListContentConfiguration = ObjCClass('UIListContentConfiguration')
 
 # todo: extension
 UIButtonConfiguration = ObjCClass('UIButtonConfiguration')
+UIColor = ObjCClass('UIColor')
+UIImage = ObjCClass('UIImage')
 
 
 class BaseTableViewController(UITableViewController):
@@ -316,6 +319,40 @@ class ButtonViewController(BaseTableViewController):
     action = SEL('buttonClicked:')
     controlEvents = UIControlEvents.touchUpInside
     button.addTarget_action_forControlEvents_(target, action, controlEvents)
+
+
+  # 08
+  # todo: `@available(iOS 15.0, *)`
+  @objc_method
+  def configureImageButton_(self, button):
+    image = UIImage.systemImageNamed('xmark')
+    
+    systemPurple = UIColor.systemPurpleColor()
+    renderingMode = UIImageRenderingMode.alwaysOriginal
+    # ref: [swift - iOS 13 `withTintColor` not obeying the color I assign - Stack Overflow](https://stackoverflow.com/questions/58867627/ios-13-withtintcolor-not-obeying-the-color-i-assign)
+    imageButtonNormalImage = image.imageWithTintColor_(systemPurple).imageWithRenderingMode_(renderingMode)
+
+ 
+    
+    config = UIButtonConfiguration.filledButtonConfiguration()
+
+    systemRed = UIColor.systemRedColor()
+    config.background.backgroundColor = systemRed
+
+    button.configuration = config
+
+    title = localizedString('Button')
+    state = UIControlState.normal
+    button.setTitle_forState_(title, state)
+
+    button.toolTip = localizedString('FilledStyleButtonToolTipTitle')
+
+    target = self
+    action = SEL('buttonClicked:')
+    controlEvents = UIControlEvents.touchUpInside
+    button.addTarget_action_forControlEvents_(target, action, controlEvents)
+
+
 
   # MARK: - Button Actions
   @objc_method
