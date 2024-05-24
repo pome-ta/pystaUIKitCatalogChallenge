@@ -17,6 +17,9 @@ UITableViewController = ObjCClass('UITableViewController')
 UITableViewHeaderFooterView = ObjCClass('UITableViewHeaderFooterView')
 UIListContentConfiguration = ObjCClass('UIListContentConfiguration')
 
+# todo: extension
+UIButtonConfiguration = ObjCClass('UIButtonConfiguration')
+
 
 class BaseTableViewController(UITableViewController):
 
@@ -146,15 +149,26 @@ class ButtonViewController(BaseTableViewController):
       CaseElement(localizedString('CloseTitle'), ButtonKind.buttonClose.value,
                   self.configureCloseButton_),
     ])
+    # xxx: 'if #available(iOS 15, *)'
+    # These button styles are available on iOS 15 or later.
+    self.testCells.extend([
+      # 4
+      CaseElement(localizedString('GrayTitle'),
+                  ButtonKind.buttonStyleGray.value,
+                  self.configureStyleGrayButton_),
+    ])
 
   @objc_method
   def viewDidDisappear_(self, animated: bool):
     send_super(__class__, self, 'viewDidDisappear:')
 
   # --- extension
+  # xxx: extension 別にしたい
   # 0
   @objc_method
   def configureSystemTextButton_(self, button):
+    # Nothing particular to set here, it's all been done in the storyboard.
+    # > ここでは特に設定するものはなく、すべてストーリーボードで行われます。
     # todo: 冗長、差し替えを容易にしたい為
     title = localizedString('Button')
     state = UIControlState.normal
@@ -184,6 +198,24 @@ class ButtonViewController(BaseTableViewController):
   # 3
   @objc_method
   def configureCloseButton_(self, button):
+    target = self
+    action = SEL('buttonClicked:')
+    controlEvents = UIControlEvents.touchUpInside
+    button.addTarget_action_forControlEvents_(target, action, controlEvents)
+
+  # 4
+  # todo: `@available(iOS 15.0, *)`
+  # xxx: あとでやる
+  @objc_method
+  def configureStyleGrayButton_(self, button):
+    config = UIButtonConfiguration.grayButtonConfiguration()
+    button.configuration = config
+
+    title = localizedString('Button')
+    state = UIControlState.normal
+    button.setTitle_forState_(title, state)
+    button.toolTip = localizedString('GrayStyleButtonToolTipTitle')
+
     target = self
     action = SEL('buttonClicked:')
     controlEvents = UIControlEvents.touchUpInside
