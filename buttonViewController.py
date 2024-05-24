@@ -5,7 +5,13 @@ from pyrubicon.objc.api import ObjCClass, objc_method, objc_property
 from pyrubicon.objc.runtime import SEL, send_super
 from pyrubicon.objc.types import NSInteger
 
-from rbedge.enumerations import UIControlState, UIControlEvents, UIListContentTextAlignment, UITableViewStyle
+from rbedge.enumerations import (
+  UIControlState,
+  UIControlEvents,
+  UIListContentTextAlignment,
+  UITableViewStyle,
+  UIButtonConfigurationCornerStyle,
+)
 from rbedge.functions import NSStringFromClass
 
 from caseElement import CaseElement
@@ -281,12 +287,14 @@ class ButtonViewController(BaseTableViewController):
     controlEvents = UIControlEvents.touchUpInside
     button.addTarget_action_forControlEvents_(target, action, controlEvents)
 
-
-  # 06
+  # 07
   # todo: `@available(iOS 15.0, *)`
   @objc_method
-  def configureStyleFilledButton_(self, button):
-    config = UIButtonConfiguration.filledButtonConfiguration()
+  def configureCornerStyleButton_(self, button):
+    #To keep the look the same betwen iOS and macOS: For cornerStyle to work in Mac Catalyst, use UIBehavioralStyle as ".pad", Available in macOS 12 or later (Mac Catalyst 15.0 or later). Use this for controls that need to look the same between iOS and macOS.
+    # > iOS と macOS の間で外観を同じにするには: CornerStyle を Mac Catalyst で機能させるには、UIBehavioralStyle を「.pad」として使用します。macOS 12 以降 (Mac Catalyst 15.0 以降) で使用できます。 iOS と macOS の間で同じように見える必要があるコントロールにこれを使用します。
+
+    config = UIButtonConfiguration.grayButtonConfiguration()
 
     # todo: `if traitCollection.userInterfaceIdiom == .mac`
     # xxx: あとでやる
@@ -305,8 +313,6 @@ class ButtonViewController(BaseTableViewController):
     action = SEL('buttonClicked:')
     controlEvents = UIControlEvents.touchUpInside
     button.addTarget_action_forControlEvents_(target, action, controlEvents)
-
-
 
   # MARK: - Button Actions
   @objc_method

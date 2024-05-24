@@ -123,3 +123,13 @@ class UITableViewStyle:
   grouped: int = 1
   insetGrouped: int = 2
 
+# ref: [UIButtonConfigurationCornerStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uibuttonconfigurationcornerstyle?language=objc)
+@dataclass
+class UIButtonConfigurationCornerStyle:
+  # todo: `Enumeration Case` に値表記が無いので独自に調査
+  dynamic:int = 0
+  fixed:int = -1
+  capsule:int = 4
+  large:int = 3
+  medium:int = 2
+  small:int = 1
