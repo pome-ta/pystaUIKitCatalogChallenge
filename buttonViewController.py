@@ -20,8 +20,6 @@ from pyLocalizedString import localizedString
 
 from storyboard.buttonViewController import prototypes
 
-
-
 UITableViewController = ObjCClass('UITableViewController')
 UITableViewHeaderFooterView = ObjCClass('UITableViewHeaderFooterView')
 UIListContentConfiguration = ObjCClass('UIListContentConfiguration')
@@ -142,7 +140,12 @@ class ButtonViewController(BaseTableViewController):
     self.navigationItem.title = title
 
     self.initPrototype()
-
+    self.testCells.extend([
+      # 0
+      CaseElement(localizedString('ImageTitle'), ButtonKind.buttonImage.value,
+                  self.configureImageButton_),
+    ])
+    '''
     self.testCells.extend([
       # 00
       CaseElement(localizedString('DefaultTitle'),
@@ -180,6 +183,13 @@ class ButtonViewController(BaseTableViewController):
                   ButtonKind.buttonCornerStyle.value,
                   self.configureCornerStyleButton_),
     ])
+
+    self.testCells.extend([
+      # 0
+      CaseElement(localizedString('ImageTitle'), ButtonKind.buttonImage.value,
+                  self.configureImageButton_),
+    ])
+    '''
 
   @objc_method
   def viewDidDisappear_(self, animated: bool):
@@ -320,32 +330,24 @@ class ButtonViewController(BaseTableViewController):
     controlEvents = UIControlEvents.touchUpInside
     button.addTarget_action_forControlEvents_(target, action, controlEvents)
 
-
   # 08
-  # todo: `@available(iOS 15.0, *)`
   @objc_method
   def configureImageButton_(self, button):
-    image = UIImage.systemImageNamed('xmark')
-    
+    _systemImageNamed = UIImage.systemImageNamed('xmark')
+
     systemPurple = UIColor.systemPurpleColor()
     renderingMode = UIImageRenderingMode.alwaysOriginal
     # ref: [swift - iOS 13 `withTintColor` not obeying the color I assign - Stack Overflow](https://stackoverflow.com/questions/58867627/ios-13-withtintcolor-not-obeying-the-color-i-assign)
-    imageButtonNormalImage = image.imageWithTintColor_(systemPurple).imageWithRenderingMode_(renderingMode)
 
- 
-    
-    config = UIButtonConfiguration.filledButtonConfiguration()
+    image = _systemImageNamed.imageWithTintColor_(
+      systemPurple).imageWithRenderingMode_(renderingMode)
+    button.accessibilityLabel = localizedString('X')
 
-    systemRed = UIColor.systemRedColor()
-    config.background.backgroundColor = systemRed
-
-    button.configuration = config
-
-    title = localizedString('Button')
     state = UIControlState.normal
-    button.setTitle_forState_(title, state)
+    button.setImage_forState_(image, state)
 
-    button.toolTip = localizedString('FilledStyleButtonToolTipTitle')
+    # todo: `@available(iOS 15.0, *)`
+    button.toolTip = localizedString('XButtonToolTipTitle')
 
     target = self
     action = SEL('buttonClicked:')
@@ -353,6 +355,14 @@ class ButtonViewController(BaseTableViewController):
     button.addTarget_action_forControlEvents_(target, action, controlEvents)
 
 
+  # 09
+  # todo: `@available(iOS 15.0, *)`
+  @objc_method
+  def configureAttributedTextSystemButton_(self, button):
+    buttonTitle = localizedString('Button')
+    # Set the button's title for normal state.
+    # > 通常状態のボタンのタイトルを設定します。
+    
 
   # MARK: - Button Actions
   @objc_method
