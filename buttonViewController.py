@@ -1,8 +1,8 @@
 import ctypes
 from enum import Enum
 
-from pyrubicon.objc.api import ObjCClass, objc_method, objc_property
-from pyrubicon.objc.runtime import SEL, send_super
+from pyrubicon.objc.api import ObjCClass, objc_method, objc_property, objc_const
+from pyrubicon.objc.runtime import Foundation, SEL, send_super
 from pyrubicon.objc.types import NSInteger
 
 from rbedge.enumerations import (
@@ -28,6 +28,7 @@ UIListContentConfiguration = ObjCClass('UIListContentConfiguration')
 UIButtonConfiguration = ObjCClass('UIButtonConfiguration')
 UIColor = ObjCClass('UIColor')
 UIImage = ObjCClass('UIImage')
+NSAttributedString = ObjCClass('NSAttributedString')
 
 
 class BaseTableViewController(UITableViewController):
@@ -140,10 +141,12 @@ class ButtonViewController(BaseTableViewController):
     self.navigationItem.title = title
 
     self.initPrototype()
+    # --- test
     self.testCells.extend([
       # 0
-      CaseElement(localizedString('ImageTitle'), ButtonKind.buttonImage.value,
-                  self.configureImageButton_),
+      CaseElement(localizedString('AttributedStringTitle'),
+                  ButtonKind.buttonAttrText.value,
+                  self.configureAttributedTextSystemButton_),
     ])
     '''
     self.testCells.extend([
@@ -354,15 +357,28 @@ class ButtonViewController(BaseTableViewController):
     controlEvents = UIControlEvents.touchUpInside
     button.addTarget_action_forControlEvents_(target, action, controlEvents)
 
-
   # 09
   # todo: `@available(iOS 15.0, *)`
   @objc_method
   def configureAttributedTextSystemButton_(self, button):
     buttonTitle = localizedString('Button')
+    
     # Set the button's title for normal state.
     # > 通常状態のボタンのタイトルを設定します。
+    #NSStrikethroughStyleAttributeName = objc_const(Foundation, 'NSStrikethroughStyleAttributeName')
+    #normalTitleAttributes = {NSStrikethroughStyleAttributeName: NSUnderlineStyle.single,}
     
+    #normalAttributedTitle = NSAttributedString.alloc().initWithString_attributes_(buttonTitle, normalTitleAttributes)
+    #button.setAttributedTitle_forState_(normalAttributedTitle, UIControlState.normal)
+    
+    # Set the button's title for highlighted state (note this is not supported in Mac Catalyst).
+    # > ボタンのタイトルを強調表示状態に設定します (これは Mac Catalyst ではサポートされていないことに注意してください)。
+    
+    
+    
+    
+
+      
 
   # MARK: - Button Actions
   @objc_method
