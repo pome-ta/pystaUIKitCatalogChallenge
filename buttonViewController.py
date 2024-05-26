@@ -363,6 +363,12 @@ class ButtonViewController(BaseTableViewController):
   def configureAttributedTextSystemButton_(self, button):
     buttonTitle = localizedString('Button')
     
+    
+    #pdbr.state(NSAttributedString)
+    #NSAttributedStringKey
+    NSAttributedStringKey = objc_const(Foundation, 'NSAttributedStringKey')
+    
+    
     # Set the button's title for normal state.
     # > 通常状態のボタンのタイトルを設定します。
     #NSStrikethroughStyleAttributeName = objc_const(Foundation, 'NSStrikethroughStyleAttributeName')
