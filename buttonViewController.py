@@ -367,15 +367,13 @@ class ButtonViewController(BaseTableViewController):
     normalTitleAttributes = {
       'NSStrikethroughStyleAttributeName': NSUnderlineStyle.single,
     }
-    
-    normalAttributedTitle = NSAttributedString.alloc().initWithString_attributes_(buttonTitle, normalTitleAttributes)
-    
-    button.setAttributedTitle_forState_(normalAttributedTitle, UIControlState.normal)
-    
-    
-    
-    
-    
+
+    normalAttributedTitle = NSAttributedString.alloc(
+    ).initWithString_attributes_(buttonTitle, normalTitleAttributes)
+
+    button.setAttributedTitle_forState_(normalAttributedTitle,
+                                        UIControlState.normal)
+
     #initWithString_attributes_()
     #pdbr.state(NSAttributedString.new())
     #NSAttributedStringKey
