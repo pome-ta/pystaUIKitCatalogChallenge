@@ -1,8 +1,8 @@
 import ctypes
 from enum import Enum
 
-from pyrubicon.objc.api import ObjCClass, objc_method, objc_property, objc_const
-from pyrubicon.objc.runtime import Foundation, SEL, send_super
+from pyrubicon.objc.api import ObjCClass, objc_method, objc_property
+from pyrubicon.objc.runtime import SEL, send_super
 from pyrubicon.objc.types import NSInteger
 
 from rbedge.enumerations import (
@@ -12,6 +12,7 @@ from rbedge.enumerations import (
   UITableViewStyle,
   UIButtonConfigurationCornerStyle,
   UIImageRenderingMode,
+  NSUnderlineStyle,
 )
 from rbedge.functions import NSStringFromClass
 
@@ -362,29 +363,35 @@ class ButtonViewController(BaseTableViewController):
   @objc_method
   def configureAttributedTextSystemButton_(self, button):
     buttonTitle = localizedString('Button')
+
+    normalTitleAttributes = {
+      'NSStrikethroughStyleAttributeName': NSUnderlineStyle.single,
+    }
+    
+    normalAttributedTitle = NSAttributedString.alloc().initWithString_attributes_(buttonTitle, normalTitleAttributes)
+    
+    button.setAttributedTitle_forState_(normalAttributedTitle, UIControlState.normal)
     
     
-    #pdbr.state(NSAttributedString)
+    
+    
+    
+    #initWithString_attributes_()
+    #pdbr.state(NSAttributedString.new())
     #NSAttributedStringKey
-    NSAttributedStringKey = objc_const(Foundation, 'NSAttributedStringKey')
-    
-    
+    #NSAttributedStringKey = objc_const(Foundation, 'NSAttributedStringKey')
+    #NSUnderlineStyle.single
+
     # Set the button's title for normal state.
     # > 通常状態のボタンのタイトルを設定します。
     #NSStrikethroughStyleAttributeName = objc_const(Foundation, 'NSStrikethroughStyleAttributeName')
     #normalTitleAttributes = {NSStrikethroughStyleAttributeName: NSUnderlineStyle.single,}
-    
+
     #normalAttributedTitle = NSAttributedString.alloc().initWithString_attributes_(buttonTitle, normalTitleAttributes)
     #button.setAttributedTitle_forState_(normalAttributedTitle, UIControlState.normal)
-    
+
     # Set the button's title for highlighted state (note this is not supported in Mac Catalyst).
     # > ボタンのタイトルを強調表示状態に設定します (これは Mac Catalyst ではサポートされていないことに注意してください)。
-    
-    
-    
-    
-
-      
 
   # MARK: - Button Actions
   @objc_method

@@ -135,10 +135,26 @@ class UIButtonConfigurationCornerStyle:
   medium: int = 2
   small: int = 1
 
+
 # ref: [UIImageRenderingMode | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uiimagerenderingmode?language=objc)
 @dataclass
 class UIImageRenderingMode:
   automatic: int = 0
   alwaysOriginal: int = 1
   alwaysTemplate: int = 2
+
+
+# ref: [NSUnderlineStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/nsunderlinestyle?language=objc)
+@dataclass
+class NSUnderlineStyle:
+  none: int = 0x00  # xxx: patternSolid ?
+  single: int = 0x01
+  thick: int = 0x02
+  double: int = 0x09
+  patternSolid: int = 0x0000  # xxx: none ?
+  patternDot: int = 0x0100
+  patternDash: int = 0x0200
+  patternDashDot: int = 0x0300
+  patternDashDotDot: int = 0x0400
+  byWord: int = 0x8000
 
