@@ -1,8 +1,8 @@
 import ctypes
 from enum import Enum
 
-from pyrubicon.objc.api import ObjCClass, objc_method, objc_property
-from pyrubicon.objc.runtime import SEL, send_super
+from pyrubicon.objc.api import ObjCClass, ObjCInstance, objc_method, objc_property, objc_const
+from pyrubicon.objc.runtime import Foundation, SEL, send_super, libc, libobjc, objc_id, load_library
 from pyrubicon.objc.types import NSInteger
 
 from rbedge.enumerations import (
@@ -30,6 +30,12 @@ UIButtonConfiguration = ObjCClass('UIButtonConfiguration')
 UIColor = ObjCClass('UIColor')
 UIImage = ObjCClass('UIImage')
 NSAttributedString = ObjCClass('NSAttributedString')
+
+
+#p = ctypes.c_void_p.in_dll(libobjc, 'NSStrikethroughStyleAttributeName')
+
+
+p = objc_const(libobjc, 'NSStrikethroughStyleAttributeName')
 
 
 class BaseTableViewController(UITableViewController):
@@ -364,15 +370,27 @@ class ButtonViewController(BaseTableViewController):
   def configureAttributedTextSystemButton_(self, button):
     buttonTitle = localizedString('Button')
 
+    #NSStrikethrough
+
+    #normalTitleAttributes = {'NSStrikethroughStyleAttributeName': NSUnderlineStyle.single,}
+
+    #print(Foundation)
+    #pdbr.state(Foundation)
+    #print(libobjc)
+    #print(dir(libobjc))
+    #ctypes.c_void_p.in_dll(c, name)
+    #p = ctypes.c_void_p.in_dll(libobjc, 'NSStrikethroughStyleAttributeName')
+    #load_library(None)
+
     normalTitleAttributes = {
-      'NSStrikethroughStyleAttributeName': NSUnderlineStyle.single,
+      'NSStrikethrough': NSUnderlineStyle.single,
     }
 
     normalAttributedTitle = NSAttributedString.alloc(
     ).initWithString_attributes_(buttonTitle, normalTitleAttributes)
 
-    button.setAttributedTitle_forState_(normalAttributedTitle,
-                                        UIControlState.normal)
+    normal = UIControlState.normal
+    button.setAttributedTitle_forState_(normalAttributedTitle, normal)
 
     #initWithString_attributes_()
     #pdbr.state(NSAttributedString.new())
