@@ -1,7 +1,7 @@
 import ctypes
 from enum import Enum
 
-from pyrubicon.objc.api import ObjCClass, ObjCInstance, objc_method, objc_property, objc_const, at
+from pyrubicon.objc.api import ObjCClass, ObjCInstance, objc_method, objc_property, objc_const
 from pyrubicon.objc.runtime import SEL, send_super, load_library
 from pyrubicon.objc.types import NSInteger
 
@@ -371,7 +371,6 @@ class ButtonViewController(BaseTableViewController):
       str(objc_const(UIKit, 'NSStrikethroughStyleAttributeName')):
       NSUnderlineStyle.single,
     }
-
     normalAttributedTitle = NSAttributedString.alloc(
     ).initWithString_attributes_(buttonTitle, normalTitleAttributes)
 
@@ -386,7 +385,6 @@ class ButtonViewController(BaseTableViewController):
       str(objc_const(UIKit, 'NSStrikethroughStyleAttributeName')):
       NSUnderlineStyle.thick,
     }
-
     highlightedAttributedTitle = NSAttributedString.alloc(
     ).initWithString_attributes_(buttonTitle, highlightedTitleAttributes)
 
