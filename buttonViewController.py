@@ -391,6 +391,10 @@ class ButtonViewController(BaseTableViewController):
     highlighted = UIControlState.highlighted
     button.setAttributedTitle_forState_(highlightedAttributedTitle,
                                         highlighted)
+    target = self
+    action = SEL('buttonClicked:')
+    controlEvents = UIControlEvents.touchUpInside
+    button.addTarget_action_forControlEvents_(target, action, controlEvents)
 
   # MARK: - Button Actions
   @objc_method
