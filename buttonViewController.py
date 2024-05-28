@@ -145,10 +145,10 @@ class ButtonViewController(BaseTableViewController):
     self.initPrototype()
     # --- test
     self.testCells.extend([
-      # 0
-      CaseElement(localizedString('AttributedStringTitle'),
-                  ButtonKind.buttonAttrText.value,
-                  self.configureAttributedTextSystemButton_),
+      # 9
+      CaseElement(localizedString('SymbolTitle'),
+                  ButtonKind.buttonSymbol.value,
+                  self.configureSymbolButton_),
     ])
     '''
     self.testCells.extend([
@@ -193,6 +193,10 @@ class ButtonViewController(BaseTableViewController):
       # 0
       CaseElement(localizedString('ImageTitle'), ButtonKind.buttonImage.value,
                   self.configureImageButton_),
+      # 9
+      CaseElement(localizedString('AttributedStringTitle'),
+                  ButtonKind.buttonAttrText.value,
+                  self.configureAttributedTextSystemButton_),
     ])
     '''
 
@@ -395,6 +399,29 @@ class ButtonViewController(BaseTableViewController):
     action = SEL('buttonClicked:')
     controlEvents = UIControlEvents.touchUpInside
     button.addTarget_action_forControlEvents_(target, action, controlEvents)
+
+
+  # 10
+  @objc_method
+  def configureSymbolButton_(self, button):
+    buttonImage = UIImage.systemImageNamed('person')
+    
+    
+    
+    
+    if True:  # xxx: `available(iOS 15, *)`
+      # For iOS 15 use the UIButtonConfiguration to set the image.
+      # iOS 15 の場合は、UIButtonConfiguration を使用して画像を設定します。
+      buttonConfig = UIButtonConfiguration.plainButtonConfiguration()
+      buttonConfig.image = buttonImage
+      button.configuration = buttonConfig
+      button.toolTip = localizedString('PersonButtonToolTipTitle')
+    else:
+      state = UIControlState.normal
+      button.setImage_forState_(buttonImage, state)
+    
+
+
 
   # MARK: - Button Actions
   @objc_method
