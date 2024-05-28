@@ -35,7 +35,12 @@ NSAttributedString = ObjCClass('NSAttributedString')
 #p = ctypes.c_void_p.in_dll(libobjc, 'NSStrikethroughStyleAttributeName')
 
 
-p = objc_const(libobjc, 'NSStrikethroughStyleAttributeName')
+#p = objc_const(Foundation, 'NSAttachmentAttributeName')
+#p=ctypes.c_void_p.in_dll(libobjc, 'NSAttachmentAttributeName')
+
+UIKit = load_library('UIKit')
+p = objc_const(UIKit, 'NSStrikethroughStyleAttributeName')
+print(p)
 
 
 class BaseTableViewController(UITableViewController):
