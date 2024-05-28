@@ -1,7 +1,7 @@
 import ctypes
 from enum import Enum
 
-from pyrubicon.objc.api import ObjCClass, ObjCInstance, objc_method, objc_property, objc_const,at
+from pyrubicon.objc.api import ObjCClass, ObjCInstance, objc_method, objc_property, objc_const, at
 from pyrubicon.objc.runtime import SEL, send_super, load_library
 from pyrubicon.objc.types import NSInteger
 
@@ -365,28 +365,11 @@ class ButtonViewController(BaseTableViewController):
   def configureAttributedTextSystemButton_(self, button):
     buttonTitle = localizedString('Button')
 
-    #NSStrikethrough
-
-    #normalTitleAttributes = {'NSStrikethroughStyleAttributeName': NSUnderlineStyle.single,}
-
-    #print(Foundation)
-    #pdbr.state(Foundation)
-    #print(libobjc)
-    #print(dir(libobjc))
-    #ctypes.c_void_p.in_dll(c, name)
-    #p = ctypes.c_void_p.in_dll(libobjc, 'NSStrikethroughStyleAttributeName')
-    #load_library(None)
-
-    NSStrikethroughStyleAttributeName = objc_const(
-      UIKit, 'NSStrikethroughStyleAttributeName')
-
-    #pdbr.state(NSStrikethroughStyleAttributeName)
-    #print(at(NSStrikethroughStyleAttributeName))
-    print(type(at(NSStrikethroughStyleAttributeName)))
-    print(str(NSStrikethroughStyleAttributeName))
-
+    # Set the button's title for normal state.
+    # > 通常状態のボタンのタイトルを設定します。
     normalTitleAttributes = {
-      str(NSStrikethroughStyleAttributeName): NSUnderlineStyle.single,
+      str(objc_const(UIKit, 'NSStrikethroughStyleAttributeName')):
+      NSUnderlineStyle.single,
     }
 
     normalAttributedTitle = NSAttributedString.alloc(
@@ -395,22 +378,21 @@ class ButtonViewController(BaseTableViewController):
     normal = UIControlState.normal
     button.setAttributedTitle_forState_(normalAttributedTitle, normal)
 
-    #initWithString_attributes_()
-    #pdbr.state(NSAttributedString.new())
-    #NSAttributedStringKey
-    #NSAttributedStringKey = objc_const(Foundation, 'NSAttributedStringKey')
-    #NSUnderlineStyle.single
-
-    # Set the button's title for normal state.
-    # > 通常状態のボタンのタイトルを設定します。
-    #NSStrikethroughStyleAttributeName = objc_const(Foundation, 'NSStrikethroughStyleAttributeName')
-    #normalTitleAttributes = {NSStrikethroughStyleAttributeName: NSUnderlineStyle.single,}
-
-    #normalAttributedTitle = NSAttributedString.alloc().initWithString_attributes_(buttonTitle, normalTitleAttributes)
-    #button.setAttributedTitle_forState_(normalAttributedTitle, UIControlState.normal)
-
     # Set the button's title for highlighted state (note this is not supported in Mac Catalyst).
     # > ボタンのタイトルを強調表示状態に設定します (これは Mac Catalyst ではサポートされていないことに注意してください)。
+    highlightedTitleAttributes = {
+      str(objc_const(UIKit, 'NSForegroundColorAttributeName')):
+      UIColor.systemGreenColor(),
+      str(objc_const(UIKit, 'NSStrikethroughStyleAttributeName')):
+      NSUnderlineStyle.thick,
+    }
+
+    highlightedAttributedTitle = NSAttributedString.alloc(
+    ).initWithString_attributes_(buttonTitle, highlightedTitleAttributes)
+
+    highlighted = UIControlState.highlighted
+    button.setAttributedTitle_forState_(highlightedAttributedTitle,
+                                        highlighted)
 
   # MARK: - Button Actions
   @objc_method
