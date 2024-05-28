@@ -1,8 +1,8 @@
 import ctypes
 from enum import Enum
 
-from pyrubicon.objc.api import ObjCClass, ObjCInstance, objc_method, objc_property, objc_const
-from pyrubicon.objc.runtime import Foundation, SEL, send_super, libc, libobjc, objc_id, load_library
+from pyrubicon.objc.api import ObjCClass, ObjCInstance, objc_method, objc_property, objc_const,at
+from pyrubicon.objc.runtime import SEL, send_super, load_library
 from pyrubicon.objc.types import NSInteger
 
 from rbedge.enumerations import (
@@ -26,21 +26,11 @@ UITableViewHeaderFooterView = ObjCClass('UITableViewHeaderFooterView')
 UIListContentConfiguration = ObjCClass('UIListContentConfiguration')
 
 # todo: extension
+UIKit = load_library('UIKit')
 UIButtonConfiguration = ObjCClass('UIButtonConfiguration')
 UIColor = ObjCClass('UIColor')
 UIImage = ObjCClass('UIImage')
 NSAttributedString = ObjCClass('NSAttributedString')
-
-
-#p = ctypes.c_void_p.in_dll(libobjc, 'NSStrikethroughStyleAttributeName')
-
-
-#p = objc_const(Foundation, 'NSAttachmentAttributeName')
-#p=ctypes.c_void_p.in_dll(libobjc, 'NSAttachmentAttributeName')
-
-UIKit = load_library('UIKit')
-p = objc_const(UIKit, 'NSStrikethroughStyleAttributeName')
-print(p)
 
 
 class BaseTableViewController(UITableViewController):
@@ -387,8 +377,16 @@ class ButtonViewController(BaseTableViewController):
     #p = ctypes.c_void_p.in_dll(libobjc, 'NSStrikethroughStyleAttributeName')
     #load_library(None)
 
+    NSStrikethroughStyleAttributeName = objc_const(
+      UIKit, 'NSStrikethroughStyleAttributeName')
+
+    #pdbr.state(NSStrikethroughStyleAttributeName)
+    #print(at(NSStrikethroughStyleAttributeName))
+    print(type(at(NSStrikethroughStyleAttributeName)))
+    print(str(NSStrikethroughStyleAttributeName))
+
     normalTitleAttributes = {
-      'NSStrikethrough': NSUnderlineStyle.single,
+      str(NSStrikethroughStyleAttributeName): NSUnderlineStyle.single,
     }
 
     normalAttributedTitle = NSAttributedString.alloc(

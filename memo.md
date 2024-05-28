@@ -1,3 +1,19 @@
+# 📝 2024/05/28
+
+## `NSStrikethroughStyleAttributeName` のGlobal Variable
+
+[Global variables and constants (e.g. NSFoundationVersionNumber) | Calling plain C functions from Python - Rubicon 0.4.9](https://rubicon-objc.readthedocs.io/en/stable/how-to/c-functions.html#global-variables-and-constants-e-g-nsfoundationversionnumber)
+
+
+[NSStrikethroughStyleAttributeName | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/nsstrikethroughstyleattributename)
+
+
+``` .py
+UIKit = load_library('UIKit')
+
+NSStrikethroughStyleAttributeName = objc_const(UIKit, 'NSStrikethroughStyleAttributeName')
+```
+
 # 📝 2024/05/25
 
 
