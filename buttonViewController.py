@@ -13,6 +13,7 @@ from rbedge.enumerations import (
   UIButtonConfigurationCornerStyle,
   UIImageRenderingMode,
   NSUnderlineStyle,
+  UIImageSymbolScale,
 )
 from rbedge.functions import NSStringFromClass
 
@@ -31,6 +32,7 @@ UIButtonConfiguration = ObjCClass('UIButtonConfiguration')
 UIColor = ObjCClass('UIColor')
 UIImage = ObjCClass('UIImage')
 NSAttributedString = ObjCClass('NSAttributedString')
+UIImageSymbolConfiguration = ObjCClass('UIImageSymbolConfiguration')
 
 
 class BaseTableViewController(UITableViewController):
@@ -147,8 +149,7 @@ class ButtonViewController(BaseTableViewController):
     self.testCells.extend([
       # 9
       CaseElement(localizedString('SymbolTitle'),
-                  ButtonKind.buttonSymbol.value,
-                  self.configureSymbolButton_),
+                  ButtonKind.buttonSymbol.value, self.configureSymbolButton_),
     ])
     '''
     self.testCells.extend([
@@ -216,34 +217,26 @@ class ButtonViewController(BaseTableViewController):
     state = UIControlState.normal
     button.setTitle_forState_(title, state)
 
-    target = self
-    action = SEL('buttonClicked:')
-    controlEvents = UIControlEvents.touchUpInside
-    button.addTarget_action_forControlEvents_(target, action, controlEvents)
+    button.addTarget_action_forControlEvents_(self, SEL('buttonClicked:'),
+                                              UIControlEvents.touchUpInside)
 
   # 01
   @objc_method
   def configureSystemDetailDisclosureButton_(self, button):
-    target = self
-    action = SEL('buttonClicked:')
-    controlEvents = UIControlEvents.touchUpInside
-    button.addTarget_action_forControlEvents_(target, action, controlEvents)
+    button.addTarget_action_forControlEvents_(self, SEL('buttonClicked:'),
+                                              UIControlEvents.touchUpInside)
 
   # 02
   @objc_method
   def configureSystemContactAddButton_(self, button):
-    target = self
-    action = SEL('buttonClicked:')
-    controlEvents = UIControlEvents.touchUpInside
-    button.addTarget_action_forControlEvents_(target, action, controlEvents)
+    button.addTarget_action_forControlEvents_(self, SEL('buttonClicked:'),
+                                              UIControlEvents.touchUpInside)
 
   # 03
   @objc_method
   def configureCloseButton_(self, button):
-    target = self
-    action = SEL('buttonClicked:')
-    controlEvents = UIControlEvents.touchUpInside
-    button.addTarget_action_forControlEvents_(target, action, controlEvents)
+    button.addTarget_action_forControlEvents_(self, SEL('buttonClicked:'),
+                                              UIControlEvents.touchUpInside)
 
   # 04
   # todo: `@available(iOS 15.0, *)`
@@ -260,10 +253,8 @@ class ButtonViewController(BaseTableViewController):
     # xxx: `toolTip` 挙動未確認
     button.toolTip = localizedString('GrayStyleButtonToolTipTitle')
 
-    target = self
-    action = SEL('buttonClicked:')
-    controlEvents = UIControlEvents.touchUpInside
-    button.addTarget_action_forControlEvents_(target, action, controlEvents)
+    button.addTarget_action_forControlEvents_(self, SEL('buttonClicked:'),
+                                              UIControlEvents.touchUpInside)
 
   # 05
   # todo: `@available(iOS 15.0, *)`
@@ -284,10 +275,8 @@ class ButtonViewController(BaseTableViewController):
 
     button.toolTip = localizedString('TintedStyleButtonToolTipTitle')
 
-    target = self
-    action = SEL('buttonClicked:')
-    controlEvents = UIControlEvents.touchUpInside
-    button.addTarget_action_forControlEvents_(target, action, controlEvents)
+    button.addTarget_action_forControlEvents_(self, SEL('buttonClicked:'),
+                                              UIControlEvents.touchUpInside)
 
   # 06
   # todo: `@available(iOS 15.0, *)`
@@ -306,10 +295,8 @@ class ButtonViewController(BaseTableViewController):
 
     button.toolTip = localizedString('FilledStyleButtonToolTipTitle')
 
-    target = self
-    action = SEL('buttonClicked:')
-    controlEvents = UIControlEvents.touchUpInside
-    button.addTarget_action_forControlEvents_(target, action, controlEvents)
+    button.addTarget_action_forControlEvents_(self, SEL('buttonClicked:'),
+                                              UIControlEvents.touchUpInside)
 
   # 07
   # todo: `@available(iOS 15.0, *)`
@@ -334,10 +321,8 @@ class ButtonViewController(BaseTableViewController):
 
     button.toolTip = localizedString('CapsuleStyleButtonToolTipTitle')
 
-    target = self
-    action = SEL('buttonClicked:')
-    controlEvents = UIControlEvents.touchUpInside
-    button.addTarget_action_forControlEvents_(target, action, controlEvents)
+    button.addTarget_action_forControlEvents_(self, SEL('buttonClicked:'),
+                                              UIControlEvents.touchUpInside)
 
   # 08
   @objc_method
@@ -358,10 +343,8 @@ class ButtonViewController(BaseTableViewController):
     # todo: `@available(iOS 15.0, *)`
     button.toolTip = localizedString('XButtonToolTipTitle')
 
-    target = self
-    action = SEL('buttonClicked:')
-    controlEvents = UIControlEvents.touchUpInside
-    button.addTarget_action_forControlEvents_(target, action, controlEvents)
+    button.addTarget_action_forControlEvents_(self, SEL('buttonClicked:'),
+                                              UIControlEvents.touchUpInside)
 
   # 09
   # todo: `@available(iOS 15.0, *)`
@@ -395,20 +378,14 @@ class ButtonViewController(BaseTableViewController):
     highlighted = UIControlState.highlighted
     button.setAttributedTitle_forState_(highlightedAttributedTitle,
                                         highlighted)
-    target = self
-    action = SEL('buttonClicked:')
-    controlEvents = UIControlEvents.touchUpInside
-    button.addTarget_action_forControlEvents_(target, action, controlEvents)
-
+    button.addTarget_action_forControlEvents_(self, SEL('buttonClicked:'),
+                                              UIControlEvents.touchUpInside)
 
   # 10
   @objc_method
   def configureSymbolButton_(self, button):
     buttonImage = UIImage.systemImageNamed('person')
-    
-    
-    
-    
+
     if True:  # xxx: `available(iOS 15, *)`
       # For iOS 15 use the UIButtonConfiguration to set the image.
       # iOS 15 の場合は、UIButtonConfiguration を使用して画像を設定します。
@@ -419,9 +396,17 @@ class ButtonViewController(BaseTableViewController):
     else:
       state = UIControlState.normal
       button.setImage_forState_(buttonImage, state)
-    
 
+    config = UIImageSymbolConfiguration.configurationWithTextStyle_scale_(
+      str(objc_const(UIKit, 'UIFontTextStyleBody')), UIImageSymbolScale.large)
 
+    state = UIControlState.normal
+    button.setPreferredSymbolConfiguration_forImageInState_(config, state)
+
+    button.accessibilityLabel = localizedString('Person')
+
+    button.addTarget_action_forControlEvents_(self, SEL('buttonClicked:'),
+                                              UIControlEvents.touchUpInside)
 
   # MARK: - Button Actions
   @objc_method

@@ -168,10 +168,6 @@ class ButtonSymbol(CustomTableViewCell):
     type = UIButtonType.system
     button = UIButton.buttonWithType_(type)
 
-    title = 'Button'
-    state = UIControlState.normal
-    button.setTitle_forState_(title, state)
-
     button.translatesAutoresizingMaskIntoConstraints = False
 
     contentView = self.contentView

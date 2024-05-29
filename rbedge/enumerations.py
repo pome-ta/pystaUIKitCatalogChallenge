@@ -158,3 +158,13 @@ class NSUnderlineStyle:
   patternDashDotDot: int = 0x0400
   byWord: int = 0x8000
 
+
+# ref: [UIImageSymbolScale | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uiimagesymbolscale?language=objc)
+@dataclass
+class UIImageSymbolScale:
+  default: int = -1
+  unspecified: int = 0
+  small: int = 1
+  medium: int = 2
+  large: int = 3
+
