@@ -400,8 +400,8 @@ class ButtonViewController(BaseTableViewController):
     config = UIImageSymbolConfiguration.configurationWithTextStyle_scale_(
       str(objc_const(UIKit, 'UIFontTextStyleBody')), UIImageSymbolScale.large)
 
-    state = UIControlState.normal
-    button.setPreferredSymbolConfiguration_forImageInState_(config, state)
+    button.setPreferredSymbolConfiguration_forImageInState_(
+      config, UIControlState.normal)
 
     button.accessibilityLabel = localizedString('Person')
 
