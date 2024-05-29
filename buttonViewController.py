@@ -147,9 +147,10 @@ class ButtonViewController(BaseTableViewController):
     self.initPrototype()
     # --- test
     self.testCells.extend([
-      # 9
-      CaseElement(localizedString('SymbolTitle'),
-                  ButtonKind.buttonSymbol.value, self.configureSymbolButton_),
+      # 11
+      CaseElement(localizedString('LargeSymbolTitle'),
+                  ButtonKind.buttonLargeSymbol.value,
+                  self.configureLargeSymbolButton_),
     ])
     '''
     self.testCells.extend([
@@ -198,7 +199,18 @@ class ButtonViewController(BaseTableViewController):
       CaseElement(localizedString('AttributedStringTitle'),
                   ButtonKind.buttonAttrText.value,
                   self.configureAttributedTextSystemButton_),
+      # 10
+      CaseElement(localizedString('SymbolTitle'),
+                  ButtonKind.buttonSymbol.value, self.configureSymbolButton_),
     ])
+    
+    if True:  # xxx: `#available(iOS 15, *)`
+      self.testCells.extend([
+        # 11
+        CaseElement(localizedString('LargeSymbolTitle'),
+                    ButtonKind.buttonLargeSymbol.value,
+                    self.configureLargeSymbolButton_),
+      ])
     '''
 
   @objc_method
@@ -394,14 +406,37 @@ class ButtonViewController(BaseTableViewController):
       button.configuration = buttonConfig
       button.toolTip = localizedString('PersonButtonToolTipTitle')
     else:
-      state = UIControlState.normal
-      button.setImage_forState_(buttonImage, state)
+      button.setImage_forState_(buttonImage, UIControlState.normal)
 
     config = UIImageSymbolConfiguration.configurationWithTextStyle_scale_(
       str(objc_const(UIKit, 'UIFontTextStyleBody')), UIImageSymbolScale.large)
 
     button.setPreferredSymbolConfiguration_forImageInState_(
       config, UIControlState.normal)
+
+    button.accessibilityLabel = localizedString('Person')
+
+    button.addTarget_action_forControlEvents_(self, SEL('buttonClicked:'),
+                                              UIControlEvents.touchUpInside)
+
+  # 11
+  @objc_method
+  def configureLargeSymbolButton_(self, button):
+    buttonImage = UIImage.systemImageNamed('person')
+
+    if True:  # xxx: `available(iOS 15, *)`
+      # For iOS 15 use the UIButtonConfiguration to set the image.
+      # iOS 15 の場合は、UIButtonConfiguration を使用して画像を設定します。
+      buttonConfig = UIButtonConfiguration.plainButtonConfiguration()
+
+      buttonConfig.preferredSymbolConfigurationForImage = UIImageSymbolConfiguration.configurationWithTextStyle_(
+        str(objc_const(UIKit, 'UIFontTextStyleLargeTitle')))
+
+      buttonConfig.image = buttonImage
+      button.configuration = buttonConfig
+
+    else:
+      button.setImage_forState_(buttonImage, UIControlState.normal)
 
     button.accessibilityLabel = localizedString('Person')
 
