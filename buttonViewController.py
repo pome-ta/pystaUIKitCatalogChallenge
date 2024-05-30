@@ -149,10 +149,10 @@ class ButtonViewController(BaseTableViewController):
     self.initPrototype()
     # --- test
     self.testCells.extend([
-      # 14
-      CaseElement(localizedString('MultiTitleTitle'),
-                  ButtonKind.buttonMultiTitle.value,
-                  self.configureMultiTitleButton_),
+      # 15
+      CaseElement(localizedString('ToggleTitle'),
+                  ButtonKind.buttonToggle.value,
+                  self.configureToggleButton_),
     ])
     '''
     self.testCells.extend([
@@ -229,6 +229,11 @@ class ButtonViewController(BaseTableViewController):
       CaseElement(localizedString('MultiTitleTitle'),
                   ButtonKind.buttonMultiTitle.value,
                   self.configureMultiTitleButton_),
+    # 15
+      CaseElement(localizedString('ToggleTitle'),
+                  ButtonKind.buttonToggle.value,
+                  self.configureToggleButton_),
+    
     '''
 
   @objc_method
@@ -534,6 +539,12 @@ class ButtonViewController(BaseTableViewController):
 
     button.addTarget_action_forControlEvents_(self, SEL('buttonClicked:'),
                                               UIControlEvents.touchUpInside)
+
+  # 15
+  @objc_method
+  def configureToggleButton_(self, button):
+    button.changesSelectionAsPrimaryAction = True
+    
 
   # MARK: - Button Actions
   @objc_method
