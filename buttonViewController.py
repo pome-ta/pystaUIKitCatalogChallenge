@@ -33,6 +33,7 @@ UIColor = ObjCClass('UIColor')
 UIImage = ObjCClass('UIImage')
 NSAttributedString = ObjCClass('NSAttributedString')
 UIImageSymbolConfiguration = ObjCClass('UIImageSymbolConfiguration')
+UIFont = ObjCClass('UIFont')
 
 
 class BaseTableViewController(UITableViewController):
@@ -147,10 +148,10 @@ class ButtonViewController(BaseTableViewController):
     self.initPrototype()
     # --- test
     self.testCells.extend([
-      # 11
-      CaseElement(localizedString('LargeSymbolTitle'),
-                  ButtonKind.buttonLargeSymbol.value,
-                  self.configureLargeSymbolButton_),
+      # 12
+      CaseElement(localizedString('StringSymbolTitle'),
+                  ButtonKind.buttonTextSymbol.value,
+                  self.configureTextSymbolButton_),
     ])
     '''
     self.testCells.extend([
@@ -211,6 +212,12 @@ class ButtonViewController(BaseTableViewController):
                     ButtonKind.buttonLargeSymbol.value,
                     self.configureLargeSymbolButton_),
       ])
+      
+    # xxx: あとで並べる
+    # 12
+      CaseElement(localizedString('SymbolStringTitle'),
+                  ButtonKind.buttonSymbolText.value,
+                  self.configureSymbolTextButton_),
     '''
 
   @objc_method
@@ -443,6 +450,73 @@ class ButtonViewController(BaseTableViewController):
     button.addTarget_action_forControlEvents_(self, SEL('buttonClicked:'),
                                               UIControlEvents.touchUpInside)
 
+  # 12
+  @objc_method
+  def configureSymbolTextButton_(self, button):
+    # Button with image to the left of the title.
+    # > タイトルの左側にある画像付きのボタン。
+    buttonImage = UIImage.systemImageNamed('person')
+
+    if True:  # xxx: `available(iOS 15, *)`
+      # For iOS 15 use the UIButtonConfiguration to set the image.
+      # iOS 15 の場合は、UIButtonConfiguration を使用して画像を設定します。
+      buttonConfig = UIButtonConfiguration.plainButtonConfiguration()
+
+      buttonConfig.preferredSymbolConfigurationForImage = UIImageSymbolConfiguration.configurationWithTextStyle_(
+        str(objc_const(UIKit, 'UIFontTextStyleBody')))
+
+      buttonConfig.image = buttonImage
+      button.configuration = buttonConfig
+
+    else:
+      button.setImage_forState_(buttonImage, UIControlState.normal)
+      config = UIImageSymbolConfiguration.configurationWithTextStyle_scale_(
+        str(objc_const(UIKit, 'UIFontTextStyleBody')),
+        UIImageSymbolScale.small)
+      button.setPreferredSymbolConfiguration_forImageInState_(
+        config, UIControlState.normal)
+
+    button.setTitle_forState_(localizedString('Person'), UIControlState.normal)
+
+    button.titleLabel.font = UIFont.preferredFontForTextStyle_(
+      str(objc_const(UIKit, 'UIFontTextStyleLargeTitle')))
+
+    button.addTarget_action_forControlEvents_(self, SEL('buttonClicked:'),
+                                              UIControlEvents.touchUpInside)
+
+  # 13
+  @objc_method
+  def configureTextSymbolButton_(self, button):
+    # Button with image to the left of the title.
+    # > タイトルの左側にある画像付きのボタン。
+    buttonImage = UIImage.systemImageNamed('person')
+
+    if True:  # xxx: `available(iOS 15, *)`
+      # For iOS 15 use the UIButtonConfiguration to set the image.
+      # iOS 15 の場合は、UIButtonConfiguration を使用して画像を設定します。
+      buttonConfig = UIButtonConfiguration.plainButtonConfiguration()
+
+      buttonConfig.preferredSymbolConfigurationForImage = UIImageSymbolConfiguration.configurationWithTextStyle_(
+        str(objc_const(UIKit, 'UIFontTextStyleBody')))
+
+      buttonConfig.image = buttonImage
+      button.configuration = buttonConfig
+
+    else:
+      button.setImage_forState_(buttonImage, UIControlState.normal)
+      config = UIImageSymbolConfiguration.configurationWithTextStyle_scale_(
+        str(objc_const(UIKit, 'UIFontTextStyleBody')),
+        UIImageSymbolScale.small)
+      button.setPreferredSymbolConfiguration_forImageInState_(
+        config, UIControlState.normal)
+
+    button.setTitle_forState_(localizedString('Person'), UIControlState.normal)
+
+    button.titleLabel.font = UIFont.preferredFontForTextStyle_(
+      str(objc_const(UIKit, 'UIFontTextStyleLargeTitle')))
+
+    button.addTarget_action_forControlEvents_(self, SEL('buttonClicked:'),
+                                              UIControlEvents.touchUpInside)
   # MARK: - Button Actions
   @objc_method
   def buttonClicked_(self, sender):
