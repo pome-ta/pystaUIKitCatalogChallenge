@@ -149,10 +149,10 @@ class ButtonViewController(BaseTableViewController):
     self.initPrototype()
     # --- test
     self.testCells.extend([
-      # 12
-      CaseElement(localizedString('StringSymbolTitle'),
-                  ButtonKind.buttonTextSymbol.value,
-                  self.configureTextSymbolButton_),
+      # 14
+      CaseElement(localizedString('MultiTitleTitle'),
+                  ButtonKind.buttonMultiTitle.value,
+                  self.configureMultiTitleButton_),
     ])
     '''
     self.testCells.extend([
@@ -219,6 +219,16 @@ class ButtonViewController(BaseTableViewController):
       CaseElement(localizedString('SymbolStringTitle'),
                   ButtonKind.buttonSymbolText.value,
                   self.configureSymbolTextButton_),
+    
+    # 13
+      CaseElement(localizedString('StringSymbolTitle'),
+                  ButtonKind.buttonTextSymbol.value,
+                  self.configureTextSymbolButton_),
+    
+    # 14
+      CaseElement(localizedString('MultiTitleTitle'),
+                  ButtonKind.buttonMultiTitle.value,
+                  self.configureMultiTitleButton_),
     '''
 
   @objc_method
@@ -509,6 +519,18 @@ class ButtonViewController(BaseTableViewController):
 
     button.titleLabel.font = UIFont.preferredFontForTextStyle_(
       str(objc_const(UIKit, 'UIFontTextStyleBody')))
+
+    button.addTarget_action_forControlEvents_(self, SEL('buttonClicked:'),
+                                              UIControlEvents.touchUpInside)
+
+  # 14
+  @objc_method
+  def configureMultiTitleButton_(self, button):
+    #if traitCollection.userInterfaceIdiom == .mac
+    #  button.preferredBehavioralStyle = .pad
+    button.setTitle_forState_(localizedString('Button'), UIControlState.normal)
+    button.setTitle_forState_(localizedString('Person'),
+                              UIControlState.highlighted)
 
     button.addTarget_action_forControlEvents_(self, SEL('buttonClicked:'),
                                               UIControlEvents.touchUpInside)
