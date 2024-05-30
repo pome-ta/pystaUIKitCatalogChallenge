@@ -480,7 +480,7 @@ class ButtonViewController(BaseTableViewController):
     button.setTitle_forState_(localizedString('Person'), UIControlState.normal)
 
     button.titleLabel.font = UIFont.preferredFontForTextStyle_(
-      str(objc_const(UIKit, 'UIFontTextStyleLargeTitle')))
+      str(objc_const(UIKit, 'UIFontTextStyleBody')))
 
     button.addTarget_action_forControlEvents_(self, SEL('buttonClicked:'),
                                               UIControlEvents.touchUpInside)
@@ -493,31 +493,26 @@ class ButtonViewController(BaseTableViewController):
     buttonImage = UIImage.systemImageNamed('person')
 
     if True:  # xxx: `available(iOS 15, *)`
-      # For iOS 15 use the UIButtonConfiguration to set the image.
-      # iOS 15 の場合は、UIButtonConfiguration を使用して画像を設定します。
       buttonConfig = UIButtonConfiguration.plainButtonConfiguration()
 
       buttonConfig.preferredSymbolConfigurationForImage = UIImageSymbolConfiguration.configurationWithTextStyle_(
         str(objc_const(UIKit, 'UIFontTextStyleBody')))
 
       buttonConfig.image = buttonImage
-      button.configuration = buttonConfig
 
-    else:
-      button.setImage_forState_(buttonImage, UIControlState.normal)
-      config = UIImageSymbolConfiguration.configurationWithTextStyle_scale_(
-        str(objc_const(UIKit, 'UIFontTextStyleBody')),
-        UIImageSymbolScale.small)
-      button.setPreferredSymbolConfiguration_forImageInState_(
-        config, UIControlState.normal)
+      #if traitCollection.userInterfaceIdiom == .mac
+      #  button.preferredBehavioralStyle = .pad
+      buttonConfig.imagePlacement = NSDirectionalRectEdge.trailing
+      button.configuration = buttonConfig
 
     button.setTitle_forState_(localizedString('Person'), UIControlState.normal)
 
     button.titleLabel.font = UIFont.preferredFontForTextStyle_(
-      str(objc_const(UIKit, 'UIFontTextStyleLargeTitle')))
+      str(objc_const(UIKit, 'UIFontTextStyleBody')))
 
     button.addTarget_action_forControlEvents_(self, SEL('buttonClicked:'),
                                               UIControlEvents.touchUpInside)
+
   # MARK: - Button Actions
   @objc_method
   def buttonClicked_(self, sender):
