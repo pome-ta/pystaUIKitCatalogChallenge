@@ -14,6 +14,7 @@ from rbedge.enumerations import (
   UIImageRenderingMode,
   NSUnderlineStyle,
   UIImageSymbolScale,
+  NSDirectionalRectEdge,
 )
 from rbedge.functions import NSStringFromClass
 
@@ -487,8 +488,8 @@ class ButtonViewController(BaseTableViewController):
   # 13
   @objc_method
   def configureTextSymbolButton_(self, button):
-    # Button with image to the left of the title.
-    # > タイトルの左側にある画像付きのボタン。
+    # Button with image to the right of the title.
+    # > タイトルの右側にある画像付きのボタン。
     buttonImage = UIImage.systemImageNamed('person')
 
     if True:  # xxx: `available(iOS 15, *)`
