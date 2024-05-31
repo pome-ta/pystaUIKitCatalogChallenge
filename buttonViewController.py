@@ -153,10 +153,10 @@ class ButtonViewController(BaseTableViewController):
     self.initPrototype()
     # --- test
     self.testCells.extend([
-      # 17
-      CaseElement(localizedString('BackgroundTitle'),
-                  ButtonKind.buttonBackground.value,
-                  self.configureBackgroundButton_),
+      # 18
+      CaseElement(localizedString('UpdateActivityHandlerTitle'),
+                  ButtonKind.buttonUpdateActivityHandler.value,
+                  self.configureUpdateActivityHandlerButton_),
     ])
     '''
     self.testCells.extend([
@@ -587,6 +587,47 @@ class ButtonViewController(BaseTableViewController):
     from pathlib import Path
 
     # xxx: `lambda` の使い方が悪い
+    dataWithContentsOfURL = lambda path_str: NSData.dataWithContentsOfURL_(
+      NSURL.fileURLWithPath_(str(Path(path_str).absolute())))
+
+    background = UIImage.alloc().initWithData_scale_(
+      dataWithContentsOfURL(normal_str), scale)
+
+    background_highlighted = UIImage.alloc().initWithData_scale_(
+      dataWithContentsOfURL(highlighted_str), scale)
+
+    background_disabled = UIImage.alloc().initWithData_scale_(
+      dataWithContentsOfURL(disabled_str), scale)
+
+    button.setBackgroundImage_forState_(background, UIControlState.normal)
+    button.setBackgroundImage_forState_(background_highlighted,
+                                        UIControlState.highlighted)
+
+    button.setBackgroundImage_forState_(background_disabled,
+                                        UIControlState.disabled)
+
+    button.addTarget_action_forControlEvents_(self, SEL('buttonClicked:'),
+                                              UIControlEvents.touchUpInside)
+
+
+  # 18
+  @objc_method
+  def configureUpdateActivityHandlerButton_(self, button):
+    if True:  # xxx: `available(iOS 15, *)`
+      #if traitCollection.userInterfaceIdiom == .mac
+      #  button.preferredBehavioralStyle = .pad
+      pass
+    # ref: [iphone - Retina display and [UIImage initWithData] - Stack Overflow](https://stackoverflow.com/questions/3289286/retina-display-and-uiimage-initwithdata)
+    # xxx: scale 指定これでいいのかな?
+    scale = int(UIScreen.mainScreen.scale)
+    normal_str = f'./UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/background.imageset/stepper_and_segment_background_{scale}x.png'
+    highlighted_str = f'./UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/background_highlighted.imageset/stepper_and_segment_background_highlighted_{scale}x.png'
+    disabled_str = f'./UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/background_disabled.imageset/stepper_and_segment_background_disabled_{scale}x.png'
+
+    # xxx: あとで取り回し考える
+    from pathlib import Path
+
+    # xxx: `lambda` の使い方が悪い
     dataWithContentsOfURL = lambda path_str: NSData.dataWithContentsOfURL_(
       NSURL.fileURLWithPath_(str(Path(path_str).absolute())))
 
