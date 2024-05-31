@@ -1,3 +1,22 @@
+# 📝 2024/05/30
+
+## UIButton
+
+``` .swift
+button.setTitle("Button", for: [])
+```
+は、
+
+``` .py
+- button.setTitle_forState_('Button', UIControlState.normal)
++ button.setTitle_('Button')
+```
+
+`[]` を無視する感じでええのか？
+
+
+
+
 # 📝 2024/05/28
 
 ## `NSStrikethroughStyleAttributeName` のGlobal Variable

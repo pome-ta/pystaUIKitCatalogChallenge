@@ -149,10 +149,10 @@ class ButtonViewController(BaseTableViewController):
     self.initPrototype()
     # --- test
     self.testCells.extend([
-      # 15
-      CaseElement(localizedString('ToggleTitle'),
-                  ButtonKind.buttonToggle.value,
-                  self.configureToggleButton_),
+      # 16
+      CaseElement(localizedString('ButtonColorTitle'),
+                  ButtonKind.buttonTitleColor.value,
+                  self.configureTitleTextButton_),
     ])
     '''
     self.testCells.extend([
@@ -544,6 +544,17 @@ class ButtonViewController(BaseTableViewController):
   @objc_method
   def configureToggleButton_(self, button):
     button.changesSelectionAsPrimaryAction = True
+
+  # 16
+  @objc_method
+  def configureTitleTextButton_(self, button):
+    # Note: Only for iOS the title's color can be changed.
+    # 注: タイトルの色を変更できるのは iOS の場合のみです。
+    #pdbr.state(button)
+    button.setTitle_(localizedString('Button'))
+    button.setTitle_forState_(localizedString('Person'),
+                              UIControlState.highlighted)
+    
     
 
   # MARK: - Button Actions
