@@ -550,12 +550,13 @@ class ButtonViewController(BaseTableViewController):
   def configureTitleTextButton_(self, button):
     # Note: Only for iOS the title's color can be changed.
     # 注: タイトルの色を変更できるのは iOS の場合のみです。
-    #pdbr.state(button)
-    button.setTitle_(localizedString('Button'))
-    button.setTitle_forState_(localizedString('Person'),
-                              UIControlState.highlighted)
-    
-    
+    button.setTitleColor_forState_(UIColor.systemGreenColor(),
+                                   UIControlState.normal)
+    button.setTitleColor_forState_(UIColor.systemRedColor(),
+                                   UIControlState.highlighted)
+
+    button.addTarget_action_forControlEvents_(self, SEL('buttonClicked:'),
+                                              UIControlEvents.touchUpInside)
 
   # MARK: - Button Actions
   @objc_method
