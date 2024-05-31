@@ -35,6 +35,7 @@ UIImage = ObjCClass('UIImage')
 NSAttributedString = ObjCClass('NSAttributedString')
 UIImageSymbolConfiguration = ObjCClass('UIImageSymbolConfiguration')
 UIFont = ObjCClass('UIFont')
+UIScreen = ObjCClass('UIScreen')
 
 
 class BaseTableViewController(UITableViewController):
@@ -149,10 +150,10 @@ class ButtonViewController(BaseTableViewController):
     self.initPrototype()
     # --- test
     self.testCells.extend([
-      # 16
-      CaseElement(localizedString('ButtonColorTitle'),
-                  ButtonKind.buttonTitleColor.value,
-                  self.configureTitleTextButton_),
+      # 17
+      CaseElement(localizedString('BackgroundTitle'),
+                  ButtonKind.buttonBackground.value,
+                  self.configureBackgroundButton_),
     ])
     '''
     self.testCells.extend([
@@ -233,6 +234,10 @@ class ButtonViewController(BaseTableViewController):
       CaseElement(localizedString('ToggleTitle'),
                   ButtonKind.buttonToggle.value,
                   self.configureToggleButton_),
+      # 16
+      CaseElement(localizedString('ButtonColorTitle'),
+                  ButtonKind.buttonTitleColor.value,
+                  self.configureTitleTextButton_),
     
     '''
 
@@ -554,6 +559,25 @@ class ButtonViewController(BaseTableViewController):
                                    UIControlState.normal)
     button.setTitleColor_forState_(UIColor.systemRedColor(),
                                    UIControlState.highlighted)
+
+    button.addTarget_action_forControlEvents_(self, SEL('buttonClicked:'),
+                                              UIControlEvents.touchUpInside)
+
+  # 17
+  @objc_method
+  def configureBackgroundButton_(self, button):
+    if True:  # xxx: `available(iOS 15, *)`
+      #if traitCollection.userInterfaceIdiom == .mac
+      #  button.preferredBehavioralStyle = .pad
+      pass
+    # ref: [iphone - Retina display and [UIImage initWithData] - Stack Overflow](https://stackoverflow.com/questions/3289286/retina-display-and-uiimage-initwithdata)
+    # xxx: scale 指定これでいいのかな?
+    scale = int(UIScreen.mainScreen.scale)
+    normal_str = f'./UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/background.imageset/stepper_and_segment_background_{scale}x.png'
+    highlighted_str = f'./UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/background_highlighted.imageset/stepper_and_segment_background_highlighted_{scale}x.png'
+    disabled_str = f'./UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/background_disabled.imageset/stepper_and_segment_background_disabled_{scale}x.png'
+
+
 
     button.addTarget_action_forControlEvents_(self, SEL('buttonClicked:'),
                                               UIControlEvents.touchUpInside)
