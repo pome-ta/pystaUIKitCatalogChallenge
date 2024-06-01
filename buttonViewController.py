@@ -157,10 +157,10 @@ class ButtonViewController(BaseTableViewController):
     self.initPrototype()
     # --- test
     self.testCells.extend([
-      # 18
-      CaseElement(localizedString('UpdateActivityHandlerTitle'),
-                  ButtonKind.buttonUpdateActivityHandler.value,
-                  self.configureUpdateActivityHandlerButton_),
+      # 19
+      CaseElement(localizedString('UpdateHandlerTitle'),
+                  ButtonKind.buttonUpdateHandler.value,
+                  self.configureUpdateHandlerButton_),
     ])
     '''
     self.testCells.extend([
@@ -249,6 +249,13 @@ class ButtonViewController(BaseTableViewController):
       CaseElement(localizedString('BackgroundTitle'),
                   ButtonKind.buttonBackground.value,
                   self.configureBackgroundButton_),
+    
+    # 18
+      CaseElement(localizedString('UpdateActivityHandlerTitle'),
+                  ButtonKind.buttonUpdateActivityHandler.value,
+                  self.configureUpdateActivityHandlerButton_),
+    
+    
     '''
 
   @objc_method
@@ -649,6 +656,40 @@ class ButtonViewController(BaseTableViewController):
                                               SEL('toggleButtonClicked:'),
                                               UIControlEvents.touchUpInside)
 
+  # 19
+  @objc_method
+  def configureUpdateHandlerButton_(self, button):
+    # This is called when a button needs an update.
+    # > これは、ボタンを更新する必要がある場合に呼び出されます。
+
+    @Block
+    def colorUpdateHandler(button_id: objc_id) -> None:
+      print('h')
+      _button = ObjCInstance(button_id)
+      _button.configuration.baseBackgroundColor = UIColor.systemPinkColor()
+      
+      
+      
+      '''
+      _button.configuration.baseBackgroundColor = UIColor.systemPinkColor(
+      ) if _button.isSelected() else UIColor.systemPinkColor(
+      ).colorWithAlphaComponent_(0.4)
+      '''
+
+    buttonConfig = UIButtonConfiguration.filledButtonConfiguration()
+
+    button.configuration = buttonConfig
+
+    button.changesSelectionAsPrimaryAction = True
+    button.configurationUpdateHandler = colorUpdateHandler
+
+    #if traitCollection.userInterfaceIdiom == .mac
+    #  button.preferredBehavioralStyle = .pad
+
+    button.addTarget_action_forControlEvents_(self,
+                                              SEL('toggleButtonClicked:'),
+                                              UIControlEvents.touchUpInside)
+
   # MARK: - Button Actions
   @objc_method
   def buttonClicked_(self, sender):
@@ -657,7 +698,6 @@ class ButtonViewController(BaseTableViewController):
   @objc_method
   def toggleButtonClicked_(self, sender):
     print(f'Toggle action: {sender}')
-    
 
 
 if __name__ == '__main__':
