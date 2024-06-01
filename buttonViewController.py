@@ -656,7 +656,8 @@ class ButtonViewController(BaseTableViewController):
 
   @objc_method
   def toggleButtonClicked_(self, sender):
-    print(f'Button was clicked.{sender}')
+    print(f'Toggle action: {sender}')
+    
 
 
 if __name__ == '__main__':
