@@ -1,7 +1,7 @@
 import ctypes
 from enum import Enum
 
-from pyrubicon.objc.api import ObjCClass, ObjCInstance, objc_method, objc_property, objc_const
+from pyrubicon.objc.api import ObjCClass, objc_method, objc_property, objc_const
 from pyrubicon.objc.runtime import SEL, send_super, load_library
 from pyrubicon.objc.types import NSInteger
 
@@ -28,6 +28,9 @@ UITableViewHeaderFooterView = ObjCClass('UITableViewHeaderFooterView')
 UIListContentConfiguration = ObjCClass('UIListContentConfiguration')
 
 # todo: extension
+from pyrubicon.objc.api import Block, ObjCInstance
+from pyrubicon.objc.runtime import objc_id
+
 UIKit = load_library('UIKit')
 UIButtonConfiguration = ObjCClass('UIButtonConfiguration')
 UIColor = ObjCClass('UIColor')
@@ -39,6 +42,7 @@ UIScreen = ObjCClass('UIScreen')
 NSURL = ObjCClass('NSURL')
 NSData = ObjCClass('NSData')
 UIImage = ObjCClass('UIImage')
+UIButton = ObjCClass('UIButton')
 
 
 class BaseTableViewController(UITableViewController):
@@ -615,12 +619,43 @@ class ButtonViewController(BaseTableViewController):
   @objc_method
   def configureUpdateActivityHandlerButton_(self, button):
 
-    button.addTarget_action_forControlEvents_(self, SEL('buttonClicked:'),
+    @Block
+    def activityUpdateHandler(button_id: objc_id) -> None:
+      _button = ObjCInstance(button_id)
+
+      config = _button.configuration
+      config.showsActivityIndicator = True if _button.isSelected() else False
+      _button.configuration = config
+
+    buttonConfig = UIButtonConfiguration.plainButtonConfiguration()
+    buttonConfig.image = UIImage.systemImageNamed('tray')
+    buttonConfig.preferredSymbolConfigurationForImage = UIImageSymbolConfiguration.configurationWithTextStyle_(
+      str(objc_const(UIKit, 'UIFontTextStyleBody')))
+
+    button.configuration = buttonConfig
+
+    button.setTitle_forState_(localizedString('Button'), UIControlState.normal)
+
+    button.titleLabel.font = UIFont.preferredFontForTextStyle_(
+      str(objc_const(UIKit, 'UIFontTextStyleBody')))
+
+    button.changesSelectionAsPrimaryAction = True
+    button.configurationUpdateHandler = activityUpdateHandler
+
+    #if traitCollection.userInterfaceIdiom == .mac
+    #  button.preferredBehavioralStyle = .pad
+
+    button.addTarget_action_forControlEvents_(self,
+                                              SEL('toggleButtonClicked:'),
                                               UIControlEvents.touchUpInside)
 
   # MARK: - Button Actions
   @objc_method
   def buttonClicked_(self, sender):
+    print(f'Button was clicked.{sender}')
+
+  @objc_method
+  def toggleButtonClicked_(self, sender):
     print(f'Button was clicked.{sender}')
 
 
