@@ -42,7 +42,7 @@ UIScreen = ObjCClass('UIScreen')
 NSURL = ObjCClass('NSURL')
 NSData = ObjCClass('NSData')
 UIImage = ObjCClass('UIImage')
-UIButton = ObjCClass('UIButton')
+UIBackgroundConfiguration=ObjCClass('UIBackgroundConfiguration')
 
 
 class BaseTableViewController(UITableViewController):
@@ -666,19 +666,27 @@ class ButtonViewController(BaseTableViewController):
     def colorUpdateHandler(button_id: objc_id) -> None:
       print('h')
       _button = ObjCInstance(button_id)
-      _button.configuration.baseBackgroundColor = UIColor.systemPinkColor()
       
+      #baseBackgroundColor = UIColor.systemPinkColor() if _button.isSelected() else UIColor.systemPinkColor().colorWithAlphaComponent_(0.4)
       
+      #_button.configuration.setBaseBackgroundColor_(baseBackgroundColor)
+
+      #setBaseBackgroundColor_
+      #print(_button.configuration.baseForegroundColor)
+      #pdbr.state(_button.configuration)
+      #_button.configuration.baseBackgroundColor = UIColor.systemPinkColor()
       
-      '''
-      _button.configuration.baseBackgroundColor = UIColor.systemPinkColor(
+      _button.configuration.background.baseBackgroundColor = UIColor.systemPinkColor(
       ) if _button.isSelected() else UIColor.systemPinkColor(
       ).colorWithAlphaComponent_(0.4)
-      '''
+      
 
     buttonConfig = UIButtonConfiguration.filledButtonConfiguration()
+    
+    #backgroundConfig = UIBackgroundConfiguration.clearConfiguration()
+    #buttonConfig.background = backgroundConfig
 
-    button.configuration = buttonConfig
+    #button.configuration = buttonConfig
 
     button.changesSelectionAsPrimaryAction = True
     button.configurationUpdateHandler = colorUpdateHandler
