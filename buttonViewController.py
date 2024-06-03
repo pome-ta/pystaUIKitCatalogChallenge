@@ -667,16 +667,30 @@ class ButtonViewController(BaseTableViewController):
       #print('h')
       _button = ObjCInstance(button_id)
       #print(_button.automaticallyUpdatesConfiguration)
+      _buttonConfig = UIButtonConfiguration.filledButtonConfiguration()
       
       _systemPinkColor = UIColor.systemPinkColor()
       _isSelected = _button.isSelected()
       
-      _button.configuration.baseBackgroundColor = _systemPinkColor.colorWithAlphaComponent_(0.4) if _isSelected else _systemPinkColor
+      #_buttonConfig.baseBackgroundColor = _systemPinkColor.colorWithAlphaComponent_(0.4) if _isSelected else _systemPinkColor
       
-      _button = _button.configuration.updatedConfigurationForButton_(_button)
+      #_button.configuration.baseBackgroundColor = _systemPinkColor.colorWithAlphaComponent_(0.4) if _isSelected else _systemPinkColor
+      
+      #_button = _buttonConfig.updatedConfigurationForButton_(_button)
       #print(_)
       
-      #pdbr.state(_button.configuration)
+      
+      #_button.configuration.background.backgroundColor = _systemPinkColor.colorWithAlphaComponent_(0.4) if _isSelected else _systemPinkColor
+      _button.configuration.setBaseBackgroundColor_(_systemPinkColor.colorWithAlphaComponent_(0.4) if _isSelected else _systemPinkColor)
+      
+      #
+      pdbr.state(_button.configuration.baseBackgroundColor)
+      
+      
+      
+      
+      #setBaseBackgroundColor
+      #_button.setNeedsUpdateConfiguration()
       
       
       
@@ -742,6 +756,7 @@ class ButtonViewController(BaseTableViewController):
 
     button.changesSelectionAsPrimaryAction = True
     button.configurationUpdateHandler = colorUpdateHandler
+    #button.setNeedsUpdateConfiguration()
     #pdbr.state(button.automaticallyUpdatesConfiguration)
     #print(button.automaticallyUpdatesConfiguration)
 
@@ -761,6 +776,7 @@ class ButtonViewController(BaseTableViewController):
   def toggleButtonClicked_(self, sender):
     #print(f'Toggle action: {sender}')
     print(f'Toggle action: ')
+    
 
 
 if __name__ == '__main__':
