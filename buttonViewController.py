@@ -666,11 +666,58 @@ class ButtonViewController(BaseTableViewController):
     def colorUpdateHandler(button_id: objc_id) -> None:
       #print('h')
       _button = ObjCInstance(button_id)
+      #print(_button.automaticallyUpdatesConfiguration)
+      
+      _systemPinkColor = UIColor.systemPinkColor()
+      _isSelected = _button.isSelected()
+      
+      _button.configuration.baseBackgroundColor = _systemPinkColor.colorWithAlphaComponent_(0.4) if _isSelected else _systemPinkColor
+      
+      _button = _button.configuration.updatedConfigurationForButton_(_button)
+      #print(_)
+      
       #pdbr.state(_button.configuration)
+      
+      
+      
+      
+      
+      
+      
+      
+      #pdbr.state(_button)
+      #buttonConfig = UIButtonConfiguration.filledButtonConfiguration()
+      
+      #buttonConfig.baseBackgroundColor = _systemPinkColor.colorWithAlphaComponent_(0.4) if _isSelected else _systemPinkColor
+      
+      #buttonConfig.baseBackgroundColor = UIColor.systemPinkColor().colorWithAlphaComponent_(0.4) if _button.isSelected() else UIColor.systemPinkColor()
+      
+      
+      #_button.configuration = buttonConfig
+      #pdbr.state(button)
+      
+      
+      
+      '''
+      
+    
+      #pdbr.state(_button.configuration.background)
       
       #_button.configuration.baseBackgroundColor = UIColor.systemPinkColor().colorWithAlphaComponent_(0.4) if _button.isSelected() else UIColor.systemPinkColor()
       
-      _button.configuration.backgroundColor = UIColor.systemPinkColor().colorWithAlphaComponent_(0.4) if _button.isSelected() else UIColor.systemPinkColor()
+      
+      #backgroundColor
+      baseBackgroundColor = _button.configuration.baseBackgroundColor
+      #pdbr.state(baseBackgroundColor)
+      UIDynamicCatalogSystemColor = ObjCClass('UIDynamicCatalogSystemColor')
+      
+      pdbr.state(UIDynamicCatalogSystemColor)
+      
+      baseBackgroundColor = UIColor.systemPinkColor().colorWithAlphaComponent_(0.4) if _button.isSelected() else UIColor.systemPinkColor()
+      
+      _button.configuration.baseBackgroundColor = baseBackgroundColor
+      
+      #_button.configuration.background.backgroundColor = UIColor.systemPinkColor().colorWithAlphaComponent_(0.4)# if _button.isSelected() else UIColor.systemPinkColor()
       
       
       #print(_button.configuration.baseBackgroundColor)
@@ -687,23 +734,16 @@ class ButtonViewController(BaseTableViewController):
       #print(_button.isSelected())
       
       #_button.configuration.background.baseBackgroundColor = UIColor.systemPinkColor() if _button.isSelected() else UIColor.systemPinkColor().colorWithAlphaComponent_(0.4)
+      '''
       
 
     buttonConfig = UIButtonConfiguration.filledButtonConfiguration()
-    
-    backgroundConfig = UIBackgroundConfiguration.clearConfiguration()
-    pdbr.state(backgroundConfig)
-    
-    #buttonConfig.background = backgroundConfig
-    
-    #buttonConfig.baseBackgroundColor = UIColor.systemPinkColor()
-    #pdbr.state(backgroundConfig)
-    #pdbr.state(buttonConfig)
-
     button.configuration = buttonConfig
 
     button.changesSelectionAsPrimaryAction = True
     button.configurationUpdateHandler = colorUpdateHandler
+    #pdbr.state(button.automaticallyUpdatesConfiguration)
+    #print(button.automaticallyUpdatesConfiguration)
 
     #if traitCollection.userInterfaceIdiom == .mac
     #  button.preferredBehavioralStyle = .pad
