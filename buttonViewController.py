@@ -42,7 +42,6 @@ UIScreen = ObjCClass('UIScreen')
 NSURL = ObjCClass('NSURL')
 NSData = ObjCClass('NSData')
 UIImage = ObjCClass('UIImage')
-UIBackgroundConfiguration = ObjCClass('UIBackgroundConfiguration')
 
 
 class BaseTableViewController(UITableViewController):
@@ -665,12 +664,19 @@ class ButtonViewController(BaseTableViewController):
     @Block
     def colorUpdateHandler(button_id: objc_id) -> None:
       _button = ObjCInstance(button_id)
-      _buttonConfig = UIButtonConfiguration.filledButtonConfiguration()
+      _title = _button.configuration.title
 
       _systemPinkColor = UIColor.systemPinkColor()
-      _isSelected = _button.isSelected()
+
       baseBackgroundColor = _systemPinkColor.colorWithAlphaComponent_(
-        0.4) if _isSelected else _systemPinkColor
+        0.4) if _button.isSelected() else _systemPinkColor
+
+      # xxx: `button.configuration?.baseBackgroundColor` を直接呼んでも変化しないので再定義している
+      buttonConfig = UIButtonConfiguration.filledButtonConfiguration()
+      buttonConfig.title = _title
+      buttonConfig.baseBackgroundColor = baseBackgroundColor
+
+      _button.configuration = buttonConfig
 
     buttonConfig = UIButtonConfiguration.filledButtonConfiguration()
     button.configuration = buttonConfig
