@@ -156,10 +156,10 @@ class ButtonViewController(BaseTableViewController):
     self.initPrototype()
     # --- test
     self.testCells.extend([
-      # 19
-      CaseElement(localizedString('UpdateHandlerTitle'),
-                  ButtonKind.buttonUpdateHandler.value,
-                  self.configureUpdateHandlerButton_),
+      # 20
+      CaseElement(localizedString('UpdateImageHandlerTitle'),
+                  ButtonKind.buttonImageUpdateHandler.value,
+                  self.configureUpdateImageHandlerButton_),
     ])
     '''
     self.testCells.extend([
@@ -253,7 +253,15 @@ class ButtonViewController(BaseTableViewController):
       CaseElement(localizedString('UpdateActivityHandlerTitle'),
                   ButtonKind.buttonUpdateActivityHandler.value,
                   self.configureUpdateActivityHandlerButton_),
-    
+      # 19
+      CaseElement(localizedString('UpdateHandlerTitle'),
+                  ButtonKind.buttonUpdateHandler.value,
+                  self.configureUpdateHandlerButton_),
+      # 20
+      CaseElement(localizedString('UpdateImageHandlerTitle'),
+                  ButtonKind.buttonImageUpdateHandler.value,
+                  self.configureUpdateImageHandlerButton_),
+          
     
     '''
 
@@ -675,7 +683,6 @@ class ButtonViewController(BaseTableViewController):
       buttonConfig = UIButtonConfiguration.filledButtonConfiguration()
       buttonConfig.title = _title
       buttonConfig.baseBackgroundColor = baseBackgroundColor
-
       _button.configuration = buttonConfig
 
     buttonConfig = UIButtonConfiguration.filledButtonConfiguration()
@@ -686,6 +693,52 @@ class ButtonViewController(BaseTableViewController):
 
     #if traitCollection.userInterfaceIdiom == .mac
     #  button.preferredBehavioralStyle = .pad
+
+    button.addTarget_action_forControlEvents_(self,
+                                              SEL('toggleButtonClicked:'),
+                                              UIControlEvents.touchUpInside)
+
+  # 20
+  @objc_method
+  def configureUpdateImageHandlerButton_(self, button):
+    # This is called when a button needs an update.
+    # > これは、ボタンを更新する必要がある場合に呼び出されます。
+
+    @Block
+    def colorUpdateHandler(button_id: objc_id) -> None:
+      _button = ObjCInstance(button_id)
+
+      image = UIImage.systemImageNamed('cart.fill') if _button.isSelected(
+      ) else UIImage.systemImageNamed('cart')
+      # xxx: `button.configuration?.image` を直接呼んでも変化しないので再定義している
+      buttonConfig = UIButtonConfiguration.plainButtonConfiguration()
+      buttonConfig.image = image
+      buttonConfig.preferredSymbolConfigurationForImage = UIImageSymbolConfiguration.configurationWithTextStyle_(
+        str(objc_const(UIKit, 'UIFontTextStyleLargeTitle')))
+      _button.configuration = buttonConfig
+
+      # xxx: `toolTip` 挙動未確認
+      _button.toolTip = localizedString(
+        'CartFilledButtonToolTipTitle') if _button.isSelected(
+        ) else localizedString('CartEmptyButtonToolTipTitle')
+
+    buttonConfig = UIButtonConfiguration.plainButtonConfiguration()
+    buttonConfig.image = UIImage.systemImageNamed('cart')
+    buttonConfig.preferredSymbolConfigurationForImage = UIImageSymbolConfiguration.configurationWithTextStyle_(
+      str(objc_const(UIKit, 'UIFontTextStyleLargeTitle')))
+
+    button.configuration = buttonConfig
+
+    button.changesSelectionAsPrimaryAction = True
+    button.configurationUpdateHandler = colorUpdateHandler
+
+    #if traitCollection.userInterfaceIdiom == .mac
+    #  button.preferredBehavioralStyle = .pad
+
+    button.setTitle_forState_(
+      '', UIControlState.normal)  # No title, just an image.
+    #button.isSelected = True
+    button.setSelected_(False)
 
     button.addTarget_action_forControlEvents_(self,
                                               SEL('toggleButtonClicked:'),
