@@ -42,7 +42,7 @@ UIScreen = ObjCClass('UIScreen')
 NSURL = ObjCClass('NSURL')
 NSData = ObjCClass('NSData')
 UIImage = ObjCClass('UIImage')
-UIBackgroundConfiguration=ObjCClass('UIBackgroundConfiguration')
+UIBackgroundConfiguration = ObjCClass('UIBackgroundConfiguration')
 
 
 class BaseTableViewController(UITableViewController):
@@ -664,94 +664,19 @@ class ButtonViewController(BaseTableViewController):
 
     @Block
     def colorUpdateHandler(button_id: objc_id) -> None:
-      #print('h')
       _button = ObjCInstance(button_id)
-      #print(_button.automaticallyUpdatesConfiguration)
       _buttonConfig = UIButtonConfiguration.filledButtonConfiguration()
-      
+
       _systemPinkColor = UIColor.systemPinkColor()
       _isSelected = _button.isSelected()
-      
-      #_buttonConfig.baseBackgroundColor = _systemPinkColor.colorWithAlphaComponent_(0.4) if _isSelected else _systemPinkColor
-      
-      #_button.configuration.baseBackgroundColor = _systemPinkColor.colorWithAlphaComponent_(0.4) if _isSelected else _systemPinkColor
-      
-      #_button = _buttonConfig.updatedConfigurationForButton_(_button)
-      #print(_)
-      
-      
-      #_button.configuration.background.backgroundColor = _systemPinkColor.colorWithAlphaComponent_(0.4) if _isSelected else _systemPinkColor
-      _button.configuration.setBaseBackgroundColor_(_systemPinkColor.colorWithAlphaComponent_(0.4) if _isSelected else _systemPinkColor)
-      
-      #
-      pdbr.state(_button.configuration.baseBackgroundColor)
-      
-
-      #setBaseBackgroundColor
-      #_button.setNeedsUpdateConfiguration()
-      
-      
-
-      #pdbr.state(_button)
-      #buttonConfig = UIButtonConfiguration.filledButtonConfiguration()
-      
-      #buttonConfig.baseBackgroundColor = _systemPinkColor.colorWithAlphaComponent_(0.4) if _isSelected else _systemPinkColor
-      
-      #buttonConfig.baseBackgroundColor = UIColor.systemPinkColor().colorWithAlphaComponent_(0.4) if _button.isSelected() else UIColor.systemPinkColor()
-      
-      
-      #_button.configuration = buttonConfig
-      #pdbr.state(button)
-      
-      
-      
-      '''
-      
-    
-      #pdbr.state(_button.configuration.background)
-      
-      #_button.configuration.baseBackgroundColor = UIColor.systemPinkColor().colorWithAlphaComponent_(0.4) if _button.isSelected() else UIColor.systemPinkColor()
-      
-      
-      #backgroundColor
-      baseBackgroundColor = _button.configuration.baseBackgroundColor
-      #pdbr.state(baseBackgroundColor)
-      UIDynamicCatalogSystemColor = ObjCClass('UIDynamicCatalogSystemColor')
-      
-      pdbr.state(UIDynamicCatalogSystemColor)
-      
-      baseBackgroundColor = UIColor.systemPinkColor().colorWithAlphaComponent_(0.4) if _button.isSelected() else UIColor.systemPinkColor()
-      
-      _button.configuration.baseBackgroundColor = baseBackgroundColor
-      
-      #_button.configuration.background.backgroundColor = UIColor.systemPinkColor().colorWithAlphaComponent_(0.4)# if _button.isSelected() else UIColor.systemPinkColor()
-      
-      
-      #print(_button.configuration.baseBackgroundColor)
-      
-      #baseBackgroundColor = UIColor.systemPinkColor() if _button.isSelected() else UIColor.systemPinkColor().colorWithAlphaComponent_(0.4)
-      
-      #_button.configuration.setBaseBackgroundColor_(baseBackgroundColor)
-
-      #setBaseBackgroundColor_
-      #print(_button.configuration.baseForegroundColor)
-      #pdbr.state(_button.configuration)
-      #_button.configuration.baseBackgroundColor = UIColor.systemPinkColor()
-      #pdbr.state(_button.configuration.baseBackgroundColor)
-      #print(_button.isSelected())
-      
-      #_button.configuration.background.baseBackgroundColor = UIColor.systemPinkColor() if _button.isSelected() else UIColor.systemPinkColor().colorWithAlphaComponent_(0.4)
-      '''
-      
+      baseBackgroundColor = _systemPinkColor.colorWithAlphaComponent_(
+        0.4) if _isSelected else _systemPinkColor
 
     buttonConfig = UIButtonConfiguration.filledButtonConfiguration()
     button.configuration = buttonConfig
 
     button.changesSelectionAsPrimaryAction = True
     button.configurationUpdateHandler = colorUpdateHandler
-    #button.setNeedsUpdateConfiguration()
-    #pdbr.state(button.automaticallyUpdatesConfiguration)
-    #print(button.automaticallyUpdatesConfiguration)
 
     #if traitCollection.userInterfaceIdiom == .mac
     #  button.preferredBehavioralStyle = .pad
@@ -769,7 +694,6 @@ class ButtonViewController(BaseTableViewController):
   def toggleButtonClicked_(self, sender):
     #print(f'Toggle action: {sender}')
     print(f'Toggle action: ')
-    
 
 
 if __name__ == '__main__':
