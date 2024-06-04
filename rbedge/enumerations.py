@@ -179,3 +179,13 @@ class NSDirectionalRectEdge:
   trailing: int = 1 << 3
   all: int = top | leading | bottom | trailing
 
+
+# ref: [UIButtonConfigurationSize | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uibuttonconfigurationsize)
+@dataclass
+class UIButtonConfigurationSize:
+  # todo: `Enumeration Case` に値表記が無いので独自に調査
+  medium: int = 0
+  small: int = 1
+  mini: int = 2
+  large: int = 3
+

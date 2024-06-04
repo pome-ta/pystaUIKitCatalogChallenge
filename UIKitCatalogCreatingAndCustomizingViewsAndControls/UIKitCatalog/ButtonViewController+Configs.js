@@ -432,7 +432,6 @@ extension ButtonViewController: UIToolTipInteractionDelegate {
         return UIToolTipConfiguration(toolTip: resultString)
     }
     
-    // 21
     @available(iOS 15.0, *)
     func addToCart(action: UIAction) {
         cartItemCount = cartItemCount > 0 ? 0 : 12
@@ -441,7 +440,7 @@ extension ButtonViewController: UIToolTipInteractionDelegate {
         }
     }
     
-    // 22
+    // 21
     @available(iOS 15.0, *)
     func configureAddToCartButton(_ button: UIButton) {
         var config = UIButton.Configuration.filled()

@@ -15,6 +15,7 @@ from rbedge.enumerations import (
   NSUnderlineStyle,
   UIImageSymbolScale,
   NSDirectionalRectEdge,
+  UIButtonConfigurationSize,
 )
 from rbedge.functions import NSStringFromClass
 
@@ -157,9 +158,9 @@ class ButtonViewController(BaseTableViewController):
     # --- test
     self.testCells.extend([
       # 20
-      CaseElement(localizedString('UpdateImageHandlerTitle'),
-                  ButtonKind.buttonImageUpdateHandler.value,
-                  self.configureUpdateImageHandlerButton_),
+      CaseElement(localizedString('AddToCartTitle'),
+                  ButtonKind.addToCartButton.value,
+                  self.configureAddToCartButton_),
     ])
     '''
     self.testCells.extend([
@@ -743,6 +744,23 @@ class ButtonViewController(BaseTableViewController):
     button.addTarget_action_forControlEvents_(self,
                                               SEL('toggleButtonClicked:'),
                                               UIControlEvents.touchUpInside)
+
+  # MARK: - Add To Cart Button
+  # 21
+  @objc_method
+  def configureAddToCartButton_(self, button):
+    config = UIButtonConfiguration.filledButtonConfiguration()
+    config.buttonSize = UIButtonConfigurationSize.large
+    config.image = UIImage.systemImageNamed('cart.fill')
+    config.title = 'Add to Cart'
+    config.cornerStyle = UIButtonConfigurationCornerStyle.capsule
+    config.baseBackgroundColor = UIColor.systemTealColor()
+    button.configuration = config
+    
+    button.toolTip = '' # The value will be determined in its delegate. > 値はデリゲート内で決定されます。
+    #button.toolTipInteraction.delegate = self
+    pdbr.state(button.toolTipInteraction)
+    
 
   # MARK: - Button Actions
   @objc_method
