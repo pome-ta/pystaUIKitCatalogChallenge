@@ -45,6 +45,7 @@ NSURL = ObjCClass('NSURL')
 NSData = ObjCClass('NSData')
 UIImage = ObjCClass('UIImage')
 UIToolTipConfiguration = ObjCClass('UIToolTipConfiguration')
+UIAction = ObjCClass('UIAction')
 
 
 class BaseTableViewController(UITableViewController):
@@ -749,10 +750,16 @@ class ButtonViewController(BaseTableViewController):
 
   # MARK: - Add To Cart Button
   @objc_method
-  def toolTipInteraction_configurationAtPoint_(interaction:objc_id,
-                                               point: ctypes.c_void_p) -> objc_id:
-    return UIToolTipConfiguration.configurationWithToolTip_('hoge').ptr
+  def toolTipInteraction_configurationAtPoint_(self, interaction,
+                                               point) -> None:
+    #return UIToolTipConfiguration.configurationWithToolTip_('hoge')
+    return None
 
+  @objc_method
+  def addToCart_(self, action):
+    print('addToCart_:')
+    pdbr.state(action)
+  
   # 21
   @objc_method
   def configureAddToCartButton_(self, button):
@@ -765,11 +772,12 @@ class ButtonViewController(BaseTableViewController):
     button.configuration = config
 
     button.toolTip = ''  # The value will be determined in its delegate. > 値はデリゲート内で決定されます。
-    button.toolTipInteraction.delegate = self
-    #pdbr.state(button.toolTipInteraction)
-    #pdbr.state(UIToolTipConfiguration.configurationWithToolTip_('hoge'))
-    #t=UIToolTipConfiguration.configurationWithToolTip_('hoge')
-    #print(t.ptr)
+    #button.toolTipInteraction.delegate = self
+    #pdbr.state(UIAction.actionWithHandler_)
+    #print(UIAction.actionWithHandler_)
+    #pdbr.state(button)
+    #button.addAction_forControlEvents_(UIAction.actionWithHandler_(SEL('addToCart:')),UIControlEvents.touchUpInside)
+    #pdbr.state()
 
   # MARK: - Button Actions
   @objc_method
