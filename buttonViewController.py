@@ -31,6 +31,7 @@ UIListContentConfiguration = ObjCClass('UIListContentConfiguration')
 # todo: extension
 from pyrubicon.objc.api import Block, ObjCInstance
 from pyrubicon.objc.runtime import objc_id
+from pyrubicon.objc.types import CGPoint
 
 UIKit = load_library('UIKit')
 UIButtonConfiguration = ObjCClass('UIButtonConfiguration')
@@ -43,6 +44,7 @@ UIScreen = ObjCClass('UIScreen')
 NSURL = ObjCClass('NSURL')
 NSData = ObjCClass('NSData')
 UIImage = ObjCClass('UIImage')
+UIToolTipConfiguration = ObjCClass('UIToolTipConfiguration')
 
 
 class BaseTableViewController(UITableViewController):
@@ -746,6 +748,11 @@ class ButtonViewController(BaseTableViewController):
                                               UIControlEvents.touchUpInside)
 
   # MARK: - Add To Cart Button
+  @objc_method
+  def toolTipInteraction_configurationAtPoint_(interaction:objc_id,
+                                               point: ctypes.c_void_p) -> objc_id:
+    return UIToolTipConfiguration.configurationWithToolTip_('hoge').ptr
+
   # 21
   @objc_method
   def configureAddToCartButton_(self, button):
@@ -756,11 +763,13 @@ class ButtonViewController(BaseTableViewController):
     config.cornerStyle = UIButtonConfigurationCornerStyle.capsule
     config.baseBackgroundColor = UIColor.systemTealColor()
     button.configuration = config
-    
-    button.toolTip = '' # The value will be determined in its delegate. > 値はデリゲート内で決定されます。
-    #button.toolTipInteraction.delegate = self
-    pdbr.state(button.toolTipInteraction)
-    
+
+    button.toolTip = ''  # The value will be determined in its delegate. > 値はデリゲート内で決定されます。
+    button.toolTipInteraction.delegate = self
+    #pdbr.state(button.toolTipInteraction)
+    #pdbr.state(UIToolTipConfiguration.configurationWithToolTip_('hoge'))
+    #t=UIToolTipConfiguration.configurationWithToolTip_('hoge')
+    #print(t.ptr)
 
   # MARK: - Button Actions
   @objc_method
