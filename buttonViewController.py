@@ -766,15 +766,19 @@ class ButtonViewController(BaseTableViewController):
     #print(dir(action.sender))
     #print(action.sender.objc_class == UIAction)
     '''
-    
     if action.sender.isKindOfClass_(UIButton):
       button = action.sender
       #pdbr.state(button)
       #print(button)
-    '''
+    
     if (button :=
         (lambda sender: sender
          if sender.isKindOfClass_(UIButton) else False)(action.sender)):
+      print(button)
+    '''
+
+    if (button :=
+        action.sender if action.sender.isKindOfClass_(UIButton) else False):
       print(button)
 
     #print(self.cartItemCount)
