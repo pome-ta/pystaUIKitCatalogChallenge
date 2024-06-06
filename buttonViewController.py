@@ -46,6 +46,7 @@ NSData = ObjCClass('NSData')
 UIImage = ObjCClass('UIImage')
 UIToolTipConfiguration = ObjCClass('UIToolTipConfiguration')
 UIAction = ObjCClass('UIAction')
+UIButton = ObjCClass('UIButton')  # todo: 型確認用
 
 
 class BaseTableViewController(UITableViewController):
@@ -758,7 +759,30 @@ class ButtonViewController(BaseTableViewController):
   @objc_method
   def addToCart_(self, _action: ctypes.c_void_p) -> None:
     action = ObjCInstance(_action)
-    pdbr.state(action)
+
+    self.cartItemCount = 0 if self.cartItemCount > 0 else 12
+
+    #print(NSStringFromClass(action))
+    #print(dir(action.sender))
+    #print(action.sender.objc_class == UIAction)
+    '''
+    
+    if action.sender.isKindOfClass_(UIButton):
+      button = action.sender
+      #pdbr.state(button)
+      #print(button)
+    '''
+    if (button :=
+        (lambda sender: sender
+         if sender.isKindOfClass_(UIButton) else False)(action.sender)):
+      print(button)
+
+    #print(self.cartItemCount)
+    #pdbr.state(action.sender)
+
+    #print(libobjc.object_getClass(action.sender))
+    #print(action.sender.isKindOfClass_(UIButton))
+    #print(action.sender.isKindOfClass_(UIImage))
 
   # 21
   @objc_method
