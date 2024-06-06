@@ -762,31 +762,9 @@ class ButtonViewController(BaseTableViewController):
 
     self.cartItemCount = 0 if self.cartItemCount > 0 else 12
 
-    #print(NSStringFromClass(action))
-    #print(dir(action.sender))
-    #print(action.sender.objc_class == UIAction)
-    '''
     if action.sender.isKindOfClass_(UIButton):
       button = action.sender
-      #pdbr.state(button)
-      #print(button)
-    
-    if (button :=
-        (lambda sender: sender
-         if sender.isKindOfClass_(UIButton) else False)(action.sender)):
-      print(button)
-    '''
-
-    if (button :=
-        action.sender if action.sender.isKindOfClass_(UIButton) else False):
-      print(button)
-
-    #print(self.cartItemCount)
-    #pdbr.state(action.sender)
-
-    #print(libobjc.object_getClass(action.sender))
-    #print(action.sender.isKindOfClass_(UIButton))
-    #print(action.sender.isKindOfClass_(UIImage))
+      button.setNeedsUpdateConfiguration()
 
   # 21
   @objc_method
@@ -805,6 +783,42 @@ class ButtonViewController(BaseTableViewController):
       UIAction.actionWithHandler_(Block(self.addToCart_, None,
                                         ctypes.c_void_p)),
       UIControlEvents.touchUpInside)
+
+    button.changesSelectionAsPrimaryAction = True
+
+    @Block
+    def _handler(button_id: objc_id) -> None:
+      _button = ObjCInstance(button_id)
+
+      # Start with the current button's configuration.
+      # > 現在のボタンの設定から始めます。
+      #newConfig = _button.configuration
+      newConfig = UIButtonConfiguration.filledButtonConfiguration()
+      newConfig.buttonSize = UIButtonConfigurationSize.large
+      newConfig.title = 'Add to Cart'
+      newConfig.cornerStyle = UIButtonConfigurationCornerStyle.capsule
+      newConfig.baseBackgroundColor = UIColor.systemTealColor()
+      '''
+      if _button.isSelected():
+        newConfig.image = UIImage.systemImageNamed(
+          'cart.fill.badge.plus'
+        ) if self.cartItemCount > 0 else UIImage.systemImageNamed(
+          'cart.badge.plus')
+      else:
+        newConfig.image = UIImage.systemImageNamed('cart.fill')
+        pass
+      '''
+      newConfig.image = UIImage.systemImageNamed(
+        'cart.fill.badge.plus'
+      ) if self.cartItemCount > 0 else UIImage.systemImageNamed(
+        'cart.badge.plus')
+
+      newConfig.imagePadding = 8
+      _button.configuration = newConfig
+
+    # This handler is called when this button needs updating.
+    # > このハンドラーは、このボタンを更新する必要がある場合に呼び出されます。
+    button.configurationUpdateHandler = _handler
 
   # MARK: - Button Actions
   @objc_method
