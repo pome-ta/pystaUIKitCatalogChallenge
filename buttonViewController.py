@@ -755,12 +755,15 @@ class ButtonViewController(BaseTableViewController):
     #return UIToolTipConfiguration.configurationWithToolTip_('hoge')
     return None
 
-
   @objc_method
-  def addToCart_(self,action)->None:
+  def addToCart_(self, _action) -> None:
     print('addToCart_:')
-    pdbr.state(action)
-  
+    
+    action = ObjCInstance(_action)
+    
+    pdbr.state((action))
+    #print(objc_id(action))
+
   # 21
   @objc_method
   def configureAddToCartButton_(self, button):
@@ -777,7 +780,9 @@ class ButtonViewController(BaseTableViewController):
     #pdbr.state(UIAction.actionWithHandler_)
     #print(UIAction.actionWithHandler_)
     #pdbr.state(button)
-    button.addAction_forControlEvents_(UIAction.actionWithHandler_(self.addToCart_),UIControlEvents.touchUpInside)
+    button.addAction_forControlEvents_(
+      UIAction.actionWithHandler_(Block(self.addToCart_, None, ctypes.c_void_p)),
+      UIControlEvents.touchUpInside)
     #pdbr.state()
 
   # MARK: - Button Actions
