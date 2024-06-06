@@ -756,13 +756,9 @@ class ButtonViewController(BaseTableViewController):
     return None
 
   @objc_method
-  def addToCart_(self, _action) -> None:
-    print('addToCart_:')
-    
+  def addToCart_(self, _action: ctypes.c_void_p) -> None:
     action = ObjCInstance(_action)
-    
-    pdbr.state((action))
-    #print(objc_id(action))
+    pdbr.state(action)
 
   # 21
   @objc_method
@@ -777,13 +773,10 @@ class ButtonViewController(BaseTableViewController):
 
     button.toolTip = ''  # The value will be determined in its delegate. > 値はデリゲート内で決定されます。
     #button.toolTipInteraction.delegate = self
-    #pdbr.state(UIAction.actionWithHandler_)
-    #print(UIAction.actionWithHandler_)
-    #pdbr.state(button)
     button.addAction_forControlEvents_(
-      UIAction.actionWithHandler_(Block(self.addToCart_, None, ctypes.c_void_p)),
+      UIAction._(Block(self.addToCart_, None,
+                                        ctypes.c_void_p)),
       UIControlEvents.touchUpInside)
-    #pdbr.state()
 
   # MARK: - Button Actions
   @objc_method
