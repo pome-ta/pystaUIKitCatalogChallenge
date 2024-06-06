@@ -774,7 +774,7 @@ class ButtonViewController(BaseTableViewController):
     button.toolTip = ''  # The value will be determined in its delegate. > 値はデリゲート内で決定されます。
     #button.toolTipInteraction.delegate = self
     button.addAction_forControlEvents_(
-      UIAction._(Block(self.addToCart_, None,
+      UIAction.actionWithHandler_(Block(self.addToCart_, None,
                                         ctypes.c_void_p)),
       UIControlEvents.touchUpInside)
 
