@@ -174,33 +174,38 @@ class ButtonViewController(BaseTableViewController):
                   ButtonKind.buttonSystemAddContact.value,
                   self.configureSystemContactAddButton_),
       # 03
-      CaseElement(localizedString('CloseTitle'), ButtonKind.buttonClose.value,
+      CaseElement(localizedString('CloseTitle'),
+                  ButtonKind.buttonClose.value,
                   self.configureCloseButton_),
     ])
     # xxx: 'if #available(iOS 15, *)'
-    # These button styles are available on iOS 15 or later.
-    self.testCells.extend([
-      # 04
-      CaseElement(localizedString('GrayTitle'),
-                  ButtonKind.buttonStyleGray.value,
-                  self.configureStyleGrayButton_),
-      # 05
-      CaseElement(localizedString('TintedTitle'),
-                  ButtonKind.buttonStyleTinted.value,
-                  self.configureStyleTintedButton_),
-      # 06
-      CaseElement(localizedString('FilledTitle'),
-                  ButtonKind.buttonStyleFilled.value,
-                  self.configureStyleFilledButton_),
-      # 07
-      CaseElement(localizedString('CornerStyleTitle'),
-                  ButtonKind.buttonCornerStyle.value,
-                  self.configureCornerStyleButton_),
-      # 15
-      CaseElement(localizedString('ToggleTitle'),
-                  ButtonKind.buttonToggle.value, self.configureToggleButton_),
-    ])
+
     if True:  # xxx: `#available(iOS 15, *)`
+        # These button styles are available on iOS 15 or later.
+        self.testCells.extend([
+          # 04
+          CaseElement(localizedString('GrayTitle'),
+                      ButtonKind.buttonStyleGray.value,
+                      self.configureStyleGrayButton_),
+          # 05
+          CaseElement(localizedString('TintedTitle'),
+                      ButtonKind.buttonStyleTinted.value,
+                      self.configureStyleTintedButton_),
+          # 06
+          CaseElement(localizedString('FilledTitle'),
+                      ButtonKind.buttonStyleFilled.value,
+                      self.configureStyleFilledButton_),
+          # 07
+          CaseElement(localizedString('CornerStyleTitle'),
+                      ButtonKind.buttonCornerStyle.value,
+                      self.configureCornerStyleButton_),
+          # 15
+          CaseElement(localizedString('ToggleTitle'),
+                      ButtonKind.buttonToggle.value,
+                      self.configureToggleButton_),
+        ])
+
+    if True:  # xxx: `traitCollection.userInterfaceIdiom != .mac`
       self.testCells.extend([
         # 16
         CaseElement(localizedString('ButtonColorTitle'),
@@ -209,45 +214,53 @@ class ButtonViewController(BaseTableViewController):
       ])
 
     self.testCells.extend([
-      # 0
-      CaseElement(localizedString('ImageTitle'), ButtonKind.buttonImage.value,
+      # 08
+      CaseElement(localizedString('ImageTitle'),
+                  ButtonKind.buttonImage.value,
                   self.configureImageButton_),
-      # 9
+      # 09
       CaseElement(localizedString('AttributedStringTitle'),
                   ButtonKind.buttonAttrText.value,
                   self.configureAttributedTextSystemButton_),
       # 10
       CaseElement(localizedString('SymbolTitle'),
-                  ButtonKind.buttonSymbol.value, self.configureSymbolButton_),
+                  ButtonKind.buttonSymbol.value,
+                  self.configureSymbolButton_),
     ])
 
     if True:  # xxx: `#available(iOS 15, *)`
-      self.testCells.extend([
-        # 11
-        CaseElement(localizedString('LargeSymbolTitle'),
-                    ButtonKind.buttonLargeSymbol.value,
-                    self.configureLargeSymbolButton_),
+      if True: # xxx: `traitCollection.userInterfaceIdiom != .mac`
+          self.testCells.extend([
+            # 11
+            CaseElement(localizedString('LargeSymbolTitle'),
+                        ButtonKind.buttonLargeSymbol.value,
+                        self.configureLargeSymbolButton_),
+            ])
 
-        # xxx: あとで並べる
+    if True:  # xxx: `#available(iOS 15, *)`
+      self.testCells.extend([
         # 12
         CaseElement(localizedString('SymbolStringTitle'),
                     ButtonKind.buttonSymbolText.value,
                     self.configureSymbolTextButton_),
-
         # 13
         CaseElement(localizedString('StringSymbolTitle'),
                     ButtonKind.buttonTextSymbol.value,
                     self.configureTextSymbolButton_),
-
+        # 17
+        CaseElement(localizedString('BackgroundTitle'),
+                    ButtonKind.buttonBackground.value,
+                    self.configureBackgroundButton_),
         # 14
         CaseElement(localizedString('MultiTitleTitle'),
                     ButtonKind.buttonMultiTitle.value,
                     self.configureMultiTitleButton_),
 
-        # 17
-        CaseElement(localizedString('BackgroundTitle'),
-                    ButtonKind.buttonBackground.value,
-                    self.configureBackgroundButton_),
+
+        # 21
+        CaseElement(localizedString('AddToCartTitle'),
+                    ButtonKind.addToCartButton.value,
+                    self.configureAddToCartButton_),
 
         # 18
         CaseElement(localizedString('UpdateActivityHandlerTitle'),
@@ -262,10 +275,6 @@ class ButtonViewController(BaseTableViewController):
                     ButtonKind.buttonImageUpdateHandler.value,
                     self.configureUpdateImageHandlerButton_),
 
-        # 21
-        CaseElement(localizedString('AddToCartTitle'),
-                    ButtonKind.addToCartButton.value,
-                    self.configureAddToCartButton_),
       ])
 
   @objc_method
@@ -835,7 +844,6 @@ if __name__ == '__main__':
   from rbedge import pdbr
 
   bvc = ButtonViewController.new()
-
   #style = UIModalPresentationStyle.pageSheet
   style = UIModalPresentationStyle.fullScreen
   present_viewController(bvc, style)
