@@ -798,20 +798,20 @@ class ButtonViewController(BaseTableViewController):
       newConfig.title = 'Add to Cart'
       newConfig.cornerStyle = UIButtonConfigurationCornerStyle.capsule
       newConfig.baseBackgroundColor = UIColor.systemTealColor()
-      '''
+
       if _button.isSelected():
+        # xxx: これだと、`0` の時取れない？
         newConfig.image = UIImage.systemImageNamed(
           'cart.fill.badge.plus'
         ) if self.cartItemCount > 0 else UIImage.systemImageNamed(
           'cart.badge.plus')
+        # xxx: 力技
+        newConfig.subtitle = f'{self.cartItemCount}items'
       else:
+        # As the button is highlighted (pressed), apply a temporary image and subtitle.
+        # > ボタンがハイライト表示される(押される)と、一時的な画像と字幕が適用されます。
         newConfig.image = UIImage.systemImageNamed('cart.fill')
-        pass
-      '''
-      newConfig.image = UIImage.systemImageNamed(
-        'cart.fill.badge.plus'
-      ) if self.cartItemCount > 0 else UIImage.systemImageNamed(
-        'cart.badge.plus')
+        newConfig.subtitle = ' '  # xxx: 文字パディング
 
       newConfig.imagePadding = 8
       _button.configuration = newConfig
@@ -827,8 +827,8 @@ class ButtonViewController(BaseTableViewController):
 
   @objc_method
   def toggleButtonClicked_(self, sender):
-    #print(f'Toggle action: {sender}')
-    print(f'Toggle action: ')
+    print(f'Toggle action: {sender}')
+    
 
 
 if __name__ == '__main__':
