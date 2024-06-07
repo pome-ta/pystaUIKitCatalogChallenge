@@ -161,12 +161,12 @@ class ButtonViewController(BaseTableViewController):
     self.initPrototype()
     # --- test
     self.testCells.extend([
-      # 20
+      # 21
       CaseElement(localizedString('AddToCartTitle'),
                   ButtonKind.addToCartButton.value,
                   self.configureAddToCartButton_),
     ])
-    '''
+
     self.testCells.extend([
       # 00
       CaseElement(localizedString('DefaultTitle'),
@@ -217,58 +217,60 @@ class ButtonViewController(BaseTableViewController):
       CaseElement(localizedString('SymbolTitle'),
                   ButtonKind.buttonSymbol.value, self.configureSymbolButton_),
     ])
-    
+
     if True:  # xxx: `#available(iOS 15, *)`
       self.testCells.extend([
         # 11
         CaseElement(localizedString('LargeSymbolTitle'),
                     ButtonKind.buttonLargeSymbol.value,
                     self.configureLargeSymbolButton_),
+
+        # xxx: あとで並べる
+        # 12
+        CaseElement(localizedString('SymbolStringTitle'),
+                    ButtonKind.buttonSymbolText.value,
+                    self.configureSymbolTextButton_),
+
+        # 13
+        CaseElement(localizedString('StringSymbolTitle'),
+                    ButtonKind.buttonTextSymbol.value,
+                    self.configureTextSymbolButton_),
+
+        # 14
+        CaseElement(localizedString('MultiTitleTitle'),
+                    ButtonKind.buttonMultiTitle.value,
+                    self.configureMultiTitleButton_),
+        # 15
+        CaseElement(localizedString('ToggleTitle'),
+                    ButtonKind.buttonToggle.value,
+                    self.configureToggleButton_),
+        # 16
+        CaseElement(localizedString('ButtonColorTitle'),
+                    ButtonKind.buttonTitleColor.value,
+                    self.configureTitleTextButton_),
+        # 17
+        CaseElement(localizedString('BackgroundTitle'),
+                    ButtonKind.buttonBackground.value,
+                    self.configureBackgroundButton_),
+
+        # 18
+        CaseElement(localizedString('UpdateActivityHandlerTitle'),
+                    ButtonKind.buttonUpdateActivityHandler.value,
+                    self.configureUpdateActivityHandlerButton_),
+        # 19
+        CaseElement(localizedString('UpdateHandlerTitle'),
+                    ButtonKind.buttonUpdateHandler.value,
+                    self.configureUpdateHandlerButton_),
+        # 20
+        CaseElement(localizedString('UpdateImageHandlerTitle'),
+                    ButtonKind.buttonImageUpdateHandler.value,
+                    self.configureUpdateImageHandlerButton_),
+
+        # 21
+        CaseElement(localizedString('AddToCartTitle'),
+                    ButtonKind.addToCartButton.value,
+                    self.configureAddToCartButton_),
       ])
-      
-    # xxx: あとで並べる
-    # 12
-      CaseElement(localizedString('SymbolStringTitle'),
-                  ButtonKind.buttonSymbolText.value,
-                  self.configureSymbolTextButton_),
-    
-    # 13
-      CaseElement(localizedString('StringSymbolTitle'),
-                  ButtonKind.buttonTextSymbol.value,
-                  self.configureTextSymbolButton_),
-    
-    # 14
-      CaseElement(localizedString('MultiTitleTitle'),
-                  ButtonKind.buttonMultiTitle.value,
-                  self.configureMultiTitleButton_),
-    # 15
-      CaseElement(localizedString('ToggleTitle'),
-                  ButtonKind.buttonToggle.value,
-                  self.configureToggleButton_),
-      # 16
-      CaseElement(localizedString('ButtonColorTitle'),
-                  ButtonKind.buttonTitleColor.value,
-                  self.configureTitleTextButton_),
-    # 17
-      CaseElement(localizedString('BackgroundTitle'),
-                  ButtonKind.buttonBackground.value,
-                  self.configureBackgroundButton_),
-    
-    # 18
-      CaseElement(localizedString('UpdateActivityHandlerTitle'),
-                  ButtonKind.buttonUpdateActivityHandler.value,
-                  self.configureUpdateActivityHandlerButton_),
-      # 19
-      CaseElement(localizedString('UpdateHandlerTitle'),
-                  ButtonKind.buttonUpdateHandler.value,
-                  self.configureUpdateHandlerButton_),
-      # 20
-      CaseElement(localizedString('UpdateImageHandlerTitle'),
-                  ButtonKind.buttonImageUpdateHandler.value,
-                  self.configureUpdateImageHandlerButton_),
-          
-    
-    '''
 
   @objc_method
   def viewDidDisappear_(self, animated: bool):
@@ -750,11 +752,11 @@ class ButtonViewController(BaseTableViewController):
                                               UIControlEvents.touchUpInside)
 
   # MARK: - Add To Cart Button
+  # xxx: wip
   @objc_method
-  def toolTipInteraction_configurationAtPoint_(self, interaction,
-                                               point) -> None:
-    #return UIToolTipConfiguration.configurationWithToolTip_('hoge')
-    return None
+  def toolTipInteraction_configurationAtPoint_(
+      self, interaction, point: CGPoint) -> ctypes.c_void_p:
+    return UIToolTipConfiguration.configurationWithToolTip_('hoge').ptr
 
   @objc_method
   def addToCart_(self, _action: ctypes.c_void_p) -> None:
@@ -778,6 +780,7 @@ class ButtonViewController(BaseTableViewController):
     button.configuration = config
 
     button.toolTip = ''  # The value will be determined in its delegate. > 値はデリゲート内で決定されます。
+    # xxx: wip
     #button.toolTipInteraction.delegate = self
     button.addAction_forControlEvents_(
       UIAction.actionWithHandler_(Block(self.addToCart_, None,
@@ -800,7 +803,7 @@ class ButtonViewController(BaseTableViewController):
       newConfig.baseBackgroundColor = UIColor.systemTealColor()
 
       if _button.isSelected():
-        # xxx: これだと、`0` の時取れない？
+        # xxx: これだと`0` の時、取れない？
         newConfig.image = UIImage.systemImageNamed(
           'cart.fill.badge.plus'
         ) if self.cartItemCount > 0 else UIImage.systemImageNamed(
@@ -828,7 +831,6 @@ class ButtonViewController(BaseTableViewController):
   @objc_method
   def toggleButtonClicked_(self, sender):
     print(f'Toggle action: {sender}')
-    
 
 
 if __name__ == '__main__':
