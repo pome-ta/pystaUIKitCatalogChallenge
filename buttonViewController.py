@@ -159,13 +159,6 @@ class ButtonViewController(BaseTableViewController):
     self.navigationItem.title = title
 
     self.initPrototype()
-    # --- test
-    self.testCells.extend([
-      # 21
-      CaseElement(localizedString('AddToCartTitle'),
-                  ButtonKind.addToCartButton.value,
-                  self.configureAddToCartButton_),
-    ])
 
     self.testCells.extend([
       # 00
@@ -203,7 +196,17 @@ class ButtonViewController(BaseTableViewController):
       CaseElement(localizedString('CornerStyleTitle'),
                   ButtonKind.buttonCornerStyle.value,
                   self.configureCornerStyleButton_),
+      # 15
+      CaseElement(localizedString('ToggleTitle'),
+                  ButtonKind.buttonToggle.value, self.configureToggleButton_),
     ])
+    if True:  # xxx: `#available(iOS 15, *)`
+      self.testCells.extend([
+        # 16
+        CaseElement(localizedString('ButtonColorTitle'),
+                    ButtonKind.buttonTitleColor.value,
+                    self.configureTitleTextButton_),
+      ])
 
     self.testCells.extend([
       # 0
@@ -240,14 +243,7 @@ class ButtonViewController(BaseTableViewController):
         CaseElement(localizedString('MultiTitleTitle'),
                     ButtonKind.buttonMultiTitle.value,
                     self.configureMultiTitleButton_),
-        # 15
-        CaseElement(localizedString('ToggleTitle'),
-                    ButtonKind.buttonToggle.value,
-                    self.configureToggleButton_),
-        # 16
-        CaseElement(localizedString('ButtonColorTitle'),
-                    ButtonKind.buttonTitleColor.value,
-                    self.configureTitleTextButton_),
+
         # 17
         CaseElement(localizedString('BackgroundTitle'),
                     ButtonKind.buttonBackground.value,
