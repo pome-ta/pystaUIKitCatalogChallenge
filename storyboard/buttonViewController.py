@@ -6,8 +6,6 @@ from pyrubicon.objc.types import NSInteger
 
 from rbedge.enumerations import UIButtonType, UIControlState
 
-#ObjCClass.auto_rename = True # xxx: ここ含めて全部呼び出し？
-
 UITableViewCell = ObjCClass('UITableViewCell')
 UIButton = ObjCClass('UIButton')
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
