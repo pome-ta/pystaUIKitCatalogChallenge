@@ -1,7 +1,7 @@
 import ctypes
 from enum import Enum
 
-from pyrubicon.objc.api import ObjCClass, objc_method, objc_property, objc_const
+from pyrubicon.objc.api import ObjCClass, objc_method, objc_property
 from pyrubicon.objc.runtime import SEL, send_super, load_library
 from pyrubicon.objc.types import NSInteger
 
@@ -23,30 +23,13 @@ from caseElement import CaseElement
 from pyLocalizedString import localizedString
 
 from storyboard.buttonViewController import prototypes
+#from baseTableViewController import BaseTableViewController
+
 
 UITableViewController = ObjCClass('UITableViewController')
 UITableViewHeaderFooterView = ObjCClass('UITableViewHeaderFooterView')
 UIListContentConfiguration = ObjCClass('UIListContentConfiguration')
 
-# todo: extension
-from pyrubicon.objc.api import Block, ObjCInstance
-from pyrubicon.objc.runtime import objc_id
-from pyrubicon.objc.types import CGPoint
-
-UIKit = load_library('UIKit')
-UIButtonConfiguration = ObjCClass('UIButtonConfiguration')
-UIColor = ObjCClass('UIColor')
-UIImage = ObjCClass('UIImage')
-NSAttributedString = ObjCClass('NSAttributedString')
-UIImageSymbolConfiguration = ObjCClass('UIImageSymbolConfiguration')
-UIFont = ObjCClass('UIFont')
-UIScreen = ObjCClass('UIScreen')
-NSURL = ObjCClass('NSURL')
-NSData = ObjCClass('NSData')
-UIImage = ObjCClass('UIImage')
-UIToolTipConfiguration = ObjCClass('UIToolTipConfiguration')
-UIAction = ObjCClass('UIAction')
-UIButton = ObjCClass('UIButton')  # todo: 型確認用
 
 
 class BaseTableViewController(UITableViewController):
@@ -55,7 +38,7 @@ class BaseTableViewController(UITableViewController):
 
   @objc_method
   def viewDidLoad(self):
-    send_super(__class__, self, 'viewDidLoad')  # xxx: 不要？
+    send_super(__class__, self, 'viewDidLoad')  # xxx: 不要?
     self.tableView.registerClass_forHeaderFooterViewReuseIdentifier_(
       UITableViewHeaderFooterView, 'customHeaderFooterView')
 
@@ -102,6 +85,27 @@ class BaseTableViewController(UITableViewController):
       cellTest.configHandler(view)
 
     return cell.ptr
+
+
+# todo: extension
+from pyrubicon.objc.api import Block, ObjCInstance, objc_const
+from pyrubicon.objc.runtime import objc_id
+from pyrubicon.objc.types import CGPoint
+
+UIKit = load_library('UIKit')
+UIButtonConfiguration = ObjCClass('UIButtonConfiguration')
+UIColor = ObjCClass('UIColor')
+UIImage = ObjCClass('UIImage')
+NSAttributedString = ObjCClass('NSAttributedString')
+UIImageSymbolConfiguration = ObjCClass('UIImageSymbolConfiguration')
+UIFont = ObjCClass('UIFont')
+UIScreen = ObjCClass('UIScreen')
+NSURL = ObjCClass('NSURL')
+NSData = ObjCClass('NSData')
+UIImage = ObjCClass('UIImage')
+UIToolTipConfiguration = ObjCClass('UIToolTipConfiguration')
+UIAction = ObjCClass('UIAction')
+UIButton = ObjCClass('UIButton')  # todo: 型確認用
 
 
 class ButtonKind(Enum):
