@@ -23,13 +23,12 @@ from caseElement import CaseElement
 from pyLocalizedString import localizedString
 
 from storyboard.buttonViewController import prototypes
-#from baseTableViewController import BaseTableViewController
 
+#from baseTableViewController import BaseTableViewController
 
 UITableViewController = ObjCClass('UITableViewController')
 UITableViewHeaderFooterView = ObjCClass('UITableViewHeaderFooterView')
 UIListContentConfiguration = ObjCClass('UIListContentConfiguration')
-
 
 
 class BaseTableViewController(UITableViewController):
