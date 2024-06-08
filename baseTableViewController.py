@@ -4,6 +4,8 @@ from pyrubicon.objc.api import ObjCClass, objc_method
 from pyrubicon.objc.runtime import send_super
 from pyrubicon.objc.types import NSInteger
 
+from rbedge.enumerations import UIListContentTextAlignment
+
 from caseElement import CaseElement  # todo: 型呼び出し
 
 UITableViewController = ObjCClass('UITableViewController')
