@@ -5,12 +5,11 @@ from pyrubicon.objc.runtime import send_super
 from pyrubicon.objc.types import NSInteger
 
 from rbedge.enumerations import UIButtonType, UIControlState
+from ._prototype import CustomTableViewCell
 
 UITableViewCell = ObjCClass('UITableViewCell')
 UIButton = ObjCClass('UIButton')
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
-
-prototypes: list[dict[UITableViewCell, str]] = []
 
 
 def add_prototype(identifier: str):
@@ -24,33 +23,7 @@ def add_prototype(identifier: str):
   return _create_reuse_dict
 
 
-class CustomTableViewCell(UITableViewCell):
-
-  @objc_method
-  def initWithStyle_reuseIdentifier_(self, style: NSInteger, reuseIdentifier):
-
-    super_args = [
-      style,
-      reuseIdentifier,
-    ]
-    super_argtypes = [
-      NSInteger,
-      ctypes.c_void_p,
-    ]
-
-    self_ptr = send_super(__class__,
-                          self,
-                          'initWithStyle:reuseIdentifier:',
-                          *super_args,
-                          argtypes=super_argtypes)
-    # todo: `self` に再定義しない
-    #self = ObjCInstance(self_ptr)
-    self.overrideCell()
-    return ObjCInstance(self_ptr)
-
-  @objc_method
-  def overrideCell(self):
-    pass
+prototypes: list[dict[UITableViewCell, str]] = []
 
 
 @add_prototype('buttonSystemAddContact')
