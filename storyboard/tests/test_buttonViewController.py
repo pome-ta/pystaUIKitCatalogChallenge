@@ -11,7 +11,6 @@ try:
   from pyrubicon.objc.types import NSInteger, CGRectMake
 
   from rbedge.functions import NSStringFromClass
-  
 
 except Exception as e:
   # xxx: `(ModuleNotFoundError, LookupError)`
@@ -43,16 +42,15 @@ class TableViewControllerTest(UITableViewController):
 
     # --- View
     self.view.backgroundColor = UIColor.systemGreenColor()
-    self.tableSetup()
+    self.initPrototype()
 
   @objc_method
-  def tableSetup(self):
-
-    for prototype in test_prototypes:
-      cellClass = prototype['cellClass']
-      identifier = prototype['identifier']
+  def initPrototype(self):
+    [
       self.tableView.registerClass_forCellReuseIdentifier_(
-        cellClass, identifier)
+        prototype['cellClass'], prototype['identifier'])
+      for prototype in test_prototypes
+    ]
 
   # --- UITableViewDataSource
   @objc_method

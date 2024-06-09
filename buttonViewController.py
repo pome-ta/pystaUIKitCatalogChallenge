@@ -79,6 +79,7 @@ class ButtonViewController(BaseTableViewController):
 
     self.testCells = []
     self.cartItemCount = 0
+    self.initPrototype()
 
     return self
 
@@ -96,8 +97,6 @@ class ButtonViewController(BaseTableViewController):
 
     title = NSStringFromClass(__class__)
     self.navigationItem.title = title
-
-    self.initPrototype()
 
     self.testCells.extend([
       # 00
