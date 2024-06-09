@@ -17,7 +17,7 @@ except Exception as e:
   print(f'{e}: error')
 
 # --- test modules
-from storyboard.buttonViewController import prototypes
+from storyboard.menuButtonViewController import prototypes
 
 _test_p = prototypes
 test_prototypes = _test_p if isinstance(_test_p, list) else [_test_p]

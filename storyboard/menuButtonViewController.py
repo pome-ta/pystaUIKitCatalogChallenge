@@ -21,3 +21,94 @@ def add_prototype(identifier: str):
 prototypes: list[dict[CustomTableViewCell, str]] = []
 
 
+@add_prototype('buttonMenuProgrammatic')
+class ButtonMenuProgrammatic(CustomTableViewCell):
+
+  @objc_method
+  def overrideCell(self):
+    type = UIButtonType.system
+    button = UIButton.buttonWithType_(type)
+
+    title = 'Drop Down'
+    state = UIControlState.normal
+    button.setTitle_forState_(title, state)
+
+    button.translatesAutoresizingMaskIntoConstraints = False
+
+    contentView = self.contentView
+    contentView.addSubview_(button)
+
+    NSLayoutConstraint.activateConstraints_([
+      button.centerXAnchor.constraintEqualToAnchor_(contentView.centerXAnchor),
+      button.centerYAnchor.constraintEqualToAnchor_(contentView.centerYAnchor),
+    ])
+
+
+@add_prototype('buttonMenuMultiAction')
+class ButtonMenuMultiAction(CustomTableViewCell):
+
+  @objc_method
+  def overrideCell(self):
+    type = UIButtonType.system
+    button = UIButton.buttonWithType_(type)
+
+    title = 'Drop Down'
+    state = UIControlState.normal
+    button.setTitle_forState_(title, state)
+
+    button.translatesAutoresizingMaskIntoConstraints = False
+
+    contentView = self.contentView
+    contentView.addSubview_(button)
+
+    NSLayoutConstraint.activateConstraints_([
+      button.centerXAnchor.constraintEqualToAnchor_(contentView.centerXAnchor),
+      button.centerYAnchor.constraintEqualToAnchor_(contentView.centerYAnchor),
+    ])
+
+
+@add_prototype('buttonSubMenu')
+class ButtonSubMenu(CustomTableViewCell):
+
+  @objc_method
+  def overrideCell(self):
+    type = UIButtonType.system
+    button = UIButton.buttonWithType_(type)
+
+    title = 'Drop Down Submenu'
+    state = UIControlState.normal
+    button.setTitle_forState_(title, state)
+
+    button.translatesAutoresizingMaskIntoConstraints = False
+
+    contentView = self.contentView
+    contentView.addSubview_(button)
+
+    NSLayoutConstraint.activateConstraints_([
+      button.centerXAnchor.constraintEqualToAnchor_(contentView.centerXAnchor),
+      button.centerYAnchor.constraintEqualToAnchor_(contentView.centerYAnchor),
+    ])
+
+
+@add_prototype('buttonMenuSelection')
+class ButtonMenuSelection(CustomTableViewCell):
+
+  @objc_method
+  def overrideCell(self):
+    type = UIButtonType.system
+    button = UIButton.buttonWithType_(type)
+
+    title = 'Drop Down'
+    state = UIControlState.normal
+    button.setTitle_forState_(title, state)
+
+    button.translatesAutoresizingMaskIntoConstraints = False
+
+    contentView = self.contentView
+    contentView.addSubview_(button)
+
+    NSLayoutConstraint.activateConstraints_([
+      button.centerXAnchor.constraintEqualToAnchor_(contentView.centerXAnchor),
+      button.centerYAnchor.constraintEqualToAnchor_(contentView.centerYAnchor),
+    ])
+
