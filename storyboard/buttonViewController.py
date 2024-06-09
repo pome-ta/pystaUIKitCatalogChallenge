@@ -1,20 +1,15 @@
-import ctypes
-
-from pyrubicon.objc.api import ObjCClass, ObjCInstance, objc_method
-from pyrubicon.objc.runtime import send_super
-from pyrubicon.objc.types import NSInteger
+from pyrubicon.objc.api import ObjCClass, objc_method
 
 from rbedge.enumerations import UIButtonType, UIControlState
 from ._prototype import CustomTableViewCell
 
-UITableViewCell = ObjCClass('UITableViewCell')
 UIButton = ObjCClass('UIButton')
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
 
 
 def add_prototype(identifier: str):
 
-  def _create_reuse_dict(cellClass: UITableViewCell):
+  def _create_reuse_dict(cellClass: CustomTableViewCell):
     prototypes.append({
       'cellClass': cellClass,
       'identifier': identifier,
@@ -23,7 +18,7 @@ def add_prototype(identifier: str):
   return _create_reuse_dict
 
 
-prototypes: list[dict[UITableViewCell, str]] = []
+prototypes: list[dict[CustomTableViewCell, str]] = []
 
 
 @add_prototype('buttonSystemAddContact')
