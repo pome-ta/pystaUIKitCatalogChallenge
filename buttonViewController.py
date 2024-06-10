@@ -1,20 +1,10 @@
 import ctypes
 from enum import Enum
 
-from pyrubicon.objc.api import ObjCClass, objc_method, objc_property
+from pyrubicon.objc.api import objc_method, objc_property
 from pyrubicon.objc.runtime import SEL, send_super
 
-from rbedge.enumerations import (
-  UIControlState,
-  UIControlEvents,
-  UITableViewStyle,
-  UIButtonConfigurationCornerStyle,
-  UIImageRenderingMode,
-  NSUnderlineStyle,
-  UIImageSymbolScale,
-  NSDirectionalRectEdge,
-  UIButtonConfigurationSize,
-)
+from rbedge.enumerations import UITableViewStyle
 from rbedge.functions import NSStringFromClass
 
 from caseElement import CaseElement
@@ -23,9 +13,20 @@ from baseTableViewController import BaseTableViewController
 from storyboard.buttonViewController import prototypes
 
 # todo: extension
-from pyrubicon.objc.api import Block, ObjCInstance, objc_const
+from pyrubicon.objc.api import Block, ObjCClass, ObjCInstance, objc_const
 from pyrubicon.objc.runtime import objc_id, load_library
 from pyrubicon.objc.types import CGPoint
+
+from rbedge.enumerations import (
+  UIControlState,
+  UIControlEvents,
+  UIButtonConfigurationCornerStyle,
+  UIImageRenderingMode,
+  NSUnderlineStyle,
+  UIImageSymbolScale,
+  NSDirectionalRectEdge,
+  UIButtonConfigurationSize,
+)
 
 UIKit = load_library('UIKit')  # todo: `objc_const` 用
 UIButtonConfiguration = ObjCClass('UIButtonConfiguration')
@@ -774,8 +775,8 @@ if __name__ == '__main__':
   from rbedge import present_viewController
   from rbedge import pdbr
 
-  bvc = ButtonViewController.new()
+  main_vc = ButtonViewController.new()
   #style = UIModalPresentationStyle.pageSheet
   style = UIModalPresentationStyle.fullScreen
-  present_viewController(bvc, style)
+  present_viewController(main_vc, style)
 
