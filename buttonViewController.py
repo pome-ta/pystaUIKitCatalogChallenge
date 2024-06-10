@@ -19,8 +19,8 @@ from rbedge.functions import NSStringFromClass
 
 from caseElement import CaseElement
 from pyLocalizedString import localizedString
-from storyboard.buttonViewController import prototypes
 from baseTableViewController import BaseTableViewController
+from storyboard.buttonViewController import prototypes
 
 # todo: extension
 from pyrubicon.objc.api import Block, ObjCInstance, objc_const
