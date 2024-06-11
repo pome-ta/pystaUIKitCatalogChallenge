@@ -190,6 +190,15 @@ class UIButtonConfigurationSize:
   large: int = 3
 
 
+# ref: [UIMenuElementState | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uimenuelementstate?language=objc)
+@dataclass
+class UIMenuElementState:
+  off: int = 0
+  on: int = 1
+  mixed: int = 2
+
+
+# ref: [UIMenuElementAttributes | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uimenuelementattributes)
 @dataclass
 class UIMenuElementAttributes:
   destructive: int = 1 << 1

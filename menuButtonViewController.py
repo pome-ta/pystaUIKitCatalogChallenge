@@ -7,6 +7,7 @@ from pyrubicon.objc.runtime import send_super, objc_id
 
 from rbedge.enumerations import (
   UITableViewStyle,
+  UIMenuElementState,
   UIMenuElementAttributes,
 )
 from rbedge.functions import NSStringFromClass
@@ -155,21 +156,14 @@ class MenuButtonViewController(BaseTableViewController):
         UIImage.systemImageNamed('5.circle'), None, menuAction5_closure),
       # Use attributes to make the 6th action disabled.
       # > 属性を使用して 6 番目のアクションを無効にします。
-      UIAction.actionWithTitle_image_identifier_handler_(
+      UIAction.alloc().
+      initWithTitle_image_identifier_discoverabilityTitle_attributes_state_handler_(
         localizedString('ItemTitle').replace('%@', '6'),
-        UIImage.systemImageNamed('6.circle'), None, menuAction6_closure),
+        UIImage.systemImageNamed('6.circle'), None, None,
+        UIMenuElementAttributes.disabled, UIMenuElementState.off,
+        menuAction6_closure),
     ])
-
-    '''
-    ac = UIAction.actionWithTitle_image_identifier_handler_(
-      localizedString('ItemTitle').replace('%@', '6'),
-      UIImage.systemImageNamed('6.circle'), None, menuAction6_closure).setAttributes_([UIMenuElementAttributes.disabled])
-    pdbr.state(ac)
-    #print(ac.attributes)
-    '''
-    pdbr.state(UIAction.alloc())
-    #initWithTitle_image_identifier_discoverabilityTitle_attributes_state_handler_
-
+    
     button.menu = buttonMenu
     button.showsMenuAsPrimaryAction = True
 
