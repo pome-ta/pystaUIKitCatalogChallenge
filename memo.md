@@ -1,3 +1,28 @@
+# 📝 2024/06/11
+
+
+## `attributes` ?
+
+[pystaUIKitCatalogChallenge/UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/MenuButtonViewController.swift at e24fc0024857e9c4a63b08a9161815b70f7c7e76 · pome-ta/pystaUIKitCatalogChallenge · GitHub](https://github.com/pome-ta/pystaUIKitCatalogChallenge/blob/e24fc0024857e9c4a63b08a9161815b70f7c7e76/UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/MenuButtonViewController.swift#L83)
+
+
+`attributes: []` や`attributes: [UIMenuElement.Attributes.disabled]` の`attributes` はなんだ？
+
+
+## 実装できてないやつ
+
+実装できてないやつを、まとめないと忘れそう
+
+## `closure` 処理
+
+`lambda` でインラインは、型がつけられずでダメか？
+
+### `@Block` 内の引数型
+
+`objc_id` としている。`Block()` 構文だと、`ctypes.c_void_p` でないとエラー
+
+
+
 # 📝 2024/06/09
 
 storyboard 用のベースのものを分けようとしたけど、取り回しが面倒かもで、断念

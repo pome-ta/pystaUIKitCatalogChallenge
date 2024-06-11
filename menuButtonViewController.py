@@ -3,7 +3,7 @@ from enum import Enum
 #import re
 
 from pyrubicon.objc.api import ObjCClass, ObjCInstance, objc_method, Block
-from pyrubicon.objc.runtime import send_super
+from pyrubicon.objc.runtime import send_super, objc_id
 
 from rbedge.enumerations import (
   UITableViewStyle, )
@@ -16,6 +16,7 @@ from storyboard.menuButtonViewController import prototypes
 
 UIMenu = ObjCClass('UIMenu')
 UIAction = ObjCClass('UIAction')
+UIImage = ObjCClass('UIImage')
 
 #UIMenuElement = ObjCClass('UIMenuElement')
 
@@ -67,6 +68,9 @@ class MenuButtonViewController(BaseTableViewController):
       CaseElement(localizedString('DropDownProgTitle'),
                   MenuButtonKind.buttonMenuProgrammatic.value,
                   self.configureDropDownProgrammaticButton_),
+      CaseElement(localizedString('DropDownMultiActionTitle'),
+                  MenuButtonKind.buttonMenuMultiAction.value,
+                  self.configureDropdownMultiActionButton_),
     ])
 
   # MARK: - Handlers
@@ -84,6 +88,11 @@ class MenuButtonViewController(BaseTableViewController):
     else:
       print('Menu Action: None')
 
+  @objc_method
+  def item4Handler_(self, _action: ctypes.c_void_p) -> None:
+    action = ObjCInstance(_action)
+    print(f'Menu Action: {action.title}')
+
   # MARK: - Drop Down Menu Buttons
   @objc_method
   def configureDropDownProgrammaticButton_(self, button):
@@ -98,6 +107,52 @@ class MenuButtonViewController(BaseTableViewController):
         ButtonMenuActionIdentifiers.item2.value,
         Block(self.menuHandler_, None, ctypes.c_void_p)),
     ])
+
+    button.showsMenuAsPrimaryAction = True
+
+  @objc_method
+  def configureDropdownMultiActionButton_(self, button):
+    
+    #pdbr.state(UIAction)
+    #UIImage.systemImageNamed('1.circle')
+    @Block
+    def menuAction5_closure(action: objc_id) -> None:
+      print(ObjCInstance(action))
+
+    # xxx: 正規表現でやる?
+    buttonMenu = UIMenu.menuWithChildren_([
+      # Share a single handler for the first 3 actions.
+      # > 最初の 3 つのアクションに対して 1 つのハンドラーを共有します。
+      UIAction.actionWithTitle_image_identifier_handler_(
+        localizedString('ItemTitle').replace('%@', '1'),
+        UIImage.systemImageNamed('1.circle'),
+        ButtonMenuActionIdentifiers.item1.value,
+        Block(self.menuHandler_, None, ctypes.c_void_p)),
+      UIAction.actionWithTitle_image_identifier_handler_(
+        localizedString('ItemTitle').replace('%@', '2'),
+        UIImage.systemImageNamed('2.circle'),
+        ButtonMenuActionIdentifiers.item2.value,
+        Block(self.menuHandler_, None, ctypes.c_void_p)),
+      UIAction.actionWithTitle_image_identifier_handler_(
+        localizedString('ItemTitle').replace('%@', '3'),
+        UIImage.systemImageNamed('3.circle'),
+        ButtonMenuActionIdentifiers.item3.value,
+        Block(self.menuHandler_, None, ctypes.c_void_p)),
+      # Use a separate handler for this 4th action.
+      # > この 4 番目のアクションには別のハンドラーを使用します。
+      UIAction.actionWithTitle_image_identifier_handler_(
+        localizedString('ItemTitle').replace('%@', '4'),
+        UIImage.systemImageNamed('4.circle'), None,
+        Block(self.item4Handler_, None, ctypes.c_void_p)),
+      # Use a closure for the 5th action.
+      # > 5 番目のアクションにはクロージャを使用します。
+      UIAction.actionWithTitle_image_identifier_handler_(
+        localizedString('ItemTitle').replace('%@', '5'),
+        UIImage.systemImageNamed('5.circle'), None, menuAction5_closure),
+    ])
+
+    button.menu = buttonMenu
+    lambda 
 
     button.showsMenuAsPrimaryAction = True
 
