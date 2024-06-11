@@ -6,7 +6,9 @@ from pyrubicon.objc.api import ObjCClass, ObjCInstance, objc_method, Block
 from pyrubicon.objc.runtime import send_super, objc_id
 
 from rbedge.enumerations import (
-  UITableViewStyle, )
+  UITableViewStyle,
+  UIMenuElementAttributes,
+)
 from rbedge.functions import NSStringFromClass
 
 from caseElement import CaseElement
@@ -18,7 +20,7 @@ UIMenu = ObjCClass('UIMenu')
 UIAction = ObjCClass('UIAction')
 UIImage = ObjCClass('UIImage')
 
-#UIMenuElement = ObjCClass('UIMenuElement')
+UIMenuElement = ObjCClass('UIMenuElement')
 
 
 # Cell identifier for each menu button table view cell.
@@ -112,12 +114,14 @@ class MenuButtonViewController(BaseTableViewController):
 
   @objc_method
   def configureDropdownMultiActionButton_(self, button):
-    
-    #pdbr.state(UIAction)
-    #UIImage.systemImageNamed('1.circle')
+
     @Block
     def menuAction5_closure(action: objc_id) -> None:
-      print(ObjCInstance(action))
+      print(f'Menu Action: {ObjCInstance(action).title}')
+
+    @Block
+    def menuAction6_closure(action: objc_id) -> None:
+      print(f'Menu Action: {ObjCInstance(action).title}')
 
     # xxx: 正規表現でやる?
     buttonMenu = UIMenu.menuWithChildren_([
@@ -149,11 +153,24 @@ class MenuButtonViewController(BaseTableViewController):
       UIAction.actionWithTitle_image_identifier_handler_(
         localizedString('ItemTitle').replace('%@', '5'),
         UIImage.systemImageNamed('5.circle'), None, menuAction5_closure),
+      # Use attributes to make the 6th action disabled.
+      # > 属性を使用して 6 番目のアクションを無効にします。
+      UIAction.actionWithTitle_image_identifier_handler_(
+        localizedString('ItemTitle').replace('%@', '6'),
+        UIImage.systemImageNamed('6.circle'), None, menuAction6_closure),
     ])
 
-    button.menu = buttonMenu
-    lambda 
+    '''
+    ac = UIAction.actionWithTitle_image_identifier_handler_(
+      localizedString('ItemTitle').replace('%@', '6'),
+      UIImage.systemImageNamed('6.circle'), None, menuAction6_closure).setAttributes_([UIMenuElementAttributes.disabled])
+    pdbr.state(ac)
+    #print(ac.attributes)
+    '''
+    pdbr.state(UIAction.alloc())
+    #initWithTitle_image_identifier_discoverabilityTitle_attributes_state_handler_
 
+    button.menu = buttonMenu
     button.showsMenuAsPrimaryAction = True
 
 

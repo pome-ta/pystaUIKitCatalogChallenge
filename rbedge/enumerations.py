@@ -189,3 +189,11 @@ class UIButtonConfigurationSize:
   mini: int = 2
   large: int = 3
 
+
+@dataclass
+class UIMenuElementAttributes:
+  destructive: int = 1 << 1
+  disabled: int = 1 << 0
+  hidden: int = 1 << 2
+  keepsMenuPresented: int = 1 << 3
+
