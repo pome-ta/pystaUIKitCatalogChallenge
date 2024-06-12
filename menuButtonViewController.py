@@ -21,8 +21,6 @@ UIMenu = ObjCClass('UIMenu')
 UIAction = ObjCClass('UIAction')
 UIImage = ObjCClass('UIImage')
 
-UIMenuElement = ObjCClass('UIMenuElement')
-
 
 # Cell identifier for each menu button table view cell.
 # > 各メニュー ボタン テーブル ビュー セルのセル識別子。
@@ -74,6 +72,9 @@ class MenuButtonViewController(BaseTableViewController):
       CaseElement(localizedString('DropDownMultiActionTitle'),
                   MenuButtonKind.buttonMenuMultiAction.value,
                   self.configureDropdownMultiActionButton_),
+      CaseElement(localizedString('DropDownButtonSubMenuTitle'),
+                  MenuButtonKind.buttonSubMenu.value,
+                  self.configureDropdownSubMenuButton_),
     ])
 
   # MARK: - Handlers
@@ -163,9 +164,32 @@ class MenuButtonViewController(BaseTableViewController):
         UIMenuElementAttributes.disabled, UIMenuElementState.off,
         menuAction6_closure),
     ])
-    
+
     button.menu = buttonMenu
     button.showsMenuAsPrimaryAction = True
+
+  @objc_method
+  def configureDropdownSubMenuButton_(self, button):
+
+    @Block
+    def sortClosure(action: objc_id) -> None:
+      print(f'Sort by: {ObjCInstance(action).title}')
+
+    @Block
+    def refreshClosure(action: objc_id) -> None:
+      print('Refresh handler')
+
+    @Block
+    def accountHandler(action: objc_id) -> None:
+      print('Account handler')
+
+    sortMenu: UIMenu
+    # xxx: `#available(iOS 15, *)`
+    if True:  # .singleSelection option only on iOS 15 or later
+      # The sort sub menu supports a selection.
+      # > 並べ替えサブメニューは選択をサポートします。
+      pdbr.state(UIAction.alloc())
+      #menuWithTitle_imageName_identifier_options_children_
 
 
 if __name__ == '__main__':

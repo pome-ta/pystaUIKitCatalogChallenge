@@ -206,3 +206,12 @@ class UIMenuElementAttributes:
   hidden: int = 1 << 2
   keepsMenuPresented: int = 1 << 3
 
+
+# ref: [UIMenuOptions | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uimenuoptions?language=objc)
+@dataclass
+class UIMenuOptions:
+  displayInline: int = 1 << 0
+  destructive: int = 1 << 1
+  singleSelection: int = 1 << 5
+  displayAsPalette: int = 1 << 7
+
