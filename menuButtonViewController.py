@@ -227,16 +227,17 @@ class MenuButtonViewController(BaseTableViewController):
                                        handler=sortClosure),
       ])
 
-      sortMenu = UIMenu.menuWithTitle_image_identifier_options_children_(
-        'Sort By', None, None, UIMenuOptions.singleSelection, [
-          UIAction.alloc().
-          initWithTitle_image_identifier_discoverabilityTitle_attributes_state_handler_(
-            'Date', None, None, 0, UIMenuElementState.off, sortClosure),
-        ])
-
-    #menuWithTitle_image_identifier_options_children_
-    #menuWithTitle_imageName_identifier_options_children_
-    #initWithTitle_image_identifier_discoverabilityTitle_attributes_state_handler_
+    topMenu = UIMenu.menuWithChildren_([
+      UIAction.actionWithTitle_image_identifier_handler_(
+        'Refresh', None, None, refreshClosure),
+      UIAction.actionWithTitle_image_identifier_handler_(
+        'Account', None, None, accountHandler),
+      sortMenu,
+    ])
+    # This makes the button behave like a drop down menu.
+    # > これにより、ボタンがドロップダウン メニューのように動作します。
+    button.showsMenuAsPrimaryAction = True
+    button.menu = topMenu
 
 
 if __name__ == '__main__':
