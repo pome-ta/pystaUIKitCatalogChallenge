@@ -9,6 +9,7 @@ from rbedge.enumerations import (
   UITableViewStyle,
   UIMenuElementState,
   UIMenuElementAttributes,
+  UIMenuOptions,
 )
 from rbedge.functions import NSStringFromClass
 
@@ -116,7 +117,7 @@ class MenuButtonViewController(BaseTableViewController):
 
   @objc_method
   def configureDropdownMultiActionButton_(self, button):
-
+    # todo: closure をblock 処理
     @Block
     def menuAction5_closure(action: objc_id) -> None:
       print(f'Menu Action: {ObjCInstance(action).title}')
@@ -152,11 +153,13 @@ class MenuButtonViewController(BaseTableViewController):
         Block(self.item4Handler_, None, ctypes.c_void_p)),
       # Use a closure for the 5th action.
       # > 5 番目のアクションにはクロージャを使用します。
+      # todo: closure をblock 処理
       UIAction.actionWithTitle_image_identifier_handler_(
         localizedString('ItemTitle').replace('%@', '5'),
         UIImage.systemImageNamed('5.circle'), None, menuAction5_closure),
       # Use attributes to make the 6th action disabled.
       # > 属性を使用して 6 番目のアクションを無効にします。
+      # todo: closure をblock 処理
       UIAction.alloc().
       initWithTitle_image_identifier_discoverabilityTitle_attributes_state_handler_(
         localizedString('ItemTitle').replace('%@', '6'),
@@ -188,9 +191,25 @@ class MenuButtonViewController(BaseTableViewController):
     if True:  # .singleSelection option only on iOS 15 or later
       # The sort sub menu supports a selection.
       # > 並べ替えサブメニューは選択をサポートします。
-      pdbr.state(UIMenu)
+      '''
+      pdbr.state(UIAction.alloc())
+      a = UIAction.alloc().initWithTitle_image_identifier_discoverabilityTitle_attributes_state_handler_('Date', None, None, None, 0, UIMenuElementState.on, sortClosure)
+      '''
+      
+      sortMenu = UIMenu.menuWithTitle_image_identifier_options_children__(
+        'Sort By', None, None, UIMenuOptions.singleSelection, [
+          UIAction.alloc().
+          initWithTitle_image_identifier_discoverabilityTitle_attributes_state_handler_(
+            'Date', None, None, None, 0, UIMenuElementState.on,
+            sortClosure),
+          UIAction.alloc().
+          initWithTitle_image_identifier_discoverabilityTitle_attributes_state_handler_(
+            'Size', None, None, None, 0, 1, sortClosure),
+        ])
+      
       #menuWithTitle_image_identifier_options_children__
       #menuWithTitle_imageName_identifier_options_children_
+      #initWithTitle_image_identifier_discoverabilityTitle_attributes_state_handler_
 
 
 if __name__ == '__main__':
