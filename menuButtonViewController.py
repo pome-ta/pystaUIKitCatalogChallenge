@@ -191,25 +191,52 @@ class MenuButtonViewController(BaseTableViewController):
     if True:  # .singleSelection option only on iOS 15 or later
       # The sort sub menu supports a selection.
       # > 並べ替えサブメニューは選択をサポートします。
-      '''
-      pdbr.state(UIAction.alloc())
-      a = UIAction.alloc().initWithTitle_image_identifier_discoverabilityTitle_attributes_state_handler_('Date', None, None, None, 0, UIMenuElementState.on, sortClosure)
-      '''
-      
-      sortMenu = UIMenu.menuWithTitle_image_identifier_options_children__(
+
+      sortMenu = sortMenu = UIMenu.menuWithTitle_image_identifier_options_children_(
+        'Sort By', None, None, UIMenuOptions.singleSelection, [
+          UIAction.alloc().initWithTitle('Date',
+                                         image=None,
+                                         identifier=None,
+                                         discoverabilityTitle=None,
+                                         attributes=0,
+                                         state=UIMenuElementState.on,
+                                         handler=sortClosure),
+          UIAction.alloc().initWithTitle('Size',
+                                         image=None,
+                                         identifier=None,
+                                         discoverabilityTitle=None,
+                                         attributes=0,
+                                         state=UIMenuElementState.off,
+                                         handler=sortClosure),
+        ])
+    else:
+      sortMenu = UIMenu.menuWithTitle_children_('Sort By', [
+        UIAction.alloc().initWithTitle('Date',
+                                       image=None,
+                                       identifier=None,
+                                       discoverabilityTitle=None,
+                                       attributes=0,
+                                       state=UIMenuElementState.on,
+                                       handler=sortClosure),
+        UIAction.alloc().initWithTitle('Size',
+                                       image=None,
+                                       identifier=None,
+                                       discoverabilityTitle=None,
+                                       attributes=0,
+                                       state=UIMenuElementState.off,
+                                       handler=sortClosure),
+      ])
+
+      sortMenu = UIMenu.menuWithTitle_image_identifier_options_children_(
         'Sort By', None, None, UIMenuOptions.singleSelection, [
           UIAction.alloc().
           initWithTitle_image_identifier_discoverabilityTitle_attributes_state_handler_(
-            'Date', None, None, None, 0, UIMenuElementState.on,
-            sortClosure),
-          UIAction.alloc().
-          initWithTitle_image_identifier_discoverabilityTitle_attributes_state_handler_(
-            'Size', None, None, None, 0, 1, sortClosure),
+            'Date', None, None, 0, UIMenuElementState.off, sortClosure),
         ])
-      
-      #menuWithTitle_image_identifier_options_children__
-      #menuWithTitle_imageName_identifier_options_children_
-      #initWithTitle_image_identifier_discoverabilityTitle_attributes_state_handler_
+
+    #menuWithTitle_image_identifier_options_children_
+    #menuWithTitle_imageName_identifier_options_children_
+    #initWithTitle_image_identifier_discoverabilityTitle_attributes_state_handler_
 
 
 if __name__ == '__main__':
