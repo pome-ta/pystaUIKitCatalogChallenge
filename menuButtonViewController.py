@@ -76,6 +76,9 @@ class MenuButtonViewController(BaseTableViewController):
       CaseElement(localizedString('DropDownButtonSubMenuTitle'),
                   MenuButtonKind.buttonSubMenu.value,
                   self.configureDropdownSubMenuButton_),
+      CaseElement(localizedString('PopupSelection'),
+                  MenuButtonKind.buttonMenuSelection.value,
+                  self.configureSelectionPopupButton_),
     ])
 
   # MARK: - Handlers
@@ -119,12 +122,12 @@ class MenuButtonViewController(BaseTableViewController):
   def configureDropdownMultiActionButton_(self, button):
     # todo: closure をblock 処理
     @Block
-    def menuAction5_closure(action: objc_id) -> None:
-      print(f'Menu Action: {ObjCInstance(action).title}')
+    def menuAction5_closure(_action: objc_id) -> None:
+      print(f'Menu Action: {ObjCInstance(_action).title}')
 
     @Block
-    def menuAction6_closure(action: objc_id) -> None:
-      print(f'Menu Action: {ObjCInstance(action).title}')
+    def menuAction6_closure(_action: objc_id) -> None:
+      print(f'Menu Action: {ObjCInstance(_action).title}')
 
     # xxx: 正規表現でやる?
     buttonMenu = UIMenu.menuWithChildren_([
@@ -175,15 +178,15 @@ class MenuButtonViewController(BaseTableViewController):
   def configureDropdownSubMenuButton_(self, button):
 
     @Block
-    def sortClosure(action: objc_id) -> None:
-      print(f'Sort by: {ObjCInstance(action).title}')
+    def sortClosure(_action: objc_id) -> None:
+      print(f'Sort by: {ObjCInstance(_action).title}')
 
     @Block
-    def refreshClosure(action: objc_id) -> None:
+    def refreshClosure(_action: objc_id) -> None:
       print('Refresh handler')
 
     @Block
-    def accountHandler(action: objc_id) -> None:
+    def accountHandler(_action: objc_id) -> None:
       print('Account handler')
 
     sortMenu: UIMenu
@@ -238,6 +241,52 @@ class MenuButtonViewController(BaseTableViewController):
     # > これにより、ボタンがドロップダウン メニューのように動作します。
     button.showsMenuAsPrimaryAction = True
     button.menu = topMenu
+
+  # MARK: - Selection Popup Menu Button
+
+  @objc_method
+  def updateColor_(self, _title: ctypes.c_void_p) -> None:
+    print(f'Color selected: {ObjCInstance(_title)}')
+
+  @objc_method
+  def configureSelectionPopupButton_(self, button):
+
+    @Block
+    def colorClosure(_action: objc_id) -> None:
+      self.updateColor_(ObjCInstance(_action).title)
+
+    button.menu = UIMenu.menuWithChildren_([
+      UIAction.alloc().initWithTitle('Red',
+                                     image=None,
+                                     identifier=None,
+                                     discoverabilityTitle=None,
+                                     attributes=0,
+                                     state=UIMenuElementState.off,
+                                     handler=colorClosure),
+      UIAction.alloc().initWithTitle('Green',
+                                     image=None,
+                                     identifier=None,
+                                     discoverabilityTitle=None,
+                                     attributes=0,
+                                     state=UIMenuElementState.on,
+                                     handler=colorClosure),
+      UIAction.alloc().initWithTitle('Blue',
+                                     image=None,
+                                     identifier=None,
+                                     discoverabilityTitle=None,
+                                     attributes=0,
+                                     state=UIMenuElementState.off,
+                                     handler=colorClosure),
+    ])
+    # This makes the button behave like a drop down menu.
+    # > これにより、ボタンがドロップダウン メニューのように動作します。
+    button.showsMenuAsPrimaryAction = True
+
+    if True:  # xxx: `#available(iOS 15, *)`
+      button.changesSelectionAsPrimaryAction = True
+      # Select the default menu item (green).
+      # > デフォルトのメニュー項目 (緑色) を選択します。
+      self.updateColor_(button.menu.selectedElements.firstObject().title)
 
 
 if __name__ == '__main__':
