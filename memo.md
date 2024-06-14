@@ -21,6 +21,12 @@
 
 以前まで、11 で行い、今回SE3 のためサイズは違う
 
+## `UISplitViewController` メモ
+
+[ViewControllerのpresentedViewControllerを辿る際の落とし穴 - 面白きことは良きことなり](https://aryzae.hatenablog.com/entry/2017/02/01/002723)
+
+
+[UISplitViewControllerの優良サンプルソースコード #Swift - Qiita](https://qiita.com/jazzmaster/items/e0db46a9fa088da87de1)
 
 # 📝 2024/06/11
 
