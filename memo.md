@@ -28,6 +28,11 @@
 
 [UISplitViewControllerの優良サンプルソースコード #Swift - Qiita](https://qiita.com/jazzmaster/items/e0db46a9fa088da87de1)
 
+
+[UISplitViewにUINavigationController を実装する その1: iPhoneアプリ開発備忘録](http://iphone-app-developer.seesaa.net/article/229896783.html)
+
+[UISplitViewにUINavigationController を実装する その2 - iPhoneアプリ開発備忘録](http://iphone-app-developer.seesaa.net/article/229904600.html)
+
 # 📝 2024/06/11
 
 
