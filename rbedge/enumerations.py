@@ -219,5 +219,6 @@ class UIMenuOptions:
 # ref: [UISplitViewControllerStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uisplitviewcontrollerstyle?language=objc)
 @dataclass
 class UISplitViewControllerStyle:
-  doubleColumn:int=1
-  tripleColumn:int=2
+  doubleColumn: int = 1
+  tripleColumn: int = 2
+

@@ -91,10 +91,11 @@ if __name__ == '__main__':
   from rbedge import pdbr
 
   #main_vc = OutlineViewController.new()
+  main_vc = OutlineViewController.alloc().initWithStyle_(UISplitViewControllerStyle.doubleColumn)
   #initWithStyle_
   #pdbr.state(main_vc)
   #print(main_vc.style)
-  pdbr.state(OutlineViewController.alloc())
+  #pdbr.state(OutlineViewController.alloc())
 
   #style = UIModalPresentationStyle.fullScreen
   style = UIModalPresentationStyle.pageSheet  # 1
