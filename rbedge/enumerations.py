@@ -215,3 +215,9 @@ class UIMenuOptions:
   singleSelection: int = 1 << 5
   displayAsPalette: int = 1 << 7
 
+
+# ref: [UISplitViewControllerStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uisplitviewcontrollerstyle?language=objc)
+@dataclass
+class UISplitViewControllerStyle:
+  doubleColumn:int=1
+  tripleColumn:int=2

@@ -1,6 +1,7 @@
 from pyrubicon.objc.api import ObjCClass, objc_method
 from pyrubicon.objc.runtime import send_super
 
+from rbedge.enumerations import UISplitViewControllerStyle
 #ObjCClass.auto_rename = True
 UISplitViewController = ObjCClass('UISplitViewController')
 
@@ -89,7 +90,11 @@ if __name__ == '__main__':
   from rbedge import present_viewController
   from rbedge import pdbr
 
-  main_vc = OutlineViewController.new()
+  #main_vc = OutlineViewController.new()
+  #initWithStyle_
+  #pdbr.state(main_vc)
+  #print(main_vc.style)
+  pdbr.state(OutlineViewController.alloc())
 
   #style = UIModalPresentationStyle.fullScreen
   style = UIModalPresentationStyle.pageSheet  # 1
