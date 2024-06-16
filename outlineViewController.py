@@ -1,7 +1,7 @@
 from pyrubicon.objc.api import ObjCClass, objc_method
 from pyrubicon.objc.runtime import send_super
 
-from rbedge.enumerations import UISplitViewControllerStyle
+from rbedge.enumerations import UISplitViewControllerStyle, UISplitViewControllerColumn
 
 #ObjCClass.auto_rename = True
 UISplitViewController = ObjCClass('UISplitViewController')
@@ -12,6 +12,7 @@ from rbedge.functions import NSStringFromClass
 UIViewController = ObjCClass('UIViewController')
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
 
+UIView = ObjCClass('UIView')
 UILabel = ObjCClass('UILabel')
 UIFont = ObjCClass('UIFont')
 UIColor = ObjCClass('UIColor')
@@ -84,8 +85,30 @@ class OutlineViewController(UISplitViewController):
   @objc_method
   def viewDidLoad(self):
     send_super(__class__, self, 'viewDidLoad')  # xxx: 不要?
-    pdbr.state(self)
-    self.setViewController_forColumn_(FirstViewController)
+    '''
+    self.setViewController_forColumn_(
+      FirstViewController, UISplitViewControllerColumn.supplementary)
+    '''
+    view = self.view
+    bg_view = UIView.new()
+    bg_view.backgroundColor = UIColor.systemCyanColor()
+
+    view.addSubview_(bg_view)
+
+    bg_view.translatesAutoresizingMaskIntoConstraints = False
+    NSLayoutConstraint.activateConstraints_([
+      bg_view.centerXAnchor.constraintEqualToAnchor_(view.centerXAnchor),
+      bg_view.centerYAnchor.constraintEqualToAnchor_(view.centerYAnchor),
+      bg_view.widthAnchor.constraintEqualToAnchor_multiplier_(
+        view.widthAnchor, 0.88),
+      bg_view.heightAnchor.constraintEqualToAnchor_multiplier_(
+        view.heightAnchor, 0.88),
+    ])
+
+    #view.addSubview_
+
+    #pdbr.state(bg_view)
+    #pdbr.state(UIColor)
 
 
 if __name__ == '__main__':
