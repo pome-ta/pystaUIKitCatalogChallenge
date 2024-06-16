@@ -222,3 +222,11 @@ class UISplitViewControllerStyle:
   doubleColumn: int = 1
   tripleColumn: int = 2
 
+
+# ref: [UISplitViewControllerColumn | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uisplitviewcontrollercolumn?language=objc)
+class UISplitViewControllerColumn:
+  primary: int = 0
+  supplementary: int = 1
+  secondary: int = 2
+  compact: int = 3
+

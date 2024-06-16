@@ -2,6 +2,7 @@ from pyrubicon.objc.api import ObjCClass, objc_method
 from pyrubicon.objc.runtime import send_super
 
 from rbedge.enumerations import UISplitViewControllerStyle
+
 #ObjCClass.auto_rename = True
 UISplitViewController = ObjCClass('UISplitViewController')
 
@@ -83,6 +84,8 @@ class OutlineViewController(UISplitViewController):
   @objc_method
   def viewDidLoad(self):
     send_super(__class__, self, 'viewDidLoad')  # xxx: 不要?
+    pdbr.state(self)
+    self.setViewController_forColumn_(FirstViewController)
 
 
 if __name__ == '__main__':
@@ -91,8 +94,8 @@ if __name__ == '__main__':
   from rbedge import pdbr
 
   #main_vc = OutlineViewController.new()
-  main_vc = OutlineViewController.alloc().initWithStyle_(UISplitViewControllerStyle.doubleColumn)
-  #initWithStyle_
+  main_vc = OutlineViewController.alloc().initWithStyle_(
+    UISplitViewControllerStyle.doubleColumn)
   #pdbr.state(main_vc)
   #print(main_vc.style)
   #pdbr.state(OutlineViewController.alloc())
