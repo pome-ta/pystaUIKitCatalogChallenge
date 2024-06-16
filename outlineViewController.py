@@ -105,11 +105,6 @@ class OutlineViewController(UISplitViewController):
         view.heightAnchor, 0.88),
     ])
 
-    #view.addSubview_
-
-    #pdbr.state(bg_view)
-    #pdbr.state(UIColor)
-
 
 if __name__ == '__main__':
   from rbedge.enumerations import UIModalPresentationStyle
