@@ -1,3 +1,10 @@
+# 📝 2024/06/17
+
+## `UISplitViewController` が難しい
+
+[iOSアプリを作ろう・スプリットビュー入門|快技庵 高橋政明](https://note.com/kaigian/n/n876e3bccb00b)
+
+
 # 📝 2024/06/14
 
 
