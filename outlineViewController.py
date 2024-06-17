@@ -104,6 +104,7 @@ class OutlineViewController(UISplitViewController):
       bg_view.heightAnchor.constraintEqualToAnchor_multiplier_(
         view.heightAnchor, 0.88),
     ])
+    pdbr.state(self.displayModeButtonItem)
 
 
 if __name__ == '__main__':
