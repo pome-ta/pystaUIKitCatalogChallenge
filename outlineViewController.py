@@ -5,7 +5,8 @@ from rbedge.enumerations import UISplitViewControllerStyle, UISplitViewControlle
 
 #ObjCClass.auto_rename = True
 UISplitViewController = ObjCClass('UISplitViewController')
-UICollectionView = ObjCClass('UICollectionView')
+UICollectionViewController = ObjCClass('UICollectionViewController')
+UICollectionViewLayout = ObjCClass('UICollectionViewLayout')
 
 from rbedge.functions import NSStringFromClass
 
@@ -105,7 +106,15 @@ class OutlineViewController(UISplitViewController):
       bg_view.heightAnchor.constraintEqualToAnchor_multiplier_(
         view.heightAnchor, 0.88),
     ])
-    pdbr.state(self.displayModeButtonItem)
+    pdbr.state(UICollectionViewController)
+
+
+class CollectionViewController(UICollectionViewController):
+
+  @objc_method
+  def init(self):
+    send_super(__class__, self, 'init')  # xxx: 不要?
+    return self
 
 
 if __name__ == '__main__':
@@ -113,14 +122,14 @@ if __name__ == '__main__':
   from rbedge import present_viewController
   from rbedge import pdbr
 
-  #main_vc = OutlineViewController.new()
-  main_vc = OutlineViewController.alloc().initWithStyle_(
-    UISplitViewControllerStyle.doubleColumn)
+  main_vc = CollectionViewController.new()
+  pdbr.state(UICollectionViewLayout)
+  #main_vc = CollectionViewController.alloc().initWithStyle_(UISplitViewControllerStyle.doubleColumn)
   #pdbr.state(main_vc)
   #print(main_vc.style)
   #pdbr.state(OutlineViewController.alloc())
 
   #style = UIModalPresentationStyle.fullScreen
-  style = UIModalPresentationStyle.pageSheet  # 1
-  present_viewController(main_vc, style, False)
+  #style = UIModalPresentationStyle.pageSheet  # 1
+  #present_viewController(main_vc, style, False)
 
