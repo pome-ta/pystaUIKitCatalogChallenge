@@ -5,6 +5,7 @@ from rbedge.enumerations import UISplitViewControllerStyle, UISplitViewControlle
 
 #ObjCClass.auto_rename = True
 UISplitViewController = ObjCClass('UISplitViewController')
+UICollectionView = ObjCClass('UICollectionView')
 
 from rbedge.functions import NSStringFromClass
 
