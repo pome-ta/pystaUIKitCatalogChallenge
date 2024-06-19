@@ -1,7 +1,10 @@
+import ctypes
+
 from pyrubicon.objc.api import ObjCClass, objc_method
 from pyrubicon.objc.runtime import send_super
+from pyrubicon.objc.types import NSInteger
 
-from rbedge.enumerations import UISplitViewControllerStyle, UISplitViewControllerColumn
+from rbedge.enumerations import UISplitViewControllerStyle, UISplitViewControllerColumn, UICollectionLayoutListAppearance
 
 #ObjCClass.auto_rename = True
 UISplitViewController = ObjCClass('UISplitViewController')
@@ -9,8 +12,10 @@ UISplitViewController = ObjCClass('UISplitViewController')
 UICollectionViewController = ObjCClass('UICollectionViewController')
 #UICollectionViewLayout = ObjCClass('UICollectionViewLayout')
 
-UICollectionViewCompositionalLayout = ObjCClass('UICollectionViewCompositionalLayout')
-UICollectionLayoutListConfiguration = ObjCClass('UICollectionLayoutListConfiguration')
+UICollectionViewCompositionalLayout = ObjCClass(
+  'UICollectionViewCompositionalLayout')
+UICollectionLayoutListConfiguration = ObjCClass(
+  'UICollectionLayoutListConfiguration')
 
 from rbedge.functions import NSStringFromClass
 
@@ -116,13 +121,21 @@ class OutlineViewController(UISplitViewController):
 class CollectionViewController(UICollectionViewController):
 
   @objc_method
-  def init(self):
-    send_super(__class__, self, 'init')  # xxx: 不要?
-    return self
-    
+  def viewDidLoad(self):
+    send_super(__class__, self, 'viewDidLoad')  # xxx: 不要?
+    self.identifier_str = 'customCell'
+
   @objc_method
-  def generateLayout():
-    pass
+  def collectionView_numberOfItemsInSection_(self, collectionView,
+                                             section: NSInteger) -> NSInteger:
+    return 10
+
+  @objc_method
+  def collectionView_cellForItemAtIndexPath_(
+      self, collectionView, indexPath) -> ctypes.c_void_p:
+    cell = collectionView.dequeueReusableCellWithReuseIdentifier_forIndexPath_(self.identifier_str, indexPath)
+    #cell.
+    return cell.ptr
 
 
 if __name__ == '__main__':
@@ -131,8 +144,16 @@ if __name__ == '__main__':
   from rbedge import pdbr
 
   main_vc = CollectionViewController.new()
+  present_viewController(main_vc)
+  #pdbr.state(main_vc)
   #layoutWithListConfiguration
-  pdbr.state(UICollectionViewCompositionalLayout)
+  #listConfiguration = UICollectionLayoutListConfiguration.alloc().initWithAppearance_(0)
+  #layout = UICollectionViewCompositionalLayout.layoutWithListConfiguration_(listConfiguration)
+
+  #v = UICollectionViewController.alloc().initWithCollectionViewLayout_(layout)
+
+  #pdbr.state(v.collectionView)
+  #print(listConfiguration.appearance)
   #main_vc = CollectionViewController.alloc().initWithStyle_(UISplitViewControllerStyle.doubleColumn)
   #pdbr.state(main_vc)
   #print(main_vc.style)

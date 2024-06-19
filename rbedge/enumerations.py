@@ -224,6 +224,7 @@ class UISplitViewControllerStyle:
 
 
 # ref: [UISplitViewControllerColumn | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uisplitviewcontrollercolumn?language=objc)
+@dataclass
 class UISplitViewControllerColumn:
   primary: int = 0
   supplementary: int = 1
@@ -232,6 +233,7 @@ class UISplitViewControllerColumn:
 
 
 # ref: [UICollectionLayoutListAppearance | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uicollectionlayoutlistappearance?language=objc)
+@dataclass
 class UICollectionLayoutListAppearance:
   plain: int = 0
   grouped: int = 1
