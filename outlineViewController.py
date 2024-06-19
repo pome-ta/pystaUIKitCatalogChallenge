@@ -11,6 +11,7 @@ UISplitViewController = ObjCClass('UISplitViewController')
 
 UICollectionViewController = ObjCClass('UICollectionViewController')
 #UICollectionViewLayout = ObjCClass('UICollectionViewLayout')
+UICollectionViewCell = ObjCClass('UICollectionViewCell')
 
 UICollectionViewCompositionalLayout = ObjCClass(
   'UICollectionViewCompositionalLayout')
@@ -124,6 +125,9 @@ class CollectionViewController(UICollectionViewController):
   def viewDidLoad(self):
     send_super(__class__, self, 'viewDidLoad')  # xxx: 不要?
     self.identifier_str = 'customCell'
+    self.collectionView.registerClass_forCellWithReuseIdentifier_(
+      UICollectionViewCell, self.identifier_str)
+    #pdbr.state(self.collectionView)
 
   @objc_method
   def collectionView_numberOfItemsInSection_(self, collectionView,
@@ -131,10 +135,12 @@ class CollectionViewController(UICollectionViewController):
     return 10
 
   @objc_method
-  def collectionView_cellForItemAtIndexPath_(
-      self, collectionView, indexPath) -> ctypes.c_void_p:
-    cell = collectionView.dequeueReusableCellWithReuseIdentifier_forIndexPath_(self.identifier_str, indexPath)
-    #cell.
+  def collectionView_cellForItemAtIndexPath_(self, collectionView,
+                                             indexPath) -> ctypes.c_void_p:
+    cell = collectionView.dequeueReusableCellWithReuseIdentifier_forIndexPath_(
+      self.identifier_str, indexPath)
+    cell.setBackgroundColor_(UIColor.systemRedColor())
+    #pdbr.state(cell)
     return cell.ptr
 
 
@@ -143,7 +149,15 @@ if __name__ == '__main__':
   from rbedge import present_viewController
   from rbedge import pdbr
 
-  main_vc = CollectionViewController.new()
+  listConfiguration = UICollectionLayoutListConfiguration.alloc(
+  ).initWithAppearance_(0)
+  layout = UICollectionViewCompositionalLayout.layoutWithListConfiguration_(
+    listConfiguration)
+
+  #main_vc = CollectionViewController.new()
+  main_vc = CollectionViewController.alloc().initWithCollectionViewLayout_(
+    layout)
+
   present_viewController(main_vc)
   #pdbr.state(main_vc)
   #layoutWithListConfiguration
