@@ -132,7 +132,7 @@ class CollectionViewController(UICollectionViewController):
   @objc_method
   def collectionView_numberOfItemsInSection_(self, collectionView,
                                              section: NSInteger) -> NSInteger:
-    return 10
+    return 7
 
   @objc_method
   def collectionView_cellForItemAtIndexPath_(self, collectionView,
@@ -150,7 +150,7 @@ if __name__ == '__main__':
   from rbedge import pdbr
 
   listConfiguration = UICollectionLayoutListConfiguration.alloc(
-  ).initWithAppearance_(0)
+  ).initWithAppearance_(1)
   layout = UICollectionViewCompositionalLayout.layoutWithListConfiguration_(
     listConfiguration)
 
