@@ -230,3 +230,12 @@ class UISplitViewControllerColumn:
   secondary: int = 2
   compact: int = 3
 
+
+# ref: [UICollectionLayoutListAppearance | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uicollectionlayoutlistappearance?language=objc)
+class UICollectionLayoutListAppearance:
+  plain: int = 0
+  grouped: int = 1
+  insetGrouped: int = 2
+  sidebar: int = 3
+  sidebarPlain: int = 4
+

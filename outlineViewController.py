@@ -5,8 +5,12 @@ from rbedge.enumerations import UISplitViewControllerStyle, UISplitViewControlle
 
 #ObjCClass.auto_rename = True
 UISplitViewController = ObjCClass('UISplitViewController')
+
 UICollectionViewController = ObjCClass('UICollectionViewController')
-UICollectionViewLayout = ObjCClass('UICollectionViewLayout')
+#UICollectionViewLayout = ObjCClass('UICollectionViewLayout')
+
+UICollectionViewCompositionalLayout = ObjCClass('UICollectionViewCompositionalLayout')
+UICollectionLayoutListConfiguration = ObjCClass('UICollectionLayoutListConfiguration')
 
 from rbedge.functions import NSStringFromClass
 
@@ -115,6 +119,10 @@ class CollectionViewController(UICollectionViewController):
   def init(self):
     send_super(__class__, self, 'init')  # xxx: 不要?
     return self
+    
+  @objc_method
+  def generateLayout():
+    pass
 
 
 if __name__ == '__main__':
@@ -123,7 +131,8 @@ if __name__ == '__main__':
   from rbedge import pdbr
 
   main_vc = CollectionViewController.new()
-  pdbr.state(UICollectionViewLayout)
+  #layoutWithListConfiguration
+  pdbr.state(UICollectionViewCompositionalLayout)
   #main_vc = CollectionViewController.alloc().initWithStyle_(UISplitViewControllerStyle.doubleColumn)
   #pdbr.state(main_vc)
   #print(main_vc.style)
