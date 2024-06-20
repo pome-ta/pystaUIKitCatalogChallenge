@@ -12,6 +12,7 @@ UISplitViewController = ObjCClass('UISplitViewController')
 UICollectionViewController = ObjCClass('UICollectionViewController')
 #UICollectionViewLayout = ObjCClass('UICollectionViewLayout')
 UICollectionViewCell = ObjCClass('UICollectionViewCell')
+UICollectionViewListCell = ObjCClass('UICollectionViewListCell')
 
 UICollectionViewCompositionalLayout = ObjCClass(
   'UICollectionViewCompositionalLayout')
@@ -119,6 +120,22 @@ class OutlineViewController(UISplitViewController):
     pdbr.state(UICollectionViewController)
 
 
+# [UICollectionLayoutListConfigurationのheaderMode=.firstItemInSection観測隊](https://zenn.dev/samekard_dev/articles/2cbb0788915f01)
+prefectures = [
+  ['北海道', '北海道'],
+  ['東北', '青森', '岩手', '秋田', '宮城', '山形', '福島'],
+  ['関東', '茨城', '栃木', '群馬', '埼玉', '千葉', '東京', '神奈川'],
+  ['甲信越', '新潟', '長野', '山梨'],
+  ['北陸', '富山', '石川', '福井'],
+  ['東海', '岐阜', '静岡', '愛知', '三重'],
+  ['近畿', '滋賀', '京都', '奈良', '大阪', '和歌山', '兵庫'],
+  ['中国', '鳥取', '島根', '岡山', '広島', '山口'],
+  ['四国', '香川', '徳島', '愛媛', '高知'],
+  ['九州', '福岡', '佐賀', '長崎', '大分', '熊本', '宮崎', '鹿児島'],
+  ['沖縄', '沖縄'],
+]
+
+
 class CollectionViewController(UICollectionViewController):
 
   @objc_method
@@ -126,21 +143,31 @@ class CollectionViewController(UICollectionViewController):
     send_super(__class__, self, 'viewDidLoad')  # xxx: 不要?
     self.identifier_str = 'customCell'
     self.collectionView.registerClass_forCellWithReuseIdentifier_(
-      UICollectionViewCell, self.identifier_str)
-    #pdbr.state(self.collectionView)
+      UICollectionViewListCell, self.identifier_str)
+
+  @objc_method
+  def numberOfSectionsInCollectionView_(self, collectionView) -> NSInteger:
+    return len(prefectures)
 
   @objc_method
   def collectionView_numberOfItemsInSection_(self, collectionView,
                                              section: NSInteger) -> NSInteger:
-    return 7
+
+    return len(prefectures[section])
 
   @objc_method
   def collectionView_cellForItemAtIndexPath_(self, collectionView,
                                              indexPath) -> ctypes.c_void_p:
     cell = collectionView.dequeueReusableCellWithReuseIdentifier_forIndexPath_(
       self.identifier_str, indexPath)
-    cell.setBackgroundColor_(UIColor.systemRedColor())
+
+    
+    cellConfiguration = cell.defaultContentConfiguration()
+    cellConfiguration.text = prefectures[indexPath.section][indexPath.row]
+    cell.contentConfiguration = cellConfiguration
+    #cell.setBackgroundColor_(UIColor.systemRedColor())
     #pdbr.state(cell)
+    #print(prefectures[indexPath.section][indexPath.row])
     return cell.ptr
 
 
