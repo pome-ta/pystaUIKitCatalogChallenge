@@ -1,3 +1,14 @@
+# 📝 2024/06/25
+
+
+
+[UICollectionViewCellRegistration | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uicollectionviewcellregistration)
+
+[UICollectionViewDiffableDataSource | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uicollectionviewdiffabledatasource?language=objc)
+
+
+[【Swift】UICollectionViewDiffableDataSourceとNSDiffableDataSourceSnapshot](https://zenn.dev/dd_sho/articles/73393668e7c8e7)
+
 # 📝 2024/06/17
 
 ## `UISplitViewController` が難しい
