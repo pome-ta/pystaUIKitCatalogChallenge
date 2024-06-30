@@ -1,3 +1,15 @@
+# 📝 2024/06/30
+
+```
+NSDiffableDataSourceSnapshot<Section, String>(_implWrapper: UIKit.NSDiffableDataSourceSnapshot<UICollectionViewSimpleList1.ViewController.Section, Swift.String>.(unknown context at $7ff8066d32e4).ImplWrapper)
+---
+▿ UIKit.NSDiffableDataSourceSnapshot<UICollectionViewSimpleList1.ViewController.Section, Swift.String>
+  ▿ _implWrapper: UIKit.NSDiffableDataSourceSnapshot<UICollectionViewSimpleList1.ViewController.Section, Swift.String>.(unknown context at $7ff8066d32e4).ImplWrapper #0
+    - impl: <__UIDiffableDataSourceSnapshot 0x600003e21e00: sectionCounts=<_UIDataSourceSnapshotter: 0x60000023b9a0; 1 section with item counts: [7] >; sections=[0x60000023b940]; identifiers=[0x60000023b5c0]> #1
+      - super: __UIDiffableDataSource
+        - super: NSObject
+```
+
 # 📝 2024/06/25
 
 
