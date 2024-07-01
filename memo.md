@@ -6,6 +6,72 @@
 [NSDiffableDataSourceSectionSnapshot | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/nsdiffabledatasourcesectionsnapshot?language=objc)
 
 
+## simulator
+
+```
+--- snapshot01
+print
+NSDiffableDataSourceSnapshot<Int, String>(_implWrapper: UIKit.NSDiffableDataSourceSnapshot<Swift.Int, Swift.String>.(unknown context at $7ff8066d32e4).ImplWrapper)
+dump
+▿ UIKit.NSDiffableDataSourceSnapshot<Swift.Int, Swift.String>
+  ▿ _implWrapper: UIKit.NSDiffableDataSourceSnapshot<Swift.Int, Swift.String>.(unknown context at $7ff8066d32e4).ImplWrapper #0
+    - impl: <__UIDiffableDataSourceSnapshot 0x600003e24400: sectionCounts=<_UIDataSourceSnapshotter: 0x600000240fa0; 0 sections with item counts: [] >; sections=[0x60000001c020]; identifiers=[0x60000001c020]> #1
+      - super: __UIDiffableDataSource
+        - super: NSObject
+--- snapshot02
+print
+NSDiffableDataSourceSnapshot<Int, String>(_implWrapper: UIKit.NSDiffableDataSourceSnapshot<Swift.Int, Swift.String>.(unknown context at $7ff8066d32e4).ImplWrapper)
+dump
+▿ UIKit.NSDiffableDataSourceSnapshot<Swift.Int, Swift.String>
+  ▿ _implWrapper: UIKit.NSDiffableDataSourceSnapshot<Swift.Int, Swift.String>.(unknown context at $7ff8066d32e4).ImplWrapper #0
+    - impl: <__UIDiffableDataSourceSnapshot 0x600003e24400: sectionCounts=<_UIDataSourceSnapshotter: 0x60000023c7e0; 1 section with item counts: [0] >; sections=[0x60000023c7c0]; identifiers=[0x60000023c780]> #1
+      - super: __UIDiffableDataSource
+        - super: NSObject
+--- snapshot03
+print
+NSDiffableDataSourceSnapshot<Int, String>(_implWrapper: UIKit.NSDiffableDataSourceSnapshot<Swift.Int, Swift.String>.(unknown context at $7ff8066d32e4).ImplWrapper)
+dump
+▿ UIKit.NSDiffableDataSourceSnapshot<Swift.Int, Swift.String>
+  ▿ _implWrapper: UIKit.NSDiffableDataSourceSnapshot<Swift.Int, Swift.String>.(unknown context at $7ff8066d32e4).ImplWrapper #0
+    - impl: <__UIDiffableDataSourceSnapshot 0x600003e24400: sectionCounts=<_UIDataSourceSnapshotter: 0x60000023c820; 1 section with item counts: [7] >; sections=[0x60000023c800]; identifiers=[0x60000023c6c0]> #1
+      - super: __UIDiffableDataSource
+        - super: NSObject
+```
+
+
+```
+--- Section.main
+main
+- UICollectionViewSimpleList1.ViewController.Section.main
+
+--- snapshot01
+NSDiffableDataSourceSnapshot<Section, String>(_implWrapper: UIKit.NSDiffableDataSourceSnapshot<UICollectionViewSimpleList1.ViewController.Section, Swift.String>.(unknown context at $7ff8066d32e4).ImplWrapper)
+
+▿ UIKit.NSDiffableDataSourceSnapshot<UICollectionViewSimpleList1.ViewController.Section, Swift.String>
+  ▿ _implWrapper: UIKit.NSDiffableDataSourceSnapshot<UICollectionViewSimpleList1.ViewController.Section, Swift.String>.(unknown context at $7ff8066d32e4).ImplWrapper #0
+    - impl: <__UIDiffableDataSourceSnapshot 0x600003e0d600: sectionCounts=<_UIDataSourceSnapshotter: 0x6000002390a0; 0 sections with item counts: [] >; sections=[0x600000010100]; identifiers=[0x600000010100]> #1
+      - super: __UIDiffableDataSource
+        - super: NSObject
+
+--- snapshot02
+NSDiffableDataSourceSnapshot<Section, String>(_implWrapper: UIKit.NSDiffableDataSourceSnapshot<UICollectionViewSimpleList1.ViewController.Section, Swift.String>.(unknown context at $7ff8066d32e4).ImplWrapper)
+
+▿ UIKit.NSDiffableDataSourceSnapshot<UICollectionViewSimpleList1.ViewController.Section, Swift.String>
+  ▿ _implWrapper: UIKit.NSDiffableDataSourceSnapshot<UICollectionViewSimpleList1.ViewController.Section, Swift.String>.(unknown context at $7ff8066d32e4).ImplWrapper #0
+    - impl: <__UIDiffableDataSourceSnapshot 0x600003e0d600: sectionCounts=<_UIDataSourceSnapshotter: 0x600000231640; 1 section with item counts: [0] >; sections=[0x600000231620]; identifiers=[0x6000002315e0]> #1
+      - super: __UIDiffableDataSource
+        - super: NSObject
+
+--- snapshot03
+NSDiffableDataSourceSnapshot<Section, String>(_implWrapper: UIKit.NSDiffableDataSourceSnapshot<UICollectionViewSimpleList1.ViewController.Section, Swift.String>.(unknown context at $7ff8066d32e4).ImplWrapper)
+
+▿ UIKit.NSDiffableDataSourceSnapshot<UICollectionViewSimpleList1.ViewController.Section, Swift.String>
+  ▿ _implWrapper: UIKit.NSDiffableDataSourceSnapshot<UICollectionViewSimpleList1.ViewController.Section, Swift.String>.(unknown context at $7ff8066d32e4).ImplWrapper #0
+    - impl: <__UIDiffableDataSourceSnapshot 0x600003e0d600: sectionCounts=<_UIDataSourceSnapshotter: 0x600000240680; 1 section with item counts: [7] >; sections=[0x600000240660]; identifiers=[0x60000022d9a0]> #1
+      - super: __UIDiffableDataSource
+        - super: NSObject
+```
+
 
 # 📝 2024/06/30
 
