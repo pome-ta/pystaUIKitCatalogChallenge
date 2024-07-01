@@ -1,3 +1,12 @@
+# 📝 2024/07/01
+
+
+[NSDiffableDataSourceSnapshot | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/nsdiffabledatasourcesnapshot?language=objc)
+
+[NSDiffableDataSourceSectionSnapshot | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/nsdiffabledatasourcesectionsnapshot?language=objc)
+
+
+
 # 📝 2024/06/30
 
 ```
