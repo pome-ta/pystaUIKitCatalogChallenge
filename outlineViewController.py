@@ -8,12 +8,16 @@ import ctypes
 
 from pyrubicon.objc.api import ObjCClass, objc_method
 from pyrubicon.objc.runtime import send_super
+from pyrubicon.objc.types import CGRectMake
 
 from rbedge.functions import NSStringFromClass
 
 UIViewController = ObjCClass('UIViewController')
 UICollectionView = ObjCClass('UICollectionView')
-UICollectionViewCompositionalLayout = ObjCClass('UICollectionViewCompositionalLayout')
+UICollectionViewCompositionalLayout = ObjCClass(
+  'UICollectionViewCompositionalLayout')
+
+CGRectZero = CGRectMake(0, 0, 0, 0)
 
 
 class TodoListViewController(UIViewController):
@@ -25,10 +29,13 @@ class TodoListViewController(UIViewController):
     title = NSStringFromClass(__class__)
     self.navigationItem.title = title
     self.configureCollectionView()
-    
+
   @objc_method
   def configureCollectionView(self):
-    pass
+
+    #collectionView = UICollectionView.alloc().initWithFrame_(CGRectZero)
+    #pdbr.state(collectionView)
+    pdbr.state(self.view)
 
 
 if __name__ == '__main__':
@@ -39,4 +46,5 @@ if __name__ == '__main__':
   todo_vc = TodoListViewController.new()
   style = UIModalPresentationStyle.fullScreen
   present_viewController(todo_vc, style)
+  #print(CGRectZero)
 

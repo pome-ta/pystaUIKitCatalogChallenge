@@ -17,6 +17,10 @@
 [Diffable DataSource 入門 #Swift - Qiita](https://qiita.com/maiyama18/items/28039293b4bbf886ce8e)
 
 
+[The Macro Behind Nil - Ben Ford](https://benford.me/blog/the-macro-behind-nil/)
+
+[[Swift]UICollectionViewの進化:Compositional Layouts編](https://zenn.dev/chiii/articles/e487b32e787b59)
+
 
 ### ここに逃す
 
