@@ -13,6 +13,7 @@ from rbedge.functions import NSStringFromClass
 
 UIViewController = ObjCClass('UIViewController')
 UICollectionView = ObjCClass('UICollectionView')
+UICollectionViewCompositionalLayout = ObjCClass('UICollectionViewCompositionalLayout')
 
 
 class TodoListViewController(UIViewController):
@@ -23,6 +24,11 @@ class TodoListViewController(UIViewController):
     # --- Navigation
     title = NSStringFromClass(__class__)
     self.navigationItem.title = title
+    self.configureCollectionView()
+    
+  @objc_method
+  def configureCollectionView(self):
+    pass
 
 
 if __name__ == '__main__':
