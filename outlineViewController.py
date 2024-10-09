@@ -19,11 +19,26 @@ UICollectionViewCompositionalLayout = ObjCClass(
   'UICollectionViewCompositionalLayout')
 UICollectionLayoutListConfiguration = ObjCClass(
   'UICollectionLayoutListConfiguration')
+
+UICollectionViewCellRegistration = ObjCClass(
+  'UICollectionViewCellRegistration')
+#UICollectionViewCell = ObjCClass('UICollectionViewCell')
+UICollectionViewListCell = ObjCClass('UICollectionViewListCell')
+UICellAccessoryCheckmark = ObjCClass('UICellAccessoryCheckmark')
+NSIndexPath = ObjCClass('NSIndexPath')
+
+NSUUID = ObjCClass('NSUUID')
 NSCollectionLayoutSection = ObjCClass('NSCollectionLayoutSection')
 
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
 
 CGRectZero = CGRectMake(0, 0, 0, 0)
+
+
+class Todo:
+
+  def __init__(self):
+    pass
 
 
 class TodoListViewController(UIViewController):
@@ -35,7 +50,7 @@ class TodoListViewController(UIViewController):
     title = NSStringFromClass(__class__)
     self.navigationItem.title = title
     self.configureCollectionView()
-    pdbr.state(self.collectionView)
+    self.configureDataSource()
 
   @objc_method
   def configureCollectionView(self):
@@ -43,6 +58,7 @@ class TodoListViewController(UIViewController):
     @Block
     def sectionProvider(sectionIndex: NSInteger,
                         layoutEnvironment: objc_id) -> ObjCInstance:
+      print('sectionProvider')
       _appearance = UICollectionLayoutListAppearance.plain
       configuration = UICollectionLayoutListConfiguration.alloc(
       ).initWithAppearance_(_appearance)
@@ -68,6 +84,28 @@ class TodoListViewController(UIViewController):
       self.collectionView.bottomAnchor.constraintEqualToAnchor_(
         self.view.bottomAnchor),
     ])
+
+  @objc_method
+  def configureDataSource(self):
+    #pdbr.state(self.collectionView)
+    #pdbr.state(UICellAccessoryCheckmark.alloc().init())
+    #pdbr.state(NSUUID.UUID())
+
+    @Block
+    def configurationHandler(cell: ObjCInstance, indexPath: ObjCInstance,
+                             item: objc_id) -> None:
+      configuration = cell.defaultContentConfiguration()
+      configuration.setText_(item.title)
+      cell.setContentConfiguration_(configuration)
+      # xxx: UICellAccessoryCheckmark enum 確認
+      cell.setAccessories_([
+        UICellAccessoryCheckmark.alloc().init(),
+      ])
+
+    todoCellRegistration = UICollectionViewCellRegistration.registrationWithCellClass_configurationHandler_(
+      UICollectionViewListCell, configurationHandler)
+    #pdbr.state(UICollectionViewCellRegistration)
+    pdbr.state(todoCellRegistration)
 
 
 if __name__ == '__main__':
