@@ -21,6 +21,8 @@ UICollectionLayoutListConfiguration = ObjCClass(
   'UICollectionLayoutListConfiguration')
 NSCollectionLayoutSection = ObjCClass('NSCollectionLayoutSection')
 
+NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
+
 CGRectZero = CGRectMake(0, 0, 0, 0)
 
 
@@ -33,15 +35,10 @@ class TodoListViewController(UIViewController):
     title = NSStringFromClass(__class__)
     self.navigationItem.title = title
     self.configureCollectionView()
+    pdbr.state(self.collectionView)
 
   @objc_method
   def configureCollectionView(self):
-
-    #collectionView = UICollectionView.alloc().initWithFrame_(CGRectZero)
-    #pdbr.state(collectionView)
-    #pdbr.state(self.view)
-    #pdbr.state(configuration)
-    #pdbr.state(UICollectionLayoutListConfiguration.alloc())
 
     @Block
     def sectionProvider(sectionIndex: NSInteger,
@@ -54,11 +51,23 @@ class TodoListViewController(UIViewController):
 
     layout = UICollectionViewCompositionalLayout.alloc(
     ).initWithSectionProvider_(sectionProvider)
-    #pdbr.state(UICollectionViewCompositionalLayout.alloc())
-    #pdbr.state(layout)
-    collectionView = UICollectionView.alloc(
+    self.collectionView = UICollectionView.alloc(
     ).initWithFrame_collectionViewLayout_(CGRectZero, layout)
-    pdbr.state(collectionView)
+
+    self.view.addSubview_(self.collectionView)
+    # --- Layout
+    self.collectionView.translatesAutoresizingMaskIntoConstraints = False
+
+    NSLayoutConstraint.activateConstraints_([
+      self.collectionView.leadingAnchor.constraintEqualToAnchor_(
+        self.view.leadingAnchor),
+      self.collectionView.trailingAnchor.constraintEqualToAnchor_(
+        self.view.trailingAnchor),
+      self.collectionView.topAnchor.constraintEqualToAnchor_(
+        self.view.topAnchor),
+      self.collectionView.bottomAnchor.constraintEqualToAnchor_(
+        self.view.bottomAnchor),
+    ])
 
 
 if __name__ == '__main__':
