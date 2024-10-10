@@ -94,21 +94,27 @@ class TodoListViewController(UIViewController):
 
     @Block
     def sectionProvider(sectionIndex: NSInteger,
-                        layoutEnvironment: objc_id) -> ObjCInstance:
+                        layoutEnvironment: objc_id) -> objc_id:
       print('Block: sectionProvider')
+      # xxx: `sectionIndex`, 'NSInteger' ? `objc_id` ? `int` ?
       _appearance = UICollectionLayoutListAppearance.plain
+
       configuration = UICollectionLayoutListConfiguration.alloc(
       ).initWithAppearance_(_appearance)
-      return NSCollectionLayoutSection.sectionWithListConfiguration_layoutEnvironment_(
-        configuration, layoutEnvironment).ptr
+
+      layoutSection = NSCollectionLayoutSection.sectionWithListConfiguration_layoutEnvironment_(
+        configuration, ObjCInstance(layoutEnvironment))
+      return layoutSection
 
     layout = UICollectionViewCompositionalLayout.alloc(
     ).initWithSectionProvider_(sectionProvider)
+
     self.collectionView = UICollectionView.alloc(
     ).initWithFrame_collectionViewLayout_(CGRectZero, layout)
 
     self.view.addSubview_(self.collectionView)
     # --- Layout
+
     self.collectionView.translatesAutoresizingMaskIntoConstraints = False
 
     NSLayoutConstraint.activateConstraints_([
@@ -153,13 +159,14 @@ class TodoListViewController(UIViewController):
 
   @objc_method
   def applySnapshot(self):
-    #pdbr.state(self.dataSource)
     snapshot = NSDiffableDataSourceSnapshot.alloc().init()
-    snapshot.appendSectionsWithIdentifiers_([0])
-    snapshot.appendItemsWithIdentifiers_intoSectionWithIdentifier_([], 0)
+    snapshot.appendSectionsWithIdentifiers_([Section.main])
+    snapshot.appendItemsWithIdentifiers_intoSectionWithIdentifier_(
+      [], Section.main)
     #snapshot.appendItemsWithIdentifiers_(self.repository.todoIDs)
     #pdbr.state(snapshot)
     self.dataSource.applySnapshot_animatingDifferences_(snapshot, True)
+
     #pdbr.state(self.dataSource)
 
 
