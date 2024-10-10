@@ -5,8 +5,9 @@ ref: [Diffable DataSource 入門 #Swift - Qiita](https://qiita.com/maiyama18/ite
 """
 
 import ctypes
+from enum import IntEnum, auto
 
-from pyrubicon.objc.api import ObjCClass, ObjCInstance, objc_method, Block
+from pyrubicon.objc.api import ObjCClass, ObjCInstance, objc_method, objc_property, Block
 from pyrubicon.objc.runtime import send_super, objc_id
 from pyrubicon.objc.types import CGRectMake, NSInteger
 
@@ -33,6 +34,8 @@ NSIndexPath = ObjCClass('NSIndexPath')
 UICollectionViewDiffableDataSource = ObjCClass(
   'UICollectionViewDiffableDataSource')
 
+NSDiffableDataSourceSnapshot = ObjCClass('NSDiffableDataSourceSnapshot')
+
 NSUUID = ObjCClass('NSUUID')
 NSCollectionLayoutSection = ObjCClass('NSCollectionLayoutSection')
 
@@ -43,20 +46,48 @@ CGRectZero = CGRectMake(0, 0, 0, 0)
 
 class Todo:
 
+  def __init__(self, id: NSUUID, title: str, done: bool):
+    self.id = id
+    self.title = title
+    self.done = done
+
+  @property
+  def ID(self):
+    return self.id
+
+
+class Section(IntEnum):
+  main = 0
+
+
+class TodoRepository:
+
   def __init__(self):
-    pass
+    self.todos = [Todo(NSUUID.UUID(), f'Todo #{i}', False) for i in range(30)]
+    self.todoIDs = [_todo.id for _todo in self.todos]
+
+  def todo(self, id: Todo.ID) -> Todo:
+    for _todo in self.todos:
+      if id == _todo.id:
+        return _todo
 
 
 class TodoListViewController(UIViewController):
 
   @objc_method
   def viewDidLoad(self):
+    #
     send_super(__class__, self, 'viewDidLoad')  # xxx: 不要?
     # --- Navigation
     title = NSStringFromClass(__class__)
     self.navigationItem.title = title
+
+    # xxx: 宣言する場所
+    self.repository = TodoRepository()
+
     self.configureCollectionView()
     self.configureDataSource()
+    self.applySnapshot()
 
   @objc_method
   def configureCollectionView(self):
@@ -64,12 +95,12 @@ class TodoListViewController(UIViewController):
     @Block
     def sectionProvider(sectionIndex: NSInteger,
                         layoutEnvironment: objc_id) -> ObjCInstance:
-      print('sectionProvider')
+      print('Block: sectionProvider')
       _appearance = UICollectionLayoutListAppearance.plain
       configuration = UICollectionLayoutListConfiguration.alloc(
       ).initWithAppearance_(_appearance)
       return NSCollectionLayoutSection.sectionWithListConfiguration_layoutEnvironment_(
-        configuration, layoutEnvironment)
+        configuration, layoutEnvironment).ptr
 
     layout = UICollectionViewCompositionalLayout.alloc(
     ).initWithSectionProvider_(sectionProvider)
@@ -97,6 +128,7 @@ class TodoListViewController(UIViewController):
     @Block
     def configurationHandler(cell: ObjCInstance, indexPath: ObjCInstance,
                              item: objc_id) -> None:
+      print('Block: configurationHandler')
       configuration = cell.defaultContentConfiguration()
       configuration.setText_(item.title)
       cell.setContentConfiguration_(configuration)
@@ -108,19 +140,27 @@ class TodoListViewController(UIViewController):
     todoCellRegistration = UICollectionViewCellRegistration.registrationWithCellClass_configurationHandler_(
       UICollectionViewListCell, configurationHandler)
 
-    #pdbr.state(todoCellRegistration)
-    #pdbr.state(UICollectionViewDiffableDataSource)
-
     @Block
     def cellProvider(collectionView: ObjCInstance, indexPath: ObjCInstance,
                      itemIdentifier: objc_id) -> ObjCInstance:
+      print('Block: cellProvider')
+      todo = self.repository.todo(itemIdentifier)
       return collectionView.dequeueConfiguredReusableCellWithRegistration_forIndexPath_item_(
         todoCellRegistration, indexPath, 'hoge')
 
-    dataSource = UICollectionViewDiffableDataSource.alloc(
+    self.dataSource = UICollectionViewDiffableDataSource.alloc(
     ).initWithCollectionView_cellProvider_(self.collectionView, cellProvider)
 
-    pdbr.state(dataSource)
+  @objc_method
+  def applySnapshot(self):
+    #pdbr.state(self.dataSource)
+    snapshot = NSDiffableDataSourceSnapshot.alloc().init()
+    snapshot.appendSectionsWithIdentifiers_([0])
+    snapshot.appendItemsWithIdentifiers_intoSectionWithIdentifier_([], 0)
+    #snapshot.appendItemsWithIdentifiers_(self.repository.todoIDs)
+    #pdbr.state(snapshot)
+    self.dataSource.applySnapshot_animatingDifferences_(snapshot, True)
+    #pdbr.state(self.dataSource)
 
 
 if __name__ == '__main__':
