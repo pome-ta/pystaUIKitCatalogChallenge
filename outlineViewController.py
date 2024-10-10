@@ -13,6 +13,7 @@ from pyrubicon.objc.types import CGRectMake, NSInteger
 from rbedge.enumerations import UICollectionLayoutListAppearance
 from rbedge.functions import NSStringFromClass
 
+# --- layout
 UIViewController = ObjCClass('UIViewController')
 UICollectionView = ObjCClass('UICollectionView')
 UICollectionViewCompositionalLayout = ObjCClass(
@@ -20,12 +21,17 @@ UICollectionViewCompositionalLayout = ObjCClass(
 UICollectionLayoutListConfiguration = ObjCClass(
   'UICollectionLayoutListConfiguration')
 
+# --- cell
 UICollectionViewCellRegistration = ObjCClass(
   'UICollectionViewCellRegistration')
 #UICollectionViewCell = ObjCClass('UICollectionViewCell')
 UICollectionViewListCell = ObjCClass('UICollectionViewListCell')
 UICellAccessoryCheckmark = ObjCClass('UICellAccessoryCheckmark')
 NSIndexPath = ObjCClass('NSIndexPath')
+
+# --- dataSource
+UICollectionViewDiffableDataSource = ObjCClass(
+  'UICollectionViewDiffableDataSource')
 
 NSUUID = ObjCClass('NSUUID')
 NSCollectionLayoutSection = ObjCClass('NSCollectionLayoutSection')
@@ -87,9 +93,6 @@ class TodoListViewController(UIViewController):
 
   @objc_method
   def configureDataSource(self):
-    #pdbr.state(self.collectionView)
-    #pdbr.state(UICellAccessoryCheckmark.alloc().init())
-    #pdbr.state(NSUUID.UUID())
 
     @Block
     def configurationHandler(cell: ObjCInstance, indexPath: ObjCInstance,
@@ -104,8 +107,20 @@ class TodoListViewController(UIViewController):
 
     todoCellRegistration = UICollectionViewCellRegistration.registrationWithCellClass_configurationHandler_(
       UICollectionViewListCell, configurationHandler)
-    #pdbr.state(UICollectionViewCellRegistration)
-    pdbr.state(todoCellRegistration)
+
+    #pdbr.state(todoCellRegistration)
+    #pdbr.state(UICollectionViewDiffableDataSource)
+
+    @Block
+    def cellProvider(collectionView: ObjCInstance, indexPath: ObjCInstance,
+                     itemIdentifier: objc_id) -> ObjCInstance:
+      return collectionView.dequeueConfiguredReusableCellWithRegistration_forIndexPath_item_(
+        todoCellRegistration, indexPath, 'hoge')
+
+    dataSource = UICollectionViewDiffableDataSource.alloc(
+    ).initWithCollectionView_cellProvider_(self.collectionView, cellProvider)
+
+    pdbr.state(dataSource)
 
 
 if __name__ == '__main__':
