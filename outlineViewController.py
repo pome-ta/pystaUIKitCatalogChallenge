@@ -7,7 +7,7 @@ ref: [Diffable DataSource 入門 #Swift - Qiita](https://qiita.com/maiyama18/ite
 import ctypes
 from enum import IntEnum, auto
 
-from pyrubicon.objc.api import ObjCClass, ObjCInstance, objc_method, objc_property, Block
+from pyrubicon.objc.api import ObjCClass, ObjCInstance, ObjCBlock, objc_method, objc_property, Block
 from pyrubicon.objc.runtime import send_super, objc_id
 from pyrubicon.objc.types import CGRectMake, NSInteger
 
@@ -94,7 +94,7 @@ class TodoListViewController(UIViewController):
 
     @Block
     def sectionProvider(sectionIndex: NSInteger,
-                        layoutEnvironment: objc_id) -> objc_id:
+                        layoutEnvironment: objc_id) -> ObjCInstance:
       print('Block: sectionProvider')
       # xxx: `sectionIndex`, 'NSInteger' ? `objc_id` ? `int` ?
       _appearance = UICollectionLayoutListAppearance.plain
@@ -106,10 +106,11 @@ class TodoListViewController(UIViewController):
       #pdbr.state(layoutSection)
       return layoutSection
 
+    #layout = UICollectionViewCompositionalLayout.alloc().initWithSectionProvider_(sectionProvider)
     layout = UICollectionViewCompositionalLayout.alloc(
-    ).initWithSectionProvider_(ObjCInstance(sectionProvider))
+    ).initWithSectionProvider_(
+      ObjCBlock(sectionProvider, ObjCInstance, NSInteger, objc_id))
     #pdbr.state(layout)
-    
 
     self.collectionView = UICollectionView.alloc(
     ).initWithFrame_collectionViewLayout_(CGRectZero, layout)
@@ -133,7 +134,7 @@ class TodoListViewController(UIViewController):
   @objc_method
   def configureDataSource(self):
 
-    @Block
+    #@Block
     def configurationHandler(cell: ObjCInstance, indexPath: ObjCInstance,
                              item: objc_id) -> None:
       print('Block: configurationHandler')
@@ -163,6 +164,8 @@ class TodoListViewController(UIViewController):
   def applySnapshot(self):
     snapshot = NSDiffableDataSourceSnapshot.alloc().init()
     snapshot.appendSectionsWithIdentifiers_([Section.main])
+    snapshot.appendItemsWithIdentifiers_intoSectionWithIdentifier_(
+      [], Section.main)
     #snapshot.appendItemsWithIdentifiers_intoSectionWithIdentifier_(['a'], Section.main)
     #snapshot.appendItemsWithIdentifiers_(self.repository.todoIDs)
     #pdbr.state(snapshot)
