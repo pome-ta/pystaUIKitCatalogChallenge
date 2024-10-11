@@ -67,6 +67,7 @@ class TodoRepository:
     self.todoIDs = [_todo.id for _todo in self.todos]
 
   def todo(self, id: Todo.ID) -> Todo:
+    print(f'todo: {id=}')
     for _todo in self.todos:
       if id == _todo.id:
         return _todo
@@ -97,23 +98,26 @@ class TodoListViewController(UIViewController):
                         layoutEnvironment: objc_id) -> ObjCInstance:
       print('Block: sectionProvider')
       # xxx: `sectionIndex`, 'NSInteger' ? `objc_id` ? `int` ?
+
       _appearance = UICollectionLayoutListAppearance.plain
       configuration = UICollectionLayoutListConfiguration.alloc(
       ).initWithAppearance_(_appearance)
-
-      layoutSection = NSCollectionLayoutSection.sectionWithListConfiguration_layoutEnvironment_(
-        configuration, ObjCInstance(layoutEnvironment))
+      
+      layoutSection = NSCollectionLayoutSection.sectionWithListConfiguration_layoutEnvironment_(configuration, ObjCInstance(layoutEnvironment))
+      
+      
+      
       #pdbr.state(layoutSection)
-      return layoutSection
+      return #layoutSection
 
-    #layout = UICollectionViewCompositionalLayout.alloc().initWithSectionProvider_(sectionProvider)
     layout = UICollectionViewCompositionalLayout.alloc(
-    ).initWithSectionProvider_(
-      ObjCBlock(sectionProvider, ObjCInstance, NSInteger, objc_id))
+    ).initWithSectionProvider_(sectionProvider)
     #pdbr.state(layout)
 
     self.collectionView = UICollectionView.alloc(
     ).initWithFrame_collectionViewLayout_(CGRectZero, layout)
+    
+    #pdbr.state(self.collectionView)
 
     self.view.addSubview_(self.collectionView)
     # --- Layout
@@ -134,12 +138,12 @@ class TodoListViewController(UIViewController):
   @objc_method
   def configureDataSource(self):
 
-    #@Block
+    @Block
     def configurationHandler(cell: ObjCInstance, indexPath: ObjCInstance,
                              item: objc_id) -> None:
       print('Block: configurationHandler')
       configuration = cell.defaultContentConfiguration()
-      configuration.setText_(item.title)
+      configuration.setText_(ObjCInstance(item).title)
       cell.setContentConfiguration_(configuration)
       # xxx: UICellAccessoryCheckmark enum 確認
       cell.setAccessories_([
@@ -150,7 +154,7 @@ class TodoListViewController(UIViewController):
       UICollectionViewListCell, configurationHandler)
 
     @Block
-    def cellProvider(collectionView: ObjCInstance, indexPath: ObjCInstance,
+    def cellProvider(collectionView: objc_id, indexPath: ObjCInstance,
                      itemIdentifier: objc_id) -> ObjCInstance:
       print('Block: cellProvider')
       todo = self.repository.todo(itemIdentifier)
@@ -165,13 +169,15 @@ class TodoListViewController(UIViewController):
     snapshot = NSDiffableDataSourceSnapshot.alloc().init()
     snapshot.appendSectionsWithIdentifiers_([Section.main])
     snapshot.appendItemsWithIdentifiers_intoSectionWithIdentifier_(
-      [], Section.main)
+      ['a'], Section.main)
     #snapshot.appendItemsWithIdentifiers_intoSectionWithIdentifier_(['a'], Section.main)
     #snapshot.appendItemsWithIdentifiers_(self.repository.todoIDs)
+    #snapshot.appendItemsWithIdentifiers_([])
     #pdbr.state(snapshot)
     self.dataSource.applySnapshot_animatingDifferences_(snapshot, True)
-
     #pdbr.state(self.dataSource)
+    pdbr.state(self.collectionView)
+    
 
 
 if __name__ == '__main__':
