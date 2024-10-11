@@ -98,16 +98,18 @@ class TodoListViewController(UIViewController):
       print('Block: sectionProvider')
       # xxx: `sectionIndex`, 'NSInteger' ? `objc_id` ? `int` ?
       _appearance = UICollectionLayoutListAppearance.plain
-
       configuration = UICollectionLayoutListConfiguration.alloc(
       ).initWithAppearance_(_appearance)
 
       layoutSection = NSCollectionLayoutSection.sectionWithListConfiguration_layoutEnvironment_(
         configuration, ObjCInstance(layoutEnvironment))
+      #pdbr.state(layoutSection)
       return layoutSection
 
     layout = UICollectionViewCompositionalLayout.alloc(
-    ).initWithSectionProvider_(sectionProvider)
+    ).initWithSectionProvider_(ObjCInstance(sectionProvider))
+    #pdbr.state(layout)
+    
 
     self.collectionView = UICollectionView.alloc(
     ).initWithFrame_collectionViewLayout_(CGRectZero, layout)
@@ -161,8 +163,7 @@ class TodoListViewController(UIViewController):
   def applySnapshot(self):
     snapshot = NSDiffableDataSourceSnapshot.alloc().init()
     snapshot.appendSectionsWithIdentifiers_([Section.main])
-    snapshot.appendItemsWithIdentifiers_intoSectionWithIdentifier_(
-      [], Section.main)
+    #snapshot.appendItemsWithIdentifiers_intoSectionWithIdentifier_(['a'], Section.main)
     #snapshot.appendItemsWithIdentifiers_(self.repository.todoIDs)
     #pdbr.state(snapshot)
     self.dataSource.applySnapshot_animatingDifferences_(snapshot, True)
