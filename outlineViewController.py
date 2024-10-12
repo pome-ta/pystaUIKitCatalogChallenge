@@ -84,21 +84,31 @@ class TodoListViewController(UIViewController):
     self.navigationItem.title = title
 
     # xxx: 宣言する場所
-    self.repository = TodoRepository()
+    #self.repository = TodoRepository()
 
     self.configureCollectionView()
     self.configureDataSource()
     self.applySnapshot()
 
   @objc_method
+  def viewDidAppear_(self, animated: bool):
+    # xxx: 引数不要?
+    send_super(__class__, self, 'viewDidAppear:')
+    print('viewDidAppear')
+    #pdbr.state(self)
+
+  @objc_method
   def configureCollectionView(self):
 
     @Block
-    def sectionProvider(sectionIndex: NSInteger,
-                        _layoutEnvironment: objc_id) -> objc_id:
+    def sectionProvider(sectionIndex: int,
+                        _layoutEnvironment: objc_id) -> ObjCInstance:
       print('Block: sectionProvider')
       # xxx: `sectionIndex`, 'NSInteger' ? `objc_id` ? `int` ?
       layoutEnvironment = ObjCInstance(_layoutEnvironment)
+      #print(layoutEnvironment.container.effectiveContentSize.width)
+      #pdbr.state(layoutEnvironment)
+      #print(sectionIndex)
       _appearance = UICollectionLayoutListAppearance.plain
       configuration = UICollectionLayoutListConfiguration.alloc(
       ).initWithAppearance_(_appearance)
@@ -106,7 +116,7 @@ class TodoListViewController(UIViewController):
       layoutSection = NSCollectionLayoutSection.sectionWithListConfiguration_layoutEnvironment_(
         configuration, layoutEnvironment)
 
-      pdbr.state(layoutSection)
+      #pdbr.state(layoutSection)
       return layoutSection
 
     layout = UICollectionViewCompositionalLayout.alloc(
@@ -160,8 +170,10 @@ class TodoListViewController(UIViewController):
       indexPath = ObjCInstance(_indexPath)
       itemIdentifier = ObjCClass(_itemIdentifier)
       #todo = self.repository.todo(itemIdentifier)
-      return collectionView.dequeueConfiguredReusableCellWithRegistration_forIndexPath_item_(
-        todoCellRegistration, ObjCInstance(indexPath), 'hoge')
+      dequeueConfiguredReusableCell = collectionView.dequeueConfiguredReusableCellWithRegistration_forIndexPath_item_(
+        todoCellRegistration, indexPath, 'hoge')
+
+      return dequeueConfiguredReusableCell
 
     self.dataSource = UICollectionViewDiffableDataSource.alloc(
     ).initWithCollectionView_cellProvider_(self.collectionView, cellProvider)
@@ -178,6 +190,7 @@ class TodoListViewController(UIViewController):
     #snapshot.appendItemsWithIdentifiers_([])
     #pdbr.state(snapshot)
     self.dataSource.applySnapshot_animatingDifferences_(snapshot, True)
+    print('h')
     #pdbr.state(self.dataSource)
     #pdbr.state(self.collectionView)
 
