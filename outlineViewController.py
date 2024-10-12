@@ -95,20 +95,19 @@ class TodoListViewController(UIViewController):
 
     @Block
     def sectionProvider(sectionIndex: NSInteger,
-                        layoutEnvironment: objc_id) -> ObjCInstance:
+                        _layoutEnvironment: objc_id) -> objc_id:
       print('Block: sectionProvider')
       # xxx: `sectionIndex`, 'NSInteger' ? `objc_id` ? `int` ?
-
+      layoutEnvironment = ObjCInstance(_layoutEnvironment)
       _appearance = UICollectionLayoutListAppearance.plain
       configuration = UICollectionLayoutListConfiguration.alloc(
       ).initWithAppearance_(_appearance)
-      
-      layoutSection = NSCollectionLayoutSection.sectionWithListConfiguration_layoutEnvironment_(configuration, ObjCInstance(layoutEnvironment))
-      
-      
-      
+
+      layoutSection = NSCollectionLayoutSection.sectionWithListConfiguration_layoutEnvironment_(
+        configuration, layoutEnvironment)
+
       #pdbr.state(layoutSection)
-      return #layoutSection
+      return layoutSection
 
     layout = UICollectionViewCompositionalLayout.alloc(
     ).initWithSectionProvider_(sectionProvider)
@@ -116,7 +115,7 @@ class TodoListViewController(UIViewController):
 
     self.collectionView = UICollectionView.alloc(
     ).initWithFrame_collectionViewLayout_(CGRectZero, layout)
-    
+
     #pdbr.state(self.collectionView)
 
     self.view.addSubview_(self.collectionView)
@@ -154,12 +153,15 @@ class TodoListViewController(UIViewController):
       UICollectionViewListCell, configurationHandler)
 
     @Block
-    def cellProvider(collectionView: objc_id, indexPath: ObjCInstance,
-                     itemIdentifier: objc_id) -> ObjCInstance:
+    def cellProvider(_collectionView: objc_id, _indexPath: objc_id,
+                     _itemIdentifier: objc_id) -> ObjCInstance:
       print('Block: cellProvider')
-      todo = self.repository.todo(itemIdentifier)
+      collectionView = ObjCInstance(_collectionView)
+      indexPath = ObjCInstance(_indexPath)
+      itemIdentifier = ObjCClass(_itemIdentifier)
+      #todo = self.repository.todo(itemIdentifier)
       return collectionView.dequeueConfiguredReusableCellWithRegistration_forIndexPath_item_(
-        todoCellRegistration, indexPath, 'hoge')
+        todoCellRegistration, ObjCInstance(indexPath), 'hoge')
 
     self.dataSource = UICollectionViewDiffableDataSource.alloc(
     ).initWithCollectionView_cellProvider_(self.collectionView, cellProvider)
@@ -167,17 +169,17 @@ class TodoListViewController(UIViewController):
   @objc_method
   def applySnapshot(self):
     snapshot = NSDiffableDataSourceSnapshot.alloc().init()
-    snapshot.appendSectionsWithIdentifiers_([Section.main])
-    snapshot.appendItemsWithIdentifiers_intoSectionWithIdentifier_(
-      ['a'], Section.main)
+    #snapshot.appendSectionsWithIdentifiers_([Section.main])
+    snapshot.appendSectionsWithIdentifiers_([0])
+    #snapshot.appendItemsWithIdentifiers_([NSUUID.UUID()])
+    #snapshot.appendItemsWithIdentifiers_intoSectionWithIdentifier_(['a'], Section.main)
     #snapshot.appendItemsWithIdentifiers_intoSectionWithIdentifier_(['a'], Section.main)
     #snapshot.appendItemsWithIdentifiers_(self.repository.todoIDs)
     #snapshot.appendItemsWithIdentifiers_([])
     #pdbr.state(snapshot)
     self.dataSource.applySnapshot_animatingDifferences_(snapshot, True)
     #pdbr.state(self.dataSource)
-    pdbr.state(self.collectionView)
-    
+    #pdbr.state(self.collectionView)
 
 
 if __name__ == '__main__':
