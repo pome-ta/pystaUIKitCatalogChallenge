@@ -106,7 +106,7 @@ class TodoListViewController(UIViewController):
       layoutSection = NSCollectionLayoutSection.sectionWithListConfiguration_layoutEnvironment_(
         configuration, layoutEnvironment)
 
-      #pdbr.state(layoutSection)
+      pdbr.state(layoutSection)
       return layoutSection
 
     layout = UICollectionViewCompositionalLayout.alloc(
