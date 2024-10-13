@@ -7,7 +7,7 @@ ref: [Diffable DataSource 入門 #Swift - Qiita](https://qiita.com/maiyama18/ite
 import ctypes
 from enum import IntEnum, auto
 
-from pyrubicon.objc.api import ObjCClass, ObjCInstance, ObjCBlock, objc_method, objc_property, Block,at
+from pyrubicon.objc.api import ObjCClass, ObjCInstance, ObjCBlock, objc_method, objc_property, Block, at
 from pyrubicon.objc.runtime import send_super, objc_id
 from pyrubicon.objc.types import CGRectMake, NSInteger
 
@@ -95,17 +95,17 @@ class TodoListViewController(UIViewController):
     # xxx: 引数不要?
     send_super(__class__, self, 'viewDidAppear:')
     print('viewDidAppear')
-    #pdbr.state(self)
 
   @objc_method
   def configureCollectionView(self):
 
     @Block
-    def sectionProvider(sectionIndex: int,
-                        _layoutEnvironment: objc_id) -> ObjCInstance:
+    def sectionProvider(sectionIndex: NSInteger,
+                        _layoutEnvironment: objc_id) -> objc_id:
       print('Block: sectionProvider')
       # xxx: `sectionIndex`, 'NSInteger' ? `objc_id` ? `int` ?
       layoutEnvironment = ObjCInstance(_layoutEnvironment)
+      
       #print(layoutEnvironment.container.effectiveContentSize.width)
       #pdbr.state(layoutEnvironment)
       #print(sectionIndex)
@@ -119,9 +119,9 @@ class TodoListViewController(UIViewController):
       #pdbr.state(layoutSection)
       return layoutSection
 
-    layout = UICollectionViewCompositionalLayout.alloc(
-    ).initWithSectionProvider_(sectionProvider)
+    layout = UICollectionViewCompositionalLayout.alloc().initWithSectionProvider_(sectionProvider)
     #pdbr.state(layout)
+    #layout = UICollectionViewCompositionalLayout.alloc().initWithSection_(ObjCInstance(sectionProvider))
 
     self.collectionView = UICollectionView.alloc(
     ).initWithFrame_collectionViewLayout_(CGRectZero, layout)
@@ -148,34 +148,40 @@ class TodoListViewController(UIViewController):
   def configureDataSource(self):
 
     @Block
-    def configurationHandler(cell: ObjCInstance, indexPath: ObjCInstance,
-                             item: objc_id) -> None:
+    def configurationHandler(_cell: objc_id, _indexPath: objc_id,
+                             _item: objc_id) -> None:
       print('Block: configurationHandler')
+      cell = ObjCInstance(_cell)
+      indexPath = ObjCInstance(_indexPath)
+      item = ObjCInstance(_item)
+
       configuration = cell.defaultContentConfiguration()
-      configuration.setText_(ObjCInstance(item).title)
+      configuration.setText_(item.title)
       cell.setContentConfiguration_(configuration)
       # xxx: UICellAccessoryCheckmark enum 確認
       cell.setAccessories_([
         UICellAccessoryCheckmark.alloc().init(),
       ])
 
-    todoCellRegistration = UICollectionViewCellRegistration.registrationWithCellClass_configurationHandler_(
-      UICollectionViewListCell, configurationHandler)
-
     @Block
     def cellProvider(_collectionView: objc_id, _indexPath: objc_id,
-                     _itemIdentifier: objc_id) -> ObjCInstance:
+                     _itemIdentifier: objc_id) -> objc_id:
       print('Block: cellProvider')
       collectionView = ObjCInstance(_collectionView)
       indexPath = ObjCInstance(_indexPath)
       itemIdentifier = ObjCClass(_itemIdentifier)
       #todo = self.repository.todo(itemIdentifier)
-      dequeueConfiguredReusableCell = collectionView.dequeueConfiguredReusableCellWithRegistration_forIndexPath_item_(todoCellRegistration, indexPath, 'hoge')
+      dequeueConfiguredReusableCell = collectionView.dequeueConfiguredReusableCellWithRegistration_forIndexPath_item_(
+        todoCellRegistration, indexPath, 'hoge')
 
       return dequeueConfiguredReusableCell
 
+    todoCellRegistration = UICollectionViewCellRegistration.registrationWithCellClass_configurationHandler_(
+      UICollectionViewListCell, configurationHandler)
+
     self.dataSource = UICollectionViewDiffableDataSource.alloc(
-    ).initWithCollectionView_cellProvider_(self.collectionView, cellProvider)
+    ).initWithCollectionView_cellProvider_(self.collectionView,
+                                           cellProvider)
 
   @objc_method
   def applySnapshot(self):
@@ -184,7 +190,8 @@ class TodoListViewController(UIViewController):
     #snapshot.appendSectionsWithIdentifiers_(at([int(Section.main)]))
     snapshot.appendSectionsWithIdentifiers_(at([0]))
     #snapshot.appendItemsWithIdentifiers_([NSUUID.UUID()])
-    snapshot.appendItemsWithIdentifiers_intoSectionWithIdentifier_(at([]), Section.main)
+    snapshot.appendItemsWithIdentifiers_intoSectionWithIdentifier_(
+      at([]), Section.main)
     #snapshot.appendItemsWithIdentifiers_intoSectionWithIdentifier_(['a'], Section.main)
     #snapshot.appendItemsWithIdentifiers_(self.repository.todoIDs)
     #snapshot.appendItemsWithIdentifiers_([])
