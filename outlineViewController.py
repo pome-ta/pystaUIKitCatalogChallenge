@@ -7,7 +7,7 @@ ref: [Diffable DataSource 入門 #Swift - Qiita](https://qiita.com/maiyama18/ite
 import ctypes
 from enum import IntEnum, auto
 
-from pyrubicon.objc.api import ObjCClass, ObjCInstance, ObjCBlock, objc_method, objc_property, Block
+from pyrubicon.objc.api import ObjCClass, ObjCInstance, ObjCBlock, objc_method, objc_property, Block,at
 from pyrubicon.objc.runtime import send_super, objc_id
 from pyrubicon.objc.types import CGRectMake, NSInteger
 
@@ -170,8 +170,7 @@ class TodoListViewController(UIViewController):
       indexPath = ObjCInstance(_indexPath)
       itemIdentifier = ObjCClass(_itemIdentifier)
       #todo = self.repository.todo(itemIdentifier)
-      dequeueConfiguredReusableCell = collectionView.dequeueConfiguredReusableCellWithRegistration_forIndexPath_item_(
-        todoCellRegistration, indexPath, 'hoge')
+      dequeueConfiguredReusableCell = collectionView.dequeueConfiguredReusableCellWithRegistration_forIndexPath_item_(todoCellRegistration, indexPath, 'hoge')
 
       return dequeueConfiguredReusableCell
 
@@ -182,9 +181,10 @@ class TodoListViewController(UIViewController):
   def applySnapshot(self):
     snapshot = NSDiffableDataSourceSnapshot.alloc().init()
     #snapshot.appendSectionsWithIdentifiers_([Section.main])
-    snapshot.appendSectionsWithIdentifiers_([0])
+    #snapshot.appendSectionsWithIdentifiers_(at([int(Section.main)]))
+    snapshot.appendSectionsWithIdentifiers_(at([0]))
     #snapshot.appendItemsWithIdentifiers_([NSUUID.UUID()])
-    #snapshot.appendItemsWithIdentifiers_intoSectionWithIdentifier_(['a'], Section.main)
+    snapshot.appendItemsWithIdentifiers_intoSectionWithIdentifier_(at([]), Section.main)
     #snapshot.appendItemsWithIdentifiers_intoSectionWithIdentifier_(['a'], Section.main)
     #snapshot.appendItemsWithIdentifiers_(self.repository.todoIDs)
     #snapshot.appendItemsWithIdentifiers_([])
