@@ -3,16 +3,20 @@ note: 案がないまま進める
 """
 
 from pyrubicon.objc.api import ObjCClass, ObjCInstance
-from pyrubicon.objc.api import objc_method, objc_property
+from pyrubicon.objc.api import objc_method, objc_property, at
 from pyrubicon.objc.runtime import send_super
 
-from rbedge.enumerations import UICollectionLayoutListAppearance
+from rbedge.enumerations import UICollectionLayoutListAppearance, UIViewAutoresizing
 
 from rbedge.functions import NSStringFromClass
 
 UIViewController = ObjCClass('UIViewController')
 UICollectionView = ObjCClass('UICollectionView')
 UICollectionViewLayout = ObjCClass('UICollectionViewLayout')
+UICollectionLayoutListConfiguration = ObjCClass(
+  'UICollectionLayoutListConfiguration')
+UICollectionViewCompositionalLayout = ObjCClass(
+  'UICollectionViewCompositionalLayout')
 
 
 class OutlineViewController(UIViewController):
@@ -38,13 +42,22 @@ class OutlineViewController(UIViewController):
   # MARK: - UICollectionViewDiffableDataSource
   @objc_method
   def configureCollectionView(self):
-    #collectionView =
-    pass
+    view = self.view
+    collectionView = UICollectionView.alloc(
+    ).initWithFrame_collectionViewLayout_(view.bounds, self.generateLayout())
+    view.addSubview_(collectionView)
+    collectionView.autoresizingMask = UIViewAutoresizing.flexibleHeight | UIViewAutoresizing.flexibleWidth
+
+    pdbr.state(collectionView)
 
   @objc_method
   def generateLayout(self) -> ObjCInstance:
-    listConfiguration
-    pass
+    listConfiguration = UICollectionLayoutListConfiguration.alloc(
+    ).initWithAppearance_(UICollectionLayoutListAppearance.sidebar)
+
+    layout = UICollectionViewCompositionalLayout.layoutWithListConfiguration_(
+      listConfiguration)
+    return layout
 
 
 if __name__ == '__main__':

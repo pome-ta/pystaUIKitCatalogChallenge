@@ -242,3 +242,15 @@ class UICollectionLayoutListAppearance:
   sidebar: int = 3
   sidebarPlain: int = 4
 
+
+# ref: [UIViewAutoresizing | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uiviewautoresizing?language=objc)
+@dataclass
+class UIViewAutoresizing:
+  none: int = 0  # ref: [UIViewAutoresizingNone | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uiviewautoresizing/uiviewautoresizingnone?language=objc)
+  flexibleLeftMargin: int = 1 << 0
+  flexibleWidth: int = 1 << 1
+  flexibleRightMargin: int = 1 << 2
+  flexibleTopMargin: int = 1 << 3
+  flexibleHeight: int = 1 << 4
+  flexibleBottomMargin: int = 1 << 5
+
