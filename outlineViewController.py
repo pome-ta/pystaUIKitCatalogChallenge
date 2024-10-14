@@ -106,8 +106,8 @@ class OutlineViewController(UIViewController):
   @objc_method
   def initialSnapshot(self):
     snapshot = NSDiffableDataSourceSectionSnapshot.alloc().init()
-    snapshot.appendItems_(at([]))
-    pdbr.state(snapshot)
+    #snapshot.appendItems_(at([]))
+    pdbr.state(NSDiffableDataSourceSectionSnapshot)
     return  #snapshot
 
 
