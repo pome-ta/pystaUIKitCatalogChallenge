@@ -2,9 +2,9 @@
 note: 案がないまま進める
 """
 
-from pyrubicon.objc.api import ObjCClass, ObjCInstance
+from pyrubicon.objc.api import ObjCClass, ObjCInstance, Block
 from pyrubicon.objc.api import objc_method, objc_property, at
-from pyrubicon.objc.runtime import send_super
+from pyrubicon.objc.runtime import send_super, objc_id
 
 from rbedge.enumerations import UICollectionLayoutListAppearance, UIViewAutoresizing
 
@@ -17,6 +17,12 @@ UICollectionLayoutListConfiguration = ObjCClass(
   'UICollectionLayoutListConfiguration')
 UICollectionViewCompositionalLayout = ObjCClass(
   'UICollectionViewCompositionalLayout')
+UICollectionViewCellRegistration = ObjCClass(
+  'UICollectionViewCellRegistration')
+UICollectionViewListCell = ObjCClass('UICollectionViewListCell')
+
+NSDiffableDataSourceSectionSnapshot = ObjCClass(
+  'NSDiffableDataSourceSectionSnapshot')
 
 
 class OutlineViewController(UIViewController):
@@ -31,6 +37,7 @@ class OutlineViewController(UIViewController):
     self.navigationItem.title = title
 
     self.configureCollectionView()
+    self.configureDataSource()
 
   @objc_method
   def viewDidAppear_(self, animated: bool):
@@ -47,8 +54,45 @@ class OutlineViewController(UIViewController):
     ).initWithFrame_collectionViewLayout_(view.bounds, self.generateLayout())
     view.addSubview_(collectionView)
     collectionView.autoresizingMask = UIViewAutoresizing.flexibleHeight | UIViewAutoresizing.flexibleWidth
+    self.outlineCollectionView = collectionView
 
-    pdbr.state(collectionView)
+    # xxx: `UICollectionViewDelegate` 後回し
+
+  @objc_method
+  def configureDataSource(self):
+
+    @Block
+    def containerCellRegistrationHandler(_cell: objc_id, _indexPath: objc_id,
+                                         _menuItem: objc_id) -> None:
+      print(f'containerCellRegistrationHandler')
+      cell = ObjCInstance(_cell)
+      indexPath = ObjCInstance(_indexPath)
+      menuItem = ObjCInstance(_menuItem)
+      # xxx: 処理は後で書く
+      contentConfiguration = cell.defaultContentConfiguration()
+      contentConfiguration.text = 'hoge'
+
+    @Block
+    def cellRegistrationHandler(_cell: objc_id, _indexPath: objc_id,
+                                _menuItem: objc_id) -> None:
+      print(f'cellRegistrationHandler')
+      cell = ObjCInstance(_cell)
+      indexPath = ObjCInstance(_indexPath)
+      menuItem = ObjCInstance(_menuItem)
+      # xxx: 処理は後で書く
+      contentConfiguration = cell.defaultContentConfiguration()
+      contentConfiguration.text = 'fuga'
+
+    containerCellRegistration = UICollectionViewCellRegistration.registrationWithCellClass_configurationHandler_(
+      UICollectionViewListCell, containerCellRegistrationHandler)
+
+    cellRegistration = UICollectionViewCellRegistration.registrationWithCellClass_configurationHandler_(
+      UICollectionViewListCell, cellRegistrationHandler)
+
+    #pdbr.state(containerCellRegistration)
+    #snapshot = self.initialSnapshot()
+    self.initialSnapshot()
+    #pdbr.state(snapshot)
 
   @objc_method
   def generateLayout(self) -> ObjCInstance:
@@ -58,6 +102,13 @@ class OutlineViewController(UIViewController):
     layout = UICollectionViewCompositionalLayout.layoutWithListConfiguration_(
       listConfiguration)
     return layout
+
+  @objc_method
+  def initialSnapshot(self):
+    snapshot = NSDiffableDataSourceSectionSnapshot.alloc().init()
+    snapshot.appendItems_(at([]))
+    pdbr.state(snapshot)
+    return  #snapshot
 
 
 if __name__ == '__main__':
