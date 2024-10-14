@@ -1,3 +1,17 @@
+# 📝 2024/10/14
+
+## `UICollectionView`、`UICollectionViewDiffableDataSource` のrubicon(objc) 実装
+
+[./OutlineViewController.swift](https://github.com/pome-ta/pystaUIKitCatalogChallenge/blob/main/UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/OutlineViewController.swift)
+
+
+Swift から、Objective-C へ読み替えをして、rubicon へ書き直すプロセス。
+
+空の状態は出せている感じだけど、要素が入ってくるとエラーもなく落ちる
+
+ちょっとテキストで整理してみたい
+
+
 # 📝 2024/10/13
 
 Block の処理なのか、エラーの出所がわからない
