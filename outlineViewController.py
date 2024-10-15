@@ -21,6 +21,8 @@ UICollectionViewCellRegistration = ObjCClass(
   'UICollectionViewCellRegistration')
 UICollectionViewListCell = ObjCClass('UICollectionViewListCell')
 
+UICollectionViewDiffableDataSource = ObjCClass(
+  'UICollectionViewDiffableDataSource')
 NSDiffableDataSourceSectionSnapshot = ObjCClass(
   'NSDiffableDataSourceSectionSnapshot')
 
@@ -50,8 +52,11 @@ class OutlineViewController(UIViewController):
   @objc_method
   def configureCollectionView(self):
     view = self.view
+    layout = self.generateLayout()
+    #collectionView = UICollectionView.alloc().initWithFrame_collectionViewLayout_(view.bounds, self.generateLayout())
     collectionView = UICollectionView.alloc(
-    ).initWithFrame_collectionViewLayout_(view.bounds, self.generateLayout())
+    ).initWithFrame_collectionViewLayout_(view.bounds, layout)
+
     view.addSubview_(collectionView)
     collectionView.autoresizingMask = UIViewAutoresizing.flexibleHeight | UIViewAutoresizing.flexibleWidth
     self.outlineCollectionView = collectionView
@@ -71,6 +76,7 @@ class OutlineViewController(UIViewController):
       # xxx: 処理は後で書く
       contentConfiguration = cell.defaultContentConfiguration()
       contentConfiguration.text = 'hoge'
+      cell.contentConfiguration = contentConfiguration
 
     @Block
     def cellRegistrationHandler(_cell: objc_id, _indexPath: objc_id,
@@ -82,6 +88,17 @@ class OutlineViewController(UIViewController):
       # xxx: 処理は後で書く
       contentConfiguration = cell.defaultContentConfiguration()
       contentConfiguration.text = 'fuga'
+      cell.contentConfiguration = contentConfiguration
+
+    @Block
+    def cellProvider(_collectionView: objc_id, _indexPath: objc_id,
+                     _item: objc_id) -> objc_id:
+      collectionView = ObjCInstance(_collectionView)
+      indexPath = ObjCInstance(_indexPath)
+      item = ObjCInstance(_item)
+
+      return collectionView.dequeueConfiguredReusableCellWithRegistration_forIndexPath_item_(
+        cellRegistration, indexPath, item)
 
     containerCellRegistration = UICollectionViewCellRegistration.registrationWithCellClass_configurationHandler_(
       UICollectionViewListCell, containerCellRegistrationHandler)
@@ -89,10 +106,21 @@ class OutlineViewController(UIViewController):
     cellRegistration = UICollectionViewCellRegistration.registrationWithCellClass_configurationHandler_(
       UICollectionViewListCell, cellRegistrationHandler)
 
+    self.dataSource = UICollectionViewDiffableDataSource.alloc(
+    ).initWithCollectionView_cellProvider_(self.outlineCollectionView,
+                                           cellProvider)
+
+    #pdbr.state(self.outlineCollectionView)
+    #pdbr.state(self.dataSource)
+
     #pdbr.state(containerCellRegistration)
     #snapshot = self.initialSnapshot()
     self.initialSnapshot()
+    #pdbr.state(self.snapshot)
     #pdbr.state(snapshot)
+    self.dataSource.applySnapshot_toSection_animatingDifferences_(self.snapshot, 0, False)
+    #pdbr.state(self.dataSource)
+    
 
   @objc_method
   def generateLayout(self) -> ObjCInstance:
@@ -104,11 +132,15 @@ class OutlineViewController(UIViewController):
     return layout
 
   @objc_method
-  def initialSnapshot(self):
+  def initialSnapshot(self) -> ObjCInstance:
     snapshot = NSDiffableDataSourceSectionSnapshot.alloc().init()
+    snapshot.appendItems_(at(['hoge']))
+    self.snapshot = snapshot
+    
+    #snapshot = NSDiffableDataSourceSectionSnapshot.new()
     #snapshot.appendItems_(at([]))
-    pdbr.state(NSDiffableDataSourceSectionSnapshot)
-    return  #snapshot
+    #pdbr.state(snapshot)
+    #return snapshot
 
 
 if __name__ == '__main__':
