@@ -29,7 +29,7 @@ NSDiffableDataSourceSectionSnapshot = ObjCClass(
 
 class OutlineViewController(UIViewController):
   # xxx: `objc_property` 宣言って必要？
-  outlineCollectionView: UICollectionView = objc_property()
+  outlineCollectionView: UICollectionView = objc_property(weak=True)
 
   @objc_method
   def viewDidLoad(self):
@@ -115,10 +115,10 @@ class OutlineViewController(UIViewController):
 
     #pdbr.state(containerCellRegistration)
     #snapshot = self.initialSnapshot()
-    self.initialSnapshot()
+    snapshot=self.initialSnapshot()
     #pdbr.state(self.snapshot)
     #pdbr.state(snapshot)
-    self.dataSource.applySnapshot_toSection_animatingDifferences_(self.snapshot, 0, False)
+    self.dataSource.applySnapshot_toSection_animatingDifferences_(snapshot, 0, False)
     #pdbr.state(self.dataSource)
     
 
@@ -135,12 +135,12 @@ class OutlineViewController(UIViewController):
   def initialSnapshot(self) -> ObjCInstance:
     snapshot = NSDiffableDataSourceSectionSnapshot.alloc().init()
     snapshot.appendItems_(at(['hoge']))
-    self.snapshot = snapshot
+    #self.snapshot = snapshot
     
     #snapshot = NSDiffableDataSourceSectionSnapshot.new()
     #snapshot.appendItems_(at([]))
     #pdbr.state(snapshot)
-    #return snapshot
+    return snapshot
 
 
 if __name__ == '__main__':
