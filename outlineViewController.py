@@ -115,12 +115,12 @@ class OutlineViewController(UIViewController):
 
     #pdbr.state(containerCellRegistration)
     #snapshot = self.initialSnapshot()
-    snapshot=self.initialSnapshot()
+    snapshot = self.initialSnapshot()
     #pdbr.state(self.snapshot)
     #pdbr.state(snapshot)
-    self.dataSource.applySnapshot_toSection_animatingDifferences_(snapshot, 0, False)
+    self.dataSource.applySnapshot_toSection_animatingDifferences_(
+      snapshot, 0, False)
     #pdbr.state(self.dataSource)
-    
 
   @objc_method
   def generateLayout(self) -> ObjCInstance:
@@ -136,7 +136,7 @@ class OutlineViewController(UIViewController):
     snapshot = NSDiffableDataSourceSectionSnapshot.alloc().init()
     snapshot.appendItems_(at(['hoge']))
     #self.snapshot = snapshot
-    
+
     #snapshot = NSDiffableDataSourceSectionSnapshot.new()
     #snapshot.appendItems_(at([]))
     #pdbr.state(snapshot)
