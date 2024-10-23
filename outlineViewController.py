@@ -29,6 +29,7 @@ NSDiffableDataSourceSectionSnapshot = ObjCClass(
 
 class OutlineViewController(UIViewController):
   # xxx: `objc_property` 宣言って必要？
+  dataSource: UICollectionViewDiffableDataSource = objc_property(weak=True)
   outlineCollectionView: UICollectionView = objc_property(weak=True)
 
   @objc_method
