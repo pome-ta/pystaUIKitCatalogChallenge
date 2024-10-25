@@ -36,16 +36,27 @@ class PageControlViewController(UIViewController):
 
   @objc_method
   def configurePageControl(self):
+    # todo: よしなに要素を配置したい
     pageControl = UIPageControl.alloc().init().autorelease()
     pageControl.frame = CGRectMake(16, 639.5, 343, 27.5)
+    
 
     pageControl.setNumberOfPages_(len(colors))
     pageControl.setCurrentPage_(2)
     pageControl.setPageIndicatorTintColor_(UIColor.systemGreenColor())
     pageControl.setCurrentPageIndicatorTintColor_(UIColor.systemPurpleColor())
-
+    
     pageControl.setBackgroundColor_(UIColor.systemDarkRedColor())
-    #pdbr.state(pageControl,1)
+    
+    _max = pageControl.sizeForNumberOfPages_(len(colors))
+    _size=pageControl.sizeThatFits_(_max)
+    pageControl.size =  _size
+
+    
+    pdbr.state(pageControl, 0)
+    #pdbr.state(pageControl.sizeForNumberOfPages_(len(colors)), 0)
+    #print(pageControl.sizeForNumberOfPages_(len(colors)))
+    #sizeForNumberOfPages
     #pdbr.state(UIColor)
 
     self.view.addSubview_(pageControl)
