@@ -17,15 +17,13 @@ class PageControlViewController(UIViewController):
     # --- Navigation
     title = NSStringFromClass(__class__)
     self.navigationItem.title = title
-    
-    
+
     pageControl = UIPageControl.alloc().init().autorelease()
-    pageControl.numberOfPages=3
-    pdbr.state(pageControl,1)
+    pageControl.frame = CGRectMake(16, 639.5, 343, 27.5)
+    pageControl.numberOfPages = 3
+    #pdbr.state(pageControl, 1.)
+    print(pageControl.contentMode)
     self.view.addSubview_(pageControl)
-    
-    
-    
 
 
 if __name__ == '__main__':

@@ -254,3 +254,21 @@ class UIViewAutoresizing:
   flexibleHeight: int = 1 << 4
   flexibleBottomMargin: int = 1 << 5
 
+
+# ref: [UIViewContentMode | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uiviewcontentmode?language=objc)
+@dataclass
+class UIViewContentMode:
+  scaleToFill: int = 0
+  scaleAspectFit: int = 1
+  scaleAspectFill: int = 2
+  redraw: int = 3
+  center: int = 4
+  top: int = 5
+  bottom: int = 6
+  left: int = 7
+  right: int = 8
+  topLeft: int = 9
+  topRight: int = 10
+  bottomLeft: int = 11
+  bottomRight: int = 12
+
