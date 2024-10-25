@@ -272,3 +272,23 @@ class UIViewContentMode:
   bottomLeft: int = 11
   bottomRight: int = 12
 
+
+# ref: [UIControlContentHorizontalAlignment | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uicontrolcontenthorizontalalignment?language=objc)
+@dataclass
+class UIControlContentHorizontalAlignment:
+  center: int = 0
+  left: int = 1
+  right: int = 2
+  fill: int = 3
+  leading: int = 4
+  trailing: int = 5
+
+
+# ref: [UIControlContentVerticalAlignment | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uicontrolcontentverticalalignment?language=objc)
+@dataclass
+class UIControlContentVerticalAlignment:
+  center: int = 0
+  top: int = 1
+  bottom: int = 2
+  fill: int = 3
+
