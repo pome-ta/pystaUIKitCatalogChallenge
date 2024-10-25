@@ -5,6 +5,7 @@ from pyrubicon.objc.runtime import send_super
 from rbedge.functions import NSStringFromClass
 
 UIViewController = ObjCClass('UIViewController')
+UIPageControl = ObjCClass('UIPageControl')
 
 
 class PageControlViewController(UIViewController):
@@ -15,6 +16,8 @@ class PageControlViewController(UIViewController):
     # --- Navigation
     title = NSStringFromClass(__class__)
     self.navigationItem.title = title
+    pageControl = UIPageControl.alloc().init().autorelease()
+    pdbr.state(pageControl)
 
 
 if __name__ == '__main__':

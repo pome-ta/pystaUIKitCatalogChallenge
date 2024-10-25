@@ -12,7 +12,21 @@
 
 Storyboard との連携を考えるのが面倒なので、1ファイルでゴリっと書いてから、Storyboard との連携を考える
 
+### 調べメモ
 
+#### `autorelease` の宣言
+
+```objc
+UIPageControl *pc = [[[UIPageControl alloc] init] autorelease];
+pc.frame = CGRectMake(0, 450, 320, 30);
+pc.numberOfPages = 10;
+pc.currentPage = 3;
+[self.view addSubview:pc];
+```
+
+[UIPageControl - iPhoneアプリ開発の虎の巻](https://iphone-tora.sakura.ne.jp/uipagecontrol.html)
+
+`autorelease` つける判断って結局どうすりゃええんだっけ？
 
 
 # 📝 2024/10/14
