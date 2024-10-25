@@ -1,6 +1,7 @@
 from pyrubicon.objc.api import ObjCClass
 from pyrubicon.objc.api import objc_method
 from pyrubicon.objc.runtime import send_super
+from pyrubicon.objc.types import CGRectMake
 
 from rbedge.functions import NSStringFromClass
 
@@ -16,8 +17,15 @@ class PageControlViewController(UIViewController):
     # --- Navigation
     title = NSStringFromClass(__class__)
     self.navigationItem.title = title
+    
+    
     pageControl = UIPageControl.alloc().init().autorelease()
-    pdbr.state(pageControl)
+    pageControl.numberOfPages=3
+    pdbr.state(pageControl,1)
+    self.view.addSubview_(pageControl)
+    
+    
+    
 
 
 if __name__ == '__main__':

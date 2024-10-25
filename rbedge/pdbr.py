@@ -44,11 +44,12 @@ def _get_className_methods(rubicon_object):
   return dict(reversed(list(py_className_methods.items())))
 
 
-def state(rubicon_obj):
+def state(rubicon_obj, is_merge_methods: bool = False):
   _dic = _get_className_methods(rubicon_obj)
   if _dic:
-    data = json.dumps(_dic, indent=2)
-    print(data)
+    pprint(sorted(set().union(
+      *list(_dic.values())))) if is_merge_methods else print(
+        json.dumps(_dic, indent=2))
     pprint(list(_dic.keys()))
     pprint(rubicon_obj)
   else:
