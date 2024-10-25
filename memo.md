@@ -28,6 +28,21 @@ pc.currentPage = 3;
 
 `autorelease` つける判断って結局どうすりゃええんだっけ？
 
+#### Storyboard の情報確認 & 取得
+
+[UIKitCatalog/Base.lproj/DefaultPageControlViewController.storyboard](https://github.com/pome-ta/pystaUIKitCatalogChallenge/blob/main/UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Base.lproj/DefaultPageControlViewController.storyboard)
+
+
+`viewController` の`view` に、`Page Control` と`Color View` が、ぶら下がっている感じ
+
+（見た目では、順序的に逆だが、要素順番として揃えておきたい。）
+
+
+要素は、`Safe Area` を基準として良い感じにやっているっぽい
+
+
+
+
 
 # 📝 2024/10/14
 
