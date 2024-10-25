@@ -6,6 +6,7 @@ from pyrubicon.objc.types import CGRectMake
 from rbedge.functions import NSStringFromClass
 
 UIViewController = ObjCClass('UIViewController')
+UIView = ObjCClass('UIView')
 UIPageControl = ObjCClass('UIPageControl')
 UIColor = ObjCClass('UIColor')
 
@@ -32,34 +33,52 @@ class PageControlViewController(UIViewController):
     title = NSStringFromClass(__class__)
     self.navigationItem.title = title
 
+    # xxx: あとで切り出す
+    self.colorView: UIView = UIView.new()
+    self.pageControl = UIPageControl.alloc().init().autorelease()
+
+    self.setlayout()
     self.configurePageControl()
+
+
+
+
+
+  @objc_method
+  def setlayout(self):
+    #pdbr.state(self.view, 1)
+    #safeAreaLayoutGuide
+    #safeAreaInsets
+    pdbr.state(self.view.safeAreaInsets)
+    #print(self.view.safeAreaLayoutGuide)
+    #pdbr.state(self.view.safeAreaLayoutGuide)
+    self.view.addSubview_(self.pageControl)
 
   @objc_method
   def configurePageControl(self):
     # todo: よしなに要素を配置したい
-    pageControl = UIPageControl.alloc().init().autorelease()
-    pageControl.frame = CGRectMake(16, 639.5, 343, 27.5)
-    
+    #self.pageControl = UIPageControl.alloc().init().autorelease()
+    self.pageControl.frame = CGRectMake(16, 639.5, 343, 27.5)
 
-    pageControl.setNumberOfPages_(len(colors))
-    pageControl.setCurrentPage_(2)
-    pageControl.setPageIndicatorTintColor_(UIColor.systemGreenColor())
-    pageControl.setCurrentPageIndicatorTintColor_(UIColor.systemPurpleColor())
-    
-    pageControl.setBackgroundColor_(UIColor.systemDarkRedColor())
-    
-    _max = pageControl.sizeForNumberOfPages_(len(colors))
-    _size=pageControl.sizeThatFits_(_max)
-    pageControl.size =  _size
+    self.pageControl.setNumberOfPages_(len(colors))
+    self.pageControl.setCurrentPage_(2)
+    self.pageControl.setPageIndicatorTintColor_(UIColor.systemGreenColor())
+    self.pageControl.setCurrentPageIndicatorTintColor_(
+      UIColor.systemPurpleColor())
 
-    
-    pdbr.state(pageControl, 0)
+    self.pageControl.setBackgroundColor_(UIColor.systemDarkRedColor())
+
+    _max = self.pageControl.sizeForNumberOfPages_(len(colors))
+    _size = self.pageControl.sizeThatFits_(_max)
+    self.pageControl.size = _size
+
+    #pdbr.state(self.pageControl, 0)
     #pdbr.state(pageControl.sizeForNumberOfPages_(len(colors)), 0)
     #print(pageControl.sizeForNumberOfPages_(len(colors)))
     #sizeForNumberOfPages
     #pdbr.state(UIColor)
 
-    self.view.addSubview_(pageControl)
+    
 
 
 if __name__ == '__main__':
