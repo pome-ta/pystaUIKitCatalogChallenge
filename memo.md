@@ -1,3 +1,20 @@
+# 📝 2024/10/25
+
+## `PageControlViewController` を進める
+
+### 断念
+
+`outline` のやつが`UICollectionView` やら`UICollectionViewDiffableDataSource` の挙動が不明すぎるので
+
+一旦パスして、こっちをはじめる
+
+### 進め方？
+
+Storyboard との連携を考えるのが面倒なので、1ファイルでゴリっと書いてから、Storyboard との連携を考える
+
+
+
+
 # 📝 2024/10/14
 
 ## `UICollectionView`、`UICollectionViewDiffableDataSource` のrubicon(objc) 実装
