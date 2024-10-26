@@ -10,6 +10,8 @@ UIView = ObjCClass('UIView')
 UIPageControl = ObjCClass('UIPageControl')
 UIColor = ObjCClass('UIColor')
 
+NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
+
 colors = [
   UIColor.blackColor,
   UIColor.systemGrayColor(),
@@ -34,25 +36,62 @@ class PageControlViewController(UIViewController):
     self.navigationItem.title = title
 
     # xxx: あとで切り出す
-    self.colorView: UIView = UIView.new()
     self.pageControl = UIPageControl.alloc().init().autorelease()
+
+    self.colorView: UIView = UIView.new()
 
     self.setlayout()
     self.configurePageControl()
 
-
-
-
-
   @objc_method
   def setlayout(self):
+    # xxx: 仮置き
+    self.pageControl.frame = CGRectMake(16, 639.5, 343, 27.5)
+
+    self.view.addSubview_(self.pageControl)
+    self.pageControl.translatesAutoresizingMaskIntoConstraints = False
+
+    safeAreaLayoutGuide = self.view.safeAreaLayoutGuide
+    '''
+    NSLayoutConstraint.activateConstraints_([
+      self.pageControl.centerXAnchor.constraintEqualToAnchor_(
+        safeAreaLayoutGuide.centerXAnchor),
+      self.pageControl.centerYAnchor.constraintEqualToAnchor_(
+        safeAreaLayoutGuide.centerYAnchor),
+    ])
+    
+    '''
+    NSLayoutConstraint.activateConstraints_([
+
+      #self.pageControl.bottomAnchor.constraintEqualToAnchor_constant_(safeAreaLayoutGuide.bottomAnchor, -40),
+      self.pageControl.bottomAnchor.constraintEqualToAnchor_(
+        safeAreaLayoutGuide.bottomAnchor),
+    ])
+    '''
+    NSLayoutConstraint.activateConstraints_([
+      self.label.centerXAnchor.constraintEqualToAnchor_(
+        self.view.centerXAnchor),
+      self.label.centerYAnchor.constraintEqualToAnchor_(
+        self.view.centerYAnchor),
+    ])
+    '''
+    '''
+    bottomAnchor",
+    "centerXAnchor",
+    "centerYAnchor",
+    leadingAnchor
+    topAnchor",
+    "trailingAnchor",
+    '''
+
+    #key="frame" x="0.0" y="0.0" width="375" height="667"
     #pdbr.state(self.view, 1)
     #safeAreaLayoutGuide
     #safeAreaInsets
-    pdbr.state(self.view.safeAreaInsets)
+    #pdbr.state(self.view.safeAreaInsets)
     #print(self.view.safeAreaLayoutGuide)
     #pdbr.state(self.view.safeAreaLayoutGuide)
-    self.view.addSubview_(self.pageControl)
+    pdbr.state(self.pageControl.leadingAnchor)
 
   @objc_method
   def configurePageControl(self):
@@ -65,20 +104,19 @@ class PageControlViewController(UIViewController):
     self.pageControl.setPageIndicatorTintColor_(UIColor.systemGreenColor())
     self.pageControl.setCurrentPageIndicatorTintColor_(
       UIColor.systemPurpleColor())
-
     self.pageControl.setBackgroundColor_(UIColor.systemDarkRedColor())
+    '''
 
     _max = self.pageControl.sizeForNumberOfPages_(len(colors))
     _size = self.pageControl.sizeThatFits_(_max)
     self.pageControl.size = _size
+    '''
 
     #pdbr.state(self.pageControl, 0)
     #pdbr.state(pageControl.sizeForNumberOfPages_(len(colors)), 0)
     #print(pageControl.sizeForNumberOfPages_(len(colors)))
     #sizeForNumberOfPages
     #pdbr.state(UIColor)
-
-    
 
 
 if __name__ == '__main__':
