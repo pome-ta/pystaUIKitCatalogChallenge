@@ -1,3 +1,106 @@
+# 📝 2024/10/26
+
+## Safe Area 表記のメモ
+
+相互的な数値の関係を整理。`Constraints` とすると、下から上にいく感じ？
+
+最上階層の`View` は、`Autoresizing Mask` は、上と左？
+
+`Margin` という概念が初で、調査が必要かも
+
+- Safe Area 要素を小さくするというわけではなく、マージンで子要素をいじめる感じか
+- 起点は Safe Area でいいはずだけど、なんか子要素（Page Control）起点っぽいところない？
+
+### Constraints
+
+```
+SafeArea.centerX = ColorView.centerX
+SafeArea.trailing = ColorView.trailing + 40
+SafeArea.bottom = ColorView.bottom + 40
+SafeArea.bottom = PageControl.bottom
+
+ColorView.centerX = PageControl.centerX
+ColorView.leading = SafeArea.leading + 40
+ColorView.top = SafeArea.top + 35
+
+PageControl.trailing = trailingMargin
+PageControl.leading = leadingMargin
+
+```
+
+### Layout Guide
+
+#### View
+
+- Horizontal
+
+```
+Trailing Margin Space Page Control
+Leading  Margin Space Page Control
+```
+
+#### Safe Area
+
+- Horizontal
+
+```
+Align Center X to: Color View
+
+Align Trailing to: Color View
+           Equals: 40(constant)
+Align Leading  to: Color View
+           Equals: 40(constant)
+```
+
+- Vertical
+
+```
+Align Bottom to: Page Control
+Align Bottom to: Color View
+         Equals: 40(constant)
+Align top    to: Color View
+         Equals: 35(constant)
+```
+
+#### Page Control
+
+- Horizontal
+
+```
+Trailing Space to: (Superview)
+Leading Space to: (Superview)
+Align Center X to: Color View
+
+```
+
+- Vertical
+
+```
+Align Bottom to: Safe Area
+```
+
+### Color View
+
+- Horizontal
+
+```
+Align Center X to: Safe Area
+Align Center X to: Page Control
+Align Trailing to: Safe Area
+           Equals: 40(constant)
+Align Leading  to: Safe Area
+           Equals: 40(constant)
+```
+
+- Vertical
+
+```
+Align Bottom to: Safe Area
+         Equals: 40(constant)
+Align top    to: Safe Area
+         Equals: 35(constant)
+```
+
 # 📝 2024/10/25
 
 ## `PageControlViewController` を進める
@@ -10,7 +113,7 @@
 
 ### 進め方？
 
-Storyboard との連携を考えるのが面倒なので、1ファイルでゴリっと書いてから、Storyboard との連携を考える
+Storyboard との連携を考えるのが面倒なので、1 ファイルでゴリっと書いてから、Storyboard との連携を考える
 
 ### 調べメモ
 
@@ -24,7 +127,7 @@ pc.currentPage = 3;
 [self.view addSubview:pc];
 ```
 
-[UIPageControl - iPhoneアプリ開発の虎の巻](https://iphone-tora.sakura.ne.jp/uipagecontrol.html)
+[UIPageControl - iPhone アプリ開発の虎の巻](https://iphone-tora.sakura.ne.jp/uipagecontrol.html)
 
 `autorelease` つける判断って結局どうすりゃええんだっけ？
 
@@ -32,31 +135,23 @@ pc.currentPage = 3;
 
 [UIKitCatalog/Base.lproj/DefaultPageControlViewController.storyboard](https://github.com/pome-ta/pystaUIKitCatalogChallenge/blob/main/UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Base.lproj/DefaultPageControlViewController.storyboard)
 
-
 `viewController` の`view` に、`Page Control` と`Color View` が、ぶら下がっている感じ
 
 （見た目では、順序的に逆だが、要素順番として揃えておきたい。）
 
-
 要素は、`Safe Area` を基準として良い感じにやっているっぽい
-
-
-
-
 
 # 📝 2024/10/14
 
-## `UICollectionView`、`UICollectionViewDiffableDataSource` のrubicon(objc) 実装
+## `UICollectionView`、`UICollectionViewDiffableDataSource` の rubicon(objc) 実装
 
 [./OutlineViewController.swift](https://github.com/pome-ta/pystaUIKitCatalogChallenge/blob/main/UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/OutlineViewController.swift)
-
 
 Swift から、Objective-C へ読み替えをして、rubicon へ書き直すプロセス。
 
 空の状態は出せている感じだけど、要素が入ってくるとエラーもなく落ちる
 
 ちょっとテキストで整理してみたい
-
 
 # 📝 2024/10/13
 
@@ -65,7 +160,6 @@ Block の処理なのか、エラーの出所がわからない
 # 📝 2024/10/07
 
 なにが出来てなくて、なにを調べるのか思い出す
-
 
 > - outline ?
 >   - storyboard との組み合わせにする?
@@ -80,20 +174,15 @@ Block の処理なのか、エラーの出所がわからない
 
 [Diffable DataSource 入門 #Swift - Qiita](https://qiita.com/maiyama18/items/28039293b4bbf886ce8e)
 
-
 [The Macro Behind Nil - Ben Ford](https://benford.me/blog/the-macro-behind-nil/)
 
-[[Swift]UICollectionViewの進化:Compositional Layouts編](https://zenn.dev/chiii/articles/e487b32e787b59)
-
+[[Swift]UICollectionView の進化:Compositional Layouts 編](https://zenn.dev/chiii/articles/e487b32e787b59)
 
 [AppStore in Objective-C with Compositional Layout | by Ravi Bastola | Medium](https://ravibastolaa.medium.com/appstore-in-objective-c-with-compositional-layout-71fb678f922)
 
-
 [UICollectionViewCompositionalLayoutSectionProvider | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uicollectionviewcompositionallayoutsectionprovider?language=objc)
 
-
 ### ここに逃す
-
 
 一旦途中までのを逃す（Working Copy の`.iCloud` 消せない問題対策）
 
@@ -261,7 +350,7 @@ class CollectionViewController(UICollectionViewController):
     cell = collectionView.dequeueReusableCellWithReuseIdentifier_forIndexPath_(
       self.identifier_str, indexPath)
 
-    
+
     cellConfiguration = cell.defaultContentConfiguration()
     cellConfiguration.text = prefectures[indexPath.section][indexPath.row]
     cell.contentConfiguration = cellConfiguration
@@ -307,14 +396,11 @@ if __name__ == '__main__':
 
 ```
 
-
 # 📝 2024/07/01
-
 
 [NSDiffableDataSourceSnapshot | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/nsdiffabledatasourcesnapshot?language=objc)
 
 [NSDiffableDataSourceSectionSnapshot | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/nsdiffabledatasourcesectionsnapshot?language=objc)
-
 
 ## simulator
 
@@ -347,7 +433,6 @@ dump
       - super: __UIDiffableDataSource
         - super: NSObject
 ```
-
 
 ```
 --- Section.main
@@ -382,7 +467,6 @@ NSDiffableDataSourceSnapshot<Section, String>(_implWrapper: UIKit.NSDiffableData
         - super: NSObject
 ```
 
-
 # 📝 2024/06/30
 
 ```
@@ -397,36 +481,27 @@ NSDiffableDataSourceSnapshot<Section, String>(_implWrapper: UIKit.NSDiffableData
 
 # 📝 2024/06/25
 
-
-
 [UICollectionViewCellRegistration | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uicollectionviewcellregistration)
 
 [UICollectionViewDiffableDataSource | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uicollectionviewdiffabledatasource?language=objc)
 
-
-[【Swift】UICollectionViewDiffableDataSourceとNSDiffableDataSourceSnapshot](https://zenn.dev/dd_sho/articles/73393668e7c8e7)
+[【Swift】UICollectionViewDiffableDataSource と NSDiffableDataSourceSnapshot](https://zenn.dev/dd_sho/articles/73393668e7c8e7)
 
 # 📝 2024/06/17
 
 ## `UISplitViewController` が難しい
 
-[iOSアプリを作ろう・スプリットビュー入門|快技庵 高橋政明](https://note.com/kaigian/n/n876e3bccb00b)
-
-
+[iOS アプリを作ろう・スプリットビュー入門|快技庵 高橋政明](https://note.com/kaigian/n/n876e3bccb00b)
 
 ## `UIKit`
 
-[UIKitについて](https://zenn.dev/joo_hashi/articles/ea716867143aac)
-
-
+[UIKit について](https://zenn.dev/joo_hashi/articles/ea716867143aac)
 
 # 📝 2024/06/14
-
 
 ## `Buttons` 完了
 
 とりあえず終えた
-
 
 ## つぎは、何やるか？
 
@@ -441,30 +516,25 @@ NSDiffableDataSourceSnapshot<Section, String>(_implWrapper: UIKit.NSDiffableData
 - ツール -> サイズを調整
   - 幅: `720` で「ピクセル」に指定
 
-以前まで、11 で行い、今回SE3 のためサイズは違う
+以前まで、11 で行い、今回 SE3 のためサイズは違う
 
 ## `UISplitViewController` メモ
 
-[ViewControllerのpresentedViewControllerを辿る際の落とし穴 - 面白きことは良きことなり](https://aryzae.hatenablog.com/entry/2017/02/01/002723)
+[ViewController の presentedViewController を辿る際の落とし穴 - 面白きことは良きことなり](https://aryzae.hatenablog.com/entry/2017/02/01/002723)
 
+[UISplitViewController の優良サンプルソースコード #Swift - Qiita](https://qiita.com/jazzmaster/items/e0db46a9fa088da87de1)
 
-[UISplitViewControllerの優良サンプルソースコード #Swift - Qiita](https://qiita.com/jazzmaster/items/e0db46a9fa088da87de1)
+[UISplitView に UINavigationController を実装する その 1: iPhone アプリ開発備忘録](http://iphone-app-developer.seesaa.net/article/229896783.html)
 
-
-[UISplitViewにUINavigationController を実装する その1: iPhoneアプリ開発備忘録](http://iphone-app-developer.seesaa.net/article/229896783.html)
-
-[UISplitViewにUINavigationController を実装する その2 - iPhoneアプリ開発備忘録](http://iphone-app-developer.seesaa.net/article/229904600.html)
+[UISplitView に UINavigationController を実装する その 2 - iPhone アプリ開発備忘録](http://iphone-app-developer.seesaa.net/article/229904600.html)
 
 # 📝 2024/06/11
-
 
 ## `attributes` ?
 
 [pystaUIKitCatalogChallenge/UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/MenuButtonViewController.swift at e24fc0024857e9c4a63b08a9161815b70f7c7e76 · pome-ta/pystaUIKitCatalogChallenge · GitHub](https://github.com/pome-ta/pystaUIKitCatalogChallenge/blob/e24fc0024857e9c4a63b08a9161815b70f7c7e76/UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/MenuButtonViewController.swift#L83)
 
-
 `attributes: []` や`attributes: [UIMenuElement.Attributes.disabled]` の`attributes` はなんだ？
-
 
 ## 実装できてないやつ
 
@@ -478,45 +548,38 @@ NSDiffableDataSourceSnapshot<Section, String>(_implWrapper: UIKit.NSDiffableData
 
 `objc_id` としている。`Block()` 構文だと、`ctypes.c_void_p` でないとエラー
 
-
-
 # 📝 2024/06/09
 
 storyboard 用のベースのものを分けようとしたけど、取り回しが面倒かもで、断念
 
 したら、Working Copy 上でゴミファイルできちゃったよ、、、
 
-
 # 📝 2024/05/30
 
 ## UIButton
 
-``` .swift
+```.swift
 button.setTitle("Button", for: [])
 ```
+
 は、
 
-``` .py
+```.py
 - button.setTitle_forState_('Button', UIControlState.normal)
 + button.setTitle_('Button')
 ```
 
 `[]` を無視する感じでええのか？
 
-
-
-
 # 📝 2024/05/28
 
-## `NSStrikethroughStyleAttributeName` のGlobal Variable
+## `NSStrikethroughStyleAttributeName` の Global Variable
 
 [Global variables and constants (e.g. NSFoundationVersionNumber) | Calling plain C functions from Python - Rubicon 0.4.9](https://rubicon-objc.readthedocs.io/en/stable/how-to/c-functions.html#global-variables-and-constants-e-g-nsfoundationversionnumber)
 
-
 [NSStrikethroughStyleAttributeName | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/nsstrikethroughstyleattributename)
 
-
-``` .py
+```.py
 UIKit = load_library('UIKit')
 
 NSStrikethroughStyleAttributeName = objc_const(UIKit, 'NSStrikethroughStyleAttributeName')
@@ -524,15 +587,11 @@ NSStrikethroughStyleAttributeName = objc_const(UIKit, 'NSStrikethroughStyleAttri
 
 # 📝 2024/05/25
 
-
 ## index のずれ
 
 extension とリスト格納の順番違うから、extension を先にする
 
-
 # 📝 2024/05/23
-
-
 
 ## view
 
@@ -544,14 +603,11 @@ extension とリスト格納の順番違うから、extension を先にする
 - storyboard で`style` 設定があるので
 - `.new()` で、style が定義されている状況
 
-
-
 # 📝 2024/05/22
 
 ## cell の色
 
 グレーぽいのって、何の設定だっけか？
-
 
 `headerView.contentConfiguration`
 
@@ -561,7 +617,7 @@ ObjCInstance: UIListContentConfiguration at 0x122030580: <UIListContentConfigura
 ```
 
 ```
- 
+
 <b'UIListContentConfiguration': <UIListContentConfiguration: 0x3020ed570; text = 'D...t' (length = 7); Base Style = Grouped Header; directionalLayoutMargins = {17, 8, 6, 8}; axesPreservingSuperviewLayoutMargins = [Horizontal]; imageToTextPadding = 16; textToSecondaryTextVerticalPadding = 3>>
 ```
 
@@ -569,19 +625,15 @@ ObjCInstance: UIListContentConfiguration at 0x122030580: <UIListContentConfigura
 
 ## 各自セルの`UITableViewHeaderFooterView`
 
-[UITableViewHeaderFooterViewをxibで生成する #iOS - Qiita](https://qiita.com/KikurageChan/items/e1847b54535df393d893)
+[UITableViewHeaderFooterView を xib で生成する #iOS - Qiita](https://qiita.com/KikurageChan/items/e1847b54535df393d893)
 
-
-[【Swift】UITableViewのセクションヘッダーに独自のViewを表示する|Hiromiick Tech Blog](https://hiromiick.com/swift-uitableview-custome-section-header-impl/)
+[【Swift】UITableView のセクションヘッダーに独自の View を表示する|Hiromiick Tech Blog](https://hiromiick.com/swift-uitableview-custome-section-header-impl/)
 
 `registerClass_forHeaderFooterViewReuseIdentifier_` 必要？
 
 `dequeueReusableHeaderFooterViewWithIdentifier_`
 
-
-
-[viewForHeaderInSectionがめっちゃ呼ばれる | anz blog](https://blog.anzfactory.xyz/articles/20190423/swift-call-view-for-header-in-section-every-scroll/)
-
+[viewForHeaderInSection がめっちゃ呼ばれる | anz blog](https://blog.anzfactory.xyz/articles/20190423/swift-call-view-for-header-in-section-every-scroll/)
 
 ```
 numberOfSectionsInTableView
@@ -600,15 +652,11 @@ titleForHeaderInSection
 
 ```
 
-
-
 # 📝 2024/05/20
-
 
 ## `UITableViewDataSource` 実行順
 
-要素としては、1つだけ
-
+要素としては、1 つだけ
 
 `tableView_viewForHeaderInSection_` を除く
 
@@ -632,9 +680,7 @@ titleForHeaderInSection
 titleForHeaderInSection
 ```
 
-
 # 📝 2024/05/17
-
 
 ## ユーティリティ的な
 
@@ -644,12 +690,7 @@ titleForHeaderInSection
 
 ベースを作るより先に`ButtonViewController` を作る。そこから分割
 
-
-
-
-
 # 📝 2024/05/16
-
 
 ## storyboard
 
@@ -674,8 +715,6 @@ def add_prototype(identifier: str):
 
 `@add_prototype('buttonSystemAddContact')` で、辞書として格納
 
-
-
 ### 単体のテスト
 
 一つだけ挙動確認。みたいのをできるようにしたいので
@@ -687,28 +726,19 @@ _test_p = prototypes
 test_prototypes = _test_p if isinstance(_test_p, list) else [_test_p]
 ```
 
-
 と、無理やり感で`test_prototypes` を読ませるようにしてみてる
-
 
 ### `UIControlState`
 
 sample では、`UIButtonConfiguration` じゃないっぽいから、直接やってみるか？
 
-
-
 # 📝 2024/05/15
-
 
 `test_buttonViewController.py`
 
-
-
 旧ブランチを参照するのがめんどうになった、、、
 
-
-
-[UIButton.Configuration その1 〜角の丸みもお手のもの](https://zenn.dev/samekard_dev/articles/64d8f1578a7bb6)
+[UIButton.Configuration その 1 〜角の丸みもお手のもの](https://zenn.dev/samekard_dev/articles/64d8f1578a7bb6)
 
 # 📝 2024/05/14
 
@@ -718,35 +748,22 @@ sample では、`UIButtonConfiguration` じゃないっぽいから、直接や�
 
 `ButtonViewController.storyboard`
 
-
 `reuseIdentifier` をどう捌くか？
-
 
 サイズはよしなにやってもらう？
 
-
-
 # 📝 2024/05/09
 
-
-[なぜUITableViewControllerを使うなと言われるのか #iOS - Qiita](https://qiita.com/yosshi4486/items/33132718a0fb08273a45)
-
-
-
-
-
+[なぜ UITableViewController を使うなと言われるのか #iOS - Qiita](https://qiita.com/yosshi4486/items/33132718a0fb08273a45)
 
 # 📝 2024/04/24
 
-改めてstoryboard について考えてみる
+改めて storyboard について考えてみる
 
 - storyboard 内で完成をさせて、出せるようにする
   - 今回の場合は、`tests` の中で出せるようにしたい
   - 私の場合だと、`prototypes` の中を実装する
-  - 
-
-
-
+  -
 
 # 📝 2024/04/23
 
@@ -764,38 +781,29 @@ sample では、`UIButtonConfiguration` じゃないっぽいから、直接や�
 
 # 📝 2024/04/20
 
-
 ## `enumerations.py` の命名定義
 
 基本的に、objc の名前で揃える。
 
 Swift だと`.` が入ったり、Document で、Enumeration として型表記になってない場合もある。
-その場合には、値としてDocument で参照しやすい方にする。
-
-
+その場合には、値として Document で参照しやすい方にする。
 
 `.` は、`_` で繋ぐ
 
-
 [pystaUIKitCatalogChallenge/objcista/constants.py at objc_util · pome-ta/pystaUIKitCatalogChallenge · GitHub](https://github.com/pome-ta/pystaUIKitCatalogChallenge/blob/objc_util/objcista/constants.py)
 
-基本的には、ここをコピペ、使用するタイミングで、都度Document を参照する。
-
+基本的には、ここをコピペ、使用するタイミングで、都度 Document を参照する。
 
 ## `tests` ディレクトリ
 
-``` .py
+```.py
 parent_level = 3
 sys.path.append(str(pathlib.Path(__file__, '../' * parent_level).resolve()))
 ```
 
-無理やりmodule をブチ込む、`sandbox` として、test 前の実験の場合は、level を階層に応じて指定する（test の意味とは）
+無理やり module をブチ込む、`sandbox` として、test 前の実験の場合は、level を階層に応じて指定する（test の意味とは）
 
-まぁ、iPhone とworking copy との`.cloud` ファイル問題なんだけど、、、
-
-
-
-
+まぁ、iPhone と working copy との`.cloud` ファイル問題なんだけど、、、
 
 # 📝 2024/04/19
 
@@ -807,7 +815,7 @@ sys.path.append(str(pathlib.Path(__file__, '../' * parent_level).resolve()))
 
 ## `rbedge`
 
-独自のRubicon のライブラリとして、作ったファイルを置いていく
+独自の Rubicon のライブラリとして、作ったファイルを置いていく
 
 ### 命名理由
 
@@ -818,18 +826,17 @@ Rubicon が多分「川」の意味があると思われるので、川の「端
 
 Python として正しくはないかもだけど、`pyrubicon` モジュールを読み込みをするので、直下に`test` ディレクトリを作成して、そのディレクトリ内で挙動の確認をする。
 
-読み込みは、`sys` モジュールで無理やりpath を取得する流れ。
+読み込みは、`sys` モジュールで無理やり path を取得する流れ。
 
 ## ファイルの配置やら関連性について
 
 rootNav 系を先に準備したが、実行するためとすると、裏側での動きだから、他のもの準備した方がいいのではないかと思う。
 
-あと、定数ではなくenum をひとつひとつ書いていくしかないのかなぁというお気持ち
-
+あと、定数ではなく enum をひとつひとつ書いていくしかないのかなぁというお気持ち
 
 # 📝 2024/03/23
 
-rubicon ver としてmain ブランチを進める予定なので
+rubicon ver として main ブランチを進める予定なので
 
 objc_util ブランチを切る
 
@@ -851,21 +858,21 @@ button 並べたけど、ズレ確認
 
 ```
 <b'UIImage':
-<UIImage:0x282e55320 symbol(system: person) {19, 17.5} baseline=2.5,contentInsets={1, 2, 1, 2},alignmentRectInsets={-1, 0, -1.5, 0} 
+<UIImage:0x282e55320 symbol(system: person) {19, 17.5} baseline=2.5,contentInsets={1, 2, 1, 2},alignmentRectInsets={-1, 0, -1.5, 0}
 config=<traits=(UserInterfaceIdiom = Phone, DisplayScale = 2, DisplayGamut = P3, HorizontalSizeClass = Compact, VerticalSizeClass = Regular, UserInterfaceStyle = Dark, UserInterfaceLayoutDirection = LTR, PreferredContentSizeCategory = XS, AccessibilityContrast = Normal)>
 renderingMode=automatic(template)>>
 ```
 
 ```
 <b'UIImage':
-<UIImage:0x282e7d440 symbol(system: person) {20.5, 19.5} baseline=4.5,contentInsets={1.5, 2.5, 1.5, 2.5},alignmentRectInsets={1.5, 0, 1, 0} 
+<UIImage:0x282e7d440 symbol(system: person) {20.5, 19.5} baseline=4.5,contentInsets={1.5, 2.5, 1.5, 2.5},alignmentRectInsets={1.5, 0, 1, 0}
 config=<textStyle=UICTFontTextStyleBody, scale=L, (null), traits=(UserInterfaceIdiom = Phone, DisplayScale = 2, DisplayGamut = P3, HorizontalSizeClass = Compact, VerticalSizeClass = Regular, UserInterfaceStyle = Dark, UserInterfaceLayoutDirection = LTR, PreferredContentSizeCategory = XS, AccessibilityContrast = Normal)>
 renderingMode=automatic(template)>>
 ```
 
 # 📝 2024/02/22
 
-[https://github.com/tdamdouni/Pythonista/blob/master/_2017/picker-wheel-for-lists.py](https://github.com/tdamdouni/Pythonista/blob/master/_2017/picker-wheel-for-lists.py)
+[https://github.com/tdamdouni/Pythonista/blob/master/\_2017/picker-wheel-for-lists.py](https://github.com/tdamdouni/Pythonista/blob/master/_2017/picker-wheel-for-lists.py)
 
 # 📝 2024/02/19
 
@@ -898,7 +905,7 @@ storyboard を終え、`ButtonKind` での実装
 
 # 📝 2024/02/16
 
-[【UIKit】Cellに直接addSubviewしてはいけない #Swift - Qiita](https://qiita.com/yusame0308/items/c7aee4190057f99b7bf4)
+[【UIKit】Cell に直接 addSubview してはいけない #Swift - Qiita](https://qiita.com/yusame0308/items/c7aee4190057f99b7bf4)
 
 # 📝 2024/02/15
 
@@ -936,22 +943,22 @@ UITableViewCell の`super` を呼びたいが、、、
 
 そのために、`CaseElement` の挙動が必要
 
-`CaseElement` の`configHandler` は、`ButtonViewController+Configs` で振り分けしたbutton 処理の関数情報を持ってる
+`CaseElement` の`configHandler` は、`ButtonViewController+Configs` で振り分けした button 処理の関数情報を持ってる
 
 つまり、、、?
 
 - `BaseTableViewController` のセルごとの操作の時には、button の情報がある
   - `cell!.contentView.subviews[0]` と、`subviews` を待ち望んでいるので
-- table は、button につき1つづつのbutton 情報しか持たない?
+- table は、button につき 1 つづつの button 情報しか持たない?
   - 事前に情報を持たせておく必要あり?
 
-[コードベースでカスタムTableViewCellを作る #Swift - Qiita](https://qiita.com/Hyperbolic_____/items/e35cdac1c6b537202151)
+[コードベースでカスタム TableViewCell を作る #Swift - Qiita](https://qiita.com/Hyperbolic_____/items/e35cdac1c6b537202151)
 
 これか?
 
 ## 階層整理
 
-- `UITableViewCell` のsubclass を作る
+- `UITableViewCell` の subclass を作る
 - `subviews` へアクセスするため
 - 事前につくる?
 
@@ -987,8 +994,8 @@ nav 系の詳細設定忘れたから、後にする
 
 # 📝 2024/01/30
 
-- 最初から、左肩にViewController を生やすのか
-- xcode からディレクトリツリーのキャプチャーを取って載せようとしたけど、GitHub クライアントからうまくうpできなかったので断念
+- 最初から、左肩に ViewController を生やすのか
+- xcode からディレクトリツリーのキャプチャーを取って載せようとしたけど、GitHub クライアントからうまくう p できなかったので断念
 
 # 📝 2024/01/29
 
@@ -996,28 +1003,27 @@ nav 系の詳細設定忘れたから、後にする
 
 ## `Main.storyboard`
 
-- Navigation Controller が2つ?
+- Navigation Controller が 2 つ?
   - View (Controller) ごとに分ける?
-    - 「UIKitCatalog」と書かれるView
-    - OutLine で出すView
+    - 「UIKitCatalog」と書かれる View
+    - OutLine で出す View
 
 ## UISplitViewController
 
 [UISplitViewController | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uisplitviewcontroller?language=objc)
 
-[UISplitViewControllerについて学ぶ|山田良治 Yoshiharu Yamada](https://note.com/raiso/n/n23c156e360e5)
+[UISplitViewController について学ぶ|山田良治 Yoshiharu Yamada](https://note.com/raiso/n/n23c156e360e5)
 
 # 📝 2024/01/28
 
 - `./captureSampleImage/` に、xcode 実行時のキャプチャを追加
 - xcode だと、ディレクトリ構成が違うのでメモしておきたい
   - `./UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog.xcodeproj/project.pbxproj` ここのやつ?
-- iOS のportrait レイアウトのみで、まずは実装?
+- iOS の portrait レイアウトのみで、まずは実装?
   - landscape の左上アイコンと、挙動は気になる
     - 何で呼び出すか?程度は調査予定とする
-- とりあえず「UIKitCatalog」とview に書かれているものを探す
+- とりあえず「UIKitCatalog」と view に書かれているものを探す
   - `./UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Base.lproj/Main.storyboard`
   - `.storyboard` か、、、`.xml` として読み解く
     - `navigationController` のカラーとかある
-    - `.xml` をPython 的に処理する?
-
+    - `.xml` を Python 的に処理する?
