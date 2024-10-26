@@ -1,8 +1,16 @@
+"""
+todo:
+  Storyboard 未対応
+  各 frame が仮
+  `centerXAnchor` の挙動
+"""
+
 from pyrubicon.objc.api import ObjCClass
 from pyrubicon.objc.api import objc_method
-from pyrubicon.objc.runtime import send_super
+from pyrubicon.objc.runtime import send_super, SEL
 from pyrubicon.objc.types import CGRectMake
 
+from rbedge.enumerations import UIControlEvents
 from rbedge.functions import NSStringFromClass
 
 UIViewController = ObjCClass('UIViewController')
@@ -13,7 +21,8 @@ UIColor = ObjCClass('UIColor')
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
 
 colors = [
-  UIColor.blackColor,
+  #UIColor.blackColor,
+  UIColor.whiteColor,
   UIColor.systemGrayColor(),
   UIColor.systemRedColor(),
   UIColor.systemGreenColor(),
@@ -35,43 +44,40 @@ class PageControlViewController(UIViewController):
     title = NSStringFromClass(__class__)
     self.navigationItem.title = title
 
+    self.view.backgroundColor = UIColor.systemBackgroundColor()
+
     # xxx: あとで切り出す
     self.pageControl = UIPageControl.alloc().init().autorelease()
-
     self.colorView: UIView = UIView.new()
 
     self.setlayout()
     self.configurePageControl()
+    self.pageControlValueDidChange()
 
   @objc_method
   def setlayout(self):
     safeAreaLayoutGuide = self.view.safeAreaLayoutGuide
     # xxx: 仮置き
     self.pageControl.frame = CGRectMake(16.0, 639.5, 343.0, 27.5)
-    self.colorView.frame = CGRectMake(0.0, 0.0, 375.0, 667.0)
-    self.colorView.backgroundColor = UIColor.systemMintColor()
+    self.colorView.frame = CGRectMake(40.0, 79.0, 295.0, 548.0)
+    #self.colorView.backgroundColor = UIColor.systemMintColor()
 
     self.view.addSubview_(self.pageControl)
     self.view.addSubview_(self.colorView)
 
     # --- layout
     self.pageControl.translatesAutoresizingMaskIntoConstraints = False
-
     NSLayoutConstraint.activateConstraints_([
       self.pageControl.trailingAnchor.constraintEqualToAnchor_constant_(
         safeAreaLayoutGuide.trailingAnchor, -40),
       self.pageControl.leadingAnchor.constraintEqualToAnchor_constant_(
         safeAreaLayoutGuide.leadingAnchor, 40),
-      #self.pageControl.centerXAnchor.constraintEqualToAnchor_(safeAreaLayoutGuide.centerXAnchor),
       self.pageControl.bottomAnchor.constraintEqualToAnchor_(
         safeAreaLayoutGuide.bottomAnchor),
     ])
 
     self.colorView.translatesAutoresizingMaskIntoConstraints = False
-
     NSLayoutConstraint.activateConstraints_([
-      #self.colorView.centerXAnchor.constraintEqualToAnchor_(safeAreaLayoutGuide.centerXAnchor),
-      #self.colorView.centerXAnchor.constraintEqualToAnchor_(self.view.centerXAnchor),
       self.colorView.trailingAnchor.constraintEqualToAnchor_constant_(
         safeAreaLayoutGuide.trailingAnchor, -40),
       self.colorView.leadingAnchor.constraintEqualToAnchor_constant_(
@@ -81,50 +87,32 @@ class PageControlViewController(UIViewController):
       self.colorView.bottomAnchor.constraintEqualToAnchor_constant_(
         safeAreaLayoutGuide.bottomAnchor, -40),
     ])
-    '''
-    bottomAnchor",
-    "centerXAnchor",
-    "centerYAnchor",
-    leadingAnchor
-    topAnchor",
-    "trailingAnchor",
-    '''
-
-    #key="frame" x="0.0" y="0.0" width="375" height="667"
-    #pdbr.state(self.view, 1)
-    #safeAreaLayoutGuide
-    #safeAreaInsets
-    #pdbr.state(self.view.safeAreaInsets)
-    #print(self.view.safeAreaLayoutGuide)
-    #pdbr.state(self.view.safeAreaLayoutGuide)
-    #pdbr.state(self.pageControl.leadingAnchor)
-    #pdbr.state(self.pageControl.layoutMargins,1)
-    #print(type(self.pageControl.layoutMargins))
 
   @objc_method
   def configurePageControl(self):
-    # todo: よしなに要素を配置したい
-    #self.pageControl = UIPageControl.alloc().init().autorelease()
-    self.pageControl.frame = CGRectMake(16, 639.5, 343, 27.5)
+    # wip: よしなに要素を配置したい
 
     self.pageControl.setNumberOfPages_(len(colors))
     self.pageControl.setCurrentPage_(2)
     self.pageControl.setPageIndicatorTintColor_(UIColor.systemGreenColor())
     self.pageControl.setCurrentPageIndicatorTintColor_(
       UIColor.systemPurpleColor())
-    self.pageControl.setBackgroundColor_(UIColor.systemDarkRedColor())
-    '''
 
-    _max = self.pageControl.sizeForNumberOfPages_(len(colors))
-    _size = self.pageControl.sizeThatFits_(_max)
-    self.pageControl.size = _size
-    '''
+    # xxx: 要素範囲確認用
+    #self.pageControl.setBackgroundColor_(UIColor.systemDarkRedColor())
 
-    #pdbr.state(self.pageControl, 0)
-    #pdbr.state(pageControl.sizeForNumberOfPages_(len(colors)), 0)
-    #print(pageControl.sizeForNumberOfPages_(len(colors)))
-    #sizeForNumberOfPages
-    #pdbr.state(UIColor)
+    self.pageControl.addTarget_action_forControlEvents_(
+      self, SEL('pageControlValueDidChange'), UIControlEvents.valueChanged)
+
+  # MARK: - Actions
+  @objc_method
+  def pageControlValueDidChange(self):
+    # The total number of available pages is based on the number of available colors.
+    # 利用可能なページの総数は、利用可能な色の数に基づいています。
+    print(
+      f'The page control changed its current page to {self.pageControl.currentPage}.'
+    )
+    self.colorView.backgroundColor = colors[self.pageControl.currentPage]
 
 
 if __name__ == '__main__':
