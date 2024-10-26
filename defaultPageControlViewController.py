@@ -45,36 +45,42 @@ class PageControlViewController(UIViewController):
 
   @objc_method
   def setlayout(self):
+    safeAreaLayoutGuide = self.view.safeAreaLayoutGuide
     # xxx: 仮置き
-    self.pageControl.frame = CGRectMake(16, 639.5, 343, 27.5)
+    self.pageControl.frame = CGRectMake(16.0, 639.5, 343.0, 27.5)
+    self.colorView.frame = CGRectMake(0.0, 0.0, 375.0, 667.0)
+    self.colorView.backgroundColor = UIColor.systemMintColor()
 
     self.view.addSubview_(self.pageControl)
+    self.view.addSubview_(self.colorView)
+
+    # --- layout
     self.pageControl.translatesAutoresizingMaskIntoConstraints = False
 
-    safeAreaLayoutGuide = self.view.safeAreaLayoutGuide
-    '''
     NSLayoutConstraint.activateConstraints_([
-      self.pageControl.centerXAnchor.constraintEqualToAnchor_(
-        safeAreaLayoutGuide.centerXAnchor),
-      self.pageControl.centerYAnchor.constraintEqualToAnchor_(
-        safeAreaLayoutGuide.centerYAnchor),
-    ])
-    
-    '''
-    NSLayoutConstraint.activateConstraints_([
-
-      #self.pageControl.bottomAnchor.constraintEqualToAnchor_constant_(safeAreaLayoutGuide.bottomAnchor, -40),
+      self.pageControl.trailingAnchor.constraintEqualToAnchor_constant_(
+        safeAreaLayoutGuide.trailingAnchor, -40),
+      self.pageControl.leadingAnchor.constraintEqualToAnchor_constant_(
+        safeAreaLayoutGuide.leadingAnchor, 40),
+      #self.pageControl.centerXAnchor.constraintEqualToAnchor_(safeAreaLayoutGuide.centerXAnchor),
       self.pageControl.bottomAnchor.constraintEqualToAnchor_(
         safeAreaLayoutGuide.bottomAnchor),
     ])
-    '''
+
+    self.colorView.translatesAutoresizingMaskIntoConstraints = False
+
     NSLayoutConstraint.activateConstraints_([
-      self.label.centerXAnchor.constraintEqualToAnchor_(
-        self.view.centerXAnchor),
-      self.label.centerYAnchor.constraintEqualToAnchor_(
-        self.view.centerYAnchor),
+      #self.colorView.centerXAnchor.constraintEqualToAnchor_(safeAreaLayoutGuide.centerXAnchor),
+      #self.colorView.centerXAnchor.constraintEqualToAnchor_(self.view.centerXAnchor),
+      self.colorView.trailingAnchor.constraintEqualToAnchor_constant_(
+        safeAreaLayoutGuide.trailingAnchor, -40),
+      self.colorView.leadingAnchor.constraintEqualToAnchor_constant_(
+        safeAreaLayoutGuide.leadingAnchor, 40),
+      self.colorView.topAnchor.constraintEqualToAnchor_constant_(
+        safeAreaLayoutGuide.topAnchor, 35),
+      self.colorView.bottomAnchor.constraintEqualToAnchor_constant_(
+        safeAreaLayoutGuide.bottomAnchor, -40),
     ])
-    '''
     '''
     bottomAnchor",
     "centerXAnchor",
@@ -93,7 +99,7 @@ class PageControlViewController(UIViewController):
     #pdbr.state(self.view.safeAreaLayoutGuide)
     #pdbr.state(self.pageControl.leadingAnchor)
     #pdbr.state(self.pageControl.layoutMargins,1)
-    print(type(self.pageControl.layoutMargins))
+    #print(type(self.pageControl.layoutMargins))
 
   @objc_method
   def configurePageControl(self):
