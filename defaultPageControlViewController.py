@@ -91,7 +91,9 @@ class PageControlViewController(UIViewController):
     #pdbr.state(self.view.safeAreaInsets)
     #print(self.view.safeAreaLayoutGuide)
     #pdbr.state(self.view.safeAreaLayoutGuide)
-    pdbr.state(self.pageControl.leadingAnchor)
+    #pdbr.state(self.pageControl.leadingAnchor)
+    #pdbr.state(self.pageControl.layoutMargins,1)
+    print(type(self.pageControl.layoutMargins))
 
   @objc_method
   def configurePageControl(self):
