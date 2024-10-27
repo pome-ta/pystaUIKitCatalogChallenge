@@ -292,3 +292,10 @@ class UIControlContentVerticalAlignment:
   bottom: int = 2
   fill: int = 3
 
+# ref: [UIPageControlBackgroundStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uipagecontrolbackgroundstyle?language=objc)
+@dataclass
+class UIPageControlBackgroundStyle:
+  automatic: int = 0
+  prominent: int = 1
+  minimal: int = 2
+

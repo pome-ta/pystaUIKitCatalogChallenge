@@ -22,7 +22,7 @@ NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
 
 colors = [
   #UIColor.blackColor,
-  UIColor.whiteColor,
+  UIColor.whiteColor,  # todo: Dark Mode
   UIColor.systemGrayColor(),
   UIColor.systemRedColor(),
   UIColor.systemGreenColor(),
