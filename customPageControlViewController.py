@@ -85,7 +85,6 @@ class CustomPageControlViewController(UIViewController):
     self.pageControl.frame = CGRectMake(16.0, 639.5, 343.0, 27.5)
     self.colorView.frame = CGRectMake(40.0, 79.0, 295.0, 548.0)
     #self.colorView.backgroundColor = UIColor.systemMintColor()
-    #pdbr.state(UIColor)
 
     self.view.addSubview_(self.pageControl)
     self.view.addSubview_(self.colorView)
@@ -128,8 +127,6 @@ class CustomPageControlViewController(UIViewController):
     # Prominent background style.
     # 目立つ背景スタイル。
     self.pageControl.backgroundStyle = UIPageControlBackgroundStyle.prominent
-
-    pdbr.state(self.pageControl)
 
     # Set custom indicator images.
     # カスタムインジケータイメージを設定します。
