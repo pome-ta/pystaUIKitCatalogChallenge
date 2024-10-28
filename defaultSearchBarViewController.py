@@ -2,10 +2,14 @@
 todo:
   Storyboard 未対応
   xcode だと再現できず？
+  `searchBar_selectedScopeButtonIndexDidChange_` は`searchBar` とバッティングする（？）ので、`objc_property` で宣言
+    `TypeError: Don't know how to convert a pyrubicon.objc.api.ObjCBoundMethod to a Foundation object`
+    こんなエラーになる
+    `searchBar` という変数を別にすれば、解決するが、`objc_property` 宣言の方が正規ぽいので、そうする
 """
 
 from pyrubicon.objc.api import ObjCClass, ObjCProtocol
-from pyrubicon.objc.api import objc_method
+from pyrubicon.objc.api import objc_method, objc_property
 from pyrubicon.objc.runtime import send_super, objc_id
 from pyrubicon.objc.types import CGRectMake
 
@@ -23,6 +27,8 @@ NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
 class DefaultSearchBarViewController(UIViewController,
                                      protocols=[UISearchBarDelegate]):
 
+  searchBar = objc_property()
+
   @objc_method
   def viewDidLoad(self):
     send_super(__class__, self, 'viewDidLoad')  # xxx: 不要?
@@ -30,7 +36,7 @@ class DefaultSearchBarViewController(UIViewController,
     title = NSStringFromClass(__class__)
     self.navigationItem.title = title
 
-    self.searchBarIns = UISearchBar.alloc().init().autorelease()
+    self.searchBar = UISearchBar.alloc().init().autorelease()
     self.setlayout()
     self.configureSearchBar()
 
@@ -38,27 +44,27 @@ class DefaultSearchBarViewController(UIViewController,
   def setlayout(self):
     safeAreaLayoutGuide = self.view.safeAreaLayoutGuide
     # xxx: 仮置き
-    self.searchBarIns.frame = CGRectMake(0.0, 0.0, 375.0, 56.0)
-    self.searchBarIns.delegate = self
-    self.view.addSubview_(self.searchBarIns)
+    self.searchBar.frame = CGRectMake(0.0, 0.0, 375.0, 56.0)
+    self.searchBar.delegate = self
+    self.view.addSubview_(self.searchBar)
 
-    self.searchBarIns.translatesAutoresizingMaskIntoConstraints = False
+    self.searchBar.translatesAutoresizingMaskIntoConstraints = False
     NSLayoutConstraint.activateConstraints_([
-      self.searchBarIns.trailingAnchor.constraintEqualToAnchor_(
+      self.searchBar.trailingAnchor.constraintEqualToAnchor_(
         safeAreaLayoutGuide.trailingAnchor),
-      self.searchBarIns.topAnchor.constraintEqualToAnchor_(
+      self.searchBar.topAnchor.constraintEqualToAnchor_(
         safeAreaLayoutGuide.topAnchor),
-      self.searchBarIns.leadingAnchor.constraintEqualToAnchor_(
+      self.searchBar.leadingAnchor.constraintEqualToAnchor_(
         safeAreaLayoutGuide.leadingAnchor),
     ])
 
   # MARK: - Configuration
   @objc_method
   def configureSearchBar(self):
-    self.searchBarIns.showsCancelButton = True
-    self.searchBarIns.showsScopeBar = True
+    self.searchBar.showsCancelButton = True
+    self.searchBar.showsScopeBar = True
 
-    self.searchBarIns.scopeButtonTitles = [
+    self.searchBar.scopeButtonTitles = [
       localizedString('Scope One'),
       localizedString('Scope Two'),
     ]
