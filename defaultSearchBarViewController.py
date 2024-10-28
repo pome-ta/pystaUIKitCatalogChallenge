@@ -40,9 +40,6 @@ class DefaultSearchBarViewController(UIViewController,
     # xxx: 仮置き
     self.searchBarIns.frame = CGRectMake(0.0, 0.0, 375.0, 56.0)
     self.searchBarIns.delegate = self
-    #pdbr.state(self.searchBar)
-    #print(self.searchBar)
-    pdbr.state(self)
     self.view.addSubview_(self.searchBarIns)
 
     self.searchBarIns.translatesAutoresizingMaskIntoConstraints = False
@@ -54,7 +51,6 @@ class DefaultSearchBarViewController(UIViewController,
       self.searchBarIns.leadingAnchor.constraintEqualToAnchor_(
         safeAreaLayoutGuide.leadingAnchor),
     ])
-    
 
   # MARK: - Configuration
   @objc_method
@@ -66,18 +62,14 @@ class DefaultSearchBarViewController(UIViewController,
       localizedString('Scope One'),
       localizedString('Scope Two'),
     ]
-    #pdbr.state(self.searchBar)
-    
 
   # MARK: - UISearchBarDelegate
-  
   @objc_method
   def searchBar_selectedScopeButtonIndexDidChange_(self, searchBar,
-                                                   selectedScope:int):
-    print(selectedScope)
-  
-  
-  
+                                                   selectedScope: int):
+    print(
+      f'The default search selected scope button index changed to {selectedScope}.'
+    )
 
   @objc_method
   def searchBarSearchButtonClicked_(self, searchBar):
