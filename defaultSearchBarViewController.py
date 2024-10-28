@@ -30,28 +30,28 @@ class DefaultSearchBarViewController(UIViewController,
     title = NSStringFromClass(__class__)
     self.navigationItem.title = title
 
-    self.searchBar = UISearchBar.alloc().init().autorelease()
-    self.setuptolayout()
+    self.searchBarIns = UISearchBar.alloc().init().autorelease()
+    self.setlayout()
     self.configureSearchBar()
 
   @objc_method
-  def setuptolayout(self):
+  def setlayout(self):
     safeAreaLayoutGuide = self.view.safeAreaLayoutGuide
     # xxx: 仮置き
-    self.searchBar.frame = CGRectMake(0.0, 0.0, 375.0, 56.0)
-    self.searchBar.delegate = self
+    self.searchBarIns.frame = CGRectMake(0.0, 0.0, 375.0, 56.0)
+    self.searchBarIns.delegate = self
     #pdbr.state(self.searchBar)
     #print(self.searchBar)
     pdbr.state(self)
-    self.view.addSubview_(self.searchBar)
+    self.view.addSubview_(self.searchBarIns)
 
-    self.searchBar.translatesAutoresizingMaskIntoConstraints = False
+    self.searchBarIns.translatesAutoresizingMaskIntoConstraints = False
     NSLayoutConstraint.activateConstraints_([
-      self.searchBar.trailingAnchor.constraintEqualToAnchor_(
+      self.searchBarIns.trailingAnchor.constraintEqualToAnchor_(
         safeAreaLayoutGuide.trailingAnchor),
-      self.searchBar.topAnchor.constraintEqualToAnchor_(
+      self.searchBarIns.topAnchor.constraintEqualToAnchor_(
         safeAreaLayoutGuide.topAnchor),
-      self.searchBar.leadingAnchor.constraintEqualToAnchor_(
+      self.searchBarIns.leadingAnchor.constraintEqualToAnchor_(
         safeAreaLayoutGuide.leadingAnchor),
     ])
     
@@ -59,10 +59,10 @@ class DefaultSearchBarViewController(UIViewController,
   # MARK: - Configuration
   @objc_method
   def configureSearchBar(self):
-    self.searchBar.showsCancelButton = True
-    self.searchBar.showsScopeBar = True
+    self.searchBarIns.showsCancelButton = True
+    self.searchBarIns.showsScopeBar = True
 
-    self.searchBar.scopeButtonTitles = [
+    self.searchBarIns.scopeButtonTitles = [
       localizedString('Scope One'),
       localizedString('Scope Two'),
     ]
@@ -70,12 +70,12 @@ class DefaultSearchBarViewController(UIViewController,
     
 
   # MARK: - UISearchBarDelegate
-  '''
+  
   @objc_method
   def searchBar_selectedScopeButtonIndexDidChange_(self, searchBar,
                                                    selectedScope:int):
-    pass
-  '''
+    print(selectedScope)
+  
   
   
 
