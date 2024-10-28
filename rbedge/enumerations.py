@@ -292,10 +292,20 @@ class UIControlContentVerticalAlignment:
   bottom: int = 2
   fill: int = 3
 
+
 # ref: [UIPageControlBackgroundStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uipagecontrolbackgroundstyle?language=objc)
 @dataclass
 class UIPageControlBackgroundStyle:
   automatic: int = 0
   prominent: int = 1
   minimal: int = 2
+
+
+# ref: [UISearchBarIcon | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uisearchbaricon?language=objc)
+@dataclass
+class UISearchBarIcon:
+  search: int = 0
+  clear: int = 1
+  bookmark: int = 2
+  resultsList: int = 3
 
