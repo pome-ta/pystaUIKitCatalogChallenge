@@ -23,6 +23,9 @@ UISearchBar = ObjCClass('UISearchBar')
 UISearchBarDelegate = ObjCProtocol('UISearchBarDelegate')
 
 UIColor = ObjCClass('UIColor')
+UIScreen = ObjCClass('UIScreen')
+NSURL = ObjCClass('NSURL')
+NSData = ObjCClass('NSData')
 UIImage = ObjCClass('UIImage')
 
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
@@ -66,10 +69,24 @@ class CustomSearchBarViewController(UIViewController,
   @objc_method
   def configureSearchBar(self):
     self.searchBar.showsCancelButton = True
-    self.searchBar.showsScopeBar = True
+    self.searchBar.showsBookmarkButton = True
     self.searchBar.setTintColor_(UIColor.systemPurpleColor())
-    self.searchBar.backgroundImage = UIImage.systemImageNamed_(
-      'search_bar_background')
+
+    # ref: [iphone - Retina display and [UIImage initWithData] - Stack Overflow](https://stackoverflow.com/questions/3289286/retina-display-and-uiimage-initwithdata)
+    # xxx: scale 指定これでいいのかな?
+    scale = int(UIScreen.mainScreen.scale)
+
+    search_bar_background_str = './UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/search_bar_background.imageset/search_bar_background_3x.png'
+
+    # xxx: あとで取り回し考える
+    from pathlib import Path
+
+    # xxx: `lambda` の使い方が悪い
+    dataWithContentsOfURL = lambda path_str: NSData.dataWithContentsOfURL_(
+      NSURL.fileURLWithPath_(str(Path(path_str).absolute())))
+
+    self.searchBar.backgroundImage = UIImage.alloc().initWithData_scale_(
+      dataWithContentsOfURL(search_bar_background_str), scale)
 
     # Set the bookmark image for both normal and highlighted states.
     # しおり画像を通常状態とハイライト状態の両方に設定する。
@@ -85,20 +102,21 @@ class CustomSearchBarViewController(UIViewController,
                                                     UISearchBarIcon.bookmark,
                                                     UIControlState.highlighted)
 
-
   # MARK: - UISearchBarDelegate
 
   @objc_method
   def searchBarSearchButtonClicked_(self, searchBar):
-    print(
-      'The custom search bar keyboard "Search" button was tapped.'
-    )
+    print('The custom search bar keyboard "Search" button was tapped.')
     searchBar.resignFirstResponder()
 
   @objc_method
   def searchBarCancelButtonClicked_(self, searchBar):
-    print('The default search bar cancel button was tapped.')
+    print('The custom search bar "Cancel" button was tapped.')
     searchBar.resignFirstResponder()
+
+  @objc_method
+  def searchBarBookmarkButtonClicked_(self, searchBar):
+    print('The custom "bookmark button" inside the search bar was tapped.')
 
 
 if __name__ == '__main__':
