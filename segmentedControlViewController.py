@@ -54,9 +54,19 @@ class SegmentedControlViewController(BaseTableViewController):
                   self.configureDefaultSegmentedControl_),
     ])
 
+  
+  # MARK: - Configuration
   @objc_method
   def configureDefaultSegmentedControl_(self, segmentedControl):
-    pass
+    segmentedControl.setEnabled_forSegmentAtIndex_(False, 0)
+    #addTarget_action_forControlEvents_
+    pdbr.state(segmentedControl,1)
+    
+    
+  # MARK: - Actions
+  @objc_method
+  def selectedSegmentDidChange_(self, segmentedControl):
+    print(f'The selected segment: {segmentedControl.selectedSegmentIndex}')
 
 
 if __name__ == '__main__':
