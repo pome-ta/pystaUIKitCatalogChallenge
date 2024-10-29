@@ -1,6 +1,6 @@
 from enum import Enum
 
-from pyrubicon.objc.api import objc_method, objc_property
+from pyrubicon.objc.api import objc_method
 from pyrubicon.objc.runtime import SEL, send_super
 
 from rbedge.enumerations import UITableViewStyle
@@ -11,6 +11,10 @@ from pyLocalizedString import localizedString
 from baseTableViewController import BaseTableViewController
 from storyboard.segmentedControlViewController import prototypes
 
+from rbedge.enumerations import UIControlEvents
+
+
+UIImage = ObjCClass('UIImage')
 
 class SegmentKind(Enum):
   segmentDefault = 'segmentDefault'
@@ -54,15 +58,17 @@ class SegmentedControlViewController(BaseTableViewController):
                   self.configureDefaultSegmentedControl_),
     ])
 
-  
   # MARK: - Configuration
   @objc_method
   def configureDefaultSegmentedControl_(self, segmentedControl):
     segmentedControl.setEnabled_forSegmentAtIndex_(False, 0)
-    #addTarget_action_forControlEvents_
-    pdbr.state(segmentedControl,1)
-    
-    
+    segmentedControl.addTarget_action_forControlEvents_(
+      self, SEL('selectedSegmentDidChange:'), UIControlEvents.valueChanged)
+
+  @objc_method
+  def configureCustomSegmentsSegmentedControl_(self, segmentedControl):
+    airplaneImage = UIImage.systemImageNamed_('airplane')
+
   # MARK: - Actions
   @objc_method
   def selectedSegmentDidChange_(self, segmentedControl):
