@@ -1,5 +1,6 @@
 from enum import Enum
 
+from pyrubicon.objc.api import ObjCClass
 from pyrubicon.objc.api import objc_method
 from pyrubicon.objc.runtime import SEL, send_super
 
@@ -56,6 +57,9 @@ class SegmentedControlViewController(BaseTableViewController):
       CaseElement(localizedString('DefaultTitle'),
                   SegmentKind.segmentDefault.value,
                   self.configureDefaultSegmentedControl_),
+      CaseElement(localizedString('CustomSegmentsTitle'),
+                  SegmentKind.segmentCustom.value,
+                  self.configureCustomSegmentsSegmentedControl_),
     ])
 
   # MARK: - Configuration
@@ -68,6 +72,8 @@ class SegmentedControlViewController(BaseTableViewController):
   @objc_method
   def configureCustomSegmentsSegmentedControl_(self, segmentedControl):
     airplaneImage = UIImage.systemImageNamed_('airplane')
+    pdbr.state(airplaneImage)
+    airplaneImage.accessibilityLabel = localizedString('Airplane')
 
   # MARK: - Actions
   @objc_method
