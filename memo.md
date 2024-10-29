@@ -1,3 +1,16 @@
+# 📝 2024/10/29
+
+## `UISegmentedControl` に入る
+
+[UISegmentedControl - iPhoneアプリ開発の虎の巻](https://iphone-tora.sakura.ne.jp/uisegmentedcontrol.html)
+
+## Storyboard
+
+buttom の時と同じようにする
+
+tableView で並べていくため
+
+
 # 📝 2024/10/26
 
 ## Safe Area 表記のメモ
