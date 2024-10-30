@@ -14,8 +14,8 @@ from storyboard.segmentedControlViewController import prototypes
 
 from rbedge.enumerations import UIControlEvents
 
-
 UIImage = ObjCClass('UIImage')
+
 
 class SegmentKind(Enum):
   segmentDefault = 'segmentDefault'
@@ -72,8 +72,21 @@ class SegmentedControlViewController(BaseTableViewController):
   @objc_method
   def configureCustomSegmentsSegmentedControl_(self, segmentedControl):
     airplaneImage = UIImage.systemImageNamed_('airplane')
-    pdbr.state(airplaneImage)
     airplaneImage.accessibilityLabel = localizedString('Airplane')
+    segmentedControl.setImage_forSegmentAtIndex_(airplaneImage, 0)
+
+    giftImage = UIImage.systemImageNamed_('gift')
+    giftImage.accessibilityLabel = localizedString('Gift')
+    segmentedControl.setImage_forSegmentAtIndex_(giftImage, 1)
+
+    burstImage = UIImage.systemImageNamed_('burst')
+    burstImage.accessibilityLabel = localizedString('Burst')
+    segmentedControl.setImage_forSegmentAtIndex_(burstImage, 2)
+
+    segmentedControl.selectedSegmentIndex = 0
+
+    segmentedControl.addTarget_action_forControlEvents_(
+      self, SEL('selectedSegmentDidChange:'), UIControlEvents.valueChanged)
 
   # MARK: - Actions
   @objc_method
