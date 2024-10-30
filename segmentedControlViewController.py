@@ -60,6 +60,7 @@ class SegmentedControlViewController(BaseTableViewController):
       CaseElement(localizedString('CustomSegmentsTitle'),
                   SegmentKind.segmentCustom.value,
                   self.configureCustomSegmentsSegmentedControl_),
+      #CaseElement(localizedString('CustomBackgroundTitle'),SegmentKind.segmentCustomBackground.value,self.configureCustomBackgroundSegmentedControl_),
     ])
 
   # MARK: - Configuration
@@ -87,6 +88,14 @@ class SegmentedControlViewController(BaseTableViewController):
 
     segmentedControl.addTarget_action_forControlEvents_(
       self, SEL('selectedSegmentDidChange:'), UIControlEvents.valueChanged)
+
+  # Configure the segmented control with a background image, dividers, and custom font.
+  # セグメント化されたコントロールに、背景画像、仕切り、カスタム・フォントを設定する。
+  # The background image first needs to be sized to match the control's size.
+  # 背景画像は、まずコントロールのサイズに合わせた大きさにする必要があります。
+  @objc_method
+  def configureCustomBackgroundSegmentedControl_(self, placeHolderView):
+    pass
 
   # MARK: - Actions
   @objc_method
