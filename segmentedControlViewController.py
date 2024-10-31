@@ -1,5 +1,6 @@
 from enum import Enum
 from pathlib import Path
+import json
 
 from pyrubicon.objc.api import ObjCClass, ObjCInstance, Block
 from pyrubicon.objc.api import objc_method
@@ -13,13 +14,47 @@ from pyLocalizedString import localizedString
 from baseTableViewController import BaseTableViewController
 from storyboard.segmentedControlViewController import prototypes
 
-from rbedge.enumerations import UIControlEvents, UIUserInterfaceIdiom
+from rbedge.enumerations import UIControlEvents, UIUserInterfaceIdiom, UIUserInterfaceStyle
 
 UIImage = ObjCClass('UIImage')
 UIAction = ObjCClass('UIAction')
 UIColor = ObjCClass('UIColor')
-NSBundle = ObjCClass('NSBundle')
-NSURL = ObjCClass('NSURL')
+
+
+def get_srgb_named_style(named: str,
+                         userInterfaceStyle: UIUserInterfaceStyle) -> list:
+  # todo: 本来`UIColor.colorNamed:` で呼び出す。asset(bundle) の取り込みが難しそうなので、独自に直で呼び出し
+  _path = Path(
+    f'./UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/{named}.colorset/Contents.json'
+  )
+  _str = _path.read_text()
+  _dict = json.loads(_str)
+
+  def _pick_color(colors: list[dict], style: str | None = None) -> list:
+    components: dict
+    for color in colors:
+      idiom = color.get('idiom')
+      if idiom != 'universal':
+        continue
+      if style is None and color.get('appearances') is None:
+        components = color.get('color').get('components')
+        break
+      if (appearances := color.get('appearances')) is not None:
+        appearance, *_ = appearances
+        if style == appearance.get('value'):
+          components = color.get('color').get('components')
+          break
+    red, green, blue, alpha = (float(components.get(c))
+                               for c in ('red', 'green', 'blue', 'alpha'))
+    return [red, green, blue, alpha]
+
+  color_dicts = _dict.get('colors')
+  if userInterfaceStyle == UIUserInterfaceStyle.light:
+    return _pick_color(color_dicts, 'light')
+  elif userInterfaceStyle == UIUserInterfaceStyle.dark:
+    return _pick_color(color_dicts, 'dark')
+  else:
+    return _pick_color(color_dicts)
 
 
 class SegmentKind(Enum):
@@ -78,10 +113,6 @@ class SegmentedControlViewController(BaseTableViewController):
                     self.configureTintedSegmentedControl_),
       ])
 
-    #UIUserInterfaceIdiom.mac
-    #pdbr.state()
-    #print(self.traitCollection.userInterfaceIdiom)
-
   # MARK: - Configuration
   @objc_method
   def configureDefaultSegmentedControl_(self, segmentedControl):
@@ -93,22 +124,13 @@ class SegmentedControlViewController(BaseTableViewController):
   def configureTintedSegmentedControl_(self, segmentedControl):
     # Use a dynamic tinted "green" color (separate one for Light Appearance and separate one for Dark Appearance).
     # ダイナミックな色合いの "グリーン "を使用する(ライト・アピアランス用とダーク・アピアランス用に分ける)。
-    #pdbr.state(UIColor.)
-    #bundleWithURL_
-    #pdbr.state(NSBundle.mainBundle)
-    #/private/var/mobile/Containers/Shared/AppGroup/CD0D241D-A767-4CE7-823D-680C601C49D6/File Provider Storage/Repositories/pystaUIKitCatalogChallenge/UIKitCatalogCreatingAndCustomizingViewsAndControls/README.md
-    base_str = './UIKitCatalogCreatingAndCustomizingViewsAndControls'
-    catalog_url = NSURL.fileURLWithPath_(str(Path(base_str).absolute()))
-    catalog_bundle = NSBundle.bundleWithURL_(catalog_url)
-    #catalog_bundle.load()
-    tint = UIColor.colorNamed_inBundle_compatibleWithTraitCollection_('tinted_segmented_control', catalog_bundle, self.traitCollection)
-    #pdbr.state(catalog_bundle)
-    #pdbr.state(self)
-    print(tint)
-    
-    
-    
-    #colorNamed_inBundle_compatibleWithTraitCollection_
+    _style = self.traitCollection.userInterfaceStyle
+    _srgb = get_srgb_named_style('tinted_segmented_control', _style)
+    color_named = UIColor.alloc().initWithRed_green_blue_alpha_(*_srgb)
+
+    segmentedControl.selectedSegmentTintColor = color_named
+    segmentedControl.selectedSegmentIndex = 1
+
     segmentedControl.addTarget_action_forControlEvents_(
       self, SEL('selectedSegmentDidChange:'), UIControlEvents.valueChanged)
 
