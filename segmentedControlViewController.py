@@ -1,8 +1,8 @@
 from enum import Enum
 
-from pyrubicon.objc.api import ObjCClass
+from pyrubicon.objc.api import ObjCClass, ObjCInstance, Block
 from pyrubicon.objc.api import objc_method
-from pyrubicon.objc.runtime import SEL, send_super
+from pyrubicon.objc.runtime import SEL, send_super, objc_id
 
 from rbedge.enumerations import UITableViewStyle
 from rbedge.functions import NSStringFromClass
@@ -15,6 +15,7 @@ from storyboard.segmentedControlViewController import prototypes
 from rbedge.enumerations import UIControlEvents
 
 UIImage = ObjCClass('UIImage')
+UIAction = ObjCClass('UIAction')
 
 
 class SegmentKind(Enum):
@@ -61,6 +62,9 @@ class SegmentedControlViewController(BaseTableViewController):
                   SegmentKind.segmentCustom.value,
                   self.configureCustomSegmentsSegmentedControl_),
       #CaseElement(localizedString('CustomBackgroundTitle'),SegmentKind.segmentCustomBackground.value,self.configureCustomBackgroundSegmentedControl_),
+      CaseElement(localizedString('ActionBasedTitle'),
+                  SegmentKind.segmentAction.value,
+                  self.configureActionBasedSegmentedControl_),
     ])
 
   # MARK: - Configuration
@@ -96,6 +100,27 @@ class SegmentedControlViewController(BaseTableViewController):
   @objc_method
   def configureCustomBackgroundSegmentedControl_(self, placeHolderView):
     pass
+
+  @objc_method
+  def configureActionBasedSegmentedControl_(self, segmentedControl):
+    segmentedControl.selectedSegmentIndex = 0
+
+    @Block
+    def actionHandler_(_action: objc_id) -> None:
+      action = ObjCInstance(_action)
+      print(f'Segment Action "{action.title}"')
+
+    firstAction = UIAction.actionWithHandler_(actionHandler_)
+    firstAction.setTitle_(localizedString('CheckTitle'))
+    segmentedControl.setAction_forSegmentAtIndex_(firstAction, 0)
+
+    secondAction = UIAction.actionWithHandler_(actionHandler_)
+    secondAction.setTitle_(localizedString('SearchTitle'))
+    segmentedControl.setAction_forSegmentAtIndex_(secondAction, 1)
+
+    thirdAction = UIAction.actionWithHandler_(actionHandler_)
+    thirdAction.setTitle_(localizedString('ToolsTitle'))
+    segmentedControl.setAction_forSegmentAtIndex_(thirdAction, 2)
 
   # MARK: - Actions
   @objc_method
