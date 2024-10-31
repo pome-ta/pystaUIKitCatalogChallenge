@@ -35,16 +35,17 @@ def get_srgb_named_style(named: str,
     for color in colors:
       if color.get('idiom') != 'universal':
         continue
-      if style is None and color.get('appearances') is None:
+      appearance, *_ = appearances if (
+        appearances := color.get('appearances')) is not None else [None]
+      if style is None and appearance is None:
         components = color.get('color').get('components')
         break
-      if (appearances := color.get('appearances')) is not None:
-        appearance, *_ = appearances
-        if style == appearance.get('value'):
-          components = color.get('color').get('components')
-          break
-    red, green, blue, alpha = (float(components.get(c))
-                               for c in ('red', 'green', 'blue', 'alpha'))
+      if appearance is not None and style == appearance.get('value'):
+        components = color.get('color').get('components')
+        break
+
+    red, green, blue, alpha = (float(components.get(clr))
+                               for clr in ('red', 'green', 'blue', 'alpha'))
     # wip: エラーハンドリング
     return [red, green, blue, alpha]
 
