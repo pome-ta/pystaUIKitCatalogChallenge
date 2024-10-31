@@ -57,6 +57,8 @@ def get_srgb_named_style(named: str,
     return _pick_color(color_dicts)
 
 
+# Cell identifier for each segmented control table view cell.
+# セグメント化されたコントロールテーブルビューの各セルのセル識別子。
 class SegmentKind(Enum):
   segmentDefault = 'segmentDefault'
   segmentTinted = 'segmentTinted'
@@ -86,6 +88,7 @@ class SegmentedControlViewController(BaseTableViewController):
       for prototype in prototypes
     ]
 
+  # MARK: - View Life Cycle
   @objc_method
   def viewDidLoad(self):
     send_super(__class__, self, 'viewDidLoad')  # xxx: 不要?
@@ -116,6 +119,8 @@ class SegmentedControlViewController(BaseTableViewController):
   # MARK: - Configuration
   @objc_method
   def configureDefaultSegmentedControl_(self, segmentedControl):
+    # As a demonstration, disable the first segment.
+    # デモとして、最初のセグメントを無効にします。
     segmentedControl.setEnabled_forSegmentAtIndex_(False, 0)
     segmentedControl.addTarget_action_forControlEvents_(
       self, SEL('selectedSegmentDidChange:'), UIControlEvents.valueChanged)
