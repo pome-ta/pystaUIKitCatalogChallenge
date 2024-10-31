@@ -33,8 +33,7 @@ def get_srgb_named_style(named: str,
   def _pick_color(colors: list[dict], style: str | None = None) -> list:
     components: dict
     for color in colors:
-      idiom = color.get('idiom')
-      if idiom != 'universal':
+      if color.get('idiom') != 'universal':
         continue
       if style is None and color.get('appearances') is None:
         components = color.get('color').get('components')
@@ -46,6 +45,7 @@ def get_srgb_named_style(named: str,
           break
     red, green, blue, alpha = (float(components.get(c))
                                for c in ('red', 'green', 'blue', 'alpha'))
+    # wip: エラーハンドリング
     return [red, green, blue, alpha]
 
   color_dicts = _dict.get('colors')
@@ -131,7 +131,8 @@ class SegmentedControlViewController(BaseTableViewController):
     # ダイナミックな色合いの "グリーン "を使用する(ライト・アピアランス用とダーク・アピアランス用に分ける)。
     _style = self.traitCollection.userInterfaceStyle
     _srgb = get_srgb_named_style('tinted_segmented_control', _style)
-    color_named = UIColor.alloc().initWithRed_green_blue_alpha_(*_srgb)
+
+    color_named = UIColor.colorWithRed_green_blue_alpha_(*_srgb)
 
     segmentedControl.selectedSegmentTintColor = color_named
     segmentedControl.selectedSegmentIndex = 1

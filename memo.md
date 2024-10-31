@@ -30,6 +30,22 @@ segmentedControl.selectedSegmentTintColor = UIColor(named: "tinted_segmented_con
 
 
 
+### 落ちる
+
+```python
+color_named = UIColor.alloc().initWithRed_green_blue_alpha_(*_srgb)
+```
+```python
+color_named = UIColor.colorWithRed_green_blue_alpha_(*_srgb)
+```
+
+`alloc().init()` すると、要素書き換え（`_style`）したら落ちる
+
+
+
+`autorelease` しても、落ちたので`alloc().init()` では呼ばないようにする
+
+
 # 📝 2024/10/29
 
 ## `UISegmentedControl` に入る
