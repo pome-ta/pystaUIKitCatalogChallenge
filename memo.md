@@ -1,3 +1,35 @@
+
+# 📝 2024/10/31
+
+
+## `segmentedControlViewController`の`configureTintedSegmentedControl_`
+
+```swift
+segmentedControl.selectedSegmentTintColor = UIColor(named: "tinted_segmented_control")!
+```
+
+
+`UIColor(named: "tinted_segmented_control")` と、bundle（？）
+から、呼び出す場面あり
+
+
+`.bundle` は、ビルドしてから生成される？かもなので、どうやって取得するか、、、
+
+
+[CFBundleとNSBundle [のふ処|NOFUDOKORO]](https://nofu.jp/wiki/translation/adc/cocoa/foundation/introduction_to_dynamically_loading_code/0400_cfbundle)
+
+
+どうなんやろ、、、
+
+
+とりま、
+
+[./UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/tinted_segmented_control.colorset/Contents.json](https://github.com/pome-ta/pystaUIKitCatalogChallenge/blob/main/UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/tinted_segmented_control.colorset/Contents.json)
+
+から、無理矢理こねくり回して、処理させるか？
+
+
+
 # 📝 2024/10/29
 
 ## `UISegmentedControl` に入る
