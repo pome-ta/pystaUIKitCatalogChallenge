@@ -1,3 +1,4 @@
+
 from enum import Enum
 from pathlib import Path
 import json
@@ -192,6 +193,23 @@ class SegmentedControlViewController(BaseTableViewController):
   @objc_method
   def selectedSegmentDidChange_(self, segmentedControl):
     print(f'The selected segment: {segmentedControl.selectedSegmentIndex}')
+
+  '''
+  @objc_method
+  def tableView_cellForRowAtIndexPath_(self, tableView,
+                                       indexPath) -> objc_id:
+    print('h')
+    cellTest = self.testCells[indexPath.section]
+    cell = tableView.dequeueReusableCellWithIdentifier_forIndexPath_(
+      cellTest.cellID, indexPath)
+
+    if (view := cellTest.targetView(cell)):
+      cellTest.configHandler(view)
+
+    return cell
+  '''
+
+
 
 
 if __name__ == '__main__':

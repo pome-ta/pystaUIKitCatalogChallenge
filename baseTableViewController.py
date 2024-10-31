@@ -1,7 +1,7 @@
 import ctypes
 
 from pyrubicon.objc.api import ObjCClass, objc_method
-from pyrubicon.objc.runtime import send_super
+from pyrubicon.objc.runtime import send_super, objc_id
 from pyrubicon.objc.types import NSInteger
 
 from rbedge.enumerations import UIListContentTextAlignment
@@ -11,7 +11,6 @@ from caseElement import CaseElement  # todo: 型呼び出し
 UITableViewController = ObjCClass('UITableViewController')
 UITableViewHeaderFooterView = ObjCClass('UITableViewHeaderFooterView')
 UIListContentConfiguration = ObjCClass('UIListContentConfiguration')
-
 
 
 class BaseTableViewController(UITableViewController):
@@ -40,8 +39,8 @@ class BaseTableViewController(UITableViewController):
   # MARK: - UITableViewDataSource
   @objc_method
   def tableView_viewForHeaderInSection_(self, tableView,
-                                        section: NSInteger) -> ctypes.c_void_p:
-    return self.centeredHeaderView_(self.testCells[section].title).ptr
+                                        section: NSInteger) -> objc_id:
+    return self.centeredHeaderView_(self.testCells[section].title)
 
   @objc_method
   def tableView_titleForHeaderInSection_(self, tableView, section: NSInteger):
@@ -57,8 +56,7 @@ class BaseTableViewController(UITableViewController):
     return len(self.testCells)
 
   @objc_method
-  def tableView_cellForRowAtIndexPath_(self, tableView,
-                                       indexPath) -> ctypes.c_void_p:
+  def tableView_cellForRowAtIndexPath_(self, tableView, indexPath) -> objc_id:
     cellTest = self.testCells[indexPath.section]
     cell = tableView.dequeueReusableCellWithIdentifier_forIndexPath_(
       cellTest.cellID, indexPath)
@@ -66,5 +64,5 @@ class BaseTableViewController(UITableViewController):
     if (view := cellTest.targetView(cell)):
       cellTest.configHandler(view)
 
-    return cell.ptr
+    return cell
 
