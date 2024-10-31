@@ -309,3 +309,15 @@ class UISearchBarIcon:
   bookmark: int = 2
   resultsList: int = 3
 
+
+# ref: [UIUserInterfaceIdiom | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uiuserinterfaceidiom?language=objc)
+@dataclass
+class UIUserInterfaceIdiom:
+  unspecified: int = -1
+  phone: int = 0
+  pad: int = 1
+  tv: int = 2
+  carPlay: int = 3
+  mac: int = 5
+  vision: int = 6
+

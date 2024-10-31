@@ -1,4 +1,5 @@
 from enum import Enum
+from pathlib import Path
 
 from pyrubicon.objc.api import ObjCClass, ObjCInstance, Block
 from pyrubicon.objc.api import objc_method
@@ -12,10 +13,13 @@ from pyLocalizedString import localizedString
 from baseTableViewController import BaseTableViewController
 from storyboard.segmentedControlViewController import prototypes
 
-from rbedge.enumerations import UIControlEvents
+from rbedge.enumerations import UIControlEvents, UIUserInterfaceIdiom
 
 UIImage = ObjCClass('UIImage')
 UIAction = ObjCClass('UIAction')
+UIColor = ObjCClass('UIColor')
+NSBundle = ObjCClass('NSBundle')
+NSURL = ObjCClass('NSURL')
 
 
 class SegmentKind(Enum):
@@ -66,11 +70,45 @@ class SegmentedControlViewController(BaseTableViewController):
                   SegmentKind.segmentAction.value,
                   self.configureActionBasedSegmentedControl_),
     ])
+    if self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiom.mac:
+      # Tinted segmented control is only available on iOS.
+      # ティント・セグメンテッド・コントロールはiOSでのみ利用可能。
+      self.testCells.extend([
+        CaseElement(localizedString('Tinted'), SegmentKind.segmentTinted.value,
+                    self.configureTintedSegmentedControl_),
+      ])
+
+    #UIUserInterfaceIdiom.mac
+    #pdbr.state()
+    #print(self.traitCollection.userInterfaceIdiom)
 
   # MARK: - Configuration
   @objc_method
   def configureDefaultSegmentedControl_(self, segmentedControl):
     segmentedControl.setEnabled_forSegmentAtIndex_(False, 0)
+    segmentedControl.addTarget_action_forControlEvents_(
+      self, SEL('selectedSegmentDidChange:'), UIControlEvents.valueChanged)
+
+  @objc_method
+  def configureTintedSegmentedControl_(self, segmentedControl):
+    # Use a dynamic tinted "green" color (separate one for Light Appearance and separate one for Dark Appearance).
+    # ダイナミックな色合いの "グリーン "を使用する(ライト・アピアランス用とダーク・アピアランス用に分ける)。
+    #pdbr.state(UIColor.)
+    #bundleWithURL_
+    #pdbr.state(NSBundle.mainBundle)
+    #/private/var/mobile/Containers/Shared/AppGroup/CD0D241D-A767-4CE7-823D-680C601C49D6/File Provider Storage/Repositories/pystaUIKitCatalogChallenge/UIKitCatalogCreatingAndCustomizingViewsAndControls/README.md
+    base_str = './UIKitCatalogCreatingAndCustomizingViewsAndControls'
+    catalog_url = NSURL.fileURLWithPath_(str(Path(base_str).absolute()))
+    catalog_bundle = NSBundle.bundleWithURL_(catalog_url)
+    #catalog_bundle.load()
+    tint = UIColor.colorNamed_inBundle_compatibleWithTraitCollection_('tinted_segmented_control', catalog_bundle, self.traitCollection)
+    #pdbr.state(catalog_bundle)
+    #pdbr.state(self)
+    print(tint)
+    
+    
+    
+    #colorNamed_inBundle_compatibleWithTraitCollection_
     segmentedControl.addTarget_action_forControlEvents_(
       self, SEL('selectedSegmentDidChange:'), UIControlEvents.valueChanged)
 
