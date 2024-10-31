@@ -321,3 +321,11 @@ class UIUserInterfaceIdiom:
   mac: int = 5
   vision: int = 6
 
+
+# ref: [UIUserInterfaceStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uiuserinterfacestyle?language=objc)
+@dataclass
+class UIUserInterfaceStyle:
+  unspecified: int = 0
+  light: int = 1
+  dark: int = 2
+
