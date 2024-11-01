@@ -18,6 +18,10 @@ from rbedge.enumerations import UIControlEvents, UIUserInterfaceIdiom, UIUserInt
 
 UIImage = ObjCClass('UIImage')
 UIAction = ObjCClass('UIAction')
+UIScreen = ObjCClass('UIScreen')
+NSURL = ObjCClass('NSURL')
+NSData = ObjCClass('NSData')
+UIImage = ObjCClass('UIImage')
 UIColor = ObjCClass('UIColor')
 UISegmentedControl = ObjCClass('UISegmentedControl')  # todo: 型呼び出し
 
@@ -200,9 +204,25 @@ class SegmentedControlViewController(BaseTableViewController):
 
     placeHolderView.addSubview_(customBackgroundSegmentedControl)
 
-    #print((placeHolderView.bounds.size.height - customBackgroundSegmentedControl.bounds.size.height) / 2)
-    print(customBackgroundSegmentedControl.bounds.size.height)
-    print(placeHolderView.bounds.size.height)
+    scale = int(UIScreen.mainScreen.scale)
+    normal_str = f'./UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/background.imageset/stepper_and_segment_background_{scale}x.png'
+    highlighted_str = f'./UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/background_highlighted.imageset/stepper_and_segment_background_highlighted_{scale}x.png'
+    disabled_str = f'./UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/background_disabled.imageset/stepper_and_segment_background_disabled_{scale}x.png'
+
+    # xxx: あとで取り回し考える
+    from pathlib import Path
+
+    # xxx: `lambda` の使い方が悪い
+    dataWithContentsOfURL = lambda path_str: NSData.dataWithContentsOfURL_(
+      NSURL.fileURLWithPath_(str(Path(path_str).absolute())))
+
+    # Set the background images for each control state.
+    # 制御状態ごとに背景画像を設定します。
+    normalSegmentBackgroundImage = UIImage.alloc().initWithData_scale_(
+      dataWithContentsOfURL(normal_str), scale)
+    # Size the background image to match the bounds of the segmented control.
+    # セグメント化されたコントロールの境界に一致するように背景画像のサイズを設定します。
+    
 
   @objc_method
   def configureActionBasedSegmentedControl_(self, segmentedControl):
