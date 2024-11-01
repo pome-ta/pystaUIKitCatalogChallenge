@@ -19,6 +19,7 @@ from rbedge.enumerations import UIControlEvents, UIUserInterfaceIdiom, UIUserInt
 UIImage = ObjCClass('UIImage')
 UIAction = ObjCClass('UIAction')
 UIColor = ObjCClass('UIColor')
+UISegmentedControl = ObjCClass('UISegmentedControl')  # todo: 型呼び出し
 
 
 def get_srgb_named_style(named: str,
@@ -96,7 +97,7 @@ class SegmentedControlViewController(BaseTableViewController):
 
     title = NSStringFromClass(__class__)
     self.navigationItem.title = title
-
+    '''
     self.testCells.extend([
       CaseElement(localizedString('DefaultTitle'),
                   SegmentKind.segmentDefault.value,
@@ -116,6 +117,20 @@ class SegmentedControlViewController(BaseTableViewController):
         CaseElement(localizedString('Tinted'), SegmentKind.segmentTinted.value,
                     self.configureTintedSegmentedControl_),
       ])
+    '''
+    '''
+    self.testCells.extend([
+      CaseElement(localizedString('DefaultTitle'),
+                  SegmentKind.segmentDefault.value,
+                  self.configureDefaultSegmentedControl_),
+    ])
+    '''
+
+    self.testCells.extend([
+      CaseElement(localizedString('CustomBackgroundTitle'),
+                  SegmentKind.segmentCustomBackground.value,
+                  self.configureCustomBackgroundSegmentedControl_),
+    ])
 
   # MARK: - Configuration
   @objc_method
@@ -166,7 +181,28 @@ class SegmentedControlViewController(BaseTableViewController):
   # 背景画像は、まずコントロールのサイズに合わせた大きさにする必要があります。
   @objc_method
   def configureCustomBackgroundSegmentedControl_(self, placeHolderView):
-    pass
+    customBackgroundSegmentedControl = UISegmentedControl.alloc(
+    ).initWithItems_([
+      localizedString('CheckTitle'),
+      localizedString('SearchTitle'),
+      localizedString('ToolsTitle'),
+    ]).autorelease()
+    customBackgroundSegmentedControl.selectedSegmentIndex = 2
+
+    # Place this custom segmented control within the placeholder view.
+    # このカスタムのセグメント化されたコントロールをプレースホルダー ビュー内に配置します。
+
+    #pdbr.state(placeHolderView.frame,1)
+    customBackgroundSegmentedControl.frame.size.width = placeHolderView.frame.size.width
+    customBackgroundSegmentedControl.frame.origin.y = (
+      placeHolderView.bounds.size.height -
+      customBackgroundSegmentedControl.bounds.size.height) / 2
+
+    placeHolderView.addSubview_(customBackgroundSegmentedControl)
+
+    #print((placeHolderView.bounds.size.height - customBackgroundSegmentedControl.bounds.size.height) / 2)
+    print(customBackgroundSegmentedControl.bounds.size.height)
+    print(placeHolderView.bounds.size.height)
 
   @objc_method
   def configureActionBasedSegmentedControl_(self, segmentedControl):
@@ -202,6 +238,15 @@ class SegmentedControlViewController(BaseTableViewController):
     cell = tableView.dequeueReusableCellWithIdentifier_forIndexPath_(
       cellTest.cellID, indexPath)
 
+    #print(cellTest)
+    segementedControl = cellTest.targetView(cell)
+    #pdbr.state(segementedControl,1)
+    #print(type(segementedControl))
+    #isMemberOfClass_
+    #pdbr.state(UISegmentedControl,1)
+    # The only non-segmented control cell has a placeholder UIView (for adding one as a subview).
+    # 唯一の非セグメント化コントロール セルには、プレースホルダー UIView (サブビューとして追加するため) があります。
+    #print(segementedControl.isMemberOfClass_(UISegmentedControl))
     if (view := cellTest.targetView(cell)):
       cellTest.configHandler(view)
 
