@@ -222,7 +222,6 @@ class SegmentedControlViewController(BaseTableViewController):
       dataWithContentsOfURL(normal_str), scale)
     # Size the background image to match the bounds of the segmented control.
     # セグメント化されたコントロールの境界に一致するように背景画像のサイズを設定します。
-    
 
   @objc_method
   def configureActionBasedSegmentedControl_(self, segmentedControl):
