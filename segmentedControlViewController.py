@@ -179,6 +179,12 @@ class SegmentedControlViewController(BaseTableViewController):
     segmentedControl.addTarget_action_forControlEvents_(
       self, SEL('selectedSegmentDidChange:'), UIControlEvents.valueChanged)
 
+  # Utility function to resize an image to a particular size.
+  # 画像を特定のサイズに変更するユーティリティ関数。
+  @objc_method
+  def scaledImage(self):
+    pass
+
   # Configure the segmented control with a background image, dividers, and custom font.
   # セグメント化されたコントロールに、背景画像、仕切り、カスタム・フォントを設定する。
   # The background image first needs to be sized to match the control's size.
@@ -222,6 +228,9 @@ class SegmentedControlViewController(BaseTableViewController):
       dataWithContentsOfURL(normal_str), scale)
     # Size the background image to match the bounds of the segmented control.
     # セグメント化されたコントロールの境界に一致するように背景画像のサイズを設定します。
+    backgroundImageSize = customBackgroundSegmentedControl.bounds.size
+
+    print(backgroundImageSize)
 
   @objc_method
   def configureActionBasedSegmentedControl_(self, segmentedControl):
