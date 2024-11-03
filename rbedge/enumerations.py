@@ -329,3 +329,14 @@ class UIUserInterfaceStyle:
   light: int = 1
   dark: int = 2
 
+
+# ref: [UIBarMetrics | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uibarmetrics?language=objc)
+@dataclass
+class UIBarMetrics:
+  default: int = 0  # xxx: '`' で囲まれてる
+  compact: int = 1
+  defaultPrompt: int = 101
+  compactPrompt: int = 102
+  landscapePhone: int = compact  # todo: Deprecated
+  landscapePhonePrompt: int = compactPrompt  # todo: Deprecated
+
