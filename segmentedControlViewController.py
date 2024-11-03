@@ -1,11 +1,12 @@
+import ctypes
 from enum import Enum
 from pathlib import Path
 import json
 
 from pyrubicon.objc.api import ObjCClass, ObjCInstance, Block
 from pyrubicon.objc.api import objc_method
-from pyrubicon.objc.runtime import SEL, send_super, objc_id,load_library
-from pyrubicon.objc.types import CGSize
+from pyrubicon.objc.runtime import SEL, send_super, objc_id, load_library
+from pyrubicon.objc.types import CGSize, CGFloat
 
 from rbedge.enumerations import UITableViewStyle
 from rbedge.functions import NSStringFromClass
@@ -17,7 +18,6 @@ from storyboard.segmentedControlViewController import prototypes
 
 from rbedge.enumerations import UIControlEvents, UIUserInterfaceIdiom, UIUserInterfaceStyle
 
-
 UIKit = load_library('UIKit')
 UIImage = ObjCClass('UIImage')
 UIAction = ObjCClass('UIAction')
@@ -27,6 +27,18 @@ NSData = ObjCClass('NSData')
 UIImage = ObjCClass('UIImage')
 UIColor = ObjCClass('UIColor')
 UISegmentedControl = ObjCClass('UISegmentedControl')  # todo: 型呼び出し
+
+
+def UIGraphicsBeginImageContextWithOptions(size: CGSize, opaque: bool,
+                                           scale: CGFloat):
+  _fnc = UIKit.UIGraphicsBeginImageContextWithOptions
+  _fnc.restype = ctypes.c_void_p
+  _fnc.argtypes = [
+    CGSize,
+    ctypes.c_bool,
+    CGFloat,
+  ]
+  return ObjCInstance(_fnc(size, opaque, scale))
 
 
 def get_srgb_named_style(named: str,
@@ -186,7 +198,10 @@ class SegmentedControlViewController(BaseTableViewController):
   # 画像を特定のサイズに変更するユーティリティ関数。
   @objc_method
   def scaledImage_scaledToSize_(self, image, newSize: CGSize):
-    pdbr.state(UIKit)
+    #pdbr.state(UIKit)
+    #UIGraphicsBeginImageContextWithOptions
+    print(UIKit.UIGraphicsBeginImageContextWithOptions)
+
     return image
 
   # Configure the segmented control with a background image, dividers, and custom font.
