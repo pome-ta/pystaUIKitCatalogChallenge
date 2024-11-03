@@ -33,6 +33,8 @@ NSData = ObjCClass('NSData')
 UIImage = ObjCClass('UIImage')
 UIColor = ObjCClass('UIColor')
 UISegmentedControl = ObjCClass('UISegmentedControl')  # todo: 型呼び出し
+UIFont = ObjCClass('UIFont')
+UIFontDescriptor = ObjCClass('UIFontDescriptor')
 
 
 def UIGraphicsBeginImageContextWithOptions(size: CGSize, opaque: bool,
@@ -299,6 +301,13 @@ class SegmentedControlViewController(BaseTableViewController):
     customBackgroundSegmentedControl.setDividerImage_forLeftSegmentState_rightSegmentState_barMetrics_(
       segmentDividerImage, UIControlState.normal, UIControlState.normal,
       UIBarMetrics.default)
+      
+    # Create a font to use for the attributed title, for both normal and highlighted states.
+    # 通常状態と強調表示状態の両方で、属性付きタイトルに使用するフォントを作成します。
+    pdbr.state(UIFontDescriptor)
+    #fontWithDescriptor_size_
+    #preferredFontDescriptorWithTextStyle_
+    
 
   @objc_method
   def configureActionBasedSegmentedControl_(self, segmentedControl):
