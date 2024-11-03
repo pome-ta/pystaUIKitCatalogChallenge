@@ -4,7 +4,7 @@ from pathlib import Path
 import json
 
 from pyrubicon.objc.api import ObjCClass, ObjCInstance, Block
-from pyrubicon.objc.api import objc_method
+from pyrubicon.objc.api import objc_method, objc_const
 from pyrubicon.objc.runtime import SEL, send_super, objc_id, load_library
 from pyrubicon.objc.types import CGSize, CGFloat, CGRectMake
 
@@ -35,6 +35,7 @@ UIColor = ObjCClass('UIColor')
 UISegmentedControl = ObjCClass('UISegmentedControl')  # todo: 型呼び出し
 UIFont = ObjCClass('UIFont')
 UIFontDescriptor = ObjCClass('UIFontDescriptor')
+NSAttributedString = ObjCClass('NSAttributedString')
 
 
 def UIGraphicsBeginImageContextWithOptions(size: CGSize, opaque: bool,
@@ -138,7 +139,7 @@ class SegmentedControlViewController(BaseTableViewController):
 
     title = NSStringFromClass(__class__)
     self.navigationItem.title = title
-    '''
+
     self.testCells.extend([
       CaseElement(localizedString('DefaultTitle'),
                   SegmentKind.segmentDefault.value,
@@ -146,7 +147,9 @@ class SegmentedControlViewController(BaseTableViewController):
       CaseElement(localizedString('CustomSegmentsTitle'),
                   SegmentKind.segmentCustom.value,
                   self.configureCustomSegmentsSegmentedControl_),
-      #CaseElement(localizedString('CustomBackgroundTitle'),SegmentKind.segmentCustomBackground.value,self.configureCustomBackgroundSegmentedControl_),
+      CaseElement(localizedString('CustomBackgroundTitle'),
+                  SegmentKind.segmentCustomBackground.value,
+                  self.configureCustomBackgroundSegmentedControl_),
       CaseElement(localizedString('ActionBasedTitle'),
                   SegmentKind.segmentAction.value,
                   self.configureActionBasedSegmentedControl_),
@@ -159,19 +162,19 @@ class SegmentedControlViewController(BaseTableViewController):
                     self.configureTintedSegmentedControl_),
       ])
     '''
-    '''
     self.testCells.extend([
       CaseElement(localizedString('DefaultTitle'),
                   SegmentKind.segmentDefault.value,
                   self.configureDefaultSegmentedControl_),
     ])
-    '''
+    
 
     self.testCells.extend([
       CaseElement(localizedString('CustomBackgroundTitle'),
                   SegmentKind.segmentCustomBackground.value,
                   self.configureCustomBackgroundSegmentedControl_),
     ])
+    '''
 
   # MARK: - Configuration
   @objc_method
@@ -244,7 +247,6 @@ class SegmentedControlViewController(BaseTableViewController):
     # Place this custom segmented control within the placeholder view.
     # このカスタムのセグメント化されたコントロールをプレースホルダー ビュー内に配置します。
 
-    #pdbr.state(placeHolderView.frame,1)
     customBackgroundSegmentedControl.frame.size.width = placeHolderView.frame.size.width
     customBackgroundSegmentedControl.frame.origin.y = (
       placeHolderView.bounds.size.height -
@@ -297,17 +299,36 @@ class SegmentedControlViewController(BaseTableViewController):
     # 分割画像を設定します。
     segmentDividerImage = UIImage.alloc().initWithData_scale_(
       dataWithContentsOfURL(divider_str), scale)
-    pdbr.state(customBackgroundSegmentedControl)
     customBackgroundSegmentedControl.setDividerImage_forLeftSegmentState_rightSegmentState_barMetrics_(
       segmentDividerImage, UIControlState.normal, UIControlState.normal,
       UIBarMetrics.default)
-      
+
     # Create a font to use for the attributed title, for both normal and highlighted states.
     # 通常状態と強調表示状態の両方で、属性付きタイトルに使用するフォントを作成します。
-    pdbr.state(UIFontDescriptor)
-    #fontWithDescriptor_size_
-    #preferredFontDescriptorWithTextStyle_
-    
+    font = UIFont.fontWithDescriptor_size_(
+      UIFontDescriptor.preferredFontDescriptorWithTextStyle_(
+        objc_const(UIKit, 'UIFontTextStyleBody')), 0.0)
+
+    normalTextAttributes = {
+      str(objc_const(UIKit, 'NSForegroundColorAttributeName')):
+      UIColor.systemPurpleColor(),
+      str(objc_const(UIKit, 'NSFontAttributeName')):
+      font,
+    }
+    customBackgroundSegmentedControl.setTitleTextAttributes_forState_(
+      normalTextAttributes, UIControlState.normal)
+
+    highlightedTextAttributes = {
+      str(objc_const(UIKit, 'NSForegroundColorAttributeName')):
+      UIColor.systemGreenColor(),
+      str(objc_const(UIKit, 'NSFontAttributeName')):
+      font,
+    }
+    customBackgroundSegmentedControl.setTitleTextAttributes_forState_(
+      highlightedTextAttributes, UIControlState.highlighted)
+
+    customBackgroundSegmentedControl.addTarget_action_forControlEvents_(
+      self, SEL('selectedSegmentDidChange:'), UIControlEvents.valueChanged)
 
   @objc_method
   def configureActionBasedSegmentedControl_(self, segmentedControl):
@@ -342,18 +363,17 @@ class SegmentedControlViewController(BaseTableViewController):
     cellTest = self.testCells[indexPath.section]
     cell = tableView.dequeueReusableCellWithIdentifier_forIndexPath_(
       cellTest.cellID, indexPath)
-
-    #print(cellTest)
-    segementedControl = cellTest.targetView(cell)
-    #pdbr.state(segementedControl,1)
-    #print(type(segementedControl))
-    #isMemberOfClass_
-    #pdbr.state(UISegmentedControl,1)
     # The only non-segmented control cell has a placeholder UIView (for adding one as a subview).
     # 唯一の非セグメント化コントロール セルには、プレースホルダー UIView (サブビューとして追加するため) があります。
-    #print(segementedControl.isMemberOfClass_(UISegmentedControl))
-    if (view := cellTest.targetView(cell)):
-      cellTest.configHandler(view)
+    # xxx: Python 上では、同じ処理
+
+    if cellTest.targetView(cell).isMemberOfClass_(UISegmentedControl):
+
+      if (segementedControl := cellTest.targetView(cell)):
+        cellTest.configHandler(segementedControl)
+    else:
+      if (placeHolderView := cellTest.targetView(cell)):
+        cellTest.configHandler(placeHolderView)
 
     return cell
 
