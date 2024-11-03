@@ -161,20 +161,6 @@ class SegmentedControlViewController(BaseTableViewController):
         CaseElement(localizedString('Tinted'), SegmentKind.segmentTinted.value,
                     self.configureTintedSegmentedControl_),
       ])
-    '''
-    self.testCells.extend([
-      CaseElement(localizedString('DefaultTitle'),
-                  SegmentKind.segmentDefault.value,
-                  self.configureDefaultSegmentedControl_),
-    ])
-    
-
-    self.testCells.extend([
-      CaseElement(localizedString('CustomBackgroundTitle'),
-                  SegmentKind.segmentCustomBackground.value,
-                  self.configureCustomBackgroundSegmentedControl_),
-    ])
-    '''
 
   # MARK: - Configuration
   @objc_method
@@ -182,7 +168,6 @@ class SegmentedControlViewController(BaseTableViewController):
     # As a demonstration, disable the first segment.
     # デモとして、最初のセグメントを無効にします。
     segmentedControl.setEnabled_forSegmentAtIndex_(False, 0)
-    print(f'{segmentedControl=}')
     segmentedControl.addTarget_action_forControlEvents_(
       self, SEL('selectedSegmentDidChange:'), UIControlEvents.valueChanged)
 
@@ -334,8 +319,6 @@ class SegmentedControlViewController(BaseTableViewController):
     customBackgroundSegmentedControl.setTitleTextAttributes_forState_(
       highlightedTextAttributes, UIControlState.highlighted)
 
-    print(f'{placeHolderView=}')
-    print(f'{customBackgroundSegmentedControl=}')
     customBackgroundSegmentedControl.addTarget_action_forControlEvents_(
       self, SEL('selectedSegmentDidChange:'), UIControlEvents.valueChanged)
 
