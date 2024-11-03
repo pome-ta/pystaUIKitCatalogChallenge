@@ -4,7 +4,8 @@ import json
 
 from pyrubicon.objc.api import ObjCClass, ObjCInstance, Block
 from pyrubicon.objc.api import objc_method
-from pyrubicon.objc.runtime import SEL, send_super, objc_id
+from pyrubicon.objc.runtime import SEL, send_super, objc_id,load_library
+from pyrubicon.objc.types import CGSize
 
 from rbedge.enumerations import UITableViewStyle
 from rbedge.functions import NSStringFromClass
@@ -16,6 +17,8 @@ from storyboard.segmentedControlViewController import prototypes
 
 from rbedge.enumerations import UIControlEvents, UIUserInterfaceIdiom, UIUserInterfaceStyle
 
+
+UIKit = load_library('UIKit')
 UIImage = ObjCClass('UIImage')
 UIAction = ObjCClass('UIAction')
 UIScreen = ObjCClass('UIScreen')
@@ -182,8 +185,9 @@ class SegmentedControlViewController(BaseTableViewController):
   # Utility function to resize an image to a particular size.
   # 画像を特定のサイズに変更するユーティリティ関数。
   @objc_method
-  def scaledImage(self):
-    pass
+  def scaledImage_scaledToSize_(self, image, newSize: CGSize):
+    pdbr.state(UIKit)
+    return image
 
   # Configure the segmented control with a background image, dividers, and custom font.
   # セグメント化されたコントロールに、背景画像、仕切り、カスタム・フォントを設定する。
@@ -230,7 +234,8 @@ class SegmentedControlViewController(BaseTableViewController):
     # セグメント化されたコントロールの境界に一致するように背景画像のサイズを設定します。
     backgroundImageSize = customBackgroundSegmentedControl.bounds.size
 
-    print(backgroundImageSize)
+    newBackgroundImageSize = self.scaledImage_scaledToSize_(
+      normalSegmentBackgroundImage, backgroundImageSize)
 
   @objc_method
   def configureActionBasedSegmentedControl_(self, segmentedControl):
