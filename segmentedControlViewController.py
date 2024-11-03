@@ -6,7 +6,7 @@ import json
 from pyrubicon.objc.api import ObjCClass, ObjCInstance, Block
 from pyrubicon.objc.api import objc_method
 from pyrubicon.objc.runtime import SEL, send_super, objc_id, load_library
-from pyrubicon.objc.types import CGSize, CGFloat
+from pyrubicon.objc.types import CGSize, CGFloat, CGRectMake
 
 from rbedge.enumerations import UITableViewStyle
 from rbedge.functions import NSStringFromClass
@@ -30,7 +30,7 @@ UISegmentedControl = ObjCClass('UISegmentedControl')  # todo: 型呼び出し
 
 
 def UIGraphicsBeginImageContextWithOptions(size: CGSize, opaque: bool,
-                                           scale: CGFloat):
+                                           scale: CGFloat) -> ObjCInstance:
   _fnc = UIKit.UIGraphicsBeginImageContextWithOptions
   _fnc.restype = ctypes.c_void_p
   _fnc.argtypes = [
@@ -39,6 +39,20 @@ def UIGraphicsBeginImageContextWithOptions(size: CGSize, opaque: bool,
     CGFloat,
   ]
   return ObjCInstance(_fnc(size, opaque, scale))
+
+
+def UIGraphicsGetImageFromCurrentImageContext() -> ObjCInstance:
+  _fnc = UIKit.UIGraphicsGetImageFromCurrentImageContext
+  _fnc.restype = objc_id
+  _fnc.argtypes = []
+  return ObjCInstance(_fnc())
+
+
+def UIGraphicsEndImageContext():
+  _fnc = UIKit.UIGraphicsEndImageContext
+  _fnc.restype = ctypes.c_void_p
+  _fnc.argtypes = []
+  return ObjCInstance(_fnc)
 
 
 def get_srgb_named_style(named: str,
@@ -198,11 +212,13 @@ class SegmentedControlViewController(BaseTableViewController):
   # 画像を特定のサイズに変更するユーティリティ関数。
   @objc_method
   def scaledImage_scaledToSize_(self, image, newSize: CGSize):
-    #pdbr.state(UIKit)
-    #UIGraphicsBeginImageContextWithOptions
-    print(UIKit.UIGraphicsBeginImageContextWithOptions)
+    UIGraphicsBeginImageContextWithOptions(newSize, False, 0.0)
+    image.drawInRect_(CGRectMake(0.0, 0.0, newSize.width, newSize.height))
+    newImage = UIGraphicsGetImageFromCurrentImageContext()
+    UIGraphicsEndImageContext()
+    #print(newImage)
 
-    return image
+    return newImage
 
   # Configure the segmented control with a background image, dividers, and custom font.
   # セグメント化されたコントロールに、背景画像、仕切り、カスタム・フォントを設定する。
