@@ -6,7 +6,7 @@ import json
 from pyrubicon.objc.api import ObjCClass, ObjCInstance, Block
 from pyrubicon.objc.api import objc_method, objc_const
 from pyrubicon.objc.runtime import SEL, send_super, objc_id, load_library
-from pyrubicon.objc.types import CGSize, CGFloat, CGRectMake
+from pyrubicon.objc.types import CGSize, CGFloat, CGRectMake, CGSizeMake
 
 from rbedge.enumerations import UITableViewStyle
 from rbedge.functions import NSStringFromClass
@@ -182,6 +182,7 @@ class SegmentedControlViewController(BaseTableViewController):
     # As a demonstration, disable the first segment.
     # デモとして、最初のセグメントを無効にします。
     segmentedControl.setEnabled_forSegmentAtIndex_(False, 0)
+    print(f'{segmentedControl=}')
     segmentedControl.addTarget_action_forControlEvents_(
       self, SEL('selectedSegmentDidChange:'), UIControlEvents.valueChanged)
 
@@ -242,12 +243,18 @@ class SegmentedControlViewController(BaseTableViewController):
       localizedString('SearchTitle'),
       localizedString('ToolsTitle'),
     ]).autorelease()
+
     customBackgroundSegmentedControl.selectedSegmentIndex = 2
 
     # Place this custom segmented control within the placeholder view.
     # このカスタムのセグメント化されたコントロールをプレースホルダー ビュー内に配置します。
+    _width = placeHolderView.frame.size.width
+    _height = customBackgroundSegmentedControl.frame.size.height
+    # todo: `=` では、反映されないので`setSize_` してる
+    #customBackgroundSegmentedControl.frame.size.width = placeHolderView.frame.size.width
+    customBackgroundSegmentedControl.setSize_(CGSizeMake(_width, _height))
 
-    customBackgroundSegmentedControl.frame.size.width = placeHolderView.frame.size.width
+    # xxx: ここもか？
     customBackgroundSegmentedControl.frame.origin.y = (
       placeHolderView.bounds.size.height -
       customBackgroundSegmentedControl.bounds.size.height) / 2
@@ -327,6 +334,8 @@ class SegmentedControlViewController(BaseTableViewController):
     customBackgroundSegmentedControl.setTitleTextAttributes_forState_(
       highlightedTextAttributes, UIControlState.highlighted)
 
+    print(f'{placeHolderView=}')
+    print(f'{customBackgroundSegmentedControl=}')
     customBackgroundSegmentedControl.addTarget_action_forControlEvents_(
       self, SEL('selectedSegmentDidChange:'), UIControlEvents.valueChanged)
 
