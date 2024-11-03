@@ -16,7 +16,13 @@ from pyLocalizedString import localizedString
 from baseTableViewController import BaseTableViewController
 from storyboard.segmentedControlViewController import prototypes
 
-from rbedge.enumerations import UIControlEvents, UIUserInterfaceIdiom, UIUserInterfaceStyle
+from rbedge.enumerations import (
+  UIControlEvents,
+  UIUserInterfaceIdiom,
+  UIUserInterfaceStyle,
+  UIControlState,
+  UIBarMetrics,
+)
 
 UIKit = load_library('UIKit')
 UIImage = ObjCClass('UIImage')
@@ -52,7 +58,7 @@ def UIGraphicsEndImageContext():
   _fnc = UIKit.UIGraphicsEndImageContext
   _fnc.restype = ctypes.c_void_p
   _fnc.argtypes = []
-  return ObjCInstance(_fnc)
+  _fnc()
 
 
 def get_srgb_named_style(named: str,
@@ -216,7 +222,6 @@ class SegmentedControlViewController(BaseTableViewController):
     image.drawInRect_(CGRectMake(0.0, 0.0, newSize.width, newSize.height))
     newImage = UIGraphicsGetImageFromCurrentImageContext()
     UIGraphicsEndImageContext()
-    #print(newImage)
 
     return newImage
 
@@ -267,6 +272,33 @@ class SegmentedControlViewController(BaseTableViewController):
 
     newBackgroundImageSize = self.scaledImage_scaledToSize_(
       normalSegmentBackgroundImage, backgroundImageSize)
+    customBackgroundSegmentedControl.setBackgroundImage_forState_barMetrics_(
+      newBackgroundImageSize, UIControlState.normal, UIBarMetrics.default)
+
+    disabledSegmentBackgroundImage = UIImage.alloc().initWithData_scale_(
+      dataWithContentsOfURL(disabled_str), scale)
+    customBackgroundSegmentedControl.setBackgroundImage_forState_barMetrics_(
+      disabledSegmentBackgroundImage, UIControlState.disabled,
+      UIBarMetrics.default)
+
+    highlightedSegmentBackgroundImage = UIImage.alloc().initWithData_scale_(
+      dataWithContentsOfURL(highlighted_str), scale)
+    customBackgroundSegmentedControl.setBackgroundImage_forState_barMetrics_(
+      highlightedSegmentBackgroundImage, UIControlState.highlighted,
+      UIBarMetrics.default)
+
+    # xxx: `x1`,`x2` と`x3` だと、ファイル名が違う
+    divider_scale = 'stepper_and_segment_divider_' if scale == 3 else 'stepper_and_segment_segment_divider_'
+    divider_str = f'./UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/stepper_and_segment_divider.imageset/{divider_scale}{scale}x.png'
+
+    # Set the divider image.
+    # 分割画像を設定します。
+    segmentDividerImage = UIImage.alloc().initWithData_scale_(
+      dataWithContentsOfURL(divider_str), scale)
+    pdbr.state(customBackgroundSegmentedControl)
+    customBackgroundSegmentedControl.setDividerImage_forLeftSegmentState_rightSegmentState_barMetrics_(
+      segmentDividerImage, UIControlState.normal, UIControlState.normal,
+      UIBarMetrics.default)
 
   @objc_method
   def configureActionBasedSegmentedControl_(self, segmentedControl):
