@@ -9,6 +9,7 @@ from pyrubicon.objc.runtime import SEL, send_super, objc_id
 from rbedge.enumerations import (
   UITableViewStyle,
   UIControlEvents,
+  UIControlState,
 )
 from rbedge.functions import NSStringFromClass
 
@@ -18,11 +19,11 @@ from pyLocalizedString import localizedString
 from baseTableViewController import BaseTableViewController
 from storyboard.sliderViewController import prototypes
 
-
 UIScreen = ObjCClass('UIScreen')
 NSURL = ObjCClass('NSURL')
 NSData = ObjCClass('NSData')
 UIImage = ObjCClass('UIImage')
+
 
 # Cell identifier for each slider table view cell.
 # スライダー テーブル ビューの各セルのセル識別子。
@@ -31,10 +32,6 @@ class SliderKind(Enum):
   sliderTinted = 'sliderTinted'
   sliderCustom = 'sliderCustom'
   sliderMaxMinImage = 'sliderMaxMinImage'
-
-
-
-
 
 
 class SliderViewController(BaseTableViewController):
@@ -73,11 +70,8 @@ class SliderViewController(BaseTableViewController):
     # todo: `@available(iOS 15.0, *)`
     self.testCells.extend([
       CaseElement(localizedString('CustomTitle'),
-                  SliderKind.sliderCustom.value,
-                  self.configureCustomSlider_),
+                  SliderKind.sliderCustom.value, self.configureCustomSlider_),
     ])
-      
-    
 
   # MARK: - Configuration
   @objc_method
@@ -101,9 +95,30 @@ class SliderViewController(BaseTableViewController):
     # iOSとmacOSで見た目を同じにするため:
     #  setMinimumTrackImage、setMaximumTrackImage、setThumbImageをMac Catalystで動作させるには、UIBehavioralStyleを".pad "として使用します。
     #  iOSとmacOSで同じ外観にする必要があるコントロールに使用します。
-    
-  
-  
+
+    scale = int(UIScreen.mainScreen.scale)
+    leftTrack_str = f'./UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/slider_blue_track.imageset/slider_blue_track_{scale}x.png'
+    rightTrack_str = f'./UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/slider_green_track.imageset/slider_green_track_{scale}x.png'
+
+    # xxx: `lambda` の使い方が悪い
+    dataWithContentsOfURL = lambda path_str: NSData.dataWithContentsOfURL_(
+      NSURL.fileURLWithPath_(str(Path(path_str).absolute())))
+
+    leftTrackImage = UIImage.alloc().initWithData_scale_(
+      dataWithContentsOfURL(leftTrack_str), scale)
+    rightTrackImage = UIImage.alloc().initWithData_scale_(
+      dataWithContentsOfURL(rightTrack_str), scale)
+
+    #pdbr.state(slider)
+    #leftTrackImage
+    #UIControlState.normal
+    #setMinimumTrackImage_forState_
+    #setMaximumTrackImage_forState_
+    slider.setMinimumTrackImage_forState_(leftTrackImage,
+                                          UIControlState.normal)
+    slider.setMaximumTrackImage_forState_(rightTrackImage,
+                                          UIControlState.normal)
+
   # MARK: - Actions
   @objc_method
   def sliderValueDidChange_(self, slider):
