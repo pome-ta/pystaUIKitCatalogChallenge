@@ -1,3 +1,20 @@
+# 📝 2024/11/04
+
+## `sliderViewController` のStoryboard
+
+
+```
+<constraint firstItem="lhN-5T-HKR" firstAttribute="leading" secondItem="VfF-ru-LCc" secondAttribute="leading" constant="20" symbolic="YES" id="QnE-iU-5Qj"/>
+```
+
+`symbolic="YES"` とは？
+
+[ios - What does symbolic="YES" mean in InterfaceBuilder's XML? - Stack Overflow](https://stackoverflow.com/questions/17522603/what-does-symbolic-yes-mean-in-interfacebuilders-xml)
+
+うーん🤔
+
+とりあえず、`symbolic` 気にせずに数値入れていく
+
 
 # 📝 2024/10/31
 

@@ -61,12 +61,63 @@ class SliderTinted(CustomTableViewCell):
     self.contentView.addSubview_(slider)
 
     NSLayoutConstraint.activateConstraints_([
-      slider.centerXAnchor.constraintEqualToAnchor_(
-        self.contentView.centerXAnchor),
-      slider.centerYAnchor.constraintEqualToAnchor_(
-        self.contentView.centerYAnchor),
       slider.leadingAnchor.constraintEqualToAnchor_constant_(
         self.contentView.leadingAnchor, 20.0),
+      slider.centerXAnchor.constraintEqualToAnchor_(
+        self.contentView.centerXAnchor),
+      slider.trailingAnchor.constraintEqualToAnchor_constant_(
+        self.contentView.trailingAnchor, -20.0),
+      slider.centerYAnchor.constraintEqualToAnchor_constant_(
+        self.contentView.centerYAnchor, -0.5),
+    ])
+
+
+@add_prototype('sliderCustom')
+class SliderCustom(CustomTableViewCell):
+
+  @objc_method
+  def overrideCell(self):
+    slider = UISlider.alloc().initWithFrame_(CGRectMake(
+      18.0, 7.5, 339.0, 31.0)).autorelease()
+    slider.value = 0.5
+    slider.minimumValue = 0.0
+    slider.maximumValue = 1.0
+    slider.translatesAutoresizingMaskIntoConstraints = False
+    self.contentView.addSubview_(slider)
+
+    NSLayoutConstraint.activateConstraints_([
+      slider.leadingAnchor.constraintEqualToAnchor_constant_(
+        self.contentView.leadingAnchor, 20.0),
+      slider.trailingAnchor.constraintEqualToAnchor_constant_(
+        self.contentView.trailingAnchor, -20.0),
+      slider.centerXAnchor.constraintEqualToAnchor_(
+        self.contentView.centerXAnchor),
+      slider.centerYAnchor.constraintEqualToAnchor_constant_(
+        self.contentView.centerYAnchor, -0.5),
+    ])
+
+
+#sliderMaxMinImage
+@add_prototype('sliderMaxMinImage')
+class SliderMaxMinImage(CustomTableViewCell):
+
+  @objc_method
+  def overrideCell(self):
+    slider = UISlider.alloc().initWithFrame_(CGRectMake(
+      18.0, 7.5, 339.0, 31.0)).autorelease()
+    slider.value = 0.5
+    slider.minimumValue = 0.0
+    slider.maximumValue = 1.0
+    slider.translatesAutoresizingMaskIntoConstraints = False
+    self.contentView.addSubview_(slider)
+
+    NSLayoutConstraint.activateConstraints_([
+      slider.centerXAnchor.constraintEqualToAnchor_(
+        self.contentView.centerXAnchor),
+      slider.leadingAnchor.constraintEqualToAnchor_constant_(
+        self.contentView.leadingAnchor, 20.0),
+      slider.centerYAnchor.constraintEqualToAnchor_constant_(
+        self.contentView.centerYAnchor, -0.5),
       slider.trailingAnchor.constraintEqualToAnchor_constant_(
         self.contentView.trailingAnchor, -20.0),
     ])
