@@ -16,6 +16,37 @@
 とりあえず、`symbolic` 気にせずに数値入れていく
 
 
+## `BaseTableViewController` のオーバーライド
+
+
+```python
+  @objc_method
+  def init(self):
+    send_super(__class__, self, 'init')  # xxx: 不要?
+    tableViewStyle = UITableViewStyle.grouped
+    self.initWithStyle_(tableViewStyle)
+
+    self.testCells = []
+    self.initPrototype()
+
+    return self
+
+  @objc_method
+  def initPrototype(self):
+    [
+      self.tableView.registerClass_forCellReuseIdentifier_(
+        prototype['cellClass'], prototype['identifier'])
+      for prototype in prototypes
+    ]
+
+```
+
+`prototypes` 取り回しが面倒なので、継承先でやる
+
+親の`init` で、ゴニョゴニョするのが少々面倒な気がしてるため
+
+
+
 # 📝 2024/10/31
 
 
