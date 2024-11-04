@@ -5,7 +5,10 @@ from pyrubicon.objc.api import objc_method
 from pyrubicon.objc.runtime import SEL, send_super, objc_id
 #from pyrubicon.objc.types import CGSize, CGFloat, CGRectMake, CGSizeMake
 
-from rbedge.enumerations import UITableViewStyle
+from rbedge.enumerations import (
+  UITableViewStyle,
+  UIControlEvents,
+)
 from rbedge.functions import NSStringFromClass
 
 from caseElement import CaseElement
@@ -15,6 +18,8 @@ from baseTableViewController import BaseTableViewController
 from storyboard.sliderViewController import prototypes
 
 
+# Cell identifier for each slider table view cell.
+# スライダー テーブル ビューの各セルのセル識別子。
 class SliderKind(Enum):
   sliderDefault = 'sliderDefault'
   sliderTinted = 'sliderTinted'
@@ -50,6 +55,28 @@ class SliderViewController(BaseTableViewController):
 
     title = NSStringFromClass(__class__)
     self.navigationItem.title = title
+    self.testCells.extend([
+      CaseElement(localizedString('DefaultTitle'),
+                  SliderKind.sliderDefault.value,
+                  self.configureDefaultSlider_),
+    ])
+
+  # MARK: - Configuration
+  @objc_method
+  def configureDefaultSlider_(self, slider):
+    slider.minimumValue = 0
+    slider.maximumValue = 100
+    slider.value = 42
+    slider.isContinuous = True
+    
+    slider.addTarget_action_forControlEvents_(
+      self, SEL('sliderValueDidChange:'), UIControlEvents.valueChanged)
+
+  # MARK: - Actions
+  @objc_method
+  def sliderValueDidChange_(self, slider):
+    formattedValue = f'{slider.value:.2f}'
+    print(f'Slider changed its value: {formattedValue}')
 
 
 if __name__ == '__main__':
