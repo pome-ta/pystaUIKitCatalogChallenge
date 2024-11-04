@@ -30,7 +30,6 @@ UIAction = ObjCClass('UIAction')
 UIScreen = ObjCClass('UIScreen')
 NSURL = ObjCClass('NSURL')
 NSData = ObjCClass('NSData')
-UIImage = ObjCClass('UIImage')
 UIColor = ObjCClass('UIColor')
 UISegmentedControl = ObjCClass('UISegmentedControl')  # todo: 型呼び出し
 UIFont = ObjCClass('UIFont')

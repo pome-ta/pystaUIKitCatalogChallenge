@@ -1,4 +1,5 @@
 from enum import Enum
+from pathlib import Path
 
 from pyrubicon.objc.api import ObjCClass, ObjCInstance, Block
 from pyrubicon.objc.api import objc_method
@@ -18,6 +19,11 @@ from baseTableViewController import BaseTableViewController
 from storyboard.sliderViewController import prototypes
 
 
+UIScreen = ObjCClass('UIScreen')
+NSURL = ObjCClass('NSURL')
+NSData = ObjCClass('NSData')
+UIImage = ObjCClass('UIImage')
+
 # Cell identifier for each slider table view cell.
 # スライダー テーブル ビューの各セルのセル識別子。
 class SliderKind(Enum):
@@ -25,6 +31,10 @@ class SliderKind(Enum):
   sliderTinted = 'sliderTinted'
   sliderCustom = 'sliderCustom'
   sliderMaxMinImage = 'sliderMaxMinImage'
+
+
+
+
 
 
 class SliderViewController(BaseTableViewController):
@@ -60,6 +70,14 @@ class SliderViewController(BaseTableViewController):
                   SliderKind.sliderDefault.value,
                   self.configureDefaultSlider_),
     ])
+    # todo: `@available(iOS 15.0, *)`
+    self.testCells.extend([
+      CaseElement(localizedString('CustomTitle'),
+                  SliderKind.sliderCustom.value,
+                  self.configureCustomSlider_),
+    ])
+      
+    
 
   # MARK: - Configuration
   @objc_method
@@ -73,6 +91,19 @@ class SliderViewController(BaseTableViewController):
                                               SEL('sliderValueDidChange:'),
                                               UIControlEvents.valueChanged)
 
+  # todo: `@available(iOS 15.0, *)`
+  @objc_method
+  def configureCustomSlider_(self, slider):
+    # To keep the look the same betwen iOS and macOS:
+    #   For setMinimumTrackImage, setMaximumTrackImage, setThumbImage to work in Mac Catalyst, use UIBehavioralStyle as ".pad",
+    #   Available in macOS 12 or later (Mac Catalyst 15.0 or later).
+    #   Use this for controls that need to look the same between iOS and macOS.
+    # iOSとmacOSで見た目を同じにするため:
+    #  setMinimumTrackImage、setMaximumTrackImage、setThumbImageをMac Catalystで動作させるには、UIBehavioralStyleを".pad "として使用します。
+    #  iOSとmacOSで同じ外観にする必要があるコントロールに使用します。
+    
+  
+  
   # MARK: - Actions
   @objc_method
   def sliderValueDidChange_(self, slider):
