@@ -68,9 +68,10 @@ class SliderViewController(BaseTableViewController):
     slider.maximumValue = 100
     slider.value = 42
     slider.isContinuous = True
-    
-    slider.addTarget_action_forControlEvents_(
-      self, SEL('sliderValueDidChange:'), UIControlEvents.valueChanged)
+
+    slider.addTarget_action_forControlEvents_(self,
+                                              SEL('sliderValueDidChange:'),
+                                              UIControlEvents.valueChanged)
 
   # MARK: - Actions
   @objc_method
