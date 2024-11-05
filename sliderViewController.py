@@ -12,6 +12,7 @@ from rbedge.enumerations import (
   UIControlState,
   UIUserInterfaceIdiom,
   UIImageSymbolScale,
+  UIImageSymbolWeight,
 )
 from rbedge.functions import NSStringFromClass
 
@@ -123,15 +124,29 @@ class SliderViewController(BaseTableViewController):
     # お楽しみとして、macOS と iOS の間でサムの画像に異なる画像シンボル構成を選択してください。
     thumbImageConfig: 'UIImage.SymbolConfiguration'
     if slider.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiom.mac:
-      #configurationWithScale_
-      pass
+      thumbImageConfig = UIImageSymbolConfiguration.configurationWithScale_(
+        UIImageSymbolScale.large)
     else:
-      #configurationWithPointSize_weight_scale_
-      pass
-    #pdbr.state(slider,1)
-    #traitCollection
-    #print(slider.traitCollection.userInterfaceIdiom)
-    pdbr.state(UIImageSymbolConfiguration)
+      thumbImageConfig = UIImageSymbolConfiguration.configurationWithPointSize_weight_scale_(
+        30.0, UIImageSymbolWeight.heavy, UIImageSymbolScale.large)
+    thumbImage = UIImage.systemImageNamed_withConfiguration_(
+      'circle.fill', thumbImageConfig)
+    thumbImageHighlighted = UIImage.systemImageNamed_withConfiguration_(
+      'circle', thumbImageConfig)
+
+    slider.setThumbImage_forState_(thumbImage, UIControlState.normal)
+
+    slider.setThumbImage_forState_(thumbImageHighlighted,
+                                   UIControlState.highlighted)
+
+    slider.minimumValue = 0
+    slider.maximumValue = 100
+    slider.isContinuous = False
+    slider.value = 84
+
+    slider.addTarget_action_forControlEvents_(self,
+                                              SEL('sliderValueDidChange:'),
+                                              UIControlEvents.valueChanged)
 
   # MARK: - Actions
   @objc_method
