@@ -169,6 +169,21 @@ class UIImageSymbolScale:
   large: int = 3
 
 
+# ref: [UIImageSymbolWeight | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uiimagesymbolweight?language=objc)
+@dataclass
+class UIImageSymbolWeight:
+  unspecified: int = 0
+  ultraLight: int = 1
+  thin: int = 2
+  light: int = 3
+  regular: int = 4
+  medium: int = 5
+  semibold: int = 6
+  bold: int = 7
+  heavy: int = 8
+  black: int = 9
+
+
 # ref: [NSDirectionalRectEdge | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/nsdirectionalrectedge?language=objc)
 @dataclass
 class NSDirectionalRectEdge:

@@ -10,6 +10,8 @@ from rbedge.enumerations import (
   UITableViewStyle,
   UIControlEvents,
   UIControlState,
+  UIUserInterfaceIdiom,
+  UIImageSymbolScale,
 )
 from rbedge.functions import NSStringFromClass
 
@@ -23,6 +25,7 @@ UIScreen = ObjCClass('UIScreen')
 NSURL = ObjCClass('NSURL')
 NSData = ObjCClass('NSData')
 UIImage = ObjCClass('UIImage')
+UIImageSymbolConfiguration = ObjCClass('UIImageSymbolConfiguration')
 
 
 # Cell identifier for each slider table view cell.
@@ -109,15 +112,26 @@ class SliderViewController(BaseTableViewController):
     rightTrackImage = UIImage.alloc().initWithData_scale_(
       dataWithContentsOfURL(rightTrack_str), scale)
 
-    #pdbr.state(slider)
-    #leftTrackImage
-    #UIControlState.normal
-    #setMinimumTrackImage_forState_
-    #setMaximumTrackImage_forState_
     slider.setMinimumTrackImage_forState_(leftTrackImage,
                                           UIControlState.normal)
     slider.setMaximumTrackImage_forState_(rightTrackImage,
                                           UIControlState.normal)
+
+    # Set the sliding thumb image (normal and highlighted).
+    # スライドサム画像(通常およびハイライト)を設定します。
+    # For fun, choose a different image symbol configuraton for the thumb's image between macOS and iOS.
+    # お楽しみとして、macOS と iOS の間でサムの画像に異なる画像シンボル構成を選択してください。
+    thumbImageConfig: 'UIImage.SymbolConfiguration'
+    if slider.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiom.mac:
+      #configurationWithScale_
+      pass
+    else:
+      #configurationWithPointSize_weight_scale_
+      pass
+    #pdbr.state(slider,1)
+    #traitCollection
+    #print(slider.traitCollection.userInterfaceIdiom)
+    pdbr.state(UIImageSymbolConfiguration)
 
   # MARK: - Actions
   @objc_method
