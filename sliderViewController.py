@@ -75,6 +75,9 @@ class SliderViewController(BaseTableViewController):
     self.testCells.extend([
       CaseElement(localizedString('CustomTitle'),
                   SliderKind.sliderCustom.value, self.configureCustomSlider_),
+      CaseElement(localizedString('MinMaxImagesTitle'),
+                  SliderKind.sliderMaxMinImage.value,
+                  self.configureMinMaxImageSlider_),
     ])
 
   # MARK: - Configuration
@@ -143,6 +146,32 @@ class SliderViewController(BaseTableViewController):
     slider.maximumValue = 100
     slider.isContinuous = False
     slider.value = 84
+
+    slider.addTarget_action_forControlEvents_(self,
+                                              SEL('sliderValueDidChange:'),
+                                              UIControlEvents.valueChanged)
+
+  @objc_method
+  def configureMinMaxImageSlider_(self, slider):
+    '''
+    To keep the look the same betwen iOS and macOS:
+    For setMinimumValueImage, setMaximumValueImage to work in Mac Catalyst, use UIBehavioralStyle as ".pad",
+    Available in macOS 12 or later (Mac Catalyst 15.0 or later).
+    Use this for controls that need to look the same between iOS and macOS.
+    '''
+    '''
+    iOSとmacOSで見た目を同じにするためです:
+    Mac CatalystでsetMinimumValueImage、setMaximumValueImageを動作させるには、UIBehavioralStyleを".pad "として使用してください、
+    macOS 12以降(Mac Catalyst 15.0以降)で使用できます。
+    iOSとmacOSで同じ外観にする必要があるコントロールに使用します。
+    '''
+    # xxx: あとで調整
+    if True:  # xxx: `#available(iOS 15, *)`
+      if True:  # xxx: `traitCollection.userInterfaceIdiom != .mac`
+        pass
+
+    slider.minimumValueImage = UIImage.systemImageNamed_('tortoise')
+    slider.maximumValueImage = UIImage.systemImageNamed_('hare')
 
     slider.addTarget_action_forControlEvents_(self,
                                               SEL('sliderValueDidChange:'),
