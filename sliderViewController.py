@@ -110,6 +110,11 @@ class SliderViewController(BaseTableViewController):
     macOS 12以降(Mac Catalyst 15.0以降)で利用可能です。
     iOS と macOS の間で同じように見える必要があるコントロールにこれを使用します。
     '''
+    '''
+    if traitCollection.userInterfaceIdiom == .mac {
+      slider.preferredBehavioralStyle = .pad
+    }
+    '''
     pass
   # todo: `@available(iOS 15.0, *)`
   @objc_method
@@ -126,13 +131,11 @@ class SliderViewController(BaseTableViewController):
     macOS 12以降(Mac Catalyst 15.0以降)で利用可能です。
     iOS と macOS の間で同じように見える必要があるコントロールにこれを使用します。
     '''
-    # To keep the look the same betwen iOS and macOS:
-    #   For setMinimumTrackImage, setMaximumTrackImage, setThumbImage to work in Mac Catalyst, use UIBehavioralStyle as ".pad",
-    #   Available in macOS 12 or later (Mac Catalyst 15.0 or later).
-    #   Use this for controls that need to look the same between iOS and macOS.
-    # iOSとmacOSで見た目を同じにするため:
-    #  setMinimumTrackImage、setMaximumTrackImage、setThumbImageをMac Catalystで動作させるには、UIBehavioralStyleを".pad "として使用します。
-    #  iOSとmacOSで同じ外観にする必要があるコントロールに使用します。
+    '''
+    if traitCollection.userInterfaceIdiom == .mac {
+      slider.preferredBehavioralStyle = .pad
+    }
+    '''
 
     scale = int(UIScreen.mainScreen.scale)
     leftTrack_str = f'./UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/slider_blue_track.imageset/slider_blue_track_{scale}x.png'
