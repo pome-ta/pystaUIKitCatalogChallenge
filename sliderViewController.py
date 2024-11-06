@@ -78,6 +78,9 @@ class SliderViewController(BaseTableViewController):
       CaseElement(localizedString('MinMaxImagesTitle'),
                   SliderKind.sliderMaxMinImage.value,
                   self.configureMinMaxImageSlider_),
+      CaseElement(localizedString('TintedTitle'),
+                  SliderKind.sliderTinted.value,
+                  self.configureTintedSlider_),
     ])
 
   # MARK: - Configuration
@@ -94,7 +97,35 @@ class SliderViewController(BaseTableViewController):
 
   # todo: `@available(iOS 15.0, *)`
   @objc_method
+  def configureTintedSlider_(self, slider):
+    '''
+    To keep the look the same betwen iOS and macOS:
+    For minimumTrackTintColor, maximumTrackTintColor to work in Mac Catalyst, use UIBehavioralStyle as ".pad",
+    Available in macOS 12 or later (Mac Catalyst 15.0 or later).
+    Use this for controls that need to look the same between iOS and macOS.
+    '''
+    '''
+    iOS と macOS で見た目を同じにするには:
+    minimumTrackTintColor、maximumTrackTintColor を Mac Catalyst で機能させるには、UIBehavioralStyle を「.pad」として使用します。
+    macOS 12以降(Mac Catalyst 15.0以降)で利用可能です。
+    iOS と macOS の間で同じように見える必要があるコントロールにこれを使用します。
+    '''
+    pass
+  # todo: `@available(iOS 15.0, *)`
+  @objc_method
   def configureCustomSlider_(self, slider):
+    '''
+    To keep the look the same betwen iOS and macOS:
+    For setMinimumTrackImage, setMaximumTrackImage, setThumbImage to work in Mac Catalyst, use UIBehavioralStyle as ".pad",
+    Available in macOS 12 or later (Mac Catalyst 15.0 or later).
+    Use this for controls that need to look the same between iOS and macOS.
+    '''
+    '''
+    iOS と macOS で見た目を同じにするには:
+    setMinimumTrackImage、setMinimumTrackImage、setThumbImage を Mac Catalyst で動作させるには、UIBehavioralStyle を「.pad」として使用します。
+    macOS 12以降(Mac Catalyst 15.0以降)で利用可能です。
+    iOS と macOS の間で同じように見える必要があるコントロールにこれを使用します。
+    '''
     # To keep the look the same betwen iOS and macOS:
     #   For setMinimumTrackImage, setMaximumTrackImage, setThumbImage to work in Mac Catalyst, use UIBehavioralStyle as ".pad",
     #   Available in macOS 12 or later (Mac Catalyst 15.0 or later).
