@@ -1,10 +1,9 @@
 from enum import Enum
 from pathlib import Path
 
-from pyrubicon.objc.api import ObjCClass, ObjCInstance, Block
+from pyrubicon.objc.api import ObjCClass, ObjCInstance
 from pyrubicon.objc.api import objc_method
 from pyrubicon.objc.runtime import SEL, send_super, objc_id
-#from pyrubicon.objc.types import CGSize, CGFloat, CGRectMake, CGSizeMake
 
 from rbedge.enumerations import (
   UITableViewStyle,
