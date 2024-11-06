@@ -13,6 +13,7 @@ from rbedge.enumerations import (
   UIUserInterfaceIdiom,
   UIImageSymbolScale,
   UIImageSymbolWeight,
+  UIBehavioralStyle,
 )
 from rbedge.functions import NSStringFromClass
 
@@ -27,6 +28,7 @@ NSURL = ObjCClass('NSURL')
 NSData = ObjCClass('NSData')
 UIImage = ObjCClass('UIImage')
 UIImageSymbolConfiguration = ObjCClass('UIImageSymbolConfiguration')
+UIColor = ObjCClass('UIColor')
 
 
 # Cell identifier for each slider table view cell.
@@ -79,8 +81,7 @@ class SliderViewController(BaseTableViewController):
                   SliderKind.sliderMaxMinImage.value,
                   self.configureMinMaxImageSlider_),
       CaseElement(localizedString('TintedTitle'),
-                  SliderKind.sliderTinted.value,
-                  self.configureTintedSlider_),
+                  SliderKind.sliderTinted.value, self.configureTintedSlider_),
     ])
 
   # MARK: - Configuration
@@ -110,12 +111,17 @@ class SliderViewController(BaseTableViewController):
     macOS 12以降(Mac Catalyst 15.0以降)で利用可能です。
     iOS と macOS の間で同じように見える必要があるコントロールにこれを使用します。
     '''
-    '''
-    if traitCollection.userInterfaceIdiom == .mac {
-      slider.preferredBehavioralStyle = .pad
-    }
-    '''
-    pass
+
+    if slider.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiom.mac:
+      slider.preferredBehavioralStyle = UIBehavioralStyle.pad
+
+    slider.minimumTrackTintColor = UIColor.systemBlueColor()
+    slider.maximumTrackTintColor = UIColor.systemPurpleColor()
+
+    slider.addTarget_action_forControlEvents_(self,
+                                              SEL('sliderValueDidChange:'),
+                                              UIControlEvents.valueChanged)
+
   # todo: `@available(iOS 15.0, *)`
   @objc_method
   def configureCustomSlider_(self, slider):
@@ -131,11 +137,9 @@ class SliderViewController(BaseTableViewController):
     macOS 12以降(Mac Catalyst 15.0以降)で利用可能です。
     iOS と macOS の間で同じように見える必要があるコントロールにこれを使用します。
     '''
-    '''
-    if traitCollection.userInterfaceIdiom == .mac {
-      slider.preferredBehavioralStyle = .pad
-    }
-    '''
+
+    if slider.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiom.mac:
+      slider.preferredBehavioralStyle = UIBehavioralStyle.pad
 
     scale = int(UIScreen.mainScreen.scale)
     leftTrack_str = f'./UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/slider_blue_track.imageset/slider_blue_track_{scale}x.png'
@@ -201,8 +205,8 @@ class SliderViewController(BaseTableViewController):
     '''
     # xxx: あとで調整
     if True:  # xxx: `#available(iOS 15, *)`
-      if True:  # xxx: `traitCollection.userInterfaceIdiom != .mac`
-        pass
+      if slider.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiom.mac:
+        slider.preferredBehavioralStyle = UIBehavioralStyle.pad
 
     slider.minimumValueImage = UIImage.systemImageNamed_('tortoise')
     slider.maximumValueImage = UIImage.systemImageNamed_('hare')
