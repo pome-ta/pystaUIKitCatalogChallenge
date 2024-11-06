@@ -355,3 +355,11 @@ class UIBarMetrics:
   landscapePhone: int = compact  # todo: Deprecated
   landscapePhonePrompt: int = compactPrompt  # todo: Deprecated
 
+
+# ref: [UIBehavioralStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uibehavioralstyle?language=objc)
+@dataclass
+class UIBehavioralStyle:
+  automatic: int = 0
+  pad: int = 1
+  mac: int = 2
+
