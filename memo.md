@@ -1,3 +1,12 @@
+# 📝 2024/11/07
+
+## `UISwitch` のStoryboard
+
+
+`horizontalHuggingPriority` `verticalHuggingPriority`
+
+が`750` で固定値ぽいから、既定の数値か？
+
 # 📝 2024/11/04
 
 ## `sliderViewController` のStoryboard
