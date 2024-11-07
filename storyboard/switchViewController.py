@@ -22,7 +22,7 @@ def add_prototype(identifier: str):
 prototypes: list[dict[CustomTableViewCell, str]] = []
 
 
-@add_prototype('sliderDefault')
+@add_prototype('defaultSwitch')
 class DefaultSwitch(CustomTableViewCell):
 
   @objc_method
