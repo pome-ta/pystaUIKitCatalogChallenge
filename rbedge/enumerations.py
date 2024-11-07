@@ -363,3 +363,11 @@ class UIBehavioralStyle:
   pad: int = 1
   mac: int = 2
 
+
+# ref: [UISwitchStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uiswitchstyle?language=objc&language=objc)
+@dataclass
+class UISwitchStyle:
+  automatic: int = 0
+  checkbox: int = 1
+  sliding: int = 2
+
