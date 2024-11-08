@@ -68,14 +68,15 @@ class SwitchViewController(BaseTableViewController):
                   SwitchKind.defaultSwitch.value,
                   self.configureDefaultSwitch_),
     ])
+    # Checkbox switch is available only when running on macOS.
+    # チェックボックス スイッチは、macOS で実行している場合にのみ使用できます。
+    pdbr.state(self.traitCollection,1)
 
   # MARK: - Configuration
   @objc_method
   def configureDefaultSwitch_(self, switchControl):
     switchControl.setOn_animated_(True, False)
     switchControl.preferredStyle = UISwitchStyle.sliding
-    #pdbr.state(switchControl)
-    #print(switchControl.isOn())
 
     switchControl.addTarget_action_forControlEvents_(
       self, SEL('switchValueDidChange:'), UIControlEvents.valueChanged)
