@@ -1,3 +1,10 @@
+# 📝 2024/11/08
+
+## `UISwitch` の`tintColor`
+
+変わってない気がする、、、ペンディング
+
+
 # 📝 2024/11/07
 
 ## `UISwitch` のStoryboard

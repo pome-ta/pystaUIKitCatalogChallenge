@@ -70,13 +70,35 @@ class SwitchViewController(BaseTableViewController):
     ])
     # Checkbox switch is available only when running on macOS.
     # チェックボックス スイッチは、macOS で実行している場合にのみ使用できます。
-    pdbr.state(self.traitCollection,1)
+
+    # todo: `if navigationController!.traitCollection.userInterfaceIdiom` `navigationController` が`None` なため`self` で判断
+    if self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiom.mac:
+      pass
+
+    # Tinted switch is available only when running on iOS.
+    # 色付きスイッチは、iOS で実行している場合にのみ使用できます。
+    if self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiom.mac:
+      self.testCells.extend([
+        CaseElement(localizedString('TintedSwitchTitle'),
+                    SwitchKind.tintedSwitch.value,
+                    self.configureTintedSwitch_),
+      ])
 
   # MARK: - Configuration
   @objc_method
   def configureDefaultSwitch_(self, switchControl):
     switchControl.setOn_animated_(True, False)
     switchControl.preferredStyle = UISwitchStyle.sliding
+
+    switchControl.addTarget_action_forControlEvents_(
+      self, SEL('switchValueDidChange:'), UIControlEvents.valueChanged)
+
+  @objc_method
+  def configureTintedSwitch_(self, switchControl):
+    switchControl.tintColor = UIColor.systemBlueColor()
+    #switchControl.setTintColor_(UIColor.systemPinkColor())
+    switchControl.onTintColor = UIColor.systemGreenColor()
+    switchControl.thumbTintColor = UIColor.systemPurpleColor()
 
     switchControl.addTarget_action_forControlEvents_(
       self, SEL('switchValueDidChange:'), UIControlEvents.valueChanged)
