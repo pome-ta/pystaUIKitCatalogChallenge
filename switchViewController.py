@@ -19,11 +19,6 @@ from pyLocalizedString import localizedString
 from baseTableViewController import BaseTableViewController
 from storyboard.switchViewController import prototypes
 
-UIScreen = ObjCClass('UIScreen')
-NSURL = ObjCClass('NSURL')
-NSData = ObjCClass('NSData')
-UIImage = ObjCClass('UIImage')
-UIImageSymbolConfiguration = ObjCClass('UIImageSymbolConfiguration')
 UIColor = ObjCClass('UIColor')
 
 
@@ -73,7 +68,11 @@ class SwitchViewController(BaseTableViewController):
 
     # todo: `if navigationController!.traitCollection.userInterfaceIdiom` `navigationController` が`None` なため`self` で判断
     if self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiom.mac:
-      pass
+      self.testCells.extend([
+        CaseElement(localizedString('CheckboxSwitchTitle'),
+                    SwitchKind.checkBoxSwitch.value,
+                    self.configureCheckboxSwitch_),
+      ])
 
     # Tinted switch is available only when running on iOS.
     # 色付きスイッチは、iOS で実行している場合にのみ使用できます。
@@ -92,6 +91,20 @@ class SwitchViewController(BaseTableViewController):
 
     switchControl.addTarget_action_forControlEvents_(
       self, SEL('switchValueDidChange:'), UIControlEvents.valueChanged)
+
+  @objc_method
+  def configureCheckboxSwitch_(self, switchControl):
+    switchControl.setOn_animated_(True, False)
+
+    switchControl.addTarget_action_forControlEvents_(
+      self, SEL('switchValueDidChange:'), UIControlEvents.valueChanged)
+
+    # On the Mac, make sure this control take on the apperance of a checkbox with a title.
+    # Mac では、このコントロールがタイトル付きのチェックボックスの外観になるようにしてください。
+
+    if self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiom.mac:
+      switchControl.preferredStyle = UISwitchStyle.checkbox
+      switchControl.title = localizedString('SwitchTitle')
 
   @objc_method
   def configureTintedSwitch_(self, switchControl):
