@@ -6,7 +6,7 @@ from ._prototype import CustomTableViewCell
 from rbedge import pdbr
 
 UITextField = ObjCClass('UITextField')
-UIFontDescriptor = ObjCClass('UIFontDescriptor')
+UIFont = ObjCClass('UIFont')
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
 
 
@@ -32,16 +32,19 @@ class SearchTextField(CustomTableViewCell):
     textField = UITextField.alloc().initWithFrame_(
       CGRectMake(16.0, 5.0, 343.0, 34.0)).autorelease()
 
-    textField.font = UIFontDescriptor.fontDescriptorWithName_size_(
-      'system', 14.0)
+    textField.minimumFontSize = 17.0
     textField.borderStyle = UITextBorderStyle.roundedRect
+    
+    textField.font = UIFont.systemFontOfSize_(14.0)
+    
+    
+    #pdbr.state(textField)
+    print(textField.font)
+
     textField.backgroundColor = ObjCClass('UIColor').systemRedColor()
+
     textField.translatesAutoresizingMaskIntoConstraints = False
     self.contentView.addSubview_(textField)
-
-    pdbr.state(UIFontDescriptor)
-    print(textField.font)
-    #system
 
     NSLayoutConstraint.activateConstraints_([
       textField.leadingAnchor.constraintEqualToAnchor_constant_(
@@ -51,4 +54,30 @@ class SearchTextField(CustomTableViewCell):
       textField.centerYAnchor.constraintEqualToAnchor_(
         self.contentView.centerYAnchor),
     ])
+    
+@add_prototype('tintedTextField')
+class TintedTextField(CustomTableViewCell):
+
+  @objc_method
+  def overrideCell(self):
+    textField = UITextField.alloc().initWithFrame_(
+      CGRectMake(16.0, 5.0, 343.0, 34.0)).autorelease()
+
+    textField.font = UIFont.systemFontOfSize_(14.0)
+    textField.borderStyle = UITextBorderStyle.roundedRect
+
+    textField.backgroundColor = ObjCClass('UIColor').systemRedColor()
+
+    textField.translatesAutoresizingMaskIntoConstraints = False
+    self.contentView.addSubview_(textField)
+
+    NSLayoutConstraint.activateConstraints_([
+      textField.leadingAnchor.constraintEqualToAnchor_constant_(
+        self.contentView.leadingAnchor, 16.0),
+      textField.trailingAnchor.constraintEqualToAnchor_constant_(
+        self.contentView.trailingAnchor, -16.0),
+      textField.centerYAnchor.constraintEqualToAnchor_(
+        self.contentView.centerYAnchor),
+    ])
+
 
