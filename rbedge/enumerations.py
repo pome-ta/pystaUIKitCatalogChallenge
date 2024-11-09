@@ -371,3 +371,12 @@ class UISwitchStyle:
   checkbox: int = 1
   sliding: int = 2
 
+
+# ref: [UITextBorderStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uitextborderstyle?language=objc)
+@dataclass
+class UITextBorderStyle:
+  none: int = 0
+  line: int = 1
+  bezel: int = 2
+  roundedRect: int = 3
+
