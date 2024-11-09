@@ -1,5 +1,4 @@
 from enum import Enum
-from pathlib import Path
 
 from pyrubicon.objc.api import ObjCClass, ObjCInstance
 from pyrubicon.objc.api import objc_method
