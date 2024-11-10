@@ -380,3 +380,11 @@ class UITextBorderStyle:
   bezel: int = 2
   roundedRect: int = 3
 
+
+# ref: [UITextAutocorrectionType | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uitextautocorrectiontype?language=objc)
+@dataclass
+class UITextAutocorrectionType:
+  default: int = 0
+  no: int = 1
+  yes: int = 2
+
