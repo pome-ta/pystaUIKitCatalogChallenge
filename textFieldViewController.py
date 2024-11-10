@@ -10,16 +10,9 @@ from pyrubicon.objc.types import CGFloat
 # Custom text field for controlling input text placement.
 # 入力テキストの配置を制御するためのカスタム テキスト フィールド。
 class CustomTextField(ObjCClass('UITextField')):
-  leftMarginPadding = objc_property(CGFloat)
-  rightMarginPadding = objc_property(CGFloat)
+  leftMarginPadding = 12.0
+  rightMarginPadding = 36.0
 
-  @objc_method
-  def init(self):
-    send_super(__class__, self, 'init')  # xxx: 不要?
-    print('CustomTextField: init')
-    self.leftMarginPadding = 12.0
-    self.rightMarginPadding = 36.0
-    return self
 
 
 if __name__ == '__main__':

@@ -40,7 +40,6 @@ class SearchTextField(CustomTableViewCell):
 
     textField.font = UIFont.systemFontOfSize_(14.0)
 
-
     textField.backgroundColor = ObjCClass('UIColor').systemRedColor()
 
     textField.translatesAutoresizingMaskIntoConstraints = False
@@ -62,8 +61,9 @@ class TintedTextField(CustomTableViewCell):
   @objc_method
   def overrideCell(self):
     textField = UITextField.alloc().initWithFrame_(
-      CGRectMake(16.0, 5.0, 343.0, 34.0)).autorelease()
+      CGRectMake(77.5, 5.0, 220.0, 34.0)).autorelease()
 
+    textField.minimumFontSize = 17.0
     textField.font = UIFont.systemFontOfSize_(14.0)
     textField.borderStyle = UITextBorderStyle.roundedRect
 
@@ -73,13 +73,13 @@ class TintedTextField(CustomTableViewCell):
     self.contentView.addSubview_(textField)
 
     NSLayoutConstraint.activateConstraints_([
-      textField.leadingAnchor.constraintEqualToAnchor_constant_(
-        self.contentView.leadingAnchor, 16.0),
-      textField.trailingAnchor.constraintEqualToAnchor_constant_(
-        self.contentView.trailingAnchor, -16.0),
+      textField.widthAnchor.constraintEqualToConstant_(220.0),
+      textField.centerXAnchor.constraintEqualToAnchor_(
+        self.contentView.centerXAnchor),
       textField.centerYAnchor.constraintEqualToAnchor_(
         self.contentView.centerYAnchor),
     ])
+
 
 @add_prototype('customTextField')
 class CustomTextField(CustomTableViewCell):
@@ -87,10 +87,9 @@ class CustomTextField(CustomTableViewCell):
   @objc_method
   def overrideCell(self):
     textField = _CustomTextField.alloc().initWithFrame_(
-      CGRectMake(16.0, 5.0, 343.0, 34.0)).autorelease()
+      CGRectMake(77.5, 7.0, 220.0, 30.0)).autorelease()
 
-    pdbr.state(textField)
-    #print(textField.leftMarginPadding)
+    textField.minimumFontSize = 17.0
     textField.font = UIFont.systemFontOfSize_(14.0)
     textField.borderStyle = UITextBorderStyle.roundedRect
 
@@ -100,10 +99,88 @@ class CustomTextField(CustomTableViewCell):
     self.contentView.addSubview_(textField)
 
     NSLayoutConstraint.activateConstraints_([
-      textField.leadingAnchor.constraintEqualToAnchor_constant_(
-        self.contentView.leadingAnchor, 16.0),
-      textField.trailingAnchor.constraintEqualToAnchor_constant_(
-        self.contentView.trailingAnchor, -16.0),
+      textField.heightAnchor.constraintEqualToConstant_(30.0),
+      textField.widthAnchor.constraintEqualToConstant_(220.0),
+      textField.centerXAnchor.constraintEqualToAnchor_(
+        self.contentView.centerXAnchor),
+      textField.centerYAnchor.constraintEqualToAnchor_(
+        self.contentView.centerYAnchor),
+    ])
+
+
+@add_prototype('textField')
+class TextField(CustomTableViewCell):
+
+  @objc_method
+  def overrideCell(self):
+    textField = UITextField.alloc().initWithFrame_(
+      CGRectMake(77.5, 5.0, 220.0, 34.0)).autorelease()
+
+    textField.minimumFontSize = 17.0
+    textField.font = UIFont.systemFontOfSize_(14.0)
+    textField.borderStyle = UITextBorderStyle.roundedRect
+
+    textField.backgroundColor = ObjCClass('UIColor').systemRedColor()
+
+    textField.translatesAutoresizingMaskIntoConstraints = False
+    self.contentView.addSubview_(textField)
+
+    NSLayoutConstraint.activateConstraints_([
+      textField.widthAnchor.constraintEqualToConstant_(220.0),
+      textField.centerXAnchor.constraintEqualToAnchor_(
+        self.contentView.centerXAnchor),
+      textField.centerYAnchor.constraintEqualToAnchor_(
+        self.contentView.centerYAnchor),
+    ])
+
+
+@add_prototype('secureTextField')
+class SecureTextField(CustomTableViewCell):
+
+  @objc_method
+  def overrideCell(self):
+    textField = UITextField.alloc().initWithFrame_(
+      CGRectMake(77.5, 5.0, 220.0, 34.0)).autorelease()
+
+    textField.minimumFontSize = 17.0
+    textField.font = UIFont.systemFontOfSize_(14.0)
+    textField.borderStyle = UITextBorderStyle.roundedRect
+
+    textField.backgroundColor = ObjCClass('UIColor').systemRedColor()
+
+    textField.translatesAutoresizingMaskIntoConstraints = False
+    self.contentView.addSubview_(textField)
+
+    NSLayoutConstraint.activateConstraints_([
+      textField.widthAnchor.constraintEqualToConstant_(220.0),
+      textField.centerXAnchor.constraintEqualToAnchor_(
+        self.contentView.centerXAnchor),
+      textField.centerYAnchor.constraintEqualToAnchor_(
+        self.contentView.centerYAnchor),
+    ])
+
+
+@add_prototype('specificKeyboardTextField')
+class SpecificKeyboardTextField(CustomTableViewCell):
+
+  @objc_method
+  def overrideCell(self):
+    textField = UITextField.alloc().initWithFrame_(
+      CGRectMake(77.5, 5.0, 220.0, 34.0)).autorelease()
+
+    textField.minimumFontSize = 17.0
+    textField.font = UIFont.systemFontOfSize_(14.0)
+    textField.borderStyle = UITextBorderStyle.roundedRect
+
+    textField.backgroundColor = ObjCClass('UIColor').systemRedColor()
+
+    textField.translatesAutoresizingMaskIntoConstraints = False
+    self.contentView.addSubview_(textField)
+
+    NSLayoutConstraint.activateConstraints_([
+      textField.widthAnchor.constraintEqualToConstant_(220.0),
+      textField.centerXAnchor.constraintEqualToAnchor_(
+        self.contentView.centerXAnchor),
       textField.centerYAnchor.constraintEqualToAnchor_(
         self.contentView.centerYAnchor),
     ])
