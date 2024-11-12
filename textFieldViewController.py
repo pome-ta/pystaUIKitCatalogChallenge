@@ -53,6 +53,8 @@ class CustomTextField(ObjCClass('UITextField')):
 from rbedge.enumerations import (
   UITableViewStyle,
   UITextAutocorrectionType,
+  UIReturnKeyType,
+  UITextFieldViewMode,
 )
 from rbedge.functions import NSStringFromClass
 
@@ -106,7 +108,7 @@ class TextFieldViewController(BaseTableViewController,
 
     title = NSStringFromClass(__class__)
     self.navigationItem.title = title
-    
+
     self.testCells.extend([
       CaseElement(localizedString('DefaultTextFieldTitle'),
                   TextFieldKind.textField.value, self.configureTextField_),
@@ -117,13 +119,16 @@ class TextFieldViewController(BaseTableViewController,
   def configureTextField_(self, textField):
     #textField.delegate = self
     textField.placeholder = localizedString('Placeholder text')
-    
-    #pdbr.state(textField, 1)
-    #pdbr.state(self, 1)
-    pdbr.state(textField)
-    
+
+    textInputTraits = textField.textInputTraits()
+    textInputTraits.autocorrectionType = UITextAutocorrectionType.yes
+    textInputTraits.returnKeyType = UIReturnKeyType.done
+
+    textField.clearButtonMode = UITextFieldViewMode.whileEditing
+
+
   # MARK: - UITextFieldDelegate
-  def textFieldShouldReturn(self,textField):
+  def textFieldShouldReturn(self, textField):
     textField.resignFirstResponder()
     print('d')
     return True

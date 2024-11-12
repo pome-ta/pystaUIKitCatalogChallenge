@@ -13,7 +13,22 @@
 
 > Hm, it seems like calls to `keyboardType` are handled dynamically. The `keyboardType` property does exist on `UITextField`, but there is no `keyboardType` method. Instead, `UITextField` overrides `forwardingTargetForSelector:`. When called with `SEL("keyboardType")` as an argument, it returns a `UITextInputTraits` object, which does have a statically provided `keyboardType` method. (The `UITextInputTraits` here is a class, apparently undocumented, and not the protocol of the same name.)
 
-> 
+
+m、`keyboardType` への呼び出しが動的に処理されるようです。 `keyboardType` プロパティは`UITextField` に存在しますが、`keyboardType` メソッドはありません。代わりに、`UITextField` が `forwardingTargetForSelector:` をオーバーライドします。引数として `SEL("keyboardType")` を指定して呼び出すと、静的に提供される `keyboardType` メソッドを持つ `UITextInputTraits` オブジェクトが返されます。 (ここでの `UITextInputTraits` は明らかに文書化されていないクラスであり、同じ名前のプロトコルではありません。)
+
+
+
+
+> When calling a method with Rubicon using Python method call syntax, the method is looked up on the class (in the attribute access) and then called later (when the `ObjCBoundMethod` object is called). This doesn't work for dynamic methods, since they don't exist on the class. On the other hand, `send_message` uses `objc_msgSend` and friends to send a method call to the object directly, which triggers the whole dynamic method call process.
+
+
+Python メソッド呼び出し構文を使用して Rubicon でメソッドを呼び出す場合、メソッドは (属性アクセスで) クラスで検索され、後で (`ObjCBoundMethod` オブジェクトが呼び出されたときに) 呼び出されます。動的メソッドはクラスに存在しないため、これは機能しません。一方、`send_message` は、`objc_msgSend` とその仲間を使用してメソッド呼び出しをオブジェクトに直接送信し、動的メソッド呼び出しプロセス全体をトリガーします。
+
+
+
+### 結果
+
+`textInputTraits` で呼び出せばok？
 
 
 # 📝 2024/11/08

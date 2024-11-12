@@ -388,3 +388,29 @@ class UITextAutocorrectionType:
   no: int = 1
   yes: int = 2
 
+
+# ref: [UIReturnKeyType | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uireturnkeytype?language=objc)
+@dataclass
+class UIReturnKeyType:
+  default: int = 0
+  go: int = 1
+  google: int = 2
+  join: int = 3
+  next: int = 4
+  route: int = 5
+  search: int = 6
+  send: int = 7
+  yahoo: int = 8
+  done: int = 9
+  emergencyCall: int = 10
+  _continue: int = 11  # todo: 予約語のため
+
+
+# ref: [UITextFieldViewMode | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uitextfieldviewmode?language=objc)
+@dataclass
+class UITextFieldViewMode:
+  never: int = 0
+  whileEditing: int = 1
+  unlessEditing: int = 2
+  always: int = 3
+
