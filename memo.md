@@ -1,3 +1,21 @@
+# 📝 2024/11/12
+
+## `UITextField` の`UITextInputTraits` ？
+
+
+- `autocorrectionType`
+- `returnKeyType`
+
+あたりが、見つからん
+
+[Instance properties defined by protocol on superclass are not autodiscovered · Issue #96 · beeware/rubicon-objc](https://github.com/beeware/rubicon-objc/issues/96)
+
+
+> Hm, it seems like calls to `keyboardType` are handled dynamically. The `keyboardType` property does exist on `UITextField`, but there is no `keyboardType` method. Instead, `UITextField` overrides `forwardingTargetForSelector:`. When called with `SEL("keyboardType")` as an argument, it returns a `UITextInputTraits` object, which does have a statically provided `keyboardType` method. (The `UITextInputTraits` here is a class, apparently undocumented, and not the protocol of the same name.)
+
+> 
+
+
 # 📝 2024/11/08
 
 ## `UISwitch` の`tintColor`
