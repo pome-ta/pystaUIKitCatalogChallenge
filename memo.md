@@ -30,6 +30,12 @@ Python メソッド呼び出し構文を使用して Rubicon でメソ�
 
 `textInputTraits` で呼び出せばok？
 
+## `textField_shouldChangeCharactersInRange_replacementString_` 落ちる？
+
+[UITextFieldのshouldChangeCharactersInRange:replacementString:は使えない子かもしれない #iOS - Qiita](https://qiita.com/macneko/items/073015cdf8b303a536ca)
+
+
+
 
 # 📝 2024/11/08
 

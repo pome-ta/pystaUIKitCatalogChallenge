@@ -1,3 +1,4 @@
+import ctypes
 from enum import Enum
 
 from pyrubicon.objc.api import ObjCClass, ObjCProtocol
@@ -128,9 +129,27 @@ class TextFieldViewController(BaseTableViewController,
 
   # MARK: - UITextFieldDelegate
   @objc_method
-  def textFieldShouldReturn_(self, textField):
+  def textFieldShouldReturn_(self, textField) -> bool:
     textField.resignFirstResponder()
     return True
+
+  @objc_method
+  def textFieldDidChangeSelection_(self, textField):
+    # User changed the text selection.
+    # ユーザーがテキストの選択を変更しました。
+    pass
+
+  '''  # xxx: 落ちる
+  @objc_method
+  def textField_shouldChangeCharactersInRange_replacementString_(
+      self, range, string) -> bool:
+    # Return false to not change text.
+    # テキストを変更しない場合は false を返します。
+    #print('shouldChangeCharactersInRange_replacementString')
+    #print(range)
+    #print(string)
+    return True
+  '''
 
 
 # xxx: Storyboard 先へ遅延でimport させられるか？
