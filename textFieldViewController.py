@@ -117,7 +117,7 @@ class TextFieldViewController(BaseTableViewController,
   # MARK: - Configuration
   @objc_method
   def configureTextField_(self, textField):
-    #textField.delegate = self
+    textField.delegate = self
     textField.placeholder = localizedString('Placeholder text')
 
     textInputTraits = textField.textInputTraits()
@@ -126,11 +126,10 @@ class TextFieldViewController(BaseTableViewController,
 
     textField.clearButtonMode = UITextFieldViewMode.whileEditing
 
-
   # MARK: - UITextFieldDelegate
-  def textFieldShouldReturn(self, textField):
+  @objc_method
+  def textFieldShouldReturn_(self, textField):
     textField.resignFirstResponder()
-    print('d')
     return True
 
 
