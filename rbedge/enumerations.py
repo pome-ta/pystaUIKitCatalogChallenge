@@ -414,3 +414,20 @@ class UITextFieldViewMode:
   unlessEditing: int = 2
   always: int = 3
 
+
+# ref: [UIKeyboardType | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uikeyboardtype?language=objc)
+@dataclass
+class UIKeyboardType:
+  default: int = 0
+  asciiCapable: int = 1
+  numbersAndPunctuation: int = 2
+  URL: int = 3
+  numberPad: int = 4
+  phonePad: int = 5
+  namePhonePad: int = 6
+  emailAddress: int = 7
+  decimalPad: int = 8
+  twitter: int = 9
+  webSearch: int = 10
+  asciiCapableNumberPad: int = 11
+
