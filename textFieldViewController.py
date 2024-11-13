@@ -56,6 +56,7 @@ from rbedge.enumerations import (
   UIReturnKeyType,
   UITextFieldViewMode,
   UIUserInterfaceIdiom,
+  UIKeyboardType,
 )
 from rbedge.functions import NSStringFromClass
 
@@ -129,20 +130,15 @@ class TextFieldViewController(BaseTableViewController,
                   TextFieldKind.searchTextField.value,
                   self.configureSearchTextField_),
     ])
-    '''
 
     if self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiom.mac:
       self.testCells.extend([
         # Show text field with specific kind of keyboard for iOS only.
         # iOS の場合のみ、特定の種類のキーボードを使用してテキスト フィールドを表示します。
-        
         CaseElement(localizedString('SpecificKeyboardTextFieldTitle'),
                     TextFieldKind.specificKeyboardTextField.value,
                     self.configureSpecificKeyboardTextField_),
-        
-
       ])
-      '''
 
   # MARK: - Configuration
   @objc_method
@@ -201,6 +197,25 @@ class TextFieldViewController(BaseTableViewController,
       firstToken = UISearchToken.tokenWithIcon_text_(
         UIImage.systemImageNamed_('staroflife.fill'), 'Token 1')
       searchField.insertToken_atIndex_(firstToken, 0)
+
+  '''
+  There are many different types of keyboards that you may choose to use.
+  The different types of keyboards are defined in the `UITextInputTraits` interface.
+  This example shows how to display a keyboard to help enter email addresses.
+  '''
+  '''
+  使用するキーボードにはさまざまな種類があります。
+  さまざまなタイプのキーボードは `UITextInputTraits` インターフェイスで定義されます。
+  この例では、電子メール アドレスの入力を支援するキーボードを表示する方法を示します。
+  '''
+  # todo: iOS 標準「英語」キーボード設定を入れてないと反映されない
+  @objc_method
+  def configureSpecificKeyboardTextField_(self, textField):
+    textInputTraits = textField.textInputTraits()
+    textInputTraits.keyboardType = UIKeyboardType.emailAddress
+
+    textField.placeholder = localizedString('Placeholder text')
+    textInputTraits.returnKeyType = UIReturnKeyType.done
 
   # MARK: - Actions
   @objc_method
