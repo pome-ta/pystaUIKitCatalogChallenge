@@ -1,4 +1,3 @@
-import ctypes
 from enum import Enum
 
 from pyrubicon.objc.api import ObjCClass, ObjCProtocol
@@ -56,6 +55,7 @@ from rbedge.enumerations import (
   UITextAutocorrectionType,
   UIReturnKeyType,
   UITextFieldViewMode,
+  UIUserInterfaceIdiom,
 )
 from rbedge.functions import NSStringFromClass
 
@@ -65,8 +65,13 @@ from pyLocalizedString import localizedString
 from baseTableViewController import BaseTableViewController
 from storyboard.textFieldViewController import prototypes
 
+UISearchTextField = ObjCClass('UISearchTextField')  # todo: 型確認用
 UIColor = ObjCClass('UIColor')
 UITextFieldDelegate = ObjCProtocol('UITextFieldDelegate')
+
+UIImageView = ObjCClass('UIImageView')
+UIImage = ObjCClass('UIImage')
+UISearchToken = ObjCClass('UISearchToken')
 
 
 # Cell identifier for each text field table view cell.
@@ -120,7 +125,24 @@ class TextFieldViewController(BaseTableViewController,
       CaseElement(localizedString('SecuretTextFieldTitle'),
                   TextFieldKind.secureTextField.value,
                   self.configureSecureTextField_),
+      CaseElement(localizedString('SearchTextFieldTitle'),
+                  TextFieldKind.searchTextField.value,
+                  self.configureSearchTextField_),
     ])
+    '''
+
+    if self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiom.mac:
+      self.testCells.extend([
+        # Show text field with specific kind of keyboard for iOS only.
+        # iOS の場合のみ、特定の種類のキーボードを使用してテキスト フィールドを表示します。
+        
+        CaseElement(localizedString('SpecificKeyboardTextFieldTitle'),
+                    TextFieldKind.specificKeyboardTextField.value,
+                    self.configureSpecificKeyboardTextField_),
+        
+
+      ])
+      '''
 
   # MARK: - Configuration
   @objc_method
@@ -153,6 +175,32 @@ class TextFieldViewController(BaseTableViewController,
     textInputTraits = textField.textInputTraits()
     textInputTraits.returnKeyType = UIReturnKeyType.done
     textField.clearButtonMode = UITextFieldViewMode.always
+
+  @objc_method
+  def configureSearchTextField_(self, textField):
+    if (searchField := textField).isMemberOfClass_(UISearchTextField):
+      searchField.placeholder = localizedString('Enter search text')
+
+      textInputTraits = searchField.textInputTraits()
+      textInputTraits.returnKeyType = UIReturnKeyType.done
+
+      searchField.clearButtonMode = UITextFieldViewMode.always
+      searchField.allowsDeletingTokens = True
+
+      # Setup the left view as a symbol image view.
+      # 左側のビューをシンボル イメージ ビューとして設定します。
+      searchIcon = UIImageView.alloc().initWithImage_(
+        UIImage.systemImageNamed_('magnifyingglass'))
+      searchField.leftView = searchIcon
+      searchField.leftViewMode = UITextFieldViewMode.always
+
+      secondToken = UISearchToken.tokenWithIcon_text_(
+        UIImage.systemImageNamed_('staroflife'), 'Token 2')
+      searchField.insertToken_atIndex_(secondToken, 0)
+
+      firstToken = UISearchToken.tokenWithIcon_text_(
+        UIImage.systemImageNamed_('staroflife.fill'), 'Token 1')
+      searchField.insertToken_atIndex_(firstToken, 0)
 
   # MARK: - Actions
   @objc_method
