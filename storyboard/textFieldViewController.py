@@ -39,7 +39,7 @@ class SearchTextField(CustomTableViewCell):
 
     textField.font = UIFont.systemFontOfSize_(14.0)
 
-    textField.backgroundColor = ObjCClass('UIColor').systemRedColor()
+    #textField.backgroundColor = ObjCClass('UIColor').systemRedColor()
 
     textField.translatesAutoresizingMaskIntoConstraints = False
     self.contentView.addSubview_(textField)
@@ -66,7 +66,7 @@ class TintedTextField(CustomTableViewCell):
     textField.font = UIFont.systemFontOfSize_(14.0)
     textField.borderStyle = UITextBorderStyle.roundedRect
 
-    textField.backgroundColor = ObjCClass('UIColor').systemRedColor()
+    #textField.backgroundColor = ObjCClass('UIColor').systemRedColor()
 
     textField.translatesAutoresizingMaskIntoConstraints = False
     self.contentView.addSubview_(textField)
@@ -128,7 +128,7 @@ class TextField(CustomTableViewCell):
     textField.font = UIFont.systemFontOfSize_(14.0)
     textField.borderStyle = UITextBorderStyle.roundedRect
 
-    textField.backgroundColor = ObjCClass('UIColor').systemRedColor()
+    #textField.backgroundColor = ObjCClass('UIColor').systemRedColor()
 
     textField.translatesAutoresizingMaskIntoConstraints = False
     self.contentView.addSubview_(textField)
@@ -154,7 +154,7 @@ class SecureTextField(CustomTableViewCell):
     textField.font = UIFont.systemFontOfSize_(14.0)
     textField.borderStyle = UITextBorderStyle.roundedRect
 
-    textField.backgroundColor = ObjCClass('UIColor').systemRedColor()
+    #textField.backgroundColor = ObjCClass('UIColor').systemRedColor()
 
     textField.translatesAutoresizingMaskIntoConstraints = False
     self.contentView.addSubview_(textField)
@@ -180,7 +180,7 @@ class SpecificKeyboardTextField(CustomTableViewCell):
     textField.font = UIFont.systemFontOfSize_(14.0)
     textField.borderStyle = UITextBorderStyle.roundedRect
 
-    textField.backgroundColor = ObjCClass('UIColor').systemRedColor()
+    #textField.backgroundColor = ObjCClass('UIColor').systemRedColor()
 
     textField.translatesAutoresizingMaskIntoConstraints = False
     self.contentView.addSubview_(textField)

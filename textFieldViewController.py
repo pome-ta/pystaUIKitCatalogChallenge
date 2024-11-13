@@ -65,6 +65,7 @@ from pyLocalizedString import localizedString
 from baseTableViewController import BaseTableViewController
 from storyboard.textFieldViewController import prototypes
 
+UIColor = ObjCClass('UIColor')
 UITextFieldDelegate = ObjCProtocol('UITextFieldDelegate')
 
 
@@ -113,6 +114,12 @@ class TextFieldViewController(BaseTableViewController,
     self.testCells.extend([
       CaseElement(localizedString('DefaultTextFieldTitle'),
                   TextFieldKind.textField.value, self.configureTextField_),
+      CaseElement(localizedString('TintedTextFieldTitle'),
+                  TextFieldKind.tintedTextField.value,
+                  self.configureTintedTextField_),
+      CaseElement(localizedString('SecuretTextFieldTitle'),
+                  TextFieldKind.secureTextField.value,
+                  self.configureSecureTextField_),
     ])
 
   # MARK: - Configuration
@@ -126,6 +133,31 @@ class TextFieldViewController(BaseTableViewController,
     textInputTraits.returnKeyType = UIReturnKeyType.done
 
     textField.clearButtonMode = UITextFieldViewMode.whileEditing
+
+  @objc_method
+  def configureTintedTextField_(self, textField):
+    textField.tintColor = UIColor.systemBlueColor()
+    textField.textColor = UIColor.systemGreenColor()
+
+    textField.placeholder = localizedString('Placeholder text')
+    textInputTraits = textField.textInputTraits()
+    textInputTraits.returnKeyType = UIReturnKeyType.done
+    textField.clearButtonMode = UITextFieldViewMode.never
+
+  @objc_method
+  def configureSecureTextField_(self, textField):
+    textField.setSecureTextEntry_(True)  # xxx: `setSecureTextEntry_` しか見つからず
+
+    textField.placeholder = localizedString('Placeholder text')
+
+    textInputTraits = textField.textInputTraits()
+    textInputTraits.returnKeyType = UIReturnKeyType.done
+    textField.clearButtonMode = UITextFieldViewMode.always
+
+  # MARK: - Actions
+  @objc_method
+  def customTextFieldPurpleButtonClicked():
+    print("The custom text field's purple right view button was clicked.")
 
   # MARK: - UITextFieldDelegate
   @objc_method
