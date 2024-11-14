@@ -138,6 +138,11 @@ class TextFieldViewController(BaseTableViewController,
         CaseElement(localizedString('SpecificKeyboardTextFieldTitle'),
                     TextFieldKind.specificKeyboardTextField.value,
                     self.configureSpecificKeyboardTextField_),
+        # Show text field with custom background for iOS only.
+        # iOS のみのカスタム背景を使用してテキスト フィールドを表示します。
+        CaseElement(localizedString('CustomTextFieldTitle'),
+                    TextFieldKind.customTextField.value,
+                    self.configureCustomTextField_),
       ])
 
   # MARK: - Configuration
@@ -209,6 +214,7 @@ class TextFieldViewController(BaseTableViewController,
   この例では、電子メール アドレスの入力を支援するキーボードを表示する方法を示します。
   '''
   # todo: iOS 標準「英語」キーボード設定を入れてないと反映されない
+  # xxx: 読み込み挙動がめちゃくちゃ遅くなる
   @objc_method
   def configureSpecificKeyboardTextField_(self, textField):
     textInputTraits = textField.textInputTraits()
@@ -216,6 +222,12 @@ class TextFieldViewController(BaseTableViewController,
 
     textField.placeholder = localizedString('Placeholder text')
     textInputTraits.returnKeyType = UIReturnKeyType.done
+
+  @objc_method
+  def configureCustomTextField_(self, textField):
+    # Text fields with custom image backgrounds must have no border.
+    # カスタム画像の背景を持つテキストフィールドには枠線を付ける必要はありません。
+    pass
 
   # MARK: - Actions
   @objc_method
