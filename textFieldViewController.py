@@ -1,55 +1,12 @@
 from enum import Enum
+from pathlib import Path
 
 from pyrubicon.objc.api import ObjCClass, ObjCProtocol
 from pyrubicon.objc.api import objc_method, objc_property
 from pyrubicon.objc.runtime import SEL, send_super, objc_id
-from pyrubicon.objc.types import CGRect, CGFloat
+from pyrubicon.objc.types import CGRect, CGFloat, CGRectMake, UIEdgeInsetsMake
 from rbedge import pdbr
-'''
-#UITextField = ObjCClass('UITextField')
-# Custom text field for controlling input text placement.
-# 入力テキストの配置を制御するためのカスタム テキスト フィールド。
-class CustomTextField(ObjCClass('UITextField')):
-  leftMarginPadding: CGFloat = objc_property(float)
-  rightMarginPadding: CGFloat = objc_property(float)
 
-  @objc_method
-  def init(self) -> objc_id:
-    send_super(__class__, self, 'init')  # xxx: この返り値を返さないと意味なし？
-    self.leftMarginPadding = 12.0
-    self.rightMarginPadding = 36.0
-    return self
-
-  @objc_method
-  def textRectForBounds_(self, bounds: CGRect) -> CGRect:
-    send_super(__class__,
-               self,
-               'textRectForBounds:',
-               bounds,
-               argtypes=[
-                 CGRect,
-               ])
-    rect = bounds
-    rect.origin.x += self.leftMarginPadding
-    rect.size.width -= self.rightMarginPadding
-
-    return rect
-
-  @objc_method
-  def editingRectForBounds_(self, bounds: CGRect) -> CGRect:
-    send_super(__class__,
-               self,
-               'editingRectForBounds:',
-               bounds,
-               argtypes=[
-                 CGRect,
-               ])
-    rect = bounds
-    rect.origin.x += self.leftMarginPadding
-    rect.size.width -= self.rightMarginPadding
-
-    return rect
-'''
 from rbedge.enumerations import (
   UITableViewStyle,
   UITextAutocorrectionType,
@@ -57,6 +14,10 @@ from rbedge.enumerations import (
   UITextFieldViewMode,
   UIUserInterfaceIdiom,
   UIKeyboardType,
+  UITextBorderStyle,
+  UIButtonType,
+  UIControlState,
+  UIControlEvents,
 )
 from rbedge.functions import NSStringFromClass
 
@@ -73,6 +34,10 @@ UITextFieldDelegate = ObjCProtocol('UITextFieldDelegate')
 UIImageView = ObjCClass('UIImageView')
 UIImage = ObjCClass('UIImage')
 UISearchToken = ObjCClass('UISearchToken')
+UIScreen = ObjCClass('UIScreen')
+NSURL = ObjCClass('NSURL')
+NSData = ObjCClass('NSData')
+UIButton = ObjCClass('UIButton')
 
 
 # Cell identifier for each text field table view cell.
@@ -159,6 +124,7 @@ class TextFieldViewController(BaseTableViewController,
 
   @objc_method
   def configureTintedTextField_(self, textField):
+    textField.delegate = self
     textField.tintColor = UIColor.systemBlueColor()
     textField.textColor = UIColor.systemGreenColor()
 
@@ -169,6 +135,7 @@ class TextFieldViewController(BaseTableViewController,
 
   @objc_method
   def configureSecureTextField_(self, textField):
+    textField.delegate = self
     textField.setSecureTextEntry_(True)  # xxx: `setSecureTextEntry_` しか見つからず
 
     textField.placeholder = localizedString('Placeholder text')
@@ -180,6 +147,7 @@ class TextFieldViewController(BaseTableViewController,
   @objc_method
   def configureSearchTextField_(self, textField):
     if (searchField := textField).isMemberOfClass_(UISearchTextField):
+      searchField.delegate = self
       searchField.placeholder = localizedString('Enter search text')
 
       textInputTraits = searchField.textInputTraits()
@@ -217,6 +185,7 @@ class TextFieldViewController(BaseTableViewController,
   # xxx: 読み込み挙動がめちゃくちゃ遅くなる
   @objc_method
   def configureSpecificKeyboardTextField_(self, textField):
+    textField.delegate = self
     textInputTraits = textField.textInputTraits()
     textInputTraits.keyboardType = UIKeyboardType.emailAddress
 
@@ -225,13 +194,55 @@ class TextFieldViewController(BaseTableViewController,
 
   @objc_method
   def configureCustomTextField_(self, textField):
+    textField.delegate = self
     # Text fields with custom image backgrounds must have no border.
     # カスタム画像の背景を持つテキストフィールドには枠線を付ける必要はありません。
-    pass
+    textField.borderStyle = UITextBorderStyle.none
+
+    scale = int(UIScreen.mainScreen.scale)
+
+    background_str = f'./UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/text_field_background.imageset/text_field_background_{scale}x.png'
+
+    purpleImage_str = f'./UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/text_field_purple_right_view.imageset/text_field_purple_right_view_{scale}x.png'
+
+    # xxx: `lambda` の使い方が悪い
+    dataWithContentsOfURL = lambda path_str: NSData.dataWithContentsOfURL_(
+      NSURL.fileURLWithPath_(str(Path(path_str).absolute())))
+
+    background_img = UIImage.alloc().initWithData_scale_(
+      dataWithContentsOfURL(background_str), scale)
+
+    textField.background = background_img
+
+    # Create a purple button to be used as the right view of the custom text field.
+    # カスタム テキスト フィールドの右側のビューとして使用する紫色のボタンを作成します。
+    purpleImage = UIImage.alloc().initWithData_scale_(
+      dataWithContentsOfURL(purpleImage_str), scale)
+
+    purpleImageButton = UIButton.buttonWithType_(UIButtonType.custom)
+    purpleImageButton.bounds = CGRectMake(0.0, 0.0, purpleImage.size.width,
+                                          purpleImage.size.height)
+    purpleImageButton.imageEdgeInsets = UIEdgeInsetsMake(0.0, 0.0, 0.0, 5.0)
+
+    purpleImageButton.setImage_forState_(purpleImage, UIControlState.normal)
+    purpleImageButton.addTarget_action_forControlEvents_(
+      self, SEL('customTextFieldPurpleButtonClicked'),
+      UIControlEvents.touchUpInside)
+
+    textField.rightView = purpleImageButton
+    textField.rightViewMode = UITextFieldViewMode.always
+
+    textField.placeholder = localizedString('Placeholder text')
+
+    textInputTraits = textField.textInputTraits()
+    textInputTraits.autocorrectionType = UITextAutocorrectionType.no
+
+    textField.clearButtonMode = UITextFieldViewMode.never
+    textInputTraits.returnKeyType = UIReturnKeyType.done
 
   # MARK: - Actions
   @objc_method
-  def customTextFieldPurpleButtonClicked():
+  def customTextFieldPurpleButtonClicked(self):
     print("The custom text field's purple right view button was clicked.")
 
   # MARK: - UITextFieldDelegate
@@ -246,21 +257,16 @@ class TextFieldViewController(BaseTableViewController,
     # ユーザーがテキストの選択を変更しました。
     pass
 
-  '''  # xxx: 落ちる
+  '''# xxx: 落ちる
   @objc_method
   def textField_shouldChangeCharactersInRange_replacementString_(
       self, range, string) -> bool:
     # Return false to not change text.
     # テキストを変更しない場合は false を返します。
-    #print('shouldChangeCharactersInRange_replacementString')
-    #print(range)
-    #print(string)
     return True
   '''
 
 
-# xxx: Storyboard 先へ遅延でimport させられるか？
-#UITextField = ObjCClass('UITextField')
 # Custom text field for controlling input text placement.
 # 入力テキストの配置を制御するためのカスタム テキスト フィールド。
 class CustomTextField(ObjCClass('UITextField')):

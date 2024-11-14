@@ -101,7 +101,7 @@ class CustomTextField(CustomTableViewCell):
     textField.font = UIFont.systemFontOfSize_(14.0)
     textField.borderStyle = UITextBorderStyle.roundedRect
 
-    textField.backgroundColor = ObjCClass('UIColor').systemBlueColor()
+    #textField.backgroundColor = ObjCClass('UIColor').systemBlueColor()
 
     textField.translatesAutoresizingMaskIntoConstraints = False
     self.contentView.addSubview_(textField)
