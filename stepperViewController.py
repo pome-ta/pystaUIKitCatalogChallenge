@@ -3,9 +3,9 @@ from pathlib import Path
 import json
 
 from pyrubicon.objc.api import ObjCClass
-from pyrubicon.objc.api import objc_method, objc_property
-from pyrubicon.objc.runtime import SEL, send_super, objc_id
-from pyrubicon.objc.types import CGRect, CGFloat, CGRectMake, UIEdgeInsetsMake
+from pyrubicon.objc.api import objc_method
+from pyrubicon.objc.runtime import SEL, send_super
+
 
 from rbedge.enumerations import UITableViewStyle
 from rbedge.functions import NSStringFromClass
@@ -17,7 +17,6 @@ from storyboard.stepperViewController import prototypes
 
 from rbedge.enumerations import (
   UIControlEvents,
-  UIUserInterfaceIdiom,
   UIUserInterfaceStyle,
   UIControlState,
 )
