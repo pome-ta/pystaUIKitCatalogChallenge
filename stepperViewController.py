@@ -25,6 +25,10 @@ from rbedge.enumerations import (
 from rbedge import pdbr
 
 UIColor = ObjCClass('UIColor')
+UIScreen = ObjCClass('UIScreen')
+NSURL = ObjCClass('NSURL')
+NSData = ObjCClass('NSData')
+UIImage = ObjCClass('UIImage')
 
 
 def get_srgb_named_style(named: str,
@@ -107,6 +111,9 @@ class StepperViewController(BaseTableViewController):
       CaseElement(localizedString('TintedStepperTitle'),
                   StepperKind.tintedStepper.value,
                   self.configureTintedStepper_),
+      CaseElement(localizedString('CustomStepperTitle'),
+                  StepperKind.customStepper.value,
+                  self.configureCustomStepper_),
     ])
 
   # MARK: - Configuration
@@ -144,6 +151,60 @@ class StepperViewController(BaseTableViewController):
     stepper.setIncrementImage_forState_(
       stepper.incrementImageForState_(UIControlState.normal),
       UIControlState.normal)
+
+    stepper.addTarget_action_forControlEvents_(self,
+                                               SEL('stepperValueDidChange:'),
+                                               UIControlEvents.valueChanged)
+
+  @objc_method
+  def configureCustomStepper_(self, stepper):
+    scale = int(UIScreen.mainScreen.scale)
+
+    background_str = f'./UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/background.imageset/stepper_and_segment_background_{scale}x.png'
+    disabled_str = f'./UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/background_disabled.imageset/stepper_and_segment_background_disabled_{scale}x.png'
+
+    # xxx: `lambda` の使い方が悪い
+    dataWithContentsOfURL = lambda path_str: NSData.dataWithContentsOfURL_(
+      NSURL.fileURLWithPath_(str(Path(path_str).absolute())))
+
+    stepperBackgroundImage = UIImage.alloc().initWithData_scale_(
+      dataWithContentsOfURL(background_str), scale)
+
+    # Set the background image.
+    # 背景画像を設定します。
+    stepper.setBackgroundImage_forState_(stepperBackgroundImage,
+                                         UIControlState.normal)
+    stepperDisabledBackgroundImage = UIImage.alloc().initWithData_scale_(
+      dataWithContentsOfURL(disabled_str), scale)
+    stepper.setBackgroundImage_forState_(stepperBackgroundImage,
+                                         UIControlState.disabled)
+
+    # Set the image which will be painted in between the two stepper segments. It depends on the states of both segments.
+    # 2 つのステッパー セグメントの間にペイントするイメージを設定します。それは両方のセグメントの状態によって異なります。
+
+    # xxx: `x1`,`x2` と`x3` だと、ファイル名が違う
+    divider_scale = 'stepper_and_segment_divider_' if scale == 3 else 'stepper_and_segment_segment_divider_'
+    divider_str = f'./UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/stepper_and_segment_divider.imageset/{divider_scale}{scale}x.png'
+
+    # Set the divider image.
+    # 分割画像を設定します。
+    stepperSegmentDividerImage = UIImage.alloc().initWithData_scale_(
+      dataWithContentsOfURL(divider_str), scale)
+    stepper.setDividerImage_forLeftSegmentState_rightSegmentState_(
+      stepperSegmentDividerImage, UIControlState.normal, UIControlState.normal)
+
+    # Set the image for the + button.
+    # +ボタンの画像を設定します。
+    stepperIncrementImage = UIImage.systemImageNamed_('plus')
+
+    stepper.setIncrementImage_forState_(stepperIncrementImage,
+                                        UIControlState.normal)
+
+    # Set the image for the - button.
+    # -ボタンの画像を設定します。
+    stepperDecrementImage = UIImage.systemImageNamed_('minus')
+    stepper.setDecrementImage_forState_(stepperDecrementImage,
+                                        UIControlState.normal)
 
     stepper.addTarget_action_forControlEvents_(self,
                                                SEL('stepperValueDidChange:'),
