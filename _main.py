@@ -2,6 +2,8 @@ from pyrubicon.objc.api import ObjCClass, ObjCProtocol
 from pyrubicon.objc.api import objc_method
 from pyrubicon.objc.runtime import send_super
 
+from rbedge.rootNavigationController import RootNavigationController
+
 from rbedge.functions import NSStringFromClass
 
 from rbedge import pdbr
@@ -9,7 +11,6 @@ from rbedge import pdbr
 # --- UIViewController
 UIViewController = ObjCClass('UIViewController')
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
-
 
 UISplitViewController = ObjCClass('UISplitViewController')
 
@@ -26,7 +27,10 @@ class MainViewController(UISplitViewController):
     # --- Navigation
     title = NSStringFromClass(__class__)
     self.navigationItem.title = title
-    pdbr.state(self)
+
+    #self.navigationController = RootNavigationController.new()
+    #pdbr.state(self.navigationController)
+    #pdbr.state(self)
 
     # --- View
     backgroundColor = UIColor.systemBackgroundColor()
@@ -58,5 +62,5 @@ if __name__ == '__main__':
   style = UIModalPresentationStyle.fullScreen
   style = UIModalPresentationStyle.pageSheet
 
-  present_viewController(vc, style)
+  present_viewController(vc, style, False)
 
