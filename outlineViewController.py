@@ -1,11 +1,3 @@
-'''
-  note: 
-    - [【Swift】世界一わかりやすいTableViewのアコーディオンの実装方法 #Xode - Qiita](https://qiita.com/tosh_3/items/c254429f4f68c7eab39d)
-    - `UICollectionView` 形式にもっていく
-      - 階層をつける
-      - tap 確認
-'''
-
 import ctypes
 
 from pyrubicon.objc.api import ObjCClass, ObjCInstance
@@ -19,8 +11,23 @@ from rbedge.enumerations import (
   UIUserInterfaceSizeClass,
 )
 from rbedge.functions import NSStringFromClass
+from pyLocalizedString import localizedString
 from rbedge import pdbr
 
+# ---
+# --- UIKitCatalog ViewControllers
+from buttonViewController import ButtonViewController
+from menuButtonViewController import MenuButtonViewController
+from defaultPageControlViewController import PageControlViewController
+from customPageControlViewController import CustomPageControlViewController
+from defaultSearchBarViewController import DefaultSearchBarViewController
+from customSearchBarViewController import CustomSearchBarViewController
+from segmentedControlViewController import SegmentedControlViewController
+from sliderViewController import SliderViewController
+from switchViewController import SwitchViewController
+from textFieldViewController import TextFieldViewController
+
+# --- /
 UIKit = load_library('UIKit')  # todo: `objc_const` 用
 UIViewController = ObjCClass('UIViewController')
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
@@ -42,10 +49,9 @@ UICellAccessoryOutlineDisclosure = ObjCClass(
 # --- others
 UIColor = ObjCClass('UIColor')
 UIFont = ObjCClass('UIFont')
-UITapGestureRecognizer = ObjCClass('UITapGestureRecognizer')
-NSIndexSet = ObjCClass('NSIndexSet')
 UIImage = ObjCClass('UIImage')
-UILabel = ObjCClass('UILabel')
+#UITapGestureRecognizer = ObjCClass('UITapGestureRecognizer')
+#NSIndexSet = ObjCClass('NSIndexSet')
 
 # --- Global Variable
 UICollectionElementKindSectionHeader = objc_const(
@@ -53,42 +59,14 @@ UICollectionElementKindSectionHeader = objc_const(
 UIFontTextStyleHeadline = objc_const(UIKit, 'UIFontTextStyleHeadline')
 
 
-class hogeViewController(UIViewController):
-
-  @objc_method
-  def viewDidLoad(self):
-    title = NSStringFromClass(__class__)
-    self.navigationItem.title = title
-    # --- View
-    self.view.backgroundColor = UIColor.systemDarkPurpleColor()
-
-    self.label = UILabel.new()
-    self.label.text = 'hoge'
-    self.label.font = UIFont.systemFontOfSize_(26.0)
-    self.label.sizeToFit()
-
-    self.view.addSubview_(self.label)
-
-    # --- Layout
-    self.label.translatesAutoresizingMaskIntoConstraints = False
-    safeAreaLayoutGuide = self.view.safeAreaLayoutGuide
-
-    NSLayoutConstraint.activateConstraints_([
-      self.label.centerXAnchor.constraintEqualToAnchor_(
-        safeAreaLayoutGuide.centerXAnchor),
-      self.label.centerYAnchor.constraintEqualToAnchor_(
-        safeAreaLayoutGuide.centerYAnchor),
-    ])
-
-
 class OutlineItem:
 
   def __init__(self,
                title: str,
-               imageName: str = None,
-               storyboardName: str = None,
+               imageName: str | None = None,
+               storyboardName: UIViewController | None = None,
                subitems: list = []):
-    self.title = title
+    self.title = localizedString(title)
     self.imageName = imageName
     self.storyboardName = storyboardName
     self.subitems = subitems
@@ -121,14 +99,14 @@ class SupplementaryItem:
 buttonItems = [
   OutlineItem(title='ButtonsTitle',
               imageName='rectangle',
-              storyboardName=hogeViewController),
+              storyboardName=ButtonViewController),
   OutlineItem(title='MenuButtonsTitle',
               imageName='list.bullet.rectangle',
-              storyboardName='MenuButtonViewController'),
+              storyboardName=MenuButtonViewController),
 ]
 
 controlsSubItems = [
-  OutlineItem(title='ButtonsTitles',
+  OutlineItem(title='ButtonsTitle',
               imageName='rectangle.on.rectangle',
               subitems=buttonItems),
   OutlineItem(title='PageControlTitle',
@@ -136,33 +114,33 @@ controlsSubItems = [
               subitems=[
                 OutlineItem(title='DefaultPageControlTitle',
                             imageName=None,
-                            storyboardName='DefaultPageControlViewController'),
+                            storyboardName=PageControlViewController),
                 OutlineItem(title='CustomPageControlTitle',
                             imageName=None,
-                            storyboardName='CustomPageControlViewController'),
+                            storyboardName=CustomPageControlViewController),
               ]),
   OutlineItem(title='SearchBarsTitle',
               imageName='magnifyingglass',
               subitems=[
                 OutlineItem(title='DefaultSearchBarTitle',
                             imageName=None,
-                            storyboardName='DefaultSearchBarViewController'),
+                            storyboardName=DefaultSearchBarViewController),
                 OutlineItem(title='CustomSearchBarTitle',
                             imageName=None,
-                            storyboardName='CustomSearchBarViewController'),
+                            storyboardName=CustomSearchBarViewController),
               ]),
   OutlineItem(title='SegmentedControlsTitle',
               imageName='square.split.3x1',
-              storyboardName='SegmentedControlViewController'),
+              storyboardName=SegmentedControlViewController),
   OutlineItem(title='SlidersTitle',
               imageName=None,
-              storyboardName='SliderViewController'),
+              storyboardName=SliderViewController),
   OutlineItem(title='SwitchesTitle',
               imageName=None,
-              storyboardName='SwitchViewController'),
+              storyboardName=SwitchViewController),
   OutlineItem(title='TextFieldsTitle',
               imageName=None,
-              storyboardName='TextFieldViewController'),
+              storyboardName=TextFieldViewController),
 ]
 
 controlsOutlineItem = OutlineItem(title='Controls',
@@ -257,7 +235,7 @@ class ViewController(UIViewController):
     self.navigationItem.title = title
 
     # --- View
-    self.view.backgroundColor = UIColor.systemBrownColor()  # todo: 確認用
+    #self.view.backgroundColor = UIColor.systemBrownColor()  # todo: 確認用
 
     # --- collection set
     self.listCell_identifier = 'customListCell'
@@ -376,13 +354,12 @@ class ViewController(UIViewController):
   def collectionView_didSelectItemAtIndexPath_(self, collectionView,
                                                indexPath):
     # xxx: `section` は検知しないから、判断なくてもいい?
-    #print(indexPath)
-    #pdbr.state(self.collectionView)
-    #pdbr.state(collectionView)
     menuItem = menuItems[indexPath.section].children[indexPath.row]
-    menuItem_vc = menuItem.storyboardName.new()
-    self.pushOrPresentViewController_(menuItem_vc)
-    #print(menuItem)
+    try:
+      menuItem_vc = menuItem.storyboardName.new()
+      self.pushOrPresentViewController_(menuItem_vc)
+    except Exception as e:
+      print(f'{e}')
 
   # --- private
   @objc_method
@@ -429,5 +406,4 @@ if __name__ == '__main__':
   style = UIModalPresentationStyle.fullScreen
   #style = UIModalPresentationStyle.pageSheet
   present_viewController(vc, style)
-
 
