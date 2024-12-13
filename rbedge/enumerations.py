@@ -258,6 +258,16 @@ class UICollectionLayoutListAppearance:
   sidebarPlain: int = 4
 
 
+# ref: [UICollectionLayoutListHeaderMode | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uicollectionlayoutlistheadermode)
+@dataclass
+class UICollectionLayoutListHeaderMode:
+  # xxx: 独自調査 a.k.a: 勘
+  # ref: [UICollectionLayoutList.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UICollectionLayoutList.rs.html)
+  none: int = 0
+  supplementary: int = 1
+  firstItemInSection: int = 2
+
+
 # ref: [UIViewAutoresizing | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uiviewautoresizing?language=objc)
 @dataclass
 class UIViewAutoresizing:
@@ -451,3 +461,13 @@ class UISplitViewControllerDisplayMode:
   twoBesideSecondary: int = 4
   twoOverSecondary: int = 5
   twoDisplaceSecondary: int = 6
+
+
+# ref: [UICellAccessoryOutlineDisclosureStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uicellaccessoryoutlinedisclosurestyle?language=objc)
+@dataclass
+class UICellAccessoryOutlineDisclosureStyle:
+  # ref: [UICellAccessory.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UICellAccessory.rs.html#467)
+  automatic: int = 0
+  header: int = 1
+  cell: int = 2
+
