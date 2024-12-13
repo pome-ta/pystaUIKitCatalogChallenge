@@ -16,6 +16,7 @@ from rbedge.enumerations import (
   UICollectionLayoutListAppearance,
   UICollectionLayoutListHeaderMode,
   UICellAccessoryOutlineDisclosureStyle,
+  UIUserInterfaceSizeClass,
 )
 from rbedge.functions import NSStringFromClass
 from rbedge import pdbr
@@ -23,6 +24,7 @@ from rbedge import pdbr
 UIKit = load_library('UIKit')  # todo: `objc_const` 用
 UIViewController = ObjCClass('UIViewController')
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
+UINavigationController = ObjCClass('UINavigationController')
 
 # --- UICollectionView
 UICollectionView = ObjCClass('UICollectionView')
@@ -43,11 +45,40 @@ UIFont = ObjCClass('UIFont')
 UITapGestureRecognizer = ObjCClass('UITapGestureRecognizer')
 NSIndexSet = ObjCClass('NSIndexSet')
 UIImage = ObjCClass('UIImage')
+UILabel = ObjCClass('UILabel')
 
 # --- Global Variable
 UICollectionElementKindSectionHeader = objc_const(
   UIKit, 'UICollectionElementKindSectionHeader')
 UIFontTextStyleHeadline = objc_const(UIKit, 'UIFontTextStyleHeadline')
+
+
+class hogeViewController(UIViewController):
+
+  @objc_method
+  def viewDidLoad(self):
+    title = NSStringFromClass(__class__)
+    self.navigationItem.title = title
+    # --- View
+    self.view.backgroundColor = UIColor.systemDarkPurpleColor()
+
+    self.label = UILabel.new()
+    self.label.text = 'hoge'
+    self.label.font = UIFont.systemFontOfSize_(26.0)
+    self.label.sizeToFit()
+
+    self.view.addSubview_(self.label)
+
+    # --- Layout
+    self.label.translatesAutoresizingMaskIntoConstraints = False
+    safeAreaLayoutGuide = self.view.safeAreaLayoutGuide
+
+    NSLayoutConstraint.activateConstraints_([
+      self.label.centerXAnchor.constraintEqualToAnchor_(
+        safeAreaLayoutGuide.centerXAnchor),
+      self.label.centerYAnchor.constraintEqualToAnchor_(
+        safeAreaLayoutGuide.centerYAnchor),
+    ])
 
 
 class OutlineItem:
@@ -90,7 +121,7 @@ class SupplementaryItem:
 buttonItems = [
   OutlineItem(title='ButtonsTitle',
               imageName='rectangle',
-              storyboardName='ButtonViewController'),
+              storyboardName=hogeViewController),
   OutlineItem(title='MenuButtonsTitle',
               imageName='list.bullet.rectangle',
               storyboardName='MenuButtonViewController'),
@@ -349,7 +380,29 @@ class ViewController(UIViewController):
     #pdbr.state(self.collectionView)
     #pdbr.state(collectionView)
     menuItem = menuItems[indexPath.section].children[indexPath.row]
-    print(menuItem)
+    menuItem_vc = menuItem.storyboardName.new()
+    self.pushOrPresentViewController_(menuItem_vc)
+    #print(menuItem)
+
+  # --- private
+  @objc_method
+  def splitViewWantsToShowDetail(self) -> bool:
+    if (splitViewController := self.splitViewController) is not None:
+      return splitViewController.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClass.regular
+    else:
+      return False
+
+  # --- private
+  @objc_method
+  def pushOrPresentViewController_(self, viewController):
+    if self.splitViewWantsToShowDetail():
+      navVC = UINavigationController.alloc().initWithRootViewController_(
+        viewController)
+
+      self.splitViewController.showDetailViewController_sender_(navVC, navVC)
+    else:
+      self.navigationController.pushViewController_animated_(
+        viewController, True)
 
   # --- private
   @objc_method
@@ -376,4 +429,5 @@ if __name__ == '__main__':
   style = UIModalPresentationStyle.fullScreen
   #style = UIModalPresentationStyle.pageSheet
   present_viewController(vc, style)
+
 
