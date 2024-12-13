@@ -358,7 +358,7 @@ class UIUserInterfaceStyle:
 # ref: [UIBarMetrics | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uibarmetrics?language=objc)
 @dataclass
 class UIBarMetrics:
-  default: int = 0  # xxx: '`' で囲まれてる
+  default: int = 0  # xxx: '`' で囲まれてる
   compact: int = 1
   defaultPrompt: int = 101
   compactPrompt: int = 102
@@ -463,6 +463,14 @@ class UISplitViewControllerDisplayMode:
   twoDisplaceSecondary: int = 6
 
 
+# ref: [UIUserInterfaceSizeClass | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uiuserinterfacesizeclass?language=objc)
+@dataclass
+class UIUserInterfaceSizeClass:
+  unspecified: int = 0
+  compact: int = 1
+  regular: int = 2
+
+
 # ref: [UICellAccessoryOutlineDisclosureStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uicellaccessoryoutlinedisclosurestyle?language=objc)
 @dataclass
 class UICellAccessoryOutlineDisclosureStyle:
@@ -470,4 +478,18 @@ class UICellAccessoryOutlineDisclosureStyle:
   automatic: int = 0
   header: int = 1
   cell: int = 2
+
+
+# ref: [UITableViewRowAnimation | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uitableview/rowanimation?language=objc)
+@dataclass
+class UITableViewRowAnimation:
+  # ref: [UITableView.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UITableView.rs.html#59)
+  fade: int = 0
+  right: int = 1
+  left: int = 2
+  top: int = 3
+  bottom: int = 4
+  none: int = 5
+  middle: int = 6
+  automatic: int = 100
 

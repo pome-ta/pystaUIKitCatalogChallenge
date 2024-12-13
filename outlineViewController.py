@@ -345,7 +345,11 @@ class ViewController(UIViewController):
   def collectionView_didSelectItemAtIndexPath_(self, collectionView,
                                                indexPath):
     # xxx: `section` は検知しないから、判断なくてもいい?
-    print(indexPath)
+    #print(indexPath)
+    #pdbr.state(self.collectionView)
+    #pdbr.state(collectionView)
+    menuItem = menuItems[indexPath.section].children[indexPath.row]
+    print(menuItem)
 
   # --- private
   @objc_method
