@@ -14,7 +14,6 @@ from rbedge.functions import NSStringFromClass
 from pyLocalizedString import localizedString
 from rbedge import pdbr
 
-
 # --- UIKitCatalog ViewControllers
 from buttonViewController import ButtonViewController
 from menuButtonViewController import MenuButtonViewController
@@ -27,7 +26,6 @@ from sliderViewController import SliderViewController
 from switchViewController import SwitchViewController
 from textFieldViewController import TextFieldViewController
 # --- /
-
 
 UIKit = load_library('UIKit')  # todo: `objc_const` 用
 UIViewController = ObjCClass('UIViewController')
@@ -224,7 +222,7 @@ menuItems = [
 ]
 
 
-class ViewController(UIViewController):
+class OutlineViewController(UIViewController):
 
   collectionView: UICollectionView = objc_property()
 
@@ -233,7 +231,8 @@ class ViewController(UIViewController):
     # --- Navigation
     send_super(__class__, self, 'viewDidLoad')
     title = NSStringFromClass(__class__)
-    self.navigationItem.title = title
+    #self.navigationItem.title = title
+    #self.navigationItem.title = 'UIKitCatalog'
 
     # --- View
     #self.view.backgroundColor = UIColor.systemBrownColor()  # todo: 確認用
@@ -402,7 +401,7 @@ if __name__ == '__main__':
   from rbedge import present_viewController
   from rbedge.enumerations import UIModalPresentationStyle
 
-  vc = ViewController.new()
+  vc = OutlineViewController.new()
 
   style = UIModalPresentationStyle.fullScreen
   #style = UIModalPresentationStyle.pageSheet
