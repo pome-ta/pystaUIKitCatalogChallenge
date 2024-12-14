@@ -493,3 +493,14 @@ class UITableViewRowAnimation:
   middle: int = 6
   automatic: int = 100
 
+
+# ref: [UIActivityIndicatorViewStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uiactivityindicatorview/style-swift.enum?language=objc)
+@dataclass
+class UIActivityIndicatorViewStyle:
+  # ref: [UIActivityIndicatorView.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UIActivityIndicatorView.rs.html#14)
+  large: int = 101
+  medium: int = 100
+  whiteLarge: int = 0  # todo: Deprecated
+  white: int = 1  # todo: Deprecated
+  gray: int = 2  # todo: Deprecated
+
