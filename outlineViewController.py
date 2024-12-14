@@ -14,7 +14,7 @@ from rbedge.functions import NSStringFromClass
 from pyLocalizedString import localizedString
 from rbedge import pdbr
 
-# ---
+
 # --- UIKitCatalog ViewControllers
 from buttonViewController import ButtonViewController
 from menuButtonViewController import MenuButtonViewController
@@ -26,8 +26,9 @@ from segmentedControlViewController import SegmentedControlViewController
 from sliderViewController import SliderViewController
 from switchViewController import SwitchViewController
 from textFieldViewController import TextFieldViewController
-
 # --- /
+
+
 UIKit = load_library('UIKit')  # todo: `objc_const` 用
 UIViewController = ObjCClass('UIViewController')
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
