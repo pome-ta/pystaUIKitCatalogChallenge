@@ -14,7 +14,6 @@ from rbedge.enumerations import (
   UIImageSymbolWeight,
   UIBehavioralStyle,
 )
-from rbedge.functions import NSStringFromClass
 
 from caseElement import CaseElement
 from pyLocalizedString import localizedString
@@ -65,7 +64,7 @@ class SliderViewController(BaseTableViewController):
   def viewDidLoad(self):
     send_super(__class__, self, 'viewDidLoad')  # xxx: 不要?
 
-    title = NSStringFromClass(__class__)
+    #title = NSStringFromClass(__class__)
     #self.navigationItem.title = title
     self.navigationItem.title = localizedString('SlidersTitle')
 
@@ -224,11 +223,15 @@ class SliderViewController(BaseTableViewController):
 
 
 if __name__ == '__main__':
+  from rbedge.functions import NSStringFromClass
   from rbedge.enumerations import UIModalPresentationStyle
   from rbedge import present_viewController
   from rbedge import pdbr
 
   main_vc = SliderViewController.new()
+  _title = NSStringFromClass(SliderViewController)
+  main_vc.navigationItem.title = _title
+
   #style = UIModalPresentationStyle.pageSheet
   style = UIModalPresentationStyle.fullScreen
   present_viewController(main_vc, style)
