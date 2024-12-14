@@ -15,6 +15,7 @@ from pyLocalizedString import localizedString
 from rbedge import pdbr
 
 # --- UIKitCatalog ViewControllers
+# --- --- controlsOutlineItem
 from buttonViewController import ButtonViewController
 from menuButtonViewController import MenuButtonViewController
 from defaultPageControlViewController import PageControlViewController
@@ -26,6 +27,8 @@ from sliderViewController import SliderViewController
 from switchViewController import SwitchViewController
 from textFieldViewController import TextFieldViewController
 from stepperViewController import StepperViewController
+# --- --- viewsOutlineItem
+from activityIndicatorViewController import ActivityIndicatorViewController
 # --- /
 
 UIKit = load_library('UIKit')  # todo: `objc_const` 用
@@ -179,7 +182,7 @@ viewsOutlineItem = OutlineItem(
   subitems=[
     OutlineItem(title='ActivityIndicatorsTitle',
                 imageName=None,
-                storyboardName='ActivityIndicatorViewController'),
+                storyboardName=ActivityIndicatorViewController),
     OutlineItem(title='AlertControllersTitle',
                 imageName=None,
                 storyboardName='AlertControllerViewController'),
