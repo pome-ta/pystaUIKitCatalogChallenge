@@ -10,7 +10,7 @@ from rbedge.enumerations import (
   UICellAccessoryOutlineDisclosureStyle,
   UIUserInterfaceSizeClass,
 )
-from rbedge.functions import NSStringFromClass
+
 from pyLocalizedString import localizedString
 from rbedge import pdbr
 
@@ -241,7 +241,7 @@ class OutlineViewController(UIViewController):
   def viewDidLoad(self):
     # --- Navigation
     send_super(__class__, self, 'viewDidLoad')
-    title = NSStringFromClass(__class__)
+    #title = NSStringFromClass(__class__)
     #self.navigationItem.title = title
     #self.navigationItem.title = 'UIKitCatalog'
 
@@ -409,10 +409,13 @@ class OutlineViewController(UIViewController):
 
 
 if __name__ == '__main__':
+  from rbedge.functions import NSStringFromClass
   from rbedge import present_viewController
   from rbedge.enumerations import UIModalPresentationStyle
 
   vc = OutlineViewController.new()
+  _title = NSStringFromClass(OutlineViewController)
+  vc.navigationItem.title = _title
 
   style = UIModalPresentationStyle.fullScreen
   #style = UIModalPresentationStyle.pageSheet
