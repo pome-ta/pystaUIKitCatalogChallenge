@@ -38,11 +38,8 @@ class MediumIndicator(CustomTableViewCell):
       CGRectMake(177.5, 12.0, 20.0, 20.0)).autorelease()
     _style = UIActivityIndicatorViewStyle.medium
     activityIndicatorView.setActivityIndicatorViewStyle_(_style)
-    #activityIndicatorView = UIActivityIndicatorView.alloc().initWithActivityIndicatorStyle_(_style)
-
-    activityIndicatorView.startAnimating()
+    #activityIndicatorView.startAnimating()
     #activityIndicatorView.startAnimation()
-
     activityIndicatorView.translatesAutoresizingMaskIntoConstraints = False
     self.contentView.addSubview_(activityIndicatorView)
 
@@ -63,11 +60,8 @@ class LargeTintedIndicator(CustomTableViewCell):
       CGRectMake(168.0, -41.0, 39.0, 126.0)).autorelease()
     _style = UIActivityIndicatorViewStyle.large
     activityIndicatorView.setActivityIndicatorViewStyle_(_style)
-    #activityIndicatorView = UIActivityIndicatorView.alloc().initWithActivityIndicatorStyle_(_style)
-
-    activityIndicatorView.startAnimating()
+    #activityIndicatorView.startAnimating()
     #activityIndicatorView.startAnimation()
-
     activityIndicatorView.translatesAutoresizingMaskIntoConstraints = False
     self.contentView.addSubview_(activityIndicatorView)
 
@@ -78,5 +72,50 @@ class LargeTintedIndicator(CustomTableViewCell):
       activityIndicatorView.centerYAnchor.constraintEqualToAnchor_(
         self.contentView.centerYAnchor),
       #activityIndicatorView.topAnchor.constraintEqualToConstant_(-52.0),
+    ])
+
+
+@add_prototype('mediumTintedIndicator')
+class MediumTintedIndicator(CustomTableViewCell):
+
+  @objc_method
+  def overrideCell(self):
+    activityIndicatorView = UIActivityIndicatorView.alloc().initWithFrame_(
+      CGRectMake(177.5, 12.0, 20.0, 20.0)).autorelease()
+    _style = UIActivityIndicatorViewStyle.medium
+    activityIndicatorView.setActivityIndicatorViewStyle_(_style)
+    #activityIndicatorView.startAnimating()
+    #activityIndicatorView.startAnimation()
+    activityIndicatorView.translatesAutoresizingMaskIntoConstraints = False
+    self.contentView.addSubview_(activityIndicatorView)
+
+    NSLayoutConstraint.activateConstraints_([
+      activityIndicatorView.centerXAnchor.constraintEqualToAnchor_(
+        self.contentView.centerXAnchor),
+      activityIndicatorView.centerYAnchor.constraintEqualToAnchor_(
+        self.contentView.centerYAnchor),
+    ])
+
+
+@add_prototype('largeIndicator')
+class LargeIndicator(CustomTableViewCell):
+
+  @objc_method
+  def overrideCell(self):
+    activityIndicatorView = UIActivityIndicatorView.alloc().initWithFrame_(
+      CGRectMake(168.0, -41.0, 39.0, 126.0)).autorelease()
+    _style = UIActivityIndicatorViewStyle.large
+    activityIndicatorView.setActivityIndicatorViewStyle_(_style)
+    #activityIndicatorView.startAnimating()
+    #activityIndicatorView.startAnimation()
+    activityIndicatorView.translatesAutoresizingMaskIntoConstraints = False
+    self.contentView.addSubview_(activityIndicatorView)
+
+    NSLayoutConstraint.activateConstraints_([
+      activityIndicatorView.widthAnchor.constraintEqualToConstant_(39.0),
+      activityIndicatorView.centerXAnchor.constraintEqualToAnchor_(
+        self.contentView.centerXAnchor),
+      activityIndicatorView.centerYAnchor.constraintEqualToAnchor_(
+        self.contentView.centerYAnchor),
     ])
 
