@@ -6,7 +6,6 @@ from pyrubicon.objc.api import ObjCClass
 from pyrubicon.objc.api import objc_method
 from pyrubicon.objc.runtime import SEL, send_super
 
-
 from rbedge.enumerations import UITableViewStyle
 from rbedge.functions import NSStringFromClass
 
@@ -101,7 +100,8 @@ class StepperViewController(BaseTableViewController):
     send_super(__class__, self, 'viewDidLoad')  # xxx: 不要?
 
     title = NSStringFromClass(__class__)
-    self.navigationItem.title = title
+    #self.navigationItem.title = title
+    self.navigationItem.title = localizedString('SteppersTitle')
 
     self.testCells.extend([
       CaseElement(localizedString('DefaultStepperTitle'),

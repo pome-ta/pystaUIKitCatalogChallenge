@@ -64,7 +64,8 @@ class MenuButtonViewController(BaseTableViewController):
     send_super(__class__, self, 'viewDidLoad')  # xxx: 不要?
 
     title = NSStringFromClass(__class__)
-    self.navigationItem.title = title
+    #self.navigationItem.title = title
+    self.navigationItem.title = localizedString('MenuButtonsTitle')
 
     self.testCells.extend([
       CaseElement(localizedString('DropDownProgTitle'),

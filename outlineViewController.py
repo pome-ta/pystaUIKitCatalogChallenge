@@ -25,6 +25,7 @@ from segmentedControlViewController import SegmentedControlViewController
 from sliderViewController import SliderViewController
 from switchViewController import SwitchViewController
 from textFieldViewController import TextFieldViewController
+from stepperViewController import StepperViewController
 # --- /
 
 UIKit = load_library('UIKit')  # todo: `objc_const` 用
@@ -141,6 +142,13 @@ controlsSubItems = [
               imageName=None,
               storyboardName=TextFieldViewController),
 ]
+
+# todo: traitCollection.userInterfaceIdiom != .mac
+if True:
+  stepperItem = OutlineItem(title='SteppersTitle',
+                            imageName=None,
+                            storyboardName=StepperViewController)
+  controlsSubItems.append(stepperItem)
 
 controlsOutlineItem = OutlineItem(title='Controls',
                                   imageName='slider.horizontal.3',

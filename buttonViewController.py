@@ -98,7 +98,7 @@ class ButtonViewController(BaseTableViewController):
 
     title = NSStringFromClass(__class__)
     #self.navigationItem.title = title
-    #self.navigationItem.title = 'title'
+    self.navigationItem.title = localizedString('ButtonsTitle')
 
     self.testCells.extend([
       # 00

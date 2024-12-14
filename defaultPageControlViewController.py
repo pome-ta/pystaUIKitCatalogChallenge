@@ -12,6 +12,7 @@ from pyrubicon.objc.types import CGRectMake
 
 from rbedge.enumerations import UIControlEvents
 from rbedge.functions import NSStringFromClass
+from pyLocalizedString import localizedString
 
 UIViewController = ObjCClass('UIViewController')
 UIView = ObjCClass('UIView')
@@ -42,7 +43,8 @@ class PageControlViewController(UIViewController):
     send_super(__class__, self, 'viewDidLoad')  # xxx: 不要?
     # --- Navigation
     title = NSStringFromClass(__class__)
-    self.navigationItem.title = title
+    #self.navigationItem.title = title
+    self.navigationItem.title = localizedString('DefaultPageControlTitle')
 
     self.view.backgroundColor = UIColor.systemBackgroundColor()
 

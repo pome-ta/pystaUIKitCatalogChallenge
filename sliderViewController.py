@@ -66,7 +66,9 @@ class SliderViewController(BaseTableViewController):
     send_super(__class__, self, 'viewDidLoad')  # xxx: 不要?
 
     title = NSStringFromClass(__class__)
-    self.navigationItem.title = title
+    #self.navigationItem.title = title
+    self.navigationItem.title = localizedString('SlidersTitle')
+
     self.testCells.extend([
       CaseElement(localizedString('DefaultTitle'),
                   SliderKind.sliderDefault.value,

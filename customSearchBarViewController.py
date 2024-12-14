@@ -41,7 +41,8 @@ class CustomSearchBarViewController(UIViewController,
     send_super(__class__, self, 'viewDidLoad')  # xxx: 不要?
     # --- Navigation
     title = NSStringFromClass(__class__)
-    self.navigationItem.title = title
+    #self.navigationItem.title = title
+    self.navigationItem.title = localizedString('CustomSearchBarTitle')
 
     self.searchBar = UISearchBar.alloc().init().autorelease()
     self.setlayout()
