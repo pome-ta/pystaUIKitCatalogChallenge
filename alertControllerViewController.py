@@ -4,7 +4,7 @@
 
 from pyrubicon.objc.api import ObjCClass
 from pyrubicon.objc.api import objc_method
-from pyrubicon.objc.runtime import send_super
+from pyrubicon.objc.runtime import send_super, objc_id
 
 from rbedge.enumerations import (
   UITableViewStyle, )
@@ -18,18 +18,7 @@ NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
 
 UITableView = ObjCClass('UITableView')
 UITableViewCell = ObjCClass('UITableViewCell')
-'''
-Alert Style
-Simple
-OK / Cancel
-Three Buttons
-Text Entry
-Secure Text Entry
 
-Action Sheet Style
-Confirm / Cancel
-Destructive
-'''
 
 styleSections = [
   'Alert Style',
@@ -59,32 +48,30 @@ class AlertControllerViewController(UIViewController):
 
   @objc_method
   def viewDidLoad(self):
-    # --- Navigation
     send_super(__class__, self, 'viewDidLoad')
     # --- Table set
     self.cell_identifier = 'customCell'
-
     tableView = UITableView.alloc().initWithFrame_style_(
       self.view.bounds, UITableViewStyle.grouped)
     tableView.registerClass_forCellReuseIdentifier_(UITableViewCell,
                                                     self.cell_identifier)
-
-    #tableView.delegate = self
+    tableView.delegate = self
     tableView.dataSource = self
 
     # --- Layout
     self.view.addSubview_(tableView)
     tableView.translatesAutoresizingMaskIntoConstraints = False
-    safeAreaLayoutGuide = self.view.safeAreaLayoutGuide
+    #areaLayoutGuide = self.view.safeAreaLayoutGuide
+    areaLayoutGuide = self.view
     NSLayoutConstraint.activateConstraints_([
       tableView.centerXAnchor.constraintEqualToAnchor_(
-        safeAreaLayoutGuide.centerXAnchor),
+        areaLayoutGuide.centerXAnchor),
       tableView.centerYAnchor.constraintEqualToAnchor_(
-        safeAreaLayoutGuide.centerYAnchor),
+        areaLayoutGuide.centerYAnchor),
       tableView.widthAnchor.constraintEqualToAnchor_multiplier_(
-        safeAreaLayoutGuide.widthAnchor, 1.0),
+        areaLayoutGuide.widthAnchor, 1.0),
       tableView.heightAnchor.constraintEqualToAnchor_multiplier_(
-        safeAreaLayoutGuide.heightAnchor, 1.0),
+        areaLayoutGuide.heightAnchor, 1.0),
     ])
 
   # --- UITableViewDataSource
@@ -94,7 +81,6 @@ class AlertControllerViewController(UIViewController):
 
   @objc_method
   def tableView_titleForHeaderInSection_(self, tableView, section: int):
-
     return styleSections[section]
 
   @objc_method
@@ -102,7 +88,7 @@ class AlertControllerViewController(UIViewController):
     return len(style_items[section])
 
   @objc_method
-  def tableView_cellForRowAtIndexPath_(self, tableView, indexPath):
+  def tableView_cellForRowAtIndexPath_(self, tableView, indexPath) -> objc_id:
     cell = tableView.dequeueReusableCellWithIdentifier_forIndexPath_(
       self.cell_identifier, indexPath)
 
@@ -110,8 +96,32 @@ class AlertControllerViewController(UIViewController):
     contentConfiguration.text = style_items[indexPath.section][indexPath.row]
 
     cell.contentConfiguration = contentConfiguration
-
     return cell
+
+  # --- UITableViewDelegate
+  @objc_method
+  def tableView_didSelectRowAtIndexPath_(self, tableView, indexPath):
+    if (section := indexPath.section) == 0:
+      # alertStyleSection
+      if (row := indexPath.row) == 0:
+        print(f'{section}: {row}')
+      elif row == 1:
+        print(f'{section}: {row}')
+      elif row == 2:
+        print(f'{section}: {row}')
+      elif row == 3:
+        print(f'{section}: {row}')
+      elif row == 4:
+        print(f'{section}: {row}')
+
+    elif section == 1:
+      # actionStyleSection
+      if (row := indexPath.row) == 0:
+        print(f'{section}: {row}')
+      elif row == 1:
+        print(f'{section}: {row}')
+
+    tableView.deselectRowAtIndexPath_animated_(indexPath, True)
 
 
 if __name__ == '__main__':
