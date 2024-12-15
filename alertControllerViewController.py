@@ -146,23 +146,10 @@ class AlertControllerViewController(UIViewController):
     alertController = UIAlertController.alertControllerWithTitle_message_preferredStyle_(
       title, message, UIAlertControllerStyle.alert)
 
-    #@Block
-    def actionHandler() -> None:
-      print("The simple alert's cancel action occurred.")
-
     # Create the action.
-    #cancelAction = UIAlertAction.actionWithTitle_style_handler_(cancelButtonTitle, UIAlertActionStyle.cancel, Block(actionHandler))
-
     cancelAction = UIAlertAction.actionWithTitle_style_handler_(
       cancelButtonTitle, UIAlertActionStyle.cancel,
       Block(lambda: print("The simple alert's cancel action occurred."), None))
-    '''
-    cancelAction = UIAlertAction.actionWithTitle(
-      cancelButtonTitle,
-      style=UIAlertActionStyle.cancel,
-      handler=Block(
-        lambda: print("The simple alert's cancel action occurred."), None))
-    '''
 
     # Add the action.
     alertController.addAction_(cancelAction)
@@ -181,19 +168,15 @@ class AlertControllerViewController(UIViewController):
     alertController = UIAlertController.alertControllerWithTitle_message_preferredStyle_(
       title, message, UIAlertControllerStyle.alert)
 
-    @Block
-    def cancelActionHandler() -> None:
-      print("The 'OK/Cancel' alert's cancel action occurred.")
-
-    @Block
-    def otherActionHandler() -> None:
-      print("The 'OK/Cancel' alert's other action occurred.")
-
     # Create the action.
     cancelAction = UIAlertAction.actionWithTitle_style_handler_(
-      cancelButtonTitle, UIAlertActionStyle.cancel, cancelActionHandler)
+      cancelButtonTitle, UIAlertActionStyle.cancel,
+      Block(lambda: print("The 'OK/Cancel' alert's cancel action occurred."),
+            None))
     otherAction = UIAlertAction.actionWithTitle_style_handler_(
-      otherButtonTitle, UIAlertActionStyle.default, otherActionHandler)
+      otherButtonTitle, UIAlertActionStyle.default,
+      Block(lambda: print("The 'OK/Cancel' alert's other action occurred."),
+            None))
 
     # Add the action.
     alertController.addAction_(cancelAction)
@@ -214,25 +197,21 @@ class AlertControllerViewController(UIViewController):
     alertController = UIAlertController.alertControllerWithTitle_message_preferredStyle_(
       title, message, UIAlertControllerStyle.alert)
 
-    @Block
-    def cancelActionHandler() -> None:
-      print("The 'Other' alert's cancel action occurred.")
-
-    @Block
-    def otherOneActionHandler() -> None:
-      print("The 'Other' alert's other button one action occurred.")
-
-    @Block
-    def otherTwoActionHandler() -> None:
-      print("The 'Other' alert's other button two action occurred.")
-
     # Create the action.
     cancelAction = UIAlertAction.actionWithTitle_style_handler_(
-      cancelButtonTitle, UIAlertActionStyle.cancel, cancelActionHandler)
+      cancelButtonTitle, UIAlertActionStyle.cancel,
+      Block(lambda: print("The 'Other' alert's cancel action occurred."),
+            None))
     otherButtonOneAction = UIAlertAction.actionWithTitle_style_handler_(
-      otherButtonTitleOne, UIAlertActionStyle.default, otherOneActionHandler)
+      otherButtonTitleOne, UIAlertActionStyle.default,
+      Block(
+        lambda: print("The 'Other' alert's other button one action occurred."),
+        None))
     otherButtonTwoAction = UIAlertAction.actionWithTitle_style_handler_(
-      otherButtonTitleTwo, UIAlertActionStyle.default, otherTwoActionHandler)
+      otherButtonTitleTwo, UIAlertActionStyle.default,
+      Block(
+        lambda: print("The 'Other' alert's other button two action occurred."),
+        None))
 
     # Add the action.
     alertController.addAction_(cancelAction)
