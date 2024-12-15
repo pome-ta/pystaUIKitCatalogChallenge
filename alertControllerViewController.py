@@ -1,8 +1,9 @@
 '''
   note: Storyboard 未定義
+    - index 呼び出しよりenum か？
 '''
 
-from pyrubicon.objc.api import ObjCClass
+from pyrubicon.objc.api import ObjCClass, Block
 from pyrubicon.objc.api import objc_method
 from pyrubicon.objc.runtime import send_super, objc_id
 
@@ -54,6 +55,7 @@ class AlertControllerViewController(UIViewController):
   @objc_method
   def viewDidLoad(self):
     send_super(__class__, self, 'viewDidLoad')
+    self.navigationItem.title = localizedString('AlertControllersTitle')
     # --- Table set
     self.cell_identifier = 'customCell'
     tableView = UITableView.alloc().initWithFrame_style_(
@@ -109,12 +111,14 @@ class AlertControllerViewController(UIViewController):
     if (section := indexPath.section) == 0:
       # alertStyleSection
       if (row := indexPath.row) == 0:
-        print(f'{section}: {row}')
+        #print(f'{section}: {row}')
         self.showSimpleAlert()
       elif row == 1:
-        print(f'{section}: {row}')
+        #print(f'{section}: {row}')
+        self.showOkayCancelAlert()
       elif row == 2:
-        print(f'{section}: {row}')
+        #print(f'{section}: {row}')
+        self.showOtherAlert()
       elif row == 3:
         print(f'{section}: {row}')
       elif row == 4:
@@ -138,15 +142,104 @@ class AlertControllerViewController(UIViewController):
     message = localizedString(
       'A message needs to be a short, complete sentence.')
     cancelButtonTitle = localizedString('OK')
-    print(title)
-    print(message)
-    print(cancelButtonTitle)
-    alertController = UIAlertController.alertControllerWithTitle_message_preferredStyle_(title, message, UIAlertControllerStyle.alert)
-    #UIAlertControllerStyle.alert
-    #actionWithTitle:style:handler:
-    #UIAlertActionStyle.cancel
-    
-    pdbr.state(alertController)
+
+    alertController = UIAlertController.alertControllerWithTitle_message_preferredStyle_(
+      title, message, UIAlertControllerStyle.alert)
+
+    #@Block
+    def actionHandler() -> None:
+      print("The simple alert's cancel action occurred.")
+
+    # Create the action.
+    #cancelAction = UIAlertAction.actionWithTitle_style_handler_(cancelButtonTitle, UIAlertActionStyle.cancel, Block(actionHandler))
+
+    cancelAction = UIAlertAction.actionWithTitle_style_handler_(
+      cancelButtonTitle, UIAlertActionStyle.cancel,
+      Block(lambda: print("The simple alert's cancel action occurred."), None))
+    '''
+    cancelAction = UIAlertAction.actionWithTitle(
+      cancelButtonTitle,
+      style=UIAlertActionStyle.cancel,
+      handler=Block(
+        lambda: print("The simple alert's cancel action occurred."), None))
+    '''
+
+    # Add the action.
+    alertController.addAction_(cancelAction)
+
+    self.presentViewController(alertController, animated=True, completion=None)
+
+  # Show an alert with an "OK" and "Cancel" button.
+  @objc_method
+  def showOkayCancelAlert(self):
+    title = localizedString('A Short Title is Best')
+    message = localizedString(
+      'A message needs to be a short, complete sentence.')
+    cancelButtonTitle = localizedString('Cancel')
+    otherButtonTitle = localizedString('OK')
+
+    alertController = UIAlertController.alertControllerWithTitle_message_preferredStyle_(
+      title, message, UIAlertControllerStyle.alert)
+
+    @Block
+    def cancelActionHandler() -> None:
+      print("The 'OK/Cancel' alert's cancel action occurred.")
+
+    @Block
+    def otherActionHandler() -> None:
+      print("The 'OK/Cancel' alert's other action occurred.")
+
+    # Create the action.
+    cancelAction = UIAlertAction.actionWithTitle_style_handler_(
+      cancelButtonTitle, UIAlertActionStyle.cancel, cancelActionHandler)
+    otherAction = UIAlertAction.actionWithTitle_style_handler_(
+      otherButtonTitle, UIAlertActionStyle.default, otherActionHandler)
+
+    # Add the action.
+    alertController.addAction_(cancelAction)
+    alertController.addAction_(otherAction)
+
+    self.presentViewController(alertController, animated=True, completion=None)
+
+  # Show an alert with two custom buttons.
+  @objc_method
+  def showOtherAlert(self):
+    title = localizedString('A Short Title is Best')
+    message = localizedString(
+      'A message needs to be a short, complete sentence.')
+    cancelButtonTitle = localizedString('Cancel')
+    otherButtonTitleOne = localizedString('Choice One')
+    otherButtonTitleTwo = localizedString('Choice Two')
+
+    alertController = UIAlertController.alertControllerWithTitle_message_preferredStyle_(
+      title, message, UIAlertControllerStyle.alert)
+
+    @Block
+    def cancelActionHandler() -> None:
+      print("The 'Other' alert's cancel action occurred.")
+
+    @Block
+    def otherOneActionHandler() -> None:
+      print("The 'Other' alert's other button one action occurred.")
+
+    @Block
+    def otherTwoActionHandler() -> None:
+      print("The 'Other' alert's other button two action occurred.")
+
+    # Create the action.
+    cancelAction = UIAlertAction.actionWithTitle_style_handler_(
+      cancelButtonTitle, UIAlertActionStyle.cancel, cancelActionHandler)
+    otherButtonOneAction = UIAlertAction.actionWithTitle_style_handler_(
+      otherButtonTitleOne, UIAlertActionStyle.default, otherOneActionHandler)
+    otherButtonTwoAction = UIAlertAction.actionWithTitle_style_handler_(
+      otherButtonTitleTwo, UIAlertActionStyle.default, otherTwoActionHandler)
+
+    # Add the action.
+    alertController.addAction_(cancelAction)
+    alertController.addAction_(otherButtonOneAction)
+    alertController.addAction_(otherButtonTwoAction)
+
+    self.presentViewController(alertController, animated=True, completion=None)
 
 
 if __name__ == '__main__':
