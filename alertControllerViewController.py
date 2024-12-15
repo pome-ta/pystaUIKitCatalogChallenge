@@ -7,7 +7,10 @@ from pyrubicon.objc.api import objc_method
 from pyrubicon.objc.runtime import send_super, objc_id
 
 from rbedge.enumerations import (
-  UITableViewStyle, )
+  UITableViewStyle,
+  UIAlertControllerStyle,
+  UIAlertActionStyle,
+)
 
 from rbedge import pdbr
 
@@ -19,6 +22,8 @@ NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
 UITableView = ObjCClass('UITableView')
 UITableViewCell = ObjCClass('UITableViewCell')
 
+UIAlertController = ObjCClass('UIAlertController')
+UIAlertAction = ObjCClass('UIAlertAction')
 
 styleSections = [
   'Alert Style',
@@ -105,6 +110,7 @@ class AlertControllerViewController(UIViewController):
       # alertStyleSection
       if (row := indexPath.row) == 0:
         print(f'{section}: {row}')
+        self.showSimpleAlert()
       elif row == 1:
         print(f'{section}: {row}')
       elif row == 2:
@@ -122,6 +128,25 @@ class AlertControllerViewController(UIViewController):
         print(f'{section}: {row}')
 
     tableView.deselectRowAtIndexPath_animated_(indexPath, True)
+
+  # MARK: - UIAlertControllerStyleAlert Style Alerts
+
+  # Show an alert with an "OK" button.
+  @objc_method
+  def showSimpleAlert(self):
+    title = localizedString('A Short Title is Best')
+    message = localizedString(
+      'A message needs to be a short, complete sentence.')
+    cancelButtonTitle = localizedString('OK')
+    print(title)
+    print(message)
+    print(cancelButtonTitle)
+    alertController = UIAlertController.alertControllerWithTitle_message_preferredStyle_(title, message, UIAlertControllerStyle.alert)
+    #UIAlertControllerStyle.alert
+    #actionWithTitle:style:handler:
+    #UIAlertActionStyle.cancel
+    
+    pdbr.state(alertController)
 
 
 if __name__ == '__main__':

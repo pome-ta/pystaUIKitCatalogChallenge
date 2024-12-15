@@ -504,3 +504,20 @@ class UIActivityIndicatorViewStyle:
   white: int = 1  # todo: Deprecated
   gray: int = 2  # todo: Deprecated
 
+
+# ref: [UIAlertControllerStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uialertcontroller/style?language=objc)
+@dataclass
+class UIAlertControllerStyle:
+  # ref: [UIAlertController.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UIAlertController.rs.html#31)
+  actionSheet: int = 0
+  alert: int = 1
+
+
+# ref: [UIAlertActionStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uialertaction/style-swift.enum?language=objc)
+@dataclass
+class UIAlertActionStyle:
+  # ref: [UIAlertController.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UIAlertController.rs.html#11)
+  default: int = 0
+  cancel: int = 1
+  destructive: int = 2
+
