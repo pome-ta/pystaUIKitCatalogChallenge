@@ -2,10 +2,9 @@
   note: Storyboard 未定義
     - index 呼び出しよりenum か？
 '''
-
-from pyrubicon.objc.api import ObjCClass, Block
-from pyrubicon.objc.api import objc_method
-from pyrubicon.objc.runtime import send_super, objc_id
+from pyrubicon.objc.api import ObjCClass, ObjCInstance, Block
+from pyrubicon.objc.api import objc_method, objc_property, objc_const
+from pyrubicon.objc.runtime import send_super, objc_id, load_library
 
 from rbedge.enumerations import (
   UITableViewStyle,
@@ -17,6 +16,8 @@ from rbedge import pdbr
 
 from pyLocalizedString import localizedString
 
+UIKit = load_library('UIKit')  # todo: `objc_const` 用
+
 UIViewController = ObjCClass('UIViewController')
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
 
@@ -25,6 +26,13 @@ UITableViewCell = ObjCClass('UITableViewCell')
 
 UIAlertController = ObjCClass('UIAlertController')
 UIAlertAction = ObjCClass('UIAlertAction')
+NSNotificationCenter = ObjCClass('NSNotificationCenter')
+NSOperationQueue = ObjCClass('NSOperationQueue')
+
+UITextField = ObjCClass('UITextField')
+
+UITextFieldTextDidChangeNotification = objc_const(
+  UIKit, 'UITextFieldTextDidChangeNotification')
 
 styleSections = [
   'Alert Style',
@@ -51,6 +59,9 @@ style_items = [
 
 
 class AlertControllerViewController(UIViewController):
+  textDidChangeObserver = objc_property()
+  #secureTextAlertAction: UIAlertAction = objc_property(weak=True)
+  secureTextAlertAction: UIAlertAction = objc_property()
 
   @objc_method
   def viewDidLoad(self):
@@ -123,7 +134,8 @@ class AlertControllerViewController(UIViewController):
         #print(f'{section}: {row}')
         self.showTextEntryAlert()
       elif row == 4:
-        print(f'{section}: {row}')
+        #print(f'{section}: {row}')
+        self.showSecureTextEntryAlert()
 
     elif section == 1:
       # actionStyleSection
@@ -233,7 +245,7 @@ class AlertControllerViewController(UIViewController):
 
     # Add the text field for text entry.
     @Block
-    def configurationHandler() -> None:
+    def configurationHandler(textField: objc_id) -> None:
       # If you need to customize the text field, you can do so here.
       pass
 
@@ -253,6 +265,74 @@ class AlertControllerViewController(UIViewController):
             None))
 
     # Add the action.
+    alertController.addAction_(cancelAction)
+    alertController.addAction_(otherAction)
+
+    self.presentViewController(alertController, animated=True, completion=None)
+
+  # Show a secure text entry alert with two custom buttons.
+  @objc_method
+  def showSecureTextEntryAlert(self):
+    title = localizedString('A Short Title is Best')
+    message = localizedString(
+      'A message needs to be a short, complete sentence.')
+    cancelButtonTitle = localizedString('Cancel')
+    otherButtonTitle = localizedString('OK')
+
+    alertController = UIAlertController.alertControllerWithTitle_message_preferredStyle_(
+      title, message, UIAlertControllerStyle.alert)
+
+    @Block
+    def configurationHandler(_textField: objc_id) -> None:
+      textField = ObjCInstance(_textField)
+      if (observer := self.textDidChangeObserver) is not None:
+        NSNotificationCenter.defaultCenter.removeObserver_(observer)
+
+      @Block
+      def usingBlock(_notification: objc_id) -> None:
+        notification = ObjCInstance(_notification)
+        if (textField := notification.object).isKindOfClass_(UITextField):
+
+          # Enforce a minimum length of >= 5 characters for secure text alerts.
+          # セキュア テキスト アラートの最小長は 5 文字以上にする必要があります。
+          if (alertAction := self.secureTextAlertAction):
+            if (text := textField.text):
+              alertAction.setEnabled_(text.length >= 5)
+            else:
+              alertAction.setEnabled_(False)
+
+      # Listen for changes to the text field's text so that we can toggle the current action's enabled property based on whether the user has entered a sufficiently secure entry.
+      # ユーザーが十分に安全なエントリを入力したかどうかに基づいて、現在のアクションの有効なプロパティを切り替えることができるように、テキスト フィールドのテキストへの変更をリッスンします。
+
+      self.textDidChangeObserver = NSNotificationCenter.defaultCenter.addObserverForName(
+        UITextFieldTextDidChangeNotification,
+        object=textField,
+        queue=NSOperationQueue.mainQueue,
+        usingBlock=usingBlock)
+      textField.setSecureTextEntry_(True)
+
+    # Add the text field for the secure text entry.
+    alertController.addTextFieldWithConfigurationHandler_(configurationHandler)
+    # Create the actions.
+    cancelAction = UIAlertAction.actionWithTitle_style_handler_(
+      cancelButtonTitle, UIAlertActionStyle.cancel,
+      Block(
+        lambda: print("The 'Secure Text Entry' alert's cancel action occurred."
+                      ), None))
+    otherAction = UIAlertAction.actionWithTitle_style_handler_(
+      otherButtonTitle, UIAlertActionStyle.default,
+      Block(
+        lambda: print("The 'Secure Text Entry' alert's other action occurred."
+                      ), None))
+    # The text field initially has no text in the text field, so we'll disable it for now. It will be re-enabled when the first character is typed.
+    # テキストフィールドには最初はテキストがないため、ここでは無効にします。最初の文字が入力されると再び有効になります。
+    otherAction.setEnabled_(False)
+    
+    # Hold onto the secure text alert action to toggle the enabled / disabled state when the text changed.
+    # セキュア テキスト アラート アクションを押し続けると、テキストが変更されたときに有効/無効状態が切り替わります。
+    self.secureTextAlertAction = otherAction
+    
+    # Add the actions.
     alertController.addAction_(cancelAction)
     alertController.addAction_(otherAction)
 
