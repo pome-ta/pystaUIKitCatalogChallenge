@@ -120,7 +120,8 @@ class AlertControllerViewController(UIViewController):
         #print(f'{section}: {row}')
         self.showOtherAlert()
       elif row == 3:
-        print(f'{section}: {row}')
+        #print(f'{section}: {row}')
+        self.showTextEntryAlert()
       elif row == 4:
         print(f'{section}: {row}')
 
@@ -217,6 +218,43 @@ class AlertControllerViewController(UIViewController):
     alertController.addAction_(cancelAction)
     alertController.addAction_(otherButtonOneAction)
     alertController.addAction_(otherButtonTwoAction)
+
+    self.presentViewController(alertController, animated=True, completion=None)
+
+  # Show a text entry alert with two custom buttons.
+  @objc_method
+  def showTextEntryAlert(self):
+    title = localizedString('A Short Title is Best')
+    message = localizedString(
+      'A message needs to be a short, complete sentence.')
+
+    alertController = UIAlertController.alertControllerWithTitle_message_preferredStyle_(
+      title, message, UIAlertControllerStyle.alert)
+
+    # Add the text field for text entry.
+    @Block
+    def configurationHandler() -> None:
+      # If you need to customize the text field, you can do so here.
+      pass
+
+    alertController.addTextFieldWithConfigurationHandler_(configurationHandler)
+
+    # Create the actions.
+    cancelButtonTitle = localizedString('Cancel')
+    cancelAction = UIAlertAction.actionWithTitle_style_handler_(
+      cancelButtonTitle, UIAlertActionStyle.cancel,
+      Block(lambda: print("The 'Text Entry' alert's cancel action occurred."),
+            None))
+
+    otherButtonTitle = localizedString('OK')
+    otherAction = UIAlertAction.actionWithTitle_style_handler_(
+      otherButtonTitle, UIAlertActionStyle.default,
+      Block(lambda: print("The 'Text Entry' alert's other action occurred."),
+            None))
+
+    # Add the action.
+    alertController.addAction_(cancelAction)
+    alertController.addAction_(otherAction)
 
     self.presentViewController(alertController, animated=True, completion=None)
 
