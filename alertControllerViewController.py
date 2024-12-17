@@ -1,6 +1,5 @@
 '''
   note: Storyboard 未定義
-    - index 呼び出しよりenum か？
 '''
 from enum import IntEnum, auto
 
@@ -31,7 +30,7 @@ UIAlertAction = ObjCClass('UIAlertAction')
 NSNotificationCenter = ObjCClass('NSNotificationCenter')
 NSOperationQueue = ObjCClass('NSOperationQueue')
 
-UITextField = ObjCClass('UITextField')
+UITextField = ObjCClass('UITextField')  # todo: 型確認
 
 UITextFieldTextDidChangeNotification = objc_const(
   UIKit, 'UITextFieldTextDidChangeNotification')
@@ -94,30 +93,6 @@ class StyleSections(IntEnum):
   @property
   def title(self):
     return self._data['title']
-
-
-styleSections = [
-  'Alert Style',
-  'Action Sheet Style',
-]
-
-alertStyle_items = [
-  'Simple',
-  'OK / Cancel',
-  'Three Buttons',
-  'Text Entry',
-  'Secure Text Entry',
-]
-
-actionSheetStyle_items = [
-  'Confirm / Cancel',
-  'Destructive',
-]
-
-style_items = [
-  alertStyle_items,
-  actionSheetStyle_items,
-]
 
 
 class AlertControllerViewController(UIViewController):
@@ -453,23 +428,15 @@ class AlertControllerViewController(UIViewController):
   # --- UITableViewDataSource
   @objc_method
   def numberOfSectionsInTableView_(self, tableView) -> int:
-    #return len(StyleSections)
-    #print(f'{len(styleSections)}: {len(StyleSections)}')
-    #return len(styleSections)
     return len(StyleSections)
 
   @objc_method
-  def tableView_titleForHeaderInSection_(self, tableView, section: int):
-    #return StyleSections(section).data['title']
-    #print(f'{styleSections[section]}: {StyleSections(section).data["title"]}')
-    #return styleSections[section]
+  def tableView_titleForHeaderInSection_(self, tableView,
+                                         section: int) -> objc_id:
     return StyleSections(section).title
 
   @objc_method
   def tableView_numberOfRowsInSection_(self, tableView, section: int) -> int:
-    #return len(StyleSections(section).data['items'])
-    #print(f'{len(style_items[section])}: {len(StyleSections(section).data["items"])}')
-    #return len(style_items[section])
     return len(StyleSections(section).items)
 
   @objc_method
