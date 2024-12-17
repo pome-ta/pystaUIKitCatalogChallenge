@@ -2,6 +2,8 @@
   note: Storyboard 未定義
     - index 呼び出しよりenum か？
 '''
+from enum import IntEnum, auto
+
 from pyrubicon.objc.api import ObjCClass, ObjCInstance, Block
 from pyrubicon.objc.api import objc_method, objc_property, objc_const
 from pyrubicon.objc.runtime import send_super, objc_id, load_library
@@ -33,6 +35,66 @@ UITextField = ObjCClass('UITextField')
 
 UITextFieldTextDidChangeNotification = objc_const(
   UIKit, 'UITextFieldTextDidChangeNotification')
+
+
+class AlertStyleTest(IntEnum):
+  showSimpleAlert = 0
+  showOkayCancelAlert = auto()
+  showOtherAlert = auto()
+  showTextEntryAlert = auto()
+  showSecureTextEntryAlert = auto()
+
+  @property
+  def title(self):
+    custom_names = {
+      self.showSimpleAlert: 'Simple',
+      self.showOkayCancelAlert: 'OK / Cancel',
+      self.showOtherAlert: 'Three Buttons',
+      self.showTextEntryAlert: 'Text Entry',
+      self.showSecureTextEntryAlert: 'Secure Text Entry',
+    }
+    return custom_names.get(self, 'none')
+
+
+class ActionSheetStyleTest(IntEnum):
+  showOkayCancelActionSheet = 0
+  howOtherActionSheet = auto()
+
+  @property
+  def title(self):
+    custom_names = {
+      self.showOkayCancelActionSheet: 'Confirm / Cancel',
+      self.howOtherActionSheet: 'Destructive',
+    }
+    return custom_names.get(self, 'none')
+
+
+class StyleSections(IntEnum):
+  alertStyleSection = 0
+  actionStyleSection = auto()
+
+  @property
+  def _data(self):
+    custom_datas = {
+      self.alertStyleSection: {
+        'title': 'Alert Style',
+        'items': AlertStyleTest,
+      },
+      self.actionStyleSection: {
+        'title': 'Action Sheet Style',
+        'items': ActionSheetStyleTest,
+      },
+    }
+    return custom_datas.get(self, 'none')
+
+  @property
+  def items(self):
+    return self._data['items']
+
+  @property
+  def title(self):
+    return self._data['title']
+
 
 styleSections = [
   'Alert Style',
@@ -367,31 +429,23 @@ class AlertControllerViewController(UIViewController):
   # --- UITableViewDelegate
   @objc_method
   def tableView_didSelectRowAtIndexPath_(self, tableView, indexPath):
-    if (section := indexPath.section) == 0:
-      # alertStyleSection
-      if (row := indexPath.row) == 0:
-        #print(f'{section}: {row}')
+    if (section := indexPath.section) == StyleSections.alertStyleSection:
+      if (row := indexPath.row) == AlertStyleTest.showSimpleAlert:
         self.showSimpleAlert()
-      elif row == 1:
-        #print(f'{section}: {row}')
+      elif row == AlertStyleTest.showOkayCancelAlert:
         self.showOkayCancelAlert()
-      elif row == 2:
-        #print(f'{section}: {row}')
+      elif row == AlertStyleTest.showOtherAlert:
         self.showOtherAlert()
-      elif row == 3:
-        #print(f'{section}: {row}')
+      elif row == AlertStyleTest.showTextEntryAlert:
         self.showTextEntryAlert()
-      elif row == 4:
-        #print(f'{section}: {row}')
+      elif row == AlertStyleTest.showSecureTextEntryAlert:
         self.showSecureTextEntryAlert()
 
-    elif section == 1:
-      # actionStyleSection
-      if (row := indexPath.row) == 0:
-        #print(f'{section}: {row}')
+    elif section == StyleSections.actionStyleSection:
+      if (row :=
+          indexPath.row) == ActionSheetStyleTest.showOkayCancelActionSheet:
         self.showOkayCancelActionSheet_(indexPath)
-      elif row == 1:
-        #print(f'{section}: {row}')
+      elif row == ActionSheetStyleTest.howOtherActionSheet:
         self.showOtherActionSheet_(indexPath)
 
     tableView.deselectRowAtIndexPath_animated_(indexPath, True)
@@ -399,15 +453,24 @@ class AlertControllerViewController(UIViewController):
   # --- UITableViewDataSource
   @objc_method
   def numberOfSectionsInTableView_(self, tableView) -> int:
-    return len(styleSections)
+    #return len(StyleSections)
+    #print(f'{len(styleSections)}: {len(StyleSections)}')
+    #return len(styleSections)
+    return len(StyleSections)
 
   @objc_method
   def tableView_titleForHeaderInSection_(self, tableView, section: int):
-    return styleSections[section]
+    #return StyleSections(section).data['title']
+    #print(f'{styleSections[section]}: {StyleSections(section).data["title"]}')
+    #return styleSections[section]
+    return StyleSections(section).title
 
   @objc_method
   def tableView_numberOfRowsInSection_(self, tableView, section: int) -> int:
-    return len(style_items[section])
+    #return len(StyleSections(section).data['items'])
+    #print(f'{len(style_items[section])}: {len(StyleSections(section).data["items"])}')
+    #return len(style_items[section])
+    return len(StyleSections(section).items)
 
   @objc_method
   def tableView_cellForRowAtIndexPath_(self, tableView, indexPath) -> objc_id:
@@ -415,7 +478,8 @@ class AlertControllerViewController(UIViewController):
       self.cell_identifier, indexPath)
 
     contentConfiguration = cell.defaultContentConfiguration()
-    contentConfiguration.text = style_items[indexPath.section][indexPath.row]
+    contentConfiguration.text = StyleSections(indexPath.section).items(
+      indexPath.row).title
 
     cell.contentConfiguration = contentConfiguration
     return cell
