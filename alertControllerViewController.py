@@ -92,62 +92,6 @@ class AlertControllerViewController(UIViewController):
         areaLayoutGuide.heightAnchor, 1.0),
     ])
 
-  # --- UITableViewDataSource
-  @objc_method
-  def numberOfSectionsInTableView_(self, tableView) -> int:
-    return len(styleSections)
-
-  @objc_method
-  def tableView_titleForHeaderInSection_(self, tableView, section: int):
-    return styleSections[section]
-
-  @objc_method
-  def tableView_numberOfRowsInSection_(self, tableView, section: int) -> int:
-    return len(style_items[section])
-
-  @objc_method
-  def tableView_cellForRowAtIndexPath_(self, tableView, indexPath) -> objc_id:
-    cell = tableView.dequeueReusableCellWithIdentifier_forIndexPath_(
-      self.cell_identifier, indexPath)
-
-    contentConfiguration = cell.defaultContentConfiguration()
-    contentConfiguration.text = style_items[indexPath.section][indexPath.row]
-
-    cell.contentConfiguration = contentConfiguration
-    return cell
-
-  # --- UITableViewDelegate
-  @objc_method
-  def tableView_didSelectRowAtIndexPath_(self, tableView, indexPath):
-    if (section := indexPath.section) == 0:
-      # alertStyleSection
-      if (row := indexPath.row) == 0:
-        #print(f'{section}: {row}')
-        self.showSimpleAlert()
-      elif row == 1:
-        #print(f'{section}: {row}')
-        self.showOkayCancelAlert()
-      elif row == 2:
-        #print(f'{section}: {row}')
-        self.showOtherAlert()
-      elif row == 3:
-        #print(f'{section}: {row}')
-        self.showTextEntryAlert()
-      elif row == 4:
-        #print(f'{section}: {row}')
-        self.showSecureTextEntryAlert()
-
-    elif section == 1:
-      # actionStyleSection
-      if (row := indexPath.row) == 0:
-        #print(f'{section}: {row}')
-        self.showOkayCancelActionSheet_(indexPath)
-      elif row == 1:
-        #print(f'{section}: {row}')
-        self.showOtherActionSheet_(indexPath)
-
-    tableView.deselectRowAtIndexPath_animated_(indexPath, True)
-
   # MARK: - UIAlertControllerStyleAlert Style Alerts
 
   # Show an alert with an "OK" button.
@@ -379,7 +323,7 @@ class AlertControllerViewController(UIViewController):
       print(popoverPresentationController)
       # Note for popovers the Cancel button is hidden automatically.
       # ポップオーバーの場合、「キャンセル」ボタンは自動的に非表示になることに注意してください。
-      # wip: popovers の出る条件が不明なため、ペンディング
+      # wip: popovers の出る条件が不明なため、ペンディング
     self.presentViewController(alertController, animated=True, completion=None)
 
   # Show a dialog with two custom buttons.
@@ -419,6 +363,62 @@ class AlertControllerViewController(UIViewController):
       # Note for popovers the Cancel button is hidden automatically.
       # wip: popovers の出る条件が不明なため、ペンディング
     self.presentViewController(alertController, animated=True, completion=None)
+
+  # --- UITableViewDelegate
+  @objc_method
+  def tableView_didSelectRowAtIndexPath_(self, tableView, indexPath):
+    if (section := indexPath.section) == 0:
+      # alertStyleSection
+      if (row := indexPath.row) == 0:
+        #print(f'{section}: {row}')
+        self.showSimpleAlert()
+      elif row == 1:
+        #print(f'{section}: {row}')
+        self.showOkayCancelAlert()
+      elif row == 2:
+        #print(f'{section}: {row}')
+        self.showOtherAlert()
+      elif row == 3:
+        #print(f'{section}: {row}')
+        self.showTextEntryAlert()
+      elif row == 4:
+        #print(f'{section}: {row}')
+        self.showSecureTextEntryAlert()
+
+    elif section == 1:
+      # actionStyleSection
+      if (row := indexPath.row) == 0:
+        #print(f'{section}: {row}')
+        self.showOkayCancelActionSheet_(indexPath)
+      elif row == 1:
+        #print(f'{section}: {row}')
+        self.showOtherActionSheet_(indexPath)
+
+    tableView.deselectRowAtIndexPath_animated_(indexPath, True)
+
+  # --- UITableViewDataSource
+  @objc_method
+  def numberOfSectionsInTableView_(self, tableView) -> int:
+    return len(styleSections)
+
+  @objc_method
+  def tableView_titleForHeaderInSection_(self, tableView, section: int):
+    return styleSections[section]
+
+  @objc_method
+  def tableView_numberOfRowsInSection_(self, tableView, section: int) -> int:
+    return len(style_items[section])
+
+  @objc_method
+  def tableView_cellForRowAtIndexPath_(self, tableView, indexPath) -> objc_id:
+    cell = tableView.dequeueReusableCellWithIdentifier_forIndexPath_(
+      self.cell_identifier, indexPath)
+
+    contentConfiguration = cell.defaultContentConfiguration()
+    contentConfiguration.text = style_items[indexPath.section][indexPath.row]
+
+    cell.contentConfiguration = contentConfiguration
+    return cell
 
 
 if __name__ == '__main__':
