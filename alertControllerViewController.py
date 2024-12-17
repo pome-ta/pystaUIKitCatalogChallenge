@@ -371,15 +371,15 @@ class AlertControllerViewController(UIViewController):
 
     # Configure the alert controller's popover presentation controller if it has one.
     # アラート コントローラーのポップオーバー プレゼンテーション コントローラーがある場合は、それを構成します。
-    '''
-    try:
-      popoverPresentationController = alertController.popoverPresentationController
+    if (popoverPresentationController :=
+        alertController.popoverPresentationController()) is not None:
+      print('# popovers あり')
+      print('\t- wip')
       print(popoverPresentationController)
-    except Exception as e:
-      print(e)
-
-    '''
-    pdbr.state(alertController)
+      # Note for popovers the Cancel button is hidden automatically.
+      # ポップオーバーの場合、「キャンセル」ボタンは自動的に非表示になることに注意してください。
+      # wip: popovers の出る条件が不明なため、ペンディング
+    self.presentViewController(alertController, animated=True, completion=None)
 
 
 if __name__ == '__main__':
@@ -392,6 +392,7 @@ if __name__ == '__main__':
   main_vc.navigationItem.title = _title
 
   style = UIModalPresentationStyle.fullScreen
+  #style = UIModalPresentationStyle.pageSheet
   #style = UIModalPresentationStyle.popover
 
   present_viewController(main_vc, style)
