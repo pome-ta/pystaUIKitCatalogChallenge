@@ -143,7 +143,8 @@ class AlertControllerViewController(UIViewController):
         #print(f'{section}: {row}')
         self.showOkayCancelActionSheet_(indexPath)
       elif row == 1:
-        print(f'{section}: {row}')
+        #print(f'{section}: {row}')
+        self.showOtherActionSheet_(indexPath)
 
     tableView.deselectRowAtIndexPath_animated_(indexPath, True)
 
@@ -342,7 +343,7 @@ class AlertControllerViewController(UIViewController):
   # MARK: - UIAlertControllerStyleActionSheet Style Alerts
   # Show a dialog with an "OK" and "Cancel" button.
   @objc_method
-  def showOkayCancelActionSheet_(self, IndexPath):
+  def showOkayCancelActionSheet_(self, selectedIndexPath):
     message = localizedString(
       'A message needs to be a short, complete sentence.')
     cancelButtonTitle = localizedString('Cancel')
@@ -379,6 +380,44 @@ class AlertControllerViewController(UIViewController):
       # Note for popovers the Cancel button is hidden automatically.
       # ポップオーバーの場合、「キャンセル」ボタンは自動的に非表示になることに注意してください。
       # wip: popovers の出る条件が不明なため、ペンディング
+    self.presentViewController(alertController, animated=True, completion=None)
+
+  # Show a dialog with two custom buttons.
+  @objc_method
+  def showOtherActionSheet_(self, selectedIndexPath):
+    message = localizedString(
+      'A message needs to be a short, complete sentence.')
+    destructiveButtonTitle = localizedString('Destructive Choice')
+    otherButtonTitle = localizedString('Safe Choice')
+
+    alertController = UIAlertController.alertControllerWithTitle_message_preferredStyle_(
+      None, message, UIAlertControllerStyle.actionSheet)
+
+    # Create the actions.
+    destructiveAction = UIAlertAction.actionWithTitle_style_handler_(
+      destructiveButtonTitle, UIAlertActionStyle.destructive,
+      Block(
+        lambda: print(
+          "The 'Other' alert action sheet's destructive action occurred."),
+        None))
+    otherAction = UIAlertAction.actionWithTitle_style_handler_(
+      otherButtonTitle, UIAlertActionStyle.default,
+      Block(
+        lambda: print("The 'Other' alert action sheet's other action occurred."
+                      ), None))
+
+    # Add the actions.
+    alertController.addAction_(destructiveAction)
+    alertController.addAction_(otherAction)
+
+    # Configure the alert controller's popover presentation controller if it has one.
+    if (popoverPresentationController :=
+        alertController.popoverPresentationController()) is not None:
+      print('# popovers あり')
+      print('\t- wip')
+      print(popoverPresentationController)
+      # Note for popovers the Cancel button is hidden automatically.
+      # wip: popovers の出る条件が不明なため、ペンディング
     self.presentViewController(alertController, animated=True, completion=None)
 
 
