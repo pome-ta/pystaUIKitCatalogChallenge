@@ -140,7 +140,8 @@ class AlertControllerViewController(UIViewController):
     elif section == 1:
       # actionStyleSection
       if (row := indexPath.row) == 0:
-        print(f'{section}: {row}')
+        #print(f'{section}: {row}')
+        self.showOkayCancelActionSheet_(indexPath)
       elif row == 1:
         print(f'{section}: {row}')
 
@@ -327,16 +328,58 @@ class AlertControllerViewController(UIViewController):
     # The text field initially has no text in the text field, so we'll disable it for now. It will be re-enabled when the first character is typed.
     # テキストフィールドには最初はテキストがないため、ここでは無効にします。最初の文字が入力されると再び有効になります。
     otherAction.setEnabled_(False)
-    
+
     # Hold onto the secure text alert action to toggle the enabled / disabled state when the text changed.
     # セキュア テキスト アラート アクションを押し続けると、テキストが変更されたときに有効/無効状態が切り替わります。
     self.secureTextAlertAction = otherAction
-    
+
     # Add the actions.
     alertController.addAction_(cancelAction)
     alertController.addAction_(otherAction)
 
     self.presentViewController(alertController, animated=True, completion=None)
+
+  # MARK: - UIAlertControllerStyleActionSheet Style Alerts
+  # Show a dialog with an "OK" and "Cancel" button.
+  @objc_method
+  def showOkayCancelActionSheet_(self, IndexPath):
+    message = localizedString(
+      'A message needs to be a short, complete sentence.')
+    cancelButtonTitle = localizedString('Cancel')
+    destructiveButtonTitle = localizedString('Confirm')
+
+    alertController = UIAlertController.alertControllerWithTitle_message_preferredStyle_(
+      None, message, UIAlertControllerStyle.actionSheet)
+
+    # Create the actions.
+    cancelAction = UIAlertAction.actionWithTitle_style_handler_(
+      cancelButtonTitle, UIAlertActionStyle.cancel,
+      Block(
+        lambda: print(
+          "The 'OK/Cancel' alert action sheet's cancel action occurred."),
+        None))
+    destructiveAction = UIAlertAction.actionWithTitle_style_handler_(
+      destructiveButtonTitle, UIAlertActionStyle.default,
+      Block(
+        lambda: print(
+          "The 'Confirm' alert action sheet's destructive action occurred."),
+        None))
+
+    # Add the actions.
+    alertController.addAction_(cancelAction)
+    alertController.addAction_(destructiveAction)
+
+    # Configure the alert controller's popover presentation controller if it has one.
+    # アラート コントローラーのポップオーバー プレゼンテーション コントローラーがある場合は、それを構成します。
+    '''
+    try:
+      popoverPresentationController = alertController.popoverPresentationController
+      print(popoverPresentationController)
+    except Exception as e:
+      print(e)
+
+    '''
+    pdbr.state(alertController)
 
 
 if __name__ == '__main__':
@@ -347,6 +390,9 @@ if __name__ == '__main__':
   main_vc = AlertControllerViewController.new()
   _title = NSStringFromClass(AlertControllerViewController)
   main_vc.navigationItem.title = _title
+
   style = UIModalPresentationStyle.fullScreen
+  #style = UIModalPresentationStyle.popover
+
   present_viewController(main_vc, style)
 
