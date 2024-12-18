@@ -9,6 +9,8 @@ from pyrubicon.objc.api import ObjCClass
 from pyrubicon.objc.api import objc_method, objc_property, objc_const
 from pyrubicon.objc.runtime import send_super, objc_id, load_library
 
+from pyrubicon.objc.types import NSRange
+
 from rbedge.enumerations import (
   UIUserInterfaceStyle,
   NSLineBreakMode,
@@ -25,11 +27,14 @@ NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
 UITextView = ObjCClass('UITextView')
 UIFont = ObjCClass('UIFont')
 UIFontDescriptor = ObjCClass('UIFontDescriptor')
+NSMutableAttributedString = ObjCClass('NSMutableAttributedString')
 
 UIColor = ObjCClass('UIColor')
 
 # --- Global Variables
 UIFontTextStyleBody = objc_const(UIKit, 'UIFontTextStyleBody')
+NSForegroundColorAttributeName = objc_const(UIKit,
+                                            'NSForegroundColorAttributeName')
 
 
 def get_srgb_named_style(named: str,
@@ -123,6 +128,28 @@ class TextViewController(UIViewController):
     #pdbr.state(self.collectionView)
     #print('viewDidDisappear')
 
+  # MARK: - Configuration
+  @objc_method
+  def reflowTextAttributes(self):
+    entireTextColor = UIColor.blackColor
+
+    # The text should be white in dark mode.
+    if self.traitCollection.userInterfaceStyle == UIUserInterfaceStyle.dark:
+      entireTextColor = UIColor.whiteColor
+
+    entireAttributedText = NSMutableAttributedString.alloc(
+    ).initWithAttributedString_(self.textView.attributedText)
+
+    entireRange = NSRange(0, entireAttributedText.length())
+    #pdbr.state(entireRange)
+    #length
+    #NSMutableAttributedString
+    #print(entireAttributedText.length())
+    #print(NSForegroundColorAttributeName)
+    entireAttributedText.addAttribute_value_range_(
+      NSForegroundColorAttributeName, entireTextColor, entireRange)
+    pdbr.state(entireAttributedText)
+
   @objc_method
   def configureTextView(self):
     bodyFontDescriptor = UIFontDescriptor.preferredFontDescriptorWithTextStyle_(
@@ -137,11 +164,10 @@ class TextViewController(UIViewController):
       *_color_named)
 
     self.textView.isScrollEnabled = True
-    
+
     # Apply different attributes to the text (bold, tinted, underline, etc.).
     # テキストにさまざまな属性 (太字、色付き、下線など) を適用します。
-    
-
+    self.reflowTextAttributes()
 
 
 if __name__ == '__main__':
