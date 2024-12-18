@@ -5,22 +5,20 @@ import ctypes
 from pathlib import Path
 import json
 
-from pyrubicon.objc.api import ObjCClass
+from pyrubicon.objc.api import ObjCClass, NSString
 from pyrubicon.objc.api import objc_method, objc_property, objc_const
 from pyrubicon.objc.runtime import send_super, objc_id, load_library
-
 from pyrubicon.objc.types import NSRange
 
 from rbedge.enumerations import (
   UIUserInterfaceStyle,
   NSLineBreakMode,
 )
-from rbedge import pdbr
 
 from pyLocalizedString import localizedString
+from rbedge import pdbr
 
 UIKit = load_library('UIKit')  # todo: `objc_const` 用
-
 UIViewController = ObjCClass('UIViewController')
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
 
@@ -135,20 +133,35 @@ class TextViewController(UIViewController):
 
     # The text should be white in dark mode.
     if self.traitCollection.userInterfaceStyle == UIUserInterfaceStyle.dark:
-      entireTextColor = UIColor.whiteColor
+      #entireTextColor = UIColor.whiteColor
+      entireTextColor = UIColor.redColor
 
     entireAttributedText = NSMutableAttributedString.alloc(
     ).initWithAttributedString_(self.textView.attributedText)
 
     entireRange = NSRange(0, entireAttributedText.length())
-    #pdbr.state(entireRange)
-    #length
-    #NSMutableAttributedString
-    #print(entireAttributedText.length())
-    #print(NSForegroundColorAttributeName)
+
     entireAttributedText.addAttribute_value_range_(
       NSForegroundColorAttributeName, entireTextColor, entireRange)
-    pdbr.state(entireAttributedText)
+    self.textView.attributedText = entireAttributedText
+
+    # Modify some of the attributes of the attributed string. You can modify these attributes yourself to get a better feel for what they do.Note that the initial text is visible in the storyboard.
+    # 属性付き文字列の属性の一部を変更します。これらの属性を自分で変更して、その機能をよりよく理解することができます。最初のテキストがストーリーボードに表示されることに注意してください。
+    attributedText = NSMutableAttributedString.alloc(
+    ).initWithAttributedString_(self.textView.attributedText)
+
+    # Use NSString so the result of rangeOfString is an NSRange, not Range<String.Index>. This will then be the correct type to then pass to the addAttribute method of NSMutableAttributedString.
+    # NSString を使用すると、rangeOfString の結果が Range<String.Index> ではなく NSRange になります。これは、NSMutableAttributedString の addAttribute メソッドに渡す正しい型になります。
+    text = NSString(self.textView.text)
+
+    # Find the range of each element to modify.
+    boldRange = text.rangeOfString_(localizedString('bold'))
+    highlightedRange = text.rangeOfString_(localizedString('highlighted'))
+    underlinedRange = text.rangeOfString_(localizedString('underlined'))
+    tintedRange = text.rangeOfString_(localizedString('tinted'))
+
+    # Add bold attribute. Take the current font descriptor and create a new font descriptor with an additional bold trait.
+    # 太字属性を追加します。現在のフォント記述子を使用して、追加の太字特性を持つ新しいフォント記述子を作成します。
 
   @objc_method
   def configureTextView(self):
