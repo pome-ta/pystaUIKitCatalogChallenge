@@ -521,3 +521,15 @@ class UIAlertActionStyle:
   cancel: int = 1
   destructive: int = 2
 
+
+# ref: [NSLineBreakMode | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/nslinebreakmode?language=objc)
+@dataclass
+class NSLineBreakMode:
+  # ref: [NSParagraphStyle.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/NSParagraphStyle.rs.html#11)
+  byWordWrapping: int = 0
+  byCharWrapping: int = 1
+  byClipping: int = 2
+  byTruncatingHead: int = 3
+  byTruncatingTail: int = 4
+  byTruncatingMiddle: int = 5
+
