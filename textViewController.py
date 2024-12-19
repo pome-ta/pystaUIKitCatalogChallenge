@@ -15,6 +15,7 @@ from rbedge.enumerations import (
   NSLineBreakMode,
   UIFontDescriptorSymbolicTraits,
   NSUnderlineStyle,
+  UIImageRenderingMode,
 )
 
 from pyLocalizedString import localizedString
@@ -27,9 +28,13 @@ NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
 UITextView = ObjCClass('UITextView')
 UIFont = ObjCClass('UIFont')
 UIFontDescriptor = ObjCClass('UIFontDescriptor')
+NSAttributedString = ObjCClass('NSAttributedString')
 NSMutableAttributedString = ObjCClass('NSMutableAttributedString')
+NSTextAttachment = ObjCClass('NSTextAttachment')
 
 UIColor = ObjCClass('UIColor')
+UIImage = ObjCClass('UIImage')
+UIImageSymbolConfiguration = ObjCClass('UIImageSymbolConfiguration')
 
 # --- Global Variables
 UIFontTextStyleBody = objc_const(UIKit, 'UIFontTextStyleBody')
@@ -193,6 +198,28 @@ class TextViewController(UIViewController):
     self.textView.attributedText = attributedText
 
   @objc_method
+  def symbolAttributedString_(self, name):
+    symbolAttachment = NSTextAttachment.alloc().init()
+    if (symbolImage := UIImage.systemImageNamed_(name).imageWithRenderingMode_(
+        UIImageRenderingMode.alwaysTemplate)):
+      symbolAttachment.image = symbolImage
+    return NSAttributedString.attributedStringWithAttachment_(symbolAttachment)
+
+  @objc_method
+  def multiColorSymbolAttributedString_(self, name):
+    symbolAttachment = NSTextAttachment.alloc().init()
+    palleteSymbolConfig = UIImageSymbolConfiguration.configurationWithPaletteColors_(
+      [
+        UIColor.systemOrangeColor(),
+        UIColor.systemRedColor(),
+      ])
+
+    if (symbolImage := UIImage.systemImageNamed_(name).imageWithConfiguration_(
+        palleteSymbolConfig)):
+      symbolAttachment.image = symbolImage
+    return NSAttributedString.attributedStringWithAttachment_(symbolAttachment)
+
+  @objc_method
   def configureTextView(self):
     bodyFontDescriptor = UIFontDescriptor.preferredFontDescriptorWithTextStyle_(
       UIFontTextStyleBody)
@@ -210,6 +237,42 @@ class TextViewController(UIViewController):
     # Apply different attributes to the text (bold, tinted, underline, etc.).
     # テキストにさまざまな属性 (太字、色付き、下線など) を適用します。
     self.reflowTextAttributes()
+
+    # Insert symbols as image attachments.
+    text = NSString(self.textView.text)
+    attributedText = NSMutableAttributedString.alloc(
+    ).initWithAttributedString_(self.textView.attributedText)
+
+    symbolsSearchRange = text.rangeOfString_(localizedString('symbols'))
+
+    insertPoint = symbolsSearchRange.location + symbolsSearchRange.length
+
+    attributedText.insertAttributedString(
+      self.symbolAttributedString_('heart'), atIndex=insertPoint)
+
+    insertPoint += 1
+    attributedText.insertAttributedString(
+      self.symbolAttributedString_('heart.fill'), atIndex=insertPoint)
+
+    insertPoint += 1
+    attributedText.insertAttributedString(
+      self.symbolAttributedString_('heart.slash'), atIndex=insertPoint)
+
+    # Multi-color SF Symbols only in iOS 15 or later.
+    if True:  # wip: `available(iOS 15, *)`
+      insertPoint += 1
+
+      attributedText.insertAttributedString(
+        self.multiColorSymbolAttributedString_('arrow.up.heart.fill'),
+        atIndex=insertPoint)
+    # When turned on, this changes the rendering scale of the text to match the standard text scaling and preserves the original font point sizes when the contents of the text view are copied to the pasteboard. Apps that show a lot of text content, such as a text viewer or editor, should turn this on and use the standard text scaling.
+    # オンにすると、標準のテキスト スケーリングに一致するようにテキストのレンダリング スケールが変更され、テキスト ビューの内容がペーストボードにコピーされるときに元のフォント ポイント サイズが保持されます。テキスト ビューアやエディタなど、多くのテキスト コンテンツを表示するアプリでは、これをオンにして、標準のテキスト スケーリングを使用する必要があります。
+    #pdbr.state(self.textView)
+    self.textView.attributedText = attributedText
+
+    #self.textView.usesStandardTextScaling = True
+    self.textView.setUsesStandardTextScaling_(True)
+    #print()
 
 
 if __name__ == '__main__':
