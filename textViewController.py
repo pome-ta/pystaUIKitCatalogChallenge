@@ -5,10 +5,10 @@ import ctypes
 from pathlib import Path
 import json
 
-from pyrubicon.objc.api import ObjCClass, NSString
+from pyrubicon.objc.api import ObjCClass, NSString, NSData
 from pyrubicon.objc.api import objc_method, objc_property, objc_const
 from pyrubicon.objc.runtime import send_super, objc_id, load_library
-from pyrubicon.objc.types import NSRange
+from pyrubicon.objc.types import NSRange, CGPointMake, CGRect
 
 from rbedge.enumerations import (
   UIUserInterfaceStyle,
@@ -24,6 +24,9 @@ from rbedge import pdbr
 UIKit = load_library('UIKit')  # todo: `objc_const` 用
 UIViewController = ObjCClass('UIViewController')
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
+
+UIScreen = ObjCClass('UIScreen')
+NSURL = ObjCClass('NSURL')
 
 UITextView = ObjCClass('UITextView')
 UIFont = ObjCClass('UIFont')
@@ -93,7 +96,7 @@ class TextViewController(UIViewController):
     self.view.backgroundColor = UIColor.systemBackgroundColor()
 
     textView = UITextView.alloc().initWithFrame_(self.view.bounds)
-    textView.text = 'This is a UITextView that uses attributed text. You can programmatically modify the display of the text by making it bold, highlighted, underlined, tinted, symbols, and more. These attributes are defined in NSAttributedString.h. You can even embed attachments in an NSAttributedString!'
+    textView.text = 'This is a UITextView that uses attributed text. You can programmatically modify the display of the text by making it bold, highlighted, underlined, tinted, symbols, and more. These attributes are defined in NSAttributedString.h. You can even embed attachments in an NSAttributedString!\n'
     textView.font = UIFont.fontWithName_size_('HelveticaNeue', 14.0)
     textView.textContainer.lineBreakMode = NSLineBreakMode.byWordWrapping
 
@@ -200,9 +203,12 @@ class TextViewController(UIViewController):
   @objc_method
   def symbolAttributedString_(self, name):
     symbolAttachment = NSTextAttachment.alloc().init()
+    # wip: Dark Mode時の色が黒のまま
+    # hint?: [ios - How to set color of templated image in NSTextAttachment - Stack Overflow](https://stackoverflow.com/questions/29041458/how-to-set-color-of-templated-image-in-nstextattachment)
     if (symbolImage := UIImage.systemImageNamed_(name).imageWithRenderingMode_(
         UIImageRenderingMode.alwaysTemplate)):
       symbolAttachment.image = symbolImage
+
     return NSAttributedString.attributedStringWithAttachment_(symbolAttachment)
 
   @objc_method
@@ -265,14 +271,31 @@ class TextViewController(UIViewController):
       attributedText.insertAttributedString(
         self.multiColorSymbolAttributedString_('arrow.up.heart.fill'),
         atIndex=insertPoint)
+
+    # Add the image as an attachment.
+    scale = int(UIScreen.mainScreen.scale)
+    scale = 1
+    #print(scale)
+    # xxx: `lambda` の使い方が悪い
+    dataWithContentsOfURL = lambda path_str: NSData.dataWithContentsOfURL_(
+      NSURL.fileURLWithPath_(str(Path(path_str).absolute())))
+
+    text_view_attachment = './UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/text_view_attachment.imageset/Sunset_5.png'
+
+    if (image := UIImage.alloc().initWithData_scale_(
+        dataWithContentsOfURL(text_view_attachment), scale)):
+      textAttachment = NSTextAttachment.alloc().init()
+      textAttachment.image = image
+      textAttachment.bounds = CGRect(CGPointMake(0.0, 0.0), image.size)
+      textAttachmentString = NSAttributedString.attributedStringWithAttachment_(
+        textAttachment)
+      attributedText.appendAttributedString_(textAttachmentString)
+      self.textView.attributedText = attributedText
+
     # When turned on, this changes the rendering scale of the text to match the standard text scaling and preserves the original font point sizes when the contents of the text view are copied to the pasteboard. Apps that show a lot of text content, such as a text viewer or editor, should turn this on and use the standard text scaling.
     # オンにすると、標準のテキスト スケーリングに一致するようにテキストのレンダリング スケールが変更され、テキスト ビューの内容がペーストボードにコピーされるときに元のフォント ポイント サイズが保持されます。テキスト ビューアやエディタなど、多くのテキスト コンテンツを表示するアプリでは、これをオンにして、標準のテキスト スケーリングを使用する必要があります。
-    #pdbr.state(self.textView)
-    self.textView.attributedText = attributedText
-
     #self.textView.usesStandardTextScaling = True
-    self.textView.setUsesStandardTextScaling_(True)
-    #print()
+    #self.textView.setUsesStandardTextScaling_(True)
 
 
 if __name__ == '__main__':
