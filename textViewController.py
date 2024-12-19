@@ -148,8 +148,9 @@ class TextViewController(UIViewController):
 
     entireRange = NSRange(0, entireAttributedText.length())
 
-    entireAttributedText.addAttribute_value_range_(
-      NSForegroundColorAttributeName, entireTextColor, entireRange)
+    entireAttributedText.addAttribute(NSForegroundColorAttributeName,
+                                      value=entireTextColor,
+                                      range=entireRange)
     self.textView.attributedText = entireAttributedText
 
     # Modify some of the attributes of the attributed string. You can modify these attributes yourself to get a better feel for what they do.Note that the initial text is visible in the storyboard.
@@ -173,16 +174,22 @@ class TextViewController(UIViewController):
       UIFontDescriptorSymbolicTraits.traitBold)
     boldFont = UIFont.fontWithDescriptor_size_(boldFontDescriptor, 0.0)
 
-    attributedText.addAttribute_value_range_(NSFontAttributeName, boldFont,
-                                             boldRange)
-
+    attributedText.addAttribute(NSFontAttributeName,
+                                value=boldFont,
+                                range=boldRange)
     # Add highlight attribute.
-    attributedText.addAttribute_value_range_(NSBackgroundColorAttributeName,
-                                             UIColor.systemGreenColor(),
-                                             highlightedRange)
+    attributedText.addAttribute(NSBackgroundColorAttributeName,
+                                value=UIColor.systemGreenColor(),
+                                range=highlightedRange)
     # Add underline attribute.
-    attributedText.addAttribute_value_range_(NSUnderlineStyleAttributeName,NSUnderlineStyle.single,underlinedRange)
-    
+    attributedText.addAttribute(NSUnderlineStyleAttributeName,
+                                value=NSUnderlineStyle.single,
+                                range=underlinedRange)
+    # Add tint color.
+    attributedText.addAttribute(NSForegroundColorAttributeName,
+                                value=UIColor.systemBlueColor(),
+                                range=tintedRange)
+
     self.textView.attributedText = attributedText
 
   @objc_method
