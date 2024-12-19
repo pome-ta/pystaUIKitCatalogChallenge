@@ -14,6 +14,7 @@ from rbedge.enumerations import (
   UIUserInterfaceStyle,
   NSLineBreakMode,
   UIFontDescriptorSymbolicTraits,
+  NSUnderlineStyle,
 )
 
 from pyLocalizedString import localizedString
@@ -34,6 +35,11 @@ UIColor = ObjCClass('UIColor')
 UIFontTextStyleBody = objc_const(UIKit, 'UIFontTextStyleBody')
 NSForegroundColorAttributeName = objc_const(UIKit,
                                             'NSForegroundColorAttributeName')
+NSFontAttributeName = objc_const(UIKit, 'NSFontAttributeName')
+NSBackgroundColorAttributeName = objc_const(UIKit,
+                                            'NSBackgroundColorAttributeName')
+NSUnderlineStyleAttributeName = objc_const(UIKit,
+                                           'NSUnderlineStyleAttributeName')
 
 
 def get_srgb_named_style(named: str,
@@ -134,8 +140,8 @@ class TextViewController(UIViewController):
 
     # The text should be white in dark mode.
     if self.traitCollection.userInterfaceStyle == UIUserInterfaceStyle.dark:
-      #entireTextColor = UIColor.whiteColor
-      entireTextColor = UIColor.redColor
+      entireTextColor = UIColor.whiteColor
+      #entireTextColor = UIColor.redColor
 
     entireAttributedText = NSMutableAttributedString.alloc(
     ).initWithAttributedString_(self.textView.attributedText)
@@ -163,12 +169,21 @@ class TextViewController(UIViewController):
 
     # Add bold attribute. Take the current font descriptor and create a new font descriptor with an additional bold trait.
     # 太字属性を追加します。現在のフォント記述子を使用して、追加の太字特性を持つ新しいフォント記述子を作成します。
-    #boldFontDescriptor = self.textView.font.fontDescriptor.fontDescriptorWithSymbolicTraits_(UIFontDescriptorSymbolicTraits.traitBold)
-    boldFontDescriptor = self.textView.font.fontDescriptor.fontDescriptorWithSymbolicTraits_(UIFontDescriptorSymbolicTraits.traitItalic)
-    #boldFontDescriptor = self.textView.font.fontDescriptor.fontDescriptorWithSymbolicTraits_(2)
-    pdbr.state(boldFontDescriptor)
-    #fontDescriptorWithSymbolicTraits_
-    print(boldFontDescriptor.symbolicTraits)
+    boldFontDescriptor = self.textView.font.fontDescriptor.fontDescriptorWithSymbolicTraits_(
+      UIFontDescriptorSymbolicTraits.traitBold)
+    boldFont = UIFont.fontWithDescriptor_size_(boldFontDescriptor, 0.0)
+
+    attributedText.addAttribute_value_range_(NSFontAttributeName, boldFont,
+                                             boldRange)
+
+    # Add highlight attribute.
+    attributedText.addAttribute_value_range_(NSBackgroundColorAttributeName,
+                                             UIColor.systemGreenColor(),
+                                             highlightedRange)
+    # Add underline attribute.
+    attributedText.addAttribute_value_range_(NSUnderlineStyleAttributeName,NSUnderlineStyle.single,underlinedRange)
+    
+    self.textView.attributedText = attributedText
 
   @objc_method
   def configureTextView(self):

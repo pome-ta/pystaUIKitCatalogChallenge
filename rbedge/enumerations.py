@@ -147,6 +147,7 @@ class UIImageRenderingMode:
 # ref: [NSUnderlineStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/nsunderlinestyle?language=objc)
 @dataclass
 class NSUnderlineStyle:
+  # ref: [NSAttributedString.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/NSAttributedString.rs.html#87)
   none: int = 0x00  # xxx: patternSolid ?
   single: int = 0x01
   thick: int = 0x02
