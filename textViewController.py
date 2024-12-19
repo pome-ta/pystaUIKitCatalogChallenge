@@ -7,7 +7,7 @@ import json
 
 from pyrubicon.objc.api import ObjCClass, NSString, NSData
 from pyrubicon.objc.api import objc_method, objc_property, objc_const
-from pyrubicon.objc.runtime import send_super, objc_id, load_library
+from pyrubicon.objc.runtime import send_super, objc_id, load_library, SEL
 from pyrubicon.objc.types import NSRange, CGPointMake, CGRect
 
 from rbedge.enumerations import (
@@ -35,6 +35,8 @@ NSAttributedString = ObjCClass('NSAttributedString')
 NSMutableAttributedString = ObjCClass('NSMutableAttributedString')
 NSTextAttachment = ObjCClass('NSTextAttachment')
 
+NSNotificationCenter = ObjCClass('NSNotificationCenter')
+
 UIColor = ObjCClass('UIColor')
 UIImage = ObjCClass('UIImage')
 UIImageSymbolConfiguration = ObjCClass('UIImageSymbolConfiguration')
@@ -48,6 +50,16 @@ NSBackgroundColorAttributeName = objc_const(UIKit,
                                             'NSBackgroundColorAttributeName')
 NSUnderlineStyleAttributeName = objc_const(UIKit,
                                            'NSUnderlineStyleAttributeName')
+UIKeyboardWillShowNotification = objc_const(UIKit,
+                                            'UIKeyboardWillShowNotification')
+UIKeyboardWillHideNotification = objc_const(UIKit,
+                                            'UIKeyboardWillHideNotification')
+UIKeyboardAnimationDurationUserInfoKey = objc_const(
+  UIKit, 'UIKeyboardAnimationDurationUserInfoKey')
+UIKeyboardFrameBeginUserInfoKey = objc_const(
+  UIKit, 'UIKeyboardFrameBeginUserInfoKey')
+UIKeyboardFrameEndUserInfoKey = objc_const(UIKit,
+                                           'UIKeyboardFrameEndUserInfoKey')
 
 
 def get_srgb_named_style(named: str,
@@ -126,8 +138,16 @@ class TextViewController(UIViewController):
                argtypes=[
                  ctypes.c_bool,
                ])
-    #pdbr.state(self.collectionView)
-    #print('viewWillAppear')
+    # Listen for changes to keyboard visibility so that we can adjust the text view's height accordingly.
+    notificationCenter = NSNotificationCenter.defaultCenter
+    
+    notificationCenter.addObserver_selector_name_object_(
+      self, SEL('handleKeyboardNotification:'), UIKeyboardWillShowNotification,
+      None)
+    notificationCenter.addObserver_selector_name_object_(
+      self, SEL('handleKeyboardNotification:'), UIKeyboardWillHideNotification,
+      None)
+    #pdbr.state(notificationCenter)
 
   @objc_method
   def viewDidDisappear_(self, animated: bool):
@@ -140,6 +160,18 @@ class TextViewController(UIViewController):
                ])
     #pdbr.state(self.collectionView)
     #print('viewDidDisappear')
+
+  # MARK: - Keyboard Event Notifications
+  @objc_method
+  def handleKeyboardNotification_(self, notification):
+    if (userInfo := notification.userInfo) is None:
+      return
+
+    # Get the animation duration.
+    animationDuration = 0
+    #print('hoge')
+    #pdbr.state(userInfo)
+    print(userInfo[UIKeyboardAnimationDurationUserInfoKey])
 
   # MARK: - Configuration
   @objc_method
@@ -273,9 +305,6 @@ class TextViewController(UIViewController):
         atIndex=insertPoint)
 
     # Add the image as an attachment.
-    scale = int(UIScreen.mainScreen.scale)
-    scale = 1
-    #print(scale)
     # xxx: `lambda` の使い方が悪い
     dataWithContentsOfURL = lambda path_str: NSData.dataWithContentsOfURL_(
       NSURL.fileURLWithPath_(str(Path(path_str).absolute())))
@@ -283,7 +312,7 @@ class TextViewController(UIViewController):
     text_view_attachment = './UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/text_view_attachment.imageset/Sunset_5.png'
 
     if (image := UIImage.alloc().initWithData_scale_(
-        dataWithContentsOfURL(text_view_attachment), scale)):
+        dataWithContentsOfURL(text_view_attachment), 1)):
       textAttachment = NSTextAttachment.alloc().init()
       textAttachment.image = image
       textAttachment.bounds = CGRect(CGPointMake(0.0, 0.0), image.size)
@@ -294,7 +323,7 @@ class TextViewController(UIViewController):
 
     # When turned on, this changes the rendering scale of the text to match the standard text scaling and preserves the original font point sizes when the contents of the text view are copied to the pasteboard. Apps that show a lot of text content, such as a text viewer or editor, should turn this on and use the standard text scaling.
     # オンにすると、標準のテキスト スケーリングに一致するようにテキストのレンダリング スケールが変更され、テキスト ビューの内容がペーストボードにコピーされるときに元のフォント ポイント サイズが保持されます。テキスト ビューアやエディタなど、多くのテキスト コンテンツを表示するアプリでは、これをオンにして、標準のテキスト スケーリングを使用する必要があります。
-    #self.textView.usesStandardTextScaling = True
+    self.textView.usesStandardTextScaling = True
     #self.textView.setUsesStandardTextScaling_(True)
 
 
