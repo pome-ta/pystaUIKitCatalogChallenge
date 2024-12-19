@@ -13,6 +13,7 @@ from pyrubicon.objc.types import NSRange
 from rbedge.enumerations import (
   UIUserInterfaceStyle,
   NSLineBreakMode,
+  UIFontDescriptorSymbolicTraits,
 )
 
 from pyLocalizedString import localizedString
@@ -162,6 +163,12 @@ class TextViewController(UIViewController):
 
     # Add bold attribute. Take the current font descriptor and create a new font descriptor with an additional bold trait.
     # 太字属性を追加します。現在のフォント記述子を使用して、追加の太字特性を持つ新しいフォント記述子を作成します。
+    #boldFontDescriptor = self.textView.font.fontDescriptor.fontDescriptorWithSymbolicTraits_(UIFontDescriptorSymbolicTraits.traitBold)
+    boldFontDescriptor = self.textView.font.fontDescriptor.fontDescriptorWithSymbolicTraits_(UIFontDescriptorSymbolicTraits.traitItalic)
+    #boldFontDescriptor = self.textView.font.fontDescriptor.fontDescriptorWithSymbolicTraits_(2)
+    pdbr.state(boldFontDescriptor)
+    #fontDescriptorWithSymbolicTraits_
+    print(boldFontDescriptor.symbolicTraits)
 
   @objc_method
   def configureTextView(self):
