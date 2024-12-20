@@ -588,3 +588,12 @@ class NSLayoutAttribute:
   centerYWithinMargins: int = 20
   notAnAttribute: int = 0
 
+
+# ref: [NSLayoutRelation | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/nslayoutconstraint/relation-swift.enum?language=objc)
+@dataclass
+class NSLayoutRelation:
+  # ref: [NSLayoutConstraint.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/NSLayoutConstraint.rs.html#28)
+  lessThanOrEqual: int = -1
+  equal: int = 0
+  greaterThanOrEqual: int = 1
+

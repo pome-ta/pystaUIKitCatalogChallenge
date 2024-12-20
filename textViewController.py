@@ -11,6 +11,7 @@ from pyrubicon.objc.runtime import send_super, objc_id, load_library, SEL
 from pyrubicon.objc.types import NSRange, CGPointMake, CGRect
 
 from rbedge.enumerations import (
+  NSLayoutAttribute,
   UIUserInterfaceStyle,
   NSLineBreakMode,
   UIFontDescriptorSymbolicTraits,
@@ -128,8 +129,12 @@ class TextViewController(UIViewController):
         areaLayoutGuide.leadingAnchor, 16.0),
     ])
     
+    #textViewBottomLayoutGuideConstraint = 
+    
     #addConstraints_
     #constraintWithItem_attribute_relatedBy_toItem_attribute_multiplier_constant_
+    
+    NSLayoutConstraint.constraintWithItem_attribute_relatedBy_toItem_attribute_multiplier_constant_()
     
     #pdbr.state(textView)
     pdbr.state(NSLayoutConstraint)
