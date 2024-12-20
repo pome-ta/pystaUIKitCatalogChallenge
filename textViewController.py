@@ -5,7 +5,7 @@ import ctypes
 from pathlib import Path
 import json
 
-from pyrubicon.objc.api import ObjCClass, NSString, NSData
+from pyrubicon.objc.api import ObjCClass, NSString, Block, NSData
 from pyrubicon.objc.api import objc_method, objc_property, objc_const
 from pyrubicon.objc.runtime import send_super, objc_id, load_library, SEL
 from pyrubicon.objc.types import NSRange, CGPointMake, CGRect
@@ -13,6 +13,7 @@ from pyrubicon.objc.types import NSRange, CGPointMake, CGRect
 from rbedge.enumerations import (
   NSLayoutAttribute,
   NSLayoutRelation,
+  UIViewAnimationCurve,
   UIUserInterfaceStyle,
   NSLineBreakMode,
   UIFontDescriptorSymbolicTraits,
@@ -39,8 +40,6 @@ NSTextAttachment = ObjCClass('NSTextAttachment')
 
 NSNotificationCenter = ObjCClass('NSNotificationCenter')
 UIViewPropertyAnimator = ObjCClass('UIViewPropertyAnimator')
-
-pdbr.state()
 
 UIColor = ObjCClass('UIColor')
 UIImage = ObjCClass('UIImage')
@@ -120,7 +119,6 @@ class TextViewController(UIViewController):
     # --- Layout
     self.view.addSubview_(textView)
     textView.translatesAutoresizingMaskIntoConstraints = False
-    
     '''
     areaLayoutGuide = self.view.safeAreaLayoutGuide
     #areaLayoutGuide = self.view
@@ -164,7 +162,6 @@ class TextViewController(UIViewController):
         safeAreaLayoutGuide, NSLayoutAttribute.leading, 1.0, 16.0),
     ])
 
-    
     self.textViewBottomLayoutGuideConstraint = textViewBottomLayoutGuideConstraint
     self.textView = textView
     self.configureTextView()
@@ -212,7 +209,7 @@ class TextViewController(UIViewController):
     # Get the animation duration.
     animationDuration = 0
     if (value := userInfo[UIKeyboardAnimationDurationUserInfoKey]):
-      animationDuration = value
+      animationDuration = value.doubleValue
 
     # Convert the keyboard frame from screen to view coordinates.
     keyboardScreenBeginFrame: CGRect
@@ -227,21 +224,25 @@ class TextViewController(UIViewController):
       keyboardScreenBeginFrame, self.view.window())
     keyboardViewEndFrame = self.view.convertRect_fromView_(
       keyboardScreenEndFrame, self.view.window())
-    
+
     originDelta = keyboardViewEndFrame.origin.y - keyboardViewBeginFrame.origin.y
 
     # The text view should be adjusted, update the constant for this constraint.
     self.textViewBottomLayoutGuideConstraint.constant += originDelta
-    
+
     # Inform the view that its autolayout constraints have changed and the layout should be updated.
     self.view.setNeedsUpdateConstraints()
-    
+
     # Animate updating the view's layout by calling layoutIfNeeded inside a `UIViewPropertyAnimator` animation block.
-    textViewAnimator=UIViewPropertyAnimator.alloc().initWithDuration_curve_animations_(animationDuration, )
-    print(self.textViewBottomLayoutGuideConstraint)
-    #pdbr.state(self.textViewBottomLayoutGuideConstraint)
-    #pdbr.state(self.view)
-    print('---')
+    textViewAnimator = UIViewPropertyAnimator.alloc(
+    ).initWithDuration_curve_animations_(
+      animationDuration, UIViewAnimationCurve.easeIn,
+      Block(lambda: self.view.layoutIfNeeded(), None))
+    textViewAnimator.startAnimation()
+
+    # Scroll to the selected text once the keyboard frame changes.
+    selectedRange = self.textView.selectedRange
+    self.textView.scrollRangeToVisible_(selectedRange)
 
   # MARK: - Configuration
   @objc_method
