@@ -38,6 +38,9 @@ NSMutableAttributedString = ObjCClass('NSMutableAttributedString')
 NSTextAttachment = ObjCClass('NSTextAttachment')
 
 NSNotificationCenter = ObjCClass('NSNotificationCenter')
+UIViewPropertyAnimator = ObjCClass('UIViewPropertyAnimator')
+
+pdbr.state()
 
 UIColor = ObjCClass('UIColor')
 UIImage = ObjCClass('UIImage')
@@ -117,9 +120,10 @@ class TextViewController(UIViewController):
     # --- Layout
     self.view.addSubview_(textView)
     textView.translatesAutoresizingMaskIntoConstraints = False
+    
+    '''
     areaLayoutGuide = self.view.safeAreaLayoutGuide
     #areaLayoutGuide = self.view
-    '''
     
     NSLayoutConstraint.activateConstraints_([
       textView.bottomAnchor.constraintEqualToAnchor_constant_(
@@ -134,16 +138,6 @@ class TextViewController(UIViewController):
 
     layoutMarginsGuide = self.view.layoutMarginsGuide
     safeAreaLayoutGuide = self.view.safeAreaLayoutGuide
-
-    #textViewBottomLayoutGuideConstraint =
-
-    #addConstraints_
-    #constraintWithItem_attribute_relatedBy_toItem_attribute_multiplier_constant_
-
-    #textViewBottomLayoutGuideConstraint = NSLayoutConstraint.constraintWithItem_attribute_relatedBy_toItem_attribute_multiplier_constant_(textView, NSLayoutAttribute.bottom, NSLayoutRelation.equal, safeAreaLayoutGuide, NSLayoutAttribute.bottom, 1.0, 20.0)
-
-    #NSLayoutAttribute,
-    #NSLayoutRelation,
 
     textViewBottomLayoutGuideConstraint = NSLayoutConstraint.constraintWithItem(
       textView,
@@ -170,9 +164,8 @@ class TextViewController(UIViewController):
         safeAreaLayoutGuide, NSLayoutAttribute.leading, 1.0, 16.0),
     ])
 
-    #pdbr.state(textView)
-    #pdbr.state(textViewBottomLayoutGuideConstraint)
-    #self.textViewBottomLayoutGuideConstraint = textView.bottomAnchor
+    
+    self.textViewBottomLayoutGuideConstraint = textViewBottomLayoutGuideConstraint
     self.textView = textView
     self.configureTextView()
 
@@ -194,7 +187,6 @@ class TextViewController(UIViewController):
     notificationCenter.addObserver_selector_name_object_(
       self, SEL('handleKeyboardNotification:'), UIKeyboardWillHideNotification,
       None)
-    #pdbr.state(notificationCenter)
 
   @objc_method
   def viewDidDisappear_(self, animated: bool):
@@ -235,19 +227,21 @@ class TextViewController(UIViewController):
       keyboardScreenBeginFrame, self.view.window())
     keyboardViewEndFrame = self.view.convertRect_fromView_(
       keyboardScreenEndFrame, self.view.window())
-    #pdbr.state(keyboardScreenBeginFrame)
-    #print(keyboardScreenBeginFrame)
-    #print(self.view)
-    #pdbr.state(self.view.window)
-    #print(self.view.window())
-    #pdbr.state(self.view.window())
-    #print(self.view)
+    
     originDelta = keyboardViewEndFrame.origin.y - keyboardViewBeginFrame.origin.y
 
     # The text view should be adjusted, update the constant for this constraint.
-    #print(self.textViewBottomLayoutGuideConstraint)
+    self.textViewBottomLayoutGuideConstraint.constant += originDelta
+    
+    # Inform the view that its autolayout constraints have changed and the layout should be updated.
+    self.view.setNeedsUpdateConstraints()
+    
+    # Animate updating the view's layout by calling layoutIfNeeded inside a `UIViewPropertyAnimator` animation block.
+    textViewAnimator=UIViewPropertyAnimator.alloc().initWithDuration_curve_animations_(animationDuration, )
+    print(self.textViewBottomLayoutGuideConstraint)
     #pdbr.state(self.textViewBottomLayoutGuideConstraint)
-    #print('---')
+    #pdbr.state(self.view)
+    print('---')
 
   # MARK: - Configuration
   @objc_method

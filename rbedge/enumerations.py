@@ -597,3 +597,13 @@ class NSLayoutRelation:
   equal: int = 0
   greaterThanOrEqual: int = 1
 
+
+# ref: [UIViewAnimationCurve | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uiview/animationcurve?language=objc)
+@dataclass
+class UIViewAnimationCurve:
+  # ref: [UIView.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UIView.rs.html#14)
+  easeInOut: int = 0
+  easeIn: int = 1
+  easeOut: int = 2
+  linear: int = 3
+
