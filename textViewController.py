@@ -120,6 +120,7 @@ class TextViewController(UIViewController):
     areaLayoutGuide = self.view.safeAreaLayoutGuide
     #areaLayoutGuide = self.view
     '''
+    
     NSLayoutConstraint.activateConstraints_([
       textView.bottomAnchor.constraintEqualToAnchor_constant_(
         areaLayoutGuide.bottomAnchor, -20.0),
@@ -151,7 +152,7 @@ class TextViewController(UIViewController):
       toItem=safeAreaLayoutGuide,
       attribute__2=NSLayoutAttribute.bottom,
       multiplier=1.0,
-      constant=20.0)
+      constant=-20.0)
 
     self.view.addConstraints_([
       textViewBottomLayoutGuideConstraint,
@@ -168,6 +169,7 @@ class TextViewController(UIViewController):
         textView, NSLayoutAttribute.leading, NSLayoutRelation.equal,
         safeAreaLayoutGuide, NSLayoutAttribute.leading, 1.0, 16.0),
     ])
+
     #pdbr.state(textView)
     #pdbr.state(textViewBottomLayoutGuideConstraint)
     #self.textViewBottomLayoutGuideConstraint = textView.bottomAnchor
