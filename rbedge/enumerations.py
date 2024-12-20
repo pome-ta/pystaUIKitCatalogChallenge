@@ -561,3 +561,30 @@ class UIFontDescriptorSymbolicTraits:
   classScripts: int = 10 << 28
   classSymbolic: int = 12 << 28
 
+
+# ref: [NSLayoutAttribute | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/nslayoutconstraint/attribute?language=objc)
+@dataclass
+class NSLayoutAttribute:
+  # ref [NSLayoutConstraint.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/NSLayoutConstraint.rs.html#49)
+  left: int = 1
+  right: int = 2
+  top: int = 3
+  bottom: int = 4
+  leading: int = 5
+  trailing: int = 6
+  width: int = 7
+  height: int = 8
+  centerX: int = 9
+  centerY: int = 10
+  lastBaseline: int = 11
+  firstBaseline: int = 12
+  leftMargin: int = 13
+  rightMargin: int = 14
+  topMargin: int = 15
+  bottomMargin: int = 16
+  leadingMargin: int = 17
+  trailingMargin: int = 18
+  centerXWithinMargins: int = 19
+  centerYWithinMargins: int = 20
+  notAnAttribute: int = 0
+

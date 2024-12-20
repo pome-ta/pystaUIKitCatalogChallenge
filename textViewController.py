@@ -25,6 +25,7 @@ UIKit = load_library('UIKit')  # todo: `objc_const` 用
 UIViewController = ObjCClass('UIViewController')
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
 
+
 UIScreen = ObjCClass('UIScreen')
 NSURL = ObjCClass('NSURL')
 
@@ -126,6 +127,13 @@ class TextViewController(UIViewController):
       textView.leadingAnchor.constraintEqualToAnchor_constant_(
         areaLayoutGuide.leadingAnchor, 16.0),
     ])
+    
+    #addConstraints_
+    #constraintWithItem_attribute_relatedBy_toItem_attribute_multiplier_constant_
+    
+    #pdbr.state(textView)
+    pdbr.state(NSLayoutConstraint)
+    self.textViewBottomLayoutGuideConstraint = textView.bottomAnchor
     self.textView = textView
     self.configureTextView()
 
@@ -140,7 +148,7 @@ class TextViewController(UIViewController):
                ])
     # Listen for changes to keyboard visibility so that we can adjust the text view's height accordingly.
     notificationCenter = NSNotificationCenter.defaultCenter
-    
+
     notificationCenter.addObserver_selector_name_object_(
       self, SEL('handleKeyboardNotification:'), UIKeyboardWillShowNotification,
       None)
@@ -158,8 +166,11 @@ class TextViewController(UIViewController):
                argtypes=[
                  ctypes.c_bool,
                ])
-    #pdbr.state(self.collectionView)
-    #print('viewDidDisappear')
+    notificationCenter = NSNotificationCenter.defaultCenter
+    notificationCenter.removeObserver_name_object_(
+      self, UIKeyboardWillShowNotification, None)
+    notificationCenter.removeObserver_name_object_(
+      self, UIKeyboardWillHideNotification, None)
 
   # MARK: - Keyboard Event Notifications
   @objc_method
@@ -169,9 +180,35 @@ class TextViewController(UIViewController):
 
     # Get the animation duration.
     animationDuration = 0
-    #print('hoge')
-    #pdbr.state(userInfo)
-    print(userInfo[UIKeyboardAnimationDurationUserInfoKey])
+    if (value := userInfo[UIKeyboardAnimationDurationUserInfoKey]):
+      animationDuration = value
+
+    # Convert the keyboard frame from screen to view coordinates.
+    keyboardScreenBeginFrame: CGRect
+    if (value := userInfo[UIKeyboardFrameBeginUserInfoKey]):
+      keyboardScreenBeginFrame = value.CGRectValue
+
+    keyboardScreenEndFrame: CGRect
+    if (value := userInfo[UIKeyboardFrameEndUserInfoKey]):
+      keyboardScreenEndFrame = value.CGRectValue
+
+    keyboardViewBeginFrame = self.view.convertRect_fromView_(
+      keyboardScreenBeginFrame, self.view.window())
+    keyboardViewEndFrame = self.view.convertRect_fromView_(
+      keyboardScreenEndFrame, self.view.window())
+    #pdbr.state(keyboardScreenBeginFrame)
+    #print(keyboardScreenBeginFrame)
+    #print(self.view)
+    #pdbr.state(self.view.window)
+    #print(self.view.window())
+    #pdbr.state(self.view.window())
+    #print(self.view)
+    originDelta = keyboardViewEndFrame.origin.y - keyboardViewBeginFrame.origin.y
+    
+    # The text view should be adjusted, update the constant for this constraint.
+    #print(self.textViewBottomLayoutGuideConstraint)
+    #pdbr.state(self.textViewBottomLayoutGuideConstraint)
+    #print('---')
 
   # MARK: - Configuration
   @objc_method
@@ -267,8 +304,8 @@ class TextViewController(UIViewController):
 
     _color_named = get_srgb_named_style(
       'text_view_background', self.traitCollection.userInterfaceStyle)
-    self.textView.backgroundColor = UIColor.colorWithRed_green_blue_alpha_(
-      *_color_named)
+    #self.textView.backgroundColor = UIColor.colorWithRed_green_blue_alpha_(*_color_named)
+    self.textView.backgroundColor = UIColor.redColor
 
     self.textView.isScrollEnabled = True
 
