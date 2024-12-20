@@ -12,6 +12,7 @@ from pyrubicon.objc.types import NSRange, CGPointMake, CGRect
 
 from rbedge.enumerations import (
   NSLayoutAttribute,
+  NSLayoutRelation,
   UIUserInterfaceStyle,
   NSLineBreakMode,
   UIFontDescriptorSymbolicTraits,
@@ -25,7 +26,6 @@ from rbedge import pdbr
 UIKit = load_library('UIKit')  # todo: `objc_const` 用
 UIViewController = ObjCClass('UIViewController')
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
-
 
 UIScreen = ObjCClass('UIScreen')
 NSURL = ObjCClass('NSURL')
@@ -119,6 +119,7 @@ class TextViewController(UIViewController):
     textView.translatesAutoresizingMaskIntoConstraints = False
     areaLayoutGuide = self.view.safeAreaLayoutGuide
     #areaLayoutGuide = self.view
+    '''
     NSLayoutConstraint.activateConstraints_([
       textView.bottomAnchor.constraintEqualToAnchor_constant_(
         areaLayoutGuide.bottomAnchor, -20.0),
@@ -128,17 +129,48 @@ class TextViewController(UIViewController):
       textView.leadingAnchor.constraintEqualToAnchor_constant_(
         areaLayoutGuide.leadingAnchor, 16.0),
     ])
-    
-    #textViewBottomLayoutGuideConstraint = 
-    
+    '''
+
+    layoutMarginsGuide = self.view.layoutMarginsGuide
+    safeAreaLayoutGuide = self.view.safeAreaLayoutGuide
+
+    #textViewBottomLayoutGuideConstraint =
+
     #addConstraints_
     #constraintWithItem_attribute_relatedBy_toItem_attribute_multiplier_constant_
-    
-    NSLayoutConstraint.constraintWithItem_attribute_relatedBy_toItem_attribute_multiplier_constant_()
-    
+
+    #textViewBottomLayoutGuideConstraint = NSLayoutConstraint.constraintWithItem_attribute_relatedBy_toItem_attribute_multiplier_constant_(textView, NSLayoutAttribute.bottom, NSLayoutRelation.equal, safeAreaLayoutGuide, NSLayoutAttribute.bottom, 1.0, 20.0)
+
+    #NSLayoutAttribute,
+    #NSLayoutRelation,
+
+    textViewBottomLayoutGuideConstraint = NSLayoutConstraint.constraintWithItem(
+      textView,
+      attribute__1=NSLayoutAttribute.bottom,
+      relatedBy=NSLayoutRelation.equal,
+      toItem=safeAreaLayoutGuide,
+      attribute__2=NSLayoutAttribute.bottom,
+      multiplier=1.0,
+      constant=20.0)
+
+    self.view.addConstraints_([
+      textViewBottomLayoutGuideConstraint,
+      NSLayoutConstraint.
+      constraintWithItem_attribute_relatedBy_toItem_attribute_multiplier_constant_(
+        textView, NSLayoutAttribute.top, NSLayoutRelation.equal,
+        safeAreaLayoutGuide, NSLayoutAttribute.top, 1.0, 0.0),
+      NSLayoutConstraint.
+      constraintWithItem_attribute_relatedBy_toItem_attribute_multiplier_constant_(
+        textView, NSLayoutAttribute.trailing, NSLayoutRelation.equal,
+        safeAreaLayoutGuide, NSLayoutAttribute.trailing, 1.0, -16.0),
+      NSLayoutConstraint.
+      constraintWithItem_attribute_relatedBy_toItem_attribute_multiplier_constant_(
+        textView, NSLayoutAttribute.leading, NSLayoutRelation.equal,
+        safeAreaLayoutGuide, NSLayoutAttribute.leading, 1.0, 16.0),
+    ])
     #pdbr.state(textView)
-    pdbr.state(NSLayoutConstraint)
-    self.textViewBottomLayoutGuideConstraint = textView.bottomAnchor
+    #pdbr.state(textViewBottomLayoutGuideConstraint)
+    #self.textViewBottomLayoutGuideConstraint = textView.bottomAnchor
     self.textView = textView
     self.configureTextView()
 
@@ -209,7 +241,7 @@ class TextViewController(UIViewController):
     #pdbr.state(self.view.window())
     #print(self.view)
     originDelta = keyboardViewEndFrame.origin.y - keyboardViewBeginFrame.origin.y
-    
+
     # The text view should be adjusted, update the constant for this constraint.
     #print(self.textViewBottomLayoutGuideConstraint)
     #pdbr.state(self.textViewBottomLayoutGuideConstraint)
