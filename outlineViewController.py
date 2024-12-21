@@ -30,6 +30,7 @@ from stepperViewController import StepperViewController
 # --- --- viewsOutlineItem
 from activityIndicatorViewController import ActivityIndicatorViewController
 from alertControllerViewController import AlertControllerViewController
+from textViewController import TextViewController
 # --- /
 
 UIKit = load_library('UIKit')  # todo: `objc_const` 用
@@ -189,7 +190,7 @@ viewsOutlineItem = OutlineItem(
                 storyboardName=AlertControllerViewController),
     OutlineItem(title='TextViewTitle',
                 imageName=None,
-                storyboardName='TextViewController'),
+                storyboardName=TextViewController),
     OutlineItem(title='ImagesTitle',
                 imageName='photo',
                 subitems=[

@@ -19,6 +19,7 @@ from rbedge.enumerations import (
   UIFontDescriptorSymbolicTraits,
   NSUnderlineStyle,
   UIImageRenderingMode,
+  UIBarButtonSystemItem,
 )
 
 from pyLocalizedString import localizedString
@@ -40,6 +41,8 @@ NSTextAttachment = ObjCClass('NSTextAttachment')
 
 NSNotificationCenter = ObjCClass('NSNotificationCenter')
 UIViewPropertyAnimator = ObjCClass('UIViewPropertyAnimator')
+
+UIBarButtonItem = ObjCClass('UIBarButtonItem')
 
 UIColor = ObjCClass('UIColor')
 UIImage = ObjCClass('UIImage')
@@ -109,6 +112,7 @@ class TextViewController(UIViewController):
   @objc_method
   def viewDidLoad(self):
     send_super(__class__, self, 'viewDidLoad')
+    self.navigationItem.title = localizedString('TextViewTitle')
     self.view.backgroundColor = UIColor.systemBackgroundColor()
 
     textView = UITextView.alloc().initWithFrame_(self.view.bounds)
@@ -119,20 +123,6 @@ class TextViewController(UIViewController):
     # --- Layout
     self.view.addSubview_(textView)
     textView.translatesAutoresizingMaskIntoConstraints = False
-    '''
-    areaLayoutGuide = self.view.safeAreaLayoutGuide
-    #areaLayoutGuide = self.view
-    
-    NSLayoutConstraint.activateConstraints_([
-      textView.bottomAnchor.constraintEqualToAnchor_constant_(
-        areaLayoutGuide.bottomAnchor, -20.0),
-      textView.topAnchor.constraintEqualToAnchor_(areaLayoutGuide.topAnchor),
-      textView.trailingAnchor.constraintEqualToAnchor_constant_(
-        areaLayoutGuide.trailingAnchor, -16.0),
-      textView.leadingAnchor.constraintEqualToAnchor_constant_(
-        areaLayoutGuide.leadingAnchor, 16.0),
-    ])
-    '''
 
     layoutMarginsGuide = self.view.layoutMarginsGuide
     safeAreaLayoutGuide = self.view.safeAreaLayoutGuide
@@ -164,6 +154,7 @@ class TextViewController(UIViewController):
 
     self.textViewBottomLayoutGuideConstraint = textViewBottomLayoutGuideConstraint
     self.textView = textView
+    self.textView.delegate = self
     self.configureTextView()
 
   @objc_method
@@ -252,7 +243,7 @@ class TextViewController(UIViewController):
     # The text should be white in dark mode.
     if self.traitCollection.userInterfaceStyle == UIUserInterfaceStyle.dark:
       entireTextColor = UIColor.whiteColor
-      #entireTextColor = UIColor.redColor
+      #entireTextColor = UIColor.redColor  # todo: 確認用
 
     entireAttributedText = NSMutableAttributedString.alloc(
     ).initWithAttributedString_(self.textView.attributedText)
@@ -338,8 +329,9 @@ class TextViewController(UIViewController):
 
     _color_named = get_srgb_named_style(
       'text_view_background', self.traitCollection.userInterfaceStyle)
-    #self.textView.backgroundColor = UIColor.colorWithRed_green_blue_alpha_(*_color_named)
-    self.textView.backgroundColor = UIColor.redColor
+    self.textView.backgroundColor = UIColor.colorWithRed_green_blue_alpha_(
+      *_color_named)
+    #self.textView.backgroundColor = UIColor.redColor  # todo: 確認用
 
     self.textView.isScrollEnabled = True
 
@@ -396,6 +388,41 @@ class TextViewController(UIViewController):
     # オンにすると、標準のテキスト スケーリングに一致するようにテキストのレンダリング スケールが変更され、テキスト ビューの内容がペーストボードにコピーされるときに元のフォント ポイント サイズが保持されます。テキスト ビューアやエディタなど、多くのテキスト コンテンツを表示するアプリでは、これをオンにして、標準のテキスト スケーリングを使用する必要があります。
     self.textView.usesStandardTextScaling = True
     #self.textView.setUsesStandardTextScaling_(True)
+
+  # MARK: - Actions
+  @objc_method
+  def doneBarButtonItemClicked(self):
+    # Dismiss the keyboard by removing it as the first responder.
+    self.textView.resignFirstResponder()
+    # todo: (独自実装) 全体実行と単体実行での場合分け
+    if self.rightBarButtonItems is None:
+      self.navigationItem.setRightBarButtonItem_animated_(None, True)
+    else:
+      self.navigationItem.setRightBarButtonItems_animated_([
+        *self.rightBarButtonItems,
+      ], True)
+
+  # MARK: - UITextViewDelegate
+  @objc_method
+  def textViewDidBeginEditing_(self, textView):
+    # Provide a "Done" button for the user to end text editing
+    doneBarButtonItem = UIBarButtonItem.alloc(
+    ).initWithBarButtonSystemItem_target_action_(
+      UIBarButtonSystemItem.done, self, SEL('doneBarButtonItemClicked'))
+
+    # todo: (独自実装) 全体実行と単体実行での場合分け
+    self.rightBarButtonItems = rightBarButtonItems if (
+      rightBarButtonItems := self.navigationItem.rightBarButtonItems
+    ) is None else list(rightBarButtonItems)
+
+    if self.rightBarButtonItems is None:
+      self.navigationItem.setRightBarButtonItem_animated_(
+        doneBarButtonItem, True)
+    else:
+      self.navigationItem.setRightBarButtonItems_animated_([
+        *self.rightBarButtonItems,
+        doneBarButtonItem,
+      ], True)
 
 
 if __name__ == '__main__':
