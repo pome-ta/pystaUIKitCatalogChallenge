@@ -22,6 +22,7 @@ NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
 UIImageView = ObjCClass('UIImageView')
 UIImage = ObjCClass('UIImage')
 NSURL = ObjCClass('NSURL')
+UIToolTipInteraction = ObjCClass('UIToolTipInteraction')
 
 UIColor = ObjCClass('UIColor')
 
@@ -32,15 +33,14 @@ class ImageViewController(UIViewController):
   @objc_method
   def viewDidLoad(self):
     send_super(__class__, self, 'viewDidLoad')
-    self.navigationItem.title = localizedString('ImageViewTitle')
-    #self.view.backgroundColor = UIColor.systemBackgroundColor()
-    self.view.backgroundColor = UIColor.systemIndigoColor()
+    self.navigationItem.title = localizedString('ImageViewTitle') if (
+      title := self.navigationItem.title) is None else title
+
+    self.view.backgroundColor = UIColor.systemBackgroundColor()
+    #self.view.backgroundColor = UIColor.systemIndigoColor()
 
     imageView = UIImageView.alloc().init()
-    #imageView = UIImageView.alloc().initWithFrame_(CGRect((0.0, 0.0), (375.0, 667.0)))
-    #imageView.autoresizingMask = UIViewAutoresizing.flexibleWidth | UIViewAutoresizing.flexibleHeight
-
-    imageView.backgroundColor = UIColor.systemOrangeColor()
+    #imageView.backgroundColor = UIColor.systemOrangeColor()
 
     # --- Layout
     self.view.addSubview_(imageView)
@@ -68,12 +68,12 @@ class ImageViewController(UIViewController):
     # ビュー コントローラーのルート ビューは Interface Builder で設定され、UIImageView です。
     # todo: 上記コメントと実装方法が違う。`self.imageView` は`self.view` で`addSubview_` してる。
     if (imageView := self.imageView).isKindOfClass_(UIImageView):
-      # Fetch the images (each image is of the format Flowers_number).
       # xxx: `lambda` の使い方が悪い
       flowers_str = lambda index: f'./UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/Flowers_{index}.imageset/Flowers_{index}.png'
       dataWithContentsOfURL = lambda path_str: NSData.dataWithContentsOfURL_(
         NSURL.fileURLWithPath_(str(Path(path_str).absolute())))
 
+      # Fetch the images (each image is of the format Flowers_number).
       self.imageView.animationImages = [
         UIImage.alloc().initWithData_scale_(
           dataWithContentsOfURL(flowers_str(i)), 1) for i in range(1, 3)
@@ -84,7 +84,13 @@ class ImageViewController(UIViewController):
       self.imageView.animationDuration = 5
       self.imageView.startAnimating()
 
-      #pdbr.state(self.imageView)
+      self.imageView.isAccessibilityElement = True
+      self.imageView.accessibilityLabel = localizedString('Animated')
+
+      if True:  # wip: `available(iOS 15, *)`
+        interaction = UIToolTipInteraction.alloc().initWithDefaultToolTip_(
+          localizedString('ImageToolTipTitle'))
+        self.imageView.addInteraction_(interaction)
 
 
 if __name__ == '__main__':
