@@ -39,7 +39,7 @@ class RootNavigationController(UINavigationController,
     extendedLayout = UIRectEdge.none
     viewController.setEdgesForExtendedLayout_(extendedLayout)
 
-    barButtonSystemItem = UIBarButtonSystemItem.done
+    barButtonSystemItem = UIBarButtonSystemItem.close
     doneButton = UIBarButtonItem.alloc(
     ).initWithBarButtonSystemItem_target_action_(barButtonSystemItem,
                                                  navigationController,
