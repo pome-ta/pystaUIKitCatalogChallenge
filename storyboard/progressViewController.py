@@ -1,10 +1,15 @@
 from pyrubicon.objc.api import ObjCClass, objc_method
 from pyrubicon.objc.types import CGRectMake
 
-from ._prototype import CustomTableViewCell
+from rbedge.enumerations import UIProgressViewStyle
 from rbedge import pdbr
 
-UISwitch = ObjCClass('UISwitch')
+from ._prototype import CustomTableViewCell
+
+
+
+
+
 UIProgressView = ObjCClass('UIProgressView')
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
 
@@ -28,8 +33,7 @@ class DefaultProgress(CustomTableViewCell):
 
   @objc_method
   def overrideCell(self):
-    switch = UISwitch.alloc().initWithFrame_(CGRectMake(
-      163.5, 6.5, 51.0, 31.0)).autorelease()
+    progressView = UIProgressView.alloc().initWithProgressViewStyle_().autorelease()
     
     switch.translatesAutoresizingMaskIntoConstraints = False
     self.contentView.addSubview_(switch)
