@@ -1,8 +1,10 @@
 from pyrubicon.objc.api import ObjCClass, objc_method
-from pyrubicon.objc.types import CGRectMake
+from pyrubicon.objc.types import CGRectMake, NSMakeSize
+
+from rbedge.enumerations import UIViewContentMode
+from rbedge import pdbr
 
 from ._prototype import CustomTableViewCell
-from rbedge import pdbr
 
 UIImageView = ObjCClass('UIImageView')
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
@@ -31,6 +33,7 @@ class TintedSymbol(CustomTableViewCell):
     _height = 40.0
     imageView = UIImageView.alloc().initWithFrame_(
       CGRectMake(167.5, 2.0, _width, _height)).autorelease()
+    imageView.contentMode = UIViewContentMode.scaleAspectFit
 
     imageView.translatesAutoresizingMaskIntoConstraints = False
     self.contentView.addSubview_(imageView)
@@ -54,6 +57,7 @@ class PreferringMultiColorSymbol(CustomTableViewCell):
     _height = 40.0
     imageView = UIImageView.alloc().initWithFrame_(
       CGRectMake(167.5, 2.0, _width, _height)).autorelease()
+    imageView.contentMode = UIViewContentMode.scaleAspectFit
 
     imageView.translatesAutoresizingMaskIntoConstraints = False
     self.contentView.addSubview_(imageView)
@@ -77,9 +81,14 @@ class LargeSizeSymbol(CustomTableViewCell):
     _height = 87.0
     imageView = UIImageView.alloc().initWithFrame_(
       CGRectMake(146.5, 0.0, _width, _height)).autorelease()
+    imageView.contentMode = UIViewContentMode.scaleAspectFit
 
     imageView.translatesAutoresizingMaskIntoConstraints = False
     self.contentView.addSubview_(imageView)
+
+    # 高さを指定: デフォルトが44.0 のため、この要素のみ反映
+    _size = NSMakeSize(self.contentView.size.width, _height)
+    self.contentView.setSize_(_size)
 
     NSLayoutConstraint.activateConstraints_([
       imageView.widthAnchor.constraintEqualToConstant_(_width),
@@ -100,6 +109,7 @@ class PaletteColorsSymbol(CustomTableViewCell):
     _height = 40.0
     imageView = UIImageView.alloc().initWithFrame_(
       CGRectMake(167.5, 2.0, _width, _height)).autorelease()
+    imageView.contentMode = UIViewContentMode.scaleAspectFit
 
     imageView.translatesAutoresizingMaskIntoConstraints = False
     self.contentView.addSubview_(imageView)
@@ -123,6 +133,7 @@ class PlainSymbol(CustomTableViewCell):
     _height = 40.0
     imageView = UIImageView.alloc().initWithFrame_(
       CGRectMake(167.5, 2.0, _width, _height)).autorelease()
+    imageView.contentMode = UIViewContentMode.scaleAspectFit
 
     imageView.translatesAutoresizingMaskIntoConstraints = False
     self.contentView.addSubview_(imageView)
@@ -146,6 +157,7 @@ class HierarchicalColorSymbol(CustomTableViewCell):
     _height = 40.0
     imageView = UIImageView.alloc().initWithFrame_(
       CGRectMake(167.5, 2.0, _width, _height)).autorelease()
+    imageView.contentMode = UIViewContentMode.scaleAspectFit
 
     imageView.translatesAutoresizingMaskIntoConstraints = False
     self.contentView.addSubview_(imageView)
