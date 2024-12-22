@@ -32,6 +32,7 @@ from activityIndicatorViewController import ActivityIndicatorViewController
 from alertControllerViewController import AlertControllerViewController
 from textViewController import TextViewController
 from imageViewController import ImageViewController
+from symbolViewController import SymbolViewController
 # --- /
 
 UIKit = load_library('UIKit')  # todo: `objc_const` 用
@@ -200,7 +201,7 @@ viewsOutlineItem = OutlineItem(
                               storyboardName=ImageViewController),
                   OutlineItem(title='SymbolsTitle',
                               imageName=None,
-                              storyboardName='SymbolViewController'),
+                              storyboardName=SymbolViewController),
                 ]),
     OutlineItem(title='ProgressViewsTitle',
                 imageName=None,
