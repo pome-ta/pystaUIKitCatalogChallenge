@@ -60,7 +60,6 @@ class SymbolViewController(BaseTableViewController):
     self.navigationItem.title = localizedString('SymbolsTitle') if (
       title := self.navigationItem.title) is None else title
 
-    '''
     self.testCells.extend([
       CaseElement(localizedString('PlainSymbolTitle'),
                   SymbolKind.plainSymbol.value, self.configurePlainSymbol_),
@@ -70,45 +69,26 @@ class SymbolViewController(BaseTableViewController):
                   SymbolKind.largeSizeSymbol.value,
                   self.configureLargeSizeSymbol_),
     ])
-    '''
-    
-    self.testCells.extend([
-      CaseElement(localizedString('LargeSymbolTitle'),
-                  SymbolKind.largeSizeSymbol.value,
-                  self.configureLargeSizeSymbol_),
-    ])
-
-  @objc_method
-  def viewWillAppear_(self, animated: bool):
-    import ctypes
-    send_super(__class__,
-               self,
-               'viewWillAppear:',
-               animated,
-               argtypes=[
-                 ctypes.c_bool,
-               ])
-    # ---
-    #pdbr.state(self)
-    
-
-
-
+    if True:  # wip: `available(iOS 15, *)`
+      # These type SF Sybols, and variants are available on iOS 15, Mac Catalyst 15 or later.
+      self.testCells.extend([
+        CaseElement(localizedString('HierarchicalSymbolTitle'),
+                    SymbolKind.hierarchicalColorSymbol.value,
+                    self.configureHierarchicalSymbol_),
+        CaseElement(localizedString('PaletteSymbolTitle'),
+                    SymbolKind.paletteColorsSymbol.value,
+                    self.configurePaletteColorsSymbol_),
+        CaseElement(localizedString('PreferringMultiColorSymbolTitle'),
+                    SymbolKind.preferringMultiColorSymbol.value,
+                    self.configurePreferringMultiColorSymbol_),
+      ])
 
   # MARK: - UITableViewDataSource
-  
   @objc_method
-  def tableView_heightForRowAtIndexPath_(self, tableView, indexPath)->float:
+  def tableView_heightForRowAtIndexPath_(self, tableView, indexPath) -> float:
     cellTest = self.testCells[indexPath.section]
     cell = tableView.dequeueReusableCellWithIdentifier_(cellTest.cellID)
-    #print(cellTest.cellID)
-    #pdbr.state(tableView)
-    #print(cell.contentView.bounds.size.height)
-    #pdbr.state(cell.contentView)
     return cell.contentView.bounds.size.height
-    #return 200
-  
-  
 
   # MARK: - Configuration
   @objc_method
@@ -126,13 +106,43 @@ class SymbolViewController(BaseTableViewController):
   def configureLargeSizeSymbol_(self, imageView):
     image = UIImage.systemImageNamed_('cloud.sun.rain.fill')
     imageView.image = image
-    #pdbr.state(imageView)
-    #print(imageView)
-
     symbolConfig = UIImageSymbolConfiguration.configurationWithPointSize_weight_scale_(
       32.0, UIImageSymbolWeight.heavy, UIImageSymbolScale.large)
     imageView.preferredSymbolConfiguration = symbolConfig
-    
+
+  # @available(iOS 15.0, *)
+  @objc_method
+  def configureHierarchicalSymbol_(self, imageView):
+    imageConfig = UIImageSymbolConfiguration.configurationWithHierarchicalColor_(
+      UIColor.systemRedColor())
+
+    hierarchicalSymbol = UIImage.systemImageNamed_('cloud.sun.rain.fill')
+    imageView.image = hierarchicalSymbol
+    imageView.preferredSymbolConfiguration = imageConfig
+
+  # @available(iOS 15.0, *)
+  @objc_method
+  def configurePaletteColorsSymbol_(self, imageView):
+    palleteSymbolConfig = UIImageSymbolConfiguration.configurationWithPaletteColors_(
+      [
+        UIColor.systemRedColor(),
+        UIColor.systemOrangeColor(),
+        UIColor.systemYellowColor(),
+      ])
+
+    palleteSymbol = UIImage.systemImageNamed_('battery.100.bolt')
+    imageView.image = palleteSymbol
+    imageView.backgroundColor = UIColor.darkTextColor()
+    imageView.preferredSymbolConfiguration = palleteSymbolConfig
+
+  # @available(iOS 15.0, *)
+  @objc_method
+  def configurePreferringMultiColorSymbol_(self, imageView):
+    preferredSymbolConfig = UIImageSymbolConfiguration.configurationPreferringMulticolor(
+    )
+    preferredSymbol = UIImage.systemImageNamed_('circle.hexagongrid.fill')
+    imageView.image = preferredSymbol
+    imageView.preferredSymbolConfiguration = preferredSymbolConfig
 
 
 if __name__ == '__main__':
