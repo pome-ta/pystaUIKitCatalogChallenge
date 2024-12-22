@@ -607,3 +607,10 @@ class UIViewAnimationCurve:
   easeOut: int = 2
   linear: int = 3
 
+
+# ref: [UIProgressViewStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uiprogressview/style?language=objc)
+@dataclass
+class UIProgressViewStyle:
+  default: int = 0
+  bar: int = 1
+
