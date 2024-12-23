@@ -17,6 +17,8 @@ from rbedge import pdbr
 from baseTableViewController import BaseTableViewController
 from storyboard.progressViewController import prototypes
 
+NSProgress = ObjCClass('NSProgress')
+
 UIColor = ObjCClass('UIColor')
 
 
@@ -39,6 +41,17 @@ class ProgressViewController(BaseTableViewController):
     self.initPrototype()
 
     return self
+
+  '''
+  @objc_method
+  def initWithStyle_(self, style):
+    this = send_super(__class__, self, 'initWithStyle:',style,)
+  '''
+
+  @objc_method
+  def dealloc(self):
+    send_super(__class__, self, 'dealloc')
+    print('dealloc')
 
   @objc_method
   def initPrototype(self):
@@ -82,6 +95,7 @@ class ProgressViewController(BaseTableViewController):
                ])
     # Reset the `completedUnitCount` of the `NSProgress` object and create a repeating timer to increment it over time.
     print('viewDidAppear')
+    #pdbr.state(self, 1)
 
   @objc_method
   def viewDidDisappear_(self, animated: bool):
@@ -94,6 +108,7 @@ class ProgressViewController(BaseTableViewController):
                ])
     # Stop the timer from firing.
     print('viewDidDisappear')
+    print(self.retainCount())
 
   # MARK: - Configuration
   @objc_method
@@ -132,4 +147,6 @@ if __name__ == '__main__':
   #style = UIModalPresentationStyle.popover
 
   present_viewController(main_vc, style)
+  #print(main_vc.retainCount())
+  del main_vc
 
