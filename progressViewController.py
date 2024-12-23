@@ -1,6 +1,7 @@
+import ctypes
 from enum import Enum
 
-from pyrubicon.objc.api import ObjCClass, ObjCInstance
+from pyrubicon.objc.api import ObjCClass
 from pyrubicon.objc.api import objc_method
 from pyrubicon.objc.runtime import send_super, objc_id
 
@@ -16,8 +17,6 @@ from rbedge import pdbr
 from baseTableViewController import BaseTableViewController
 from storyboard.progressViewController import prototypes
 
-UIImage = ObjCClass('UIImage')
-UIImageSymbolConfiguration = ObjCClass('UIImageSymbolConfiguration')
 UIColor = ObjCClass('UIColor')
 
 
@@ -60,12 +59,63 @@ class ProgressViewController(BaseTableViewController):
       CaseElement(localizedString('ProgressDefaultTitle'),
                   ProgressViewKind.defaultProgress.value,
                   self.configureDefaultStyleProgressView_),
+      CaseElement(localizedString('ProgressBarTitle'),
+                  ProgressViewKind.barProgress.value,
+                  self.configureBarStyleProgressView_),
     ])
+    if True:  # wip: `traitCollection.userInterfaceIdiom != .mac`
+      # Tinted progress views available only on iOS.
+      self.testCells.extend([
+        CaseElement(localizedString('ProgressTintedTitle'),
+                    ProgressViewKind.tintedProgress.value,
+                    self.configureTintedProgressView_),
+      ])
+
+  @objc_method
+  def viewDidAppear_(self, animated: bool):
+    send_super(__class__,
+               self,
+               'viewDidAppear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    # Reset the `completedUnitCount` of the `NSProgress` object and create a repeating timer to increment it over time.
+    print('viewDidAppear')
+
+  @objc_method
+  def viewDidDisappear_(self, animated: bool):
+    send_super(__class__,
+               self,
+               'viewDidDisappear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    # Stop the timer from firing.
+    print('viewDidDisappear')
 
   # MARK: - Configuration
   @objc_method
   def configureDefaultStyleProgressView_(self, progressView):
     progressView.progressViewStyle = UIProgressViewStyle.default
+    # Reset the completed progress of the `UIProgressView`s.
+    progressView.setProgress_animated_(0.0, False)
+
+  @objc_method
+  def configureBarStyleProgressView_(self, progressView):
+    progressView.progressViewStyle = UIProgressViewStyle.bar
+    # Reset the completed progress of the `UIProgressView`s.
+    progressView.setProgress_animated_(0.0, False)
+
+  @objc_method
+  def configureTintedProgressView_(self, progressView):
+    progressView.progressViewStyle = UIProgressViewStyle.default
+    progressView.trackTintColor = UIColor.systemBlueColor()
+    progressView.progressTintColor = UIColor.systemPurpleColor()
+
+    # Reset the completed progress of the `UIProgressView`s.
+    progressView.setProgress_animated_(0.0, False)
 
 
 if __name__ == '__main__':
