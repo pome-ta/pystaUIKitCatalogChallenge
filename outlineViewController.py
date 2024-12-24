@@ -5,6 +5,7 @@ from pyrubicon.objc.api import objc_method, objc_property, objc_const
 from pyrubicon.objc.runtime import send_super, objc_id, load_library
 
 from rbedge.enumerations import (
+  UITableViewStyle,
   UICollectionLayoutListAppearance,
   UICollectionLayoutListHeaderMode,
   UICellAccessoryOutlineDisclosureStyle,
