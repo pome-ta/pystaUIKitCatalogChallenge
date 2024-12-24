@@ -14,6 +14,9 @@ from rbedge.enumerations import (
 from pyLocalizedString import localizedString
 from rbedge import pdbr
 
+
+from baseTableViewController import BaseTableViewController  # todo: 型確認
+
 # --- UIKitCatalog ViewControllers
 # --- --- controlsOutlineItem
 from buttonViewController import ButtonViewController
@@ -371,6 +374,7 @@ class OutlineViewController(UIViewController):
     # xxx: `section` は検知しないから、判断なくてもいい?
     menuItem = menuItems[indexPath.section].children[indexPath.row]
     try:
+      print(menuItem.storyboardName.isSubclassOfClass_(BaseTableViewController))
       menuItem_vc = menuItem.storyboardName.new()
       self.pushOrPresentViewController_(menuItem_vc)
     except Exception as e:
