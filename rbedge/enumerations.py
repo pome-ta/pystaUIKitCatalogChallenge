@@ -614,3 +614,12 @@ class UIProgressViewStyle:
   default: int = 0
   bar: int = 1
 
+
+# ref: [NSKeyValueObservingOptions | Apple Developer Documentation](https://developer.apple.com/documentation/foundation/nskeyvalueobservingoptions?language=objc)
+@dataclass
+class NSKeyValueObservingOptions:
+  new: int = 0x01
+  old: int = 0x02
+  initial: int = 0x04
+  prior: int = 0x08
+
