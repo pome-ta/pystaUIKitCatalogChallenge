@@ -1,14 +1,19 @@
+'''
+note: wip 項目
+  - `ObjCProtocol` 不要？
+  - `CustomTextField` class の`init` って機能してる？
+  - 標準キーボードのみ機能するものあり
+'''
+
 from enum import Enum
 from pathlib import Path
 
-from pyrubicon.objc.api import ObjCClass, ObjCProtocol
+from pyrubicon.objc.api import ObjCClass, ObjCInstance, ObjCProtocol
 from pyrubicon.objc.api import objc_method, objc_property
-from pyrubicon.objc.runtime import SEL, send_super, objc_id
-from pyrubicon.objc.types import CGRect, CGFloat, CGRectMake, UIEdgeInsetsMake
-from rbedge import pdbr
+from pyrubicon.objc.runtime import send_super, objc_id, SEL
+from pyrubicon.objc.types import NSInteger, CGRect, CGFloat, CGRectMake, UIEdgeInsetsMake
 
 from rbedge.enumerations import (
-  UITableViewStyle,
   UITextAutocorrectionType,
   UIReturnKeyType,
   UITextFieldViewMode,
@@ -19,7 +24,8 @@ from rbedge.enumerations import (
   UIControlState,
   UIControlEvents,
 )
-from rbedge.functions import NSStringFromClass
+
+from rbedge import pdbr
 
 from caseElement import CaseElement
 from pyLocalizedString import localizedString
@@ -57,31 +63,24 @@ class TextFieldViewController(BaseTableViewController,
                               ]):
 
   @objc_method
-  def init(self):
-    send_super(__class__, self, 'init')  # xxx: 不要?
-    tableViewStyle = UITableViewStyle.grouped
-    self.initWithStyle_(tableViewStyle)
-
-    self.testCells = []
-    self.initPrototype()
-
+  def initWithStyle_(self, style: NSInteger) -> ObjCInstance:
+    send_super(__class__,
+               self,
+               'initWithStyle:',
+               style,
+               restype=objc_id,
+               argtypes=[
+                 NSInteger,
+               ])
+    self.setupPrototypes_(prototypes)
     return self
-
-  @objc_method
-  def initPrototype(self):
-    [
-      self.tableView.registerClass_forCellReuseIdentifier_(
-        prototype['cellClass'], prototype['identifier'])
-      for prototype in prototypes
-    ]
 
   @objc_method
   def viewDidLoad(self):
     send_super(__class__, self, 'viewDidLoad')  # xxx: 不要?
 
-    title = NSStringFromClass(__class__)
-    #self.navigationItem.title = title
-    self.navigationItem.title = localizedString('TextFieldsTitle')
+    self.navigationItem.title = localizedString('TextFieldsTitle') if (
+      title := self.navigationItem.title) is None else title
 
     self.testCells.extend([
       CaseElement(localizedString('DefaultTextFieldTitle'),
@@ -275,7 +274,7 @@ class CustomTextField(ObjCClass('UITextField')):
   rightMarginPadding: CGFloat = objc_property(float)
 
   @objc_method
-  def init(self) -> objc_id:
+  def init(self) -> ObjCInstance:
     send_super(__class__, self, 'init')  # xxx: この返り値を返さないと意味なし?
     self.leftMarginPadding = 12.0
     self.rightMarginPadding = 36.0
@@ -313,11 +312,18 @@ class CustomTextField(ObjCClass('UITextField')):
 
 
 if __name__ == '__main__':
-  from rbedge.enumerations import UIModalPresentationStyle
+  from rbedge.functions import NSStringFromClass
+  from rbedge.enumerations import (
+    UITableViewStyle,
+    UIModalPresentationStyle,
+  )
   from rbedge import present_viewController
 
-  main_vc = TextFieldViewController.new()
-  #style = UIModalPresentationStyle.pageSheet
-  style = UIModalPresentationStyle.fullScreen
-  present_viewController(main_vc, style)
+  table_style = UITableViewStyle.grouped
+  main_vc = TextFieldViewController.alloc().initWithStyle_(table_style)
+  _title = NSStringFromClass(TextFieldViewController)
+  main_vc.navigationItem.title = _title
+
+  presentation_style = UIModalPresentationStyle.fullScreen
+  present_viewController(main_vc, presentation_style)
 
