@@ -6,15 +6,7 @@ import json
 from pyrubicon.objc.api import ObjCClass, ObjCInstance, Block
 from pyrubicon.objc.api import objc_method, objc_const
 from pyrubicon.objc.runtime import SEL, send_super, objc_id, load_library
-from pyrubicon.objc.types import CGSize, CGFloat, CGRectMake, CGSizeMake
-
-from rbedge.enumerations import UITableViewStyle
-from rbedge.functions import NSStringFromClass
-
-from caseElement import CaseElement
-from pyLocalizedString import localizedString
-from baseTableViewController import BaseTableViewController
-from storyboard.segmentedControlViewController import prototypes
+from pyrubicon.objc.types import NSInteger, CGSize, CGFloat, CGRectMake, CGSizeMake
 
 from rbedge.enumerations import (
   UIControlEvents,
@@ -23,6 +15,14 @@ from rbedge.enumerations import (
   UIControlState,
   UIBarMetrics,
 )
+
+from rbedge import pdbr
+
+from caseElement import CaseElement
+from pyLocalizedString import localizedString
+
+from baseTableViewController import BaseTableViewController
+from storyboard.segmentedControlViewController import prototypes
 
 UIKit = load_library('UIKit')
 UIImage = ObjCClass('UIImage')
@@ -113,32 +113,25 @@ class SegmentKind(Enum):
 class SegmentedControlViewController(BaseTableViewController):
 
   @objc_method
-  def init(self):
-    send_super(__class__, self, 'init')  # xxx: 不要?
-    tableViewStyle = UITableViewStyle.grouped
-    self.initWithStyle_(tableViewStyle)
-
-    self.testCells = []
-    self.initPrototype()
-
+  def initWithStyle_(self, style: NSInteger) -> ObjCInstance:
+    send_super(__class__,
+               self,
+               'initWithStyle:',
+               style,
+               restype=objc_id,
+               argtypes=[
+                 NSInteger,
+               ])
+    self.setupPrototypes_(prototypes)
     return self
-
-  @objc_method
-  def initPrototype(self):
-    [
-      self.tableView.registerClass_forCellReuseIdentifier_(
-        prototype['cellClass'], prototype['identifier'])
-      for prototype in prototypes
-    ]
 
   # MARK: - View Life Cycle
   @objc_method
   def viewDidLoad(self):
     send_super(__class__, self, 'viewDidLoad')  # xxx: 不要?
 
-    title = NSStringFromClass(__class__)
-    #self.navigationItem.title = title
-    self.navigationItem.title = localizedString('SegmentedControlsTitle')
+    self.navigationItem.title = localizedString('SegmentedControlsTitle') if (
+      title := self.navigationItem.title) is None else title
 
     self.testCells.extend([
       CaseElement(localizedString('DefaultTitle'),
@@ -371,12 +364,18 @@ class SegmentedControlViewController(BaseTableViewController):
 
 
 if __name__ == '__main__':
-  from rbedge.enumerations import UIModalPresentationStyle
+  from rbedge.functions import NSStringFromClass
+  from rbedge.enumerations import (
+    UITableViewStyle,
+    UIModalPresentationStyle,
+  )
   from rbedge import present_viewController
-  from rbedge import pdbr
 
-  main_vc = SegmentedControlViewController.new()
-  #style = UIModalPresentationStyle.pageSheet
-  style = UIModalPresentationStyle.fullScreen
-  present_viewController(main_vc, style)
+  table_style = UITableViewStyle.grouped
+  main_vc = SegmentedControlViewController.alloc().initWithStyle_(table_style)
+  _title = NSStringFromClass(SegmentedControlViewController)
+  main_vc.navigationItem.title = _title
+
+  presentation_style = UIModalPresentationStyle.fullScreen
+  present_viewController(main_vc, presentation_style)
 

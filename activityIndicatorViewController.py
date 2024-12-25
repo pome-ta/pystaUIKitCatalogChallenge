@@ -1,8 +1,8 @@
 from enum import Enum
 
 from pyrubicon.objc.api import ObjCClass, ObjCInstance
-from pyrubicon.objc.api import objc_method, objc_id
-from pyrubicon.objc.runtime import send_super
+from pyrubicon.objc.api import objc_method
+from pyrubicon.objc.runtime import send_super, objc_id
 from pyrubicon.objc.types import NSInteger
 
 from rbedge.enumerations import (
