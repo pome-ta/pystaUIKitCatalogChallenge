@@ -1,21 +1,10 @@
 import ctypes
 from enum import Enum
 
-from pyrubicon.objc.api import objc_method, objc_property
-from pyrubicon.objc.runtime import SEL, send_super
-
-from rbedge.enumerations import UITableViewStyle
-from rbedge.functions import NSStringFromClass
-
-from caseElement import CaseElement
-from pyLocalizedString import localizedString
-from baseTableViewController import BaseTableViewController
-from storyboard.buttonViewController import prototypes
-
-# todo: extension
-from pyrubicon.objc.api import Block, ObjCClass, ObjCInstance, objc_const
-from pyrubicon.objc.runtime import objc_id, load_library
-from pyrubicon.objc.types import CGPoint
+from pyrubicon.objc.api import ObjCClass, ObjCInstance, Block
+from pyrubicon.objc.api import objc_method, objc_property, objc_const
+from pyrubicon.objc.runtime import send_super, objc_id, load_library, SEL
+from pyrubicon.objc.types import NSInteger, CGPoint
 
 from rbedge.enumerations import (
   UIControlState,
@@ -27,6 +16,14 @@ from rbedge.enumerations import (
   NSDirectionalRectEdge,
   UIButtonConfigurationSize,
 )
+
+from rbedge import pdbr
+
+from caseElement import CaseElement
+from pyLocalizedString import localizedString
+
+from baseTableViewController import BaseTableViewController
+from storyboard.buttonViewController import prototypes
 
 UIKit = load_library('UIKit')  # todo: `objc_const` 用
 UIButtonConfiguration = ObjCClass('UIButtonConfiguration')
@@ -73,32 +70,26 @@ class ButtonViewController(BaseTableViewController):
   cartItemCount = objc_property(int)
 
   @objc_method
-  def init(self):
-    send_super(__class__, self, 'init')  # xxx: 不要？
-    tableViewStyle = UITableViewStyle.grouped
-    self.initWithStyle_(tableViewStyle)
+  def initWithStyle_(self, style: NSInteger) -> ObjCInstance:
+    send_super(__class__,
+               self,
+               'initWithStyle:',
+               style,
+               restype=objc_id,
+               argtypes=[
+                 NSInteger,
+               ])
+    self.setupPrototypes_(prototypes)
 
-    self.testCells = []
     self.cartItemCount = 0
-    self.initPrototype()
-
     return self
-
-  @objc_method
-  def initPrototype(self):
-    [
-      self.tableView.registerClass_forCellReuseIdentifier_(
-        prototype['cellClass'], prototype['identifier'])
-      for prototype in prototypes
-    ]
 
   @objc_method
   def viewDidLoad(self):
     send_super(__class__, self, 'viewDidLoad')  # xxx: 不要？
 
-    title = NSStringFromClass(__class__)
-    #self.navigationItem.title = title
-    self.navigationItem.title = localizedString('ButtonsTitle')
+    self.navigationItem.title = localizedString('ButtonsTitle') if (
+      title := self.navigationItem.title) is None else title
 
     self.testCells.extend([
       # 00
@@ -772,12 +763,19 @@ class ButtonViewController(BaseTableViewController):
 
 
 if __name__ == '__main__':
-  from rbedge.enumerations import UIModalPresentationStyle
+  from rbedge.functions import NSStringFromClass
+  from rbedge.enumerations import (
+    UITableViewStyle,
+    UIModalPresentationStyle,
+  )
   from rbedge import present_viewController
-  from rbedge import pdbr
 
-  main_vc = ButtonViewController.new()
-  #style = UIModalPresentationStyle.pageSheet
-  style = UIModalPresentationStyle.fullScreen
-  present_viewController(main_vc, style)
+  table_style = UITableViewStyle.grouped
+
+  main_vc = ButtonViewController.alloc().initWithStyle_(table_style)
+  _title = NSStringFromClass(ButtonViewController)
+  main_vc.navigationItem.title = _title
+
+  presentation_style = UIModalPresentationStyle.fullScreen
+  present_viewController(main_vc, presentation_style)
 
