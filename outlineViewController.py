@@ -374,9 +374,14 @@ class OutlineViewController(UIViewController):
     # xxx: `section` は検知しないから、判断なくてもいい?
     menuItem = menuItems[indexPath.section].children[indexPath.row]
     try:
-      #print(menuItem.storyboardName.isSubclassOfClass_(BaseTableViewController))
-      menuItem_vc = menuItem.storyboardName.new()
-      self.pushOrPresentViewController_(menuItem_vc)
+      if (storyboardName :=
+          menuItem.storyboardName).isSubclassOfClass_(BaseTableViewController):
+        viewController = storyboardName.alloc().initWithStyle_(
+          UITableViewStyle.grouped)
+      else:
+        viewController = storyboardName.new()
+
+      self.pushOrPresentViewController_(viewController)
     except Exception as e:
       print(f'{e}')
 
