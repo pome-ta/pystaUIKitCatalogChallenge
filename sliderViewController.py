@@ -3,10 +3,10 @@ from pathlib import Path
 
 from pyrubicon.objc.api import ObjCClass, ObjCInstance
 from pyrubicon.objc.api import objc_method
-from pyrubicon.objc.runtime import SEL, send_super, objc_id
+from pyrubicon.objc.runtime import send_super, objc_id, SEL
+from pyrubicon.objc.types import NSInteger
 
 from rbedge.enumerations import (
-  UITableViewStyle,
   UIControlEvents,
   UIControlState,
   UIUserInterfaceIdiom,
@@ -14,6 +14,7 @@ from rbedge.enumerations import (
   UIImageSymbolWeight,
   UIBehavioralStyle,
 )
+from rbedge import pdbr
 
 from caseElement import CaseElement
 from pyLocalizedString import localizedString
@@ -41,32 +42,25 @@ class SliderKind(Enum):
 class SliderViewController(BaseTableViewController):
 
   @objc_method
-  def init(self):
-    send_super(__class__, self, 'init')  # xxx: 不要?
-    tableViewStyle = UITableViewStyle.grouped
-    self.initWithStyle_(tableViewStyle)
-
-    self.testCells = []
-    self.initPrototype()
-
+  def initWithStyle_(self, style: NSInteger) -> ObjCInstance:
+    send_super(__class__,
+               self,
+               'initWithStyle:',
+               style,
+               restype=objc_id,
+               argtypes=[
+                 NSInteger,
+               ])
+    self.setupPrototypes_(prototypes)
     return self
-
-  @objc_method
-  def initPrototype(self):
-    [
-      self.tableView.registerClass_forCellReuseIdentifier_(
-        prototype['cellClass'], prototype['identifier'])
-      for prototype in prototypes
-    ]
 
   # MARK: - View Life Cycle
   @objc_method
   def viewDidLoad(self):
     send_super(__class__, self, 'viewDidLoad')  # xxx: 不要?
 
-    #title = NSStringFromClass(__class__)
-    #self.navigationItem.title = title
-    self.navigationItem.title = localizedString('SlidersTitle')
+    self.navigationItem.title = localizedString('SlidersTitle') if (
+      title := self.navigationItem.title) is None else title
 
     self.testCells.extend([
       CaseElement(localizedString('DefaultTitle'),
@@ -224,15 +218,16 @@ class SliderViewController(BaseTableViewController):
 
 if __name__ == '__main__':
   from rbedge.functions import NSStringFromClass
-  from rbedge.enumerations import UIModalPresentationStyle
+  from rbedge.enumerations import (
+    UITableViewStyle,
+    UIModalPresentationStyle,
+  )
   from rbedge import present_viewController
-  from rbedge import pdbr
 
-  main_vc = SliderViewController.new()
+  table_style = UITableViewStyle.grouped
+  main_vc = SliderViewController.alloc().initWithStyle_(table_style)
   _title = NSStringFromClass(SliderViewController)
   main_vc.navigationItem.title = _title
 
-  #style = UIModalPresentationStyle.pageSheet
-  style = UIModalPresentationStyle.fullScreen
-  present_viewController(main_vc, style)
-
+  presentation_style = UIModalPresentationStyle.fullScreen
+  present_viewController(main_vc, presentation_style)
