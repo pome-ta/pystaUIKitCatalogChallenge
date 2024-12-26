@@ -25,10 +25,11 @@ UILabel = ObjCClass('UILabel')
 UIFont = ObjCClass('UIFont')
 
 UIColor = ObjCClass('UIColor')
+pdbr.state(UIColor)
 
 # --- Global Variables
 UIFontTextStyleHeadline = objc_const(UIKit, 'UIFontTextStyleHeadline')
-
+UIFontTextStyleBody = objc_const(UIKit, 'UIFontTextStyleBody')
 
 class StackViewController(UIViewController):
 
@@ -69,6 +70,12 @@ class StackViewController(UIViewController):
     subShowingHidingStackView = UIStackView.alloc().initWithFrame_(
       CGRectMake(0.0, 30.5, 343.0, 34.0))
     subShowingHidingStackView.spacing = 10.0
+    
+    labelDetail = UILabel.new()
+    labelDetail.text = 'Detail'
+    labelDetail.setFont_(
+      UIFont.preferredFontForTextStyle_(UIFontTextStyleBody))
+    
     showingHidingExampleStackView.addArrangedSubview_(labelShowingHiding)
 
     self.view.addSubview_(showingHidingExampleStackView)
