@@ -4,8 +4,8 @@
 import ctypes
 
 from pyrubicon.objc.api import ObjCClass, ObjCInstance
-from pyrubicon.objc.api import objc_method
-from pyrubicon.objc.runtime import send_super, objc_id
+from pyrubicon.objc.api import objc_method, objc_const
+from pyrubicon.objc.runtime import send_super, objc_id, load_library
 from pyrubicon.objc.types import CGRectMake
 
 from rbedge.enumerations import (
@@ -15,14 +15,19 @@ from rbedge.enumerations import (
 
 from rbedge import pdbr
 
+UIKit = load_library('UIKit')
 UIViewController = ObjCClass('UIViewController')
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
 
 UIStackView = ObjCClass('UIStackView')
 
 UILabel = ObjCClass('UILabel')
+UIFont = ObjCClass('UIFont')
 
 UIColor = ObjCClass('UIColor')
+
+# --- Global Variables
+UIFontTextStyleHeadline = objc_const(UIKit, 'UIFontTextStyleHeadline')
 
 
 class StackViewController(UIViewController):
@@ -46,19 +51,24 @@ class StackViewController(UIViewController):
     #Add/remove
     #addRemoveExampleStackView
     # xxx: あとで、`setup` 的なのを作る
+    # --- showingHidingExampleStackView
     showingHidingExampleStackView = UIStackView.alloc().initWithFrame_(
       CGRectMake(16.0, 52.0, 343.0, 134.5))
     # todo: 確認用
     showingHidingExampleStackView.backgroundColor = UIColor.systemGreenColor()
     showingHidingExampleStackView.axis = UILayoutConstraintAxis.vertical
     showingHidingExampleStackView.spacing = 10.0
-    #pdbr.state(showingHidingExampleStackView)
 
     labelShowingHiding = UILabel.new()
     labelShowingHiding.text = 'Showing/hiding views'
-    labelShowingHiding.textAlignment = 2#NSTextAlignment.center
-    pdbr.state(labelShowingHiding)
+    labelShowingHiding.textAlignment = NSTextAlignment.center
+    labelShowingHiding.setFont_(
+      UIFont.preferredFontForTextStyle_(UIFontTextStyleHeadline))
 
+    # --- subShowingHidingStackView
+    subShowingHidingStackView = UIStackView.alloc().initWithFrame_(
+      CGRectMake(0.0, 30.5, 343.0, 34.0))
+    subShowingHidingStackView.spacing = 10.0
     showingHidingExampleStackView.addArrangedSubview_(labelShowingHiding)
 
     self.view.addSubview_(showingHidingExampleStackView)
