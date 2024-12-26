@@ -6,14 +6,32 @@ import ctypes
 from pyrubicon.objc.api import ObjCClass, ObjCInstance
 from pyrubicon.objc.api import objc_method
 from pyrubicon.objc.runtime import send_super, objc_id
+from pyrubicon.objc.types import CGRectMake
+
+from rbedge.enumerations import (
+  UILayoutConstraintAxis,
+  NSTextAlignment,
+)
+
+from rbedge import pdbr
 
 UIViewController = ObjCClass('UIViewController')
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
+
+UIStackView = ObjCClass('UIStackView')
+
+UILabel = ObjCClass('UILabel')
 
 UIColor = ObjCClass('UIColor')
 
 
 class StackViewController(UIViewController):
+
+  @objc_method
+  def dealloc(self):
+    # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
+    #print('\tdealloc')
+    pass
 
   # MARK: - View Life Cycle
   @objc_method
@@ -25,10 +43,25 @@ class StackViewController(UIViewController):
     #self.view.backgroundColor = UIColor.systemBackgroundColor()
     self.view.backgroundColor = UIColor.systemIndigoColor()
 
-  @objc_method
-  def dealloc(self):
-    # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
-    print('\tdealloc')
+    #Add/remove
+    #addRemoveExampleStackView
+    # xxx: あとで、`setup` 的なのを作る
+    showingHidingExampleStackView = UIStackView.alloc().initWithFrame_(
+      CGRectMake(16.0, 52.0, 343.0, 134.5))
+    # todo: 確認用
+    showingHidingExampleStackView.backgroundColor = UIColor.systemGreenColor()
+    showingHidingExampleStackView.axis = UILayoutConstraintAxis.vertical
+    showingHidingExampleStackView.spacing = 10.0
+    #pdbr.state(showingHidingExampleStackView)
+
+    labelShowingHiding = UILabel.new()
+    labelShowingHiding.text = 'Showing/hiding views'
+    labelShowingHiding.textAlignment = 2#NSTextAlignment.center
+    pdbr.state(labelShowingHiding)
+
+    showingHidingExampleStackView.addArrangedSubview_(labelShowingHiding)
+
+    self.view.addSubview_(showingHidingExampleStackView)
 
   @objc_method
   def viewDidAppear_(self, animated: bool):
@@ -39,7 +72,7 @@ class StackViewController(UIViewController):
                argtypes=[
                  ctypes.c_bool,
                ])
-    print('viewDidAppear')
+    #print('viewDidAppear')
 
   @objc_method
   def viewDidDisappear_(self, animated: bool):
@@ -50,7 +83,7 @@ class StackViewController(UIViewController):
                argtypes=[
                  ctypes.c_bool,
                ])
-    print('viewDidDisappear')
+    #print('viewDidDisappear')
 
   @objc_method
   def didReceiveMemoryWarning(self):

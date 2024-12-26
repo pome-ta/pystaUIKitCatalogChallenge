@@ -623,3 +623,32 @@ class NSKeyValueObservingOptions:
   initial: int = 0x04
   prior: int = 0x08
 
+
+# ref: [UILayoutConstraintAxis | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/nslayoutconstraint/axis?language=objc)
+@dataclass
+class UILayoutConstraintAxis:
+  # ref: [UIView.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UIView.rs.html#1002)
+  horizontal: int = 0
+  vertical: int = 1
+
+
+# wip: [text.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/text.rs.html#8)
+'''
+(!TARGET_CPU_X86_64 || (TARGET_OS_IPHONE && !TARGET_OS_MACCATALYST))
+<https://github.com/xamarin/xamarin-macios/issues/12111>
+TODO: Make this work with mac catalyst
+const TARGET_ABI_USES_IOS_VALUES: bool =
+    !cfg!(any(target_arch = "x86", target_arch = "x86_64")) || cfg!(not(target_os = "macos"));
+'''
+
+
+# ref: [NSTextAlignment | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/nstextalignment?language=objc)
+@dataclass
+class NSTextAlignment:
+  # ref: [text.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/text.rs.html#26)
+  left: int = 0
+  right: int = 2  # wip: `TARGET_ABI_USES_IOS_VALUES`
+  center: int = 1  # wip: `TARGET_ABI_USES_IOS_VALUES`
+  justified: int = 3
+  natural: int = 4
+
