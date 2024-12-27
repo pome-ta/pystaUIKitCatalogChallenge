@@ -6,7 +6,7 @@ import ctypes
 from pyrubicon.objc.api import ObjCClass, ObjCInstance
 from pyrubicon.objc.api import objc_method, objc_const
 from pyrubicon.objc.runtime import send_super, objc_id, load_library
-from pyrubicon.objc.types import CGRectMake
+from pyrubicon.objc.types import CGRectMake, CGSizeMake
 
 from rbedge.enumerations import (
   UILayoutConstraintAxis,
@@ -35,7 +35,7 @@ UIColor = ObjCClass('UIColor')
 # --- Global Variables
 UIFontTextStyleHeadline = objc_const(UIKit, 'UIFontTextStyleHeadline')
 UIFontTextStyleBody = objc_const(UIKit, 'UIFontTextStyleBody')
-
+UIFontTextStyleFootnote = objc_const(UIKit, 'UIFontTextStyleFootnote')
 # --- Symbols
 plusSymbol = UIImage.systemImageNamed('plus')
 minusSymbol = UIImage.systemImageNamed('minus')
@@ -73,28 +73,35 @@ class StackViewController(UIViewController):
     showingHidingLabel.textAlignment = NSTextAlignment.center
     showingHidingLabel.setFont_(
       UIFont.preferredFontForTextStyle_(UIFontTextStyleHeadline))
-    
-    
-    
+
     # --- subShowingHidingStackView
-    detailStackView = UIStackView.alloc().initWithFrame_(
-      CGRectMake(0.0, 30.5, 343.0, 34.0))
+    #detailStackView = UIStackView.alloc().initWithFrame_(CGRectMake(0.0, 30.5, 343.0, 34.0))
     #detailStackView = UIStackView.alloc().initWithFrame_(CGRectMake(0.0,0.0,0.0,0.0))
+    detailStackView = UIStackView.new()
     detailStackView.spacing = 10.0
     # todo: 確認用
     detailStackView.backgroundColor = UIColor.systemDarkRedColor()
 
+    #
     detailLabel = UILabel.new()
-    detailLabel.text = 'Detail'
+    #detailLabel = UILabel.alloc().initWithFrame_(CGRectMake(0.0, 0.0, 104.0, 34.0))
+    #pdbr.state(detailLabel)
+    #detailLabel.setSize_(CGSizeMake(104.0, 34.0))
+
+    #setSize_
+    detailLabel.text = 'Detail hhjjhjjjjjjjjjj'
     detailLabel.setFont_(
       UIFont.preferredFontForTextStyle_(UIFontTextStyleBody))
 
+    #detailLabel.sizeThatFits_(CGSizeMake(104.0, 34.0))
+    #detailLabel.sizeToFit()
     detailLabel.backgroundColor = UIColor.systemOrangeColor()
-    
-    
-    detailTextField = UITextField.alloc().initWithFrame_(CGRectMake(114.0, 0.0, 177.5, 34.0))
+
+    detailTextField = UITextField.alloc().initWithFrame_(
+      CGRectMake(114.0, 0.0, 177.5, 34.0))
     #detailTextField = UITextField.alloc().initWithFrame_(CGRectMake(0.0, 0.0, 0.0, 0.0))
     #detailTextField = UITextField.new()
+
     detailTextField.borderStyle = UITextBorderStyle.roundedRect
     detailTextField.setFont_(UIFont.systemFontOfSize_(14.0))
     detailTextField.font.systemMinimumFontSize = 17.0
@@ -107,13 +114,6 @@ class StackViewController(UIViewController):
     detailPlusButton.backgroundColor = UIColor.systemBrownColor()
     #pdbr.state(detailPlusButton)
     detailPlusButton.translatesAutoresizingMaskIntoConstraints = False
-
-    detailStackView.addArrangedSubview_(detailLabel)
-    detailStackView.addArrangedSubview_(detailTextField)
-    detailStackView.addArrangedSubview_(detailPlusButton)
-
-    showingHidingExampleStackView.addArrangedSubview_(showingHidingLabel)
-    showingHidingExampleStackView.addArrangedSubview_(detailStackView)
 
     # --- furtherDetailStackView
     furtherDetailStackView = UIStackView.alloc().initWithFrame_(
@@ -141,15 +141,33 @@ class StackViewController(UIViewController):
 
     furtherDetailMinusButton.backgroundColor = UIColor.systemDarkPurpleColor()
 
+    footerLabel = UILabel.new()
+    footerLabel.text = 'Footer Label'
+    footerLabel.textAlignment = NSTextAlignment.center
+    footerLabel.setFont_(
+      UIFont.preferredFontForTextStyle_(UIFontTextStyleFootnote))
+
+    # --- addArrangedSubviews
+    detailStackView.addArrangedSubview_(detailLabel)
+    detailStackView.addArrangedSubview_(detailTextField)
+    detailStackView.addArrangedSubview_(detailPlusButton)
+
     furtherDetailStackView.addArrangedSubview_(furtherDetailLabel)
     furtherDetailStackView.addArrangedSubview_(furtherDetailTextField)
     furtherDetailStackView.addArrangedSubview_(furtherDetailMinusButton)
 
+    showingHidingExampleStackView.addArrangedSubview_(showingHidingLabel)
+    showingHidingExampleStackView.addArrangedSubview_(detailStackView)
+
     showingHidingExampleStackView.addArrangedSubview_(furtherDetailStackView)
+    showingHidingExampleStackView.addArrangedSubview_(footerLabel)
 
     self.view.addSubview_(showingHidingExampleStackView)
     # --- Layout
+
     showingHidingExampleStackView.translatesAutoresizingMaskIntoConstraints = False
+    detailLabel.translatesAutoresizingMaskIntoConstraints = False
+
     #detailTextField.translatesAutoresizingMaskIntoConstraints = False
 
     layoutMarginsGuide = self.view.layoutMarginsGuide
