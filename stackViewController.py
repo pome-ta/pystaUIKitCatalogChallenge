@@ -11,6 +11,8 @@ from pyrubicon.objc.types import CGRectMake
 from rbedge.enumerations import (
   UILayoutConstraintAxis,
   NSTextAlignment,
+  UITextBorderStyle,
+  UIButtonType,
 )
 
 from rbedge import pdbr
@@ -23,13 +25,21 @@ UIStackView = ObjCClass('UIStackView')
 
 UILabel = ObjCClass('UILabel')
 UIFont = ObjCClass('UIFont')
+UITextField = ObjCClass('UITextField')
+UIButton = ObjCClass('UIButton')
+UIButtonConfiguration = ObjCClass('UIButtonConfiguration')
+UIImage = ObjCClass('UIImage')
 
 UIColor = ObjCClass('UIColor')
-pdbr.state(UIColor)
 
 # --- Global Variables
 UIFontTextStyleHeadline = objc_const(UIKit, 'UIFontTextStyleHeadline')
 UIFontTextStyleBody = objc_const(UIKit, 'UIFontTextStyleBody')
+
+# --- Symbols
+plusSymbol = UIImage.systemImageNamed('plus')
+minusSymbol = UIImage.systemImageNamed('minus')
+
 
 class StackViewController(UIViewController):
 
@@ -49,8 +59,6 @@ class StackViewController(UIViewController):
     #self.view.backgroundColor = UIColor.systemBackgroundColor()
     self.view.backgroundColor = UIColor.systemIndigoColor()
 
-    #Add/remove
-    #addRemoveExampleStackView
     # xxx: あとで、`setup` 的なのを作る
     # --- showingHidingExampleStackView
     showingHidingExampleStackView = UIStackView.alloc().initWithFrame_(
@@ -60,25 +68,75 @@ class StackViewController(UIViewController):
     showingHidingExampleStackView.axis = UILayoutConstraintAxis.vertical
     showingHidingExampleStackView.spacing = 10.0
 
-    labelShowingHiding = UILabel.new()
-    labelShowingHiding.text = 'Showing/hiding views'
-    labelShowingHiding.textAlignment = NSTextAlignment.center
-    labelShowingHiding.setFont_(
+    showingHidingLabel = UILabel.new()
+    showingHidingLabel.text = 'Showing/hiding views'
+    showingHidingLabel.textAlignment = NSTextAlignment.center
+    showingHidingLabel.setFont_(
       UIFont.preferredFontForTextStyle_(UIFontTextStyleHeadline))
 
     # --- subShowingHidingStackView
-    subShowingHidingStackView = UIStackView.alloc().initWithFrame_(
+    detailStackView = UIStackView.alloc().initWithFrame_(
       CGRectMake(0.0, 30.5, 343.0, 34.0))
-    subShowingHidingStackView.spacing = 10.0
-    
-    labelDetail = UILabel.new()
-    labelDetail.text = 'Detail'
-    labelDetail.setFont_(
+    detailStackView.spacing = 10.0
+
+    detailLabel = UILabel.new()
+    detailLabel.text = 'Detail'
+    detailLabel.setFont_(
       UIFont.preferredFontForTextStyle_(UIFontTextStyleBody))
-    
-    showingHidingExampleStackView.addArrangedSubview_(labelShowingHiding)
+
+    detailTextField = UITextField.alloc().initWithFrame_(
+      CGRectMake(114.0, 0.0, 177.5, 34.0))
+    detailTextField.borderStyle = UITextBorderStyle.roundedRect
+    detailTextField.setFont_(UIFont.systemFontOfSize_(14.0))
+    detailTextField.font.systemMinimumFontSize = 17.0
+
+    detailPlusButton = UIButton.buttonWithType_(UIButtonType.system)
+    detailPlusButtonConfig = UIButtonConfiguration.plainButtonConfiguration()
+    detailPlusButtonConfig.image = plusSymbol
+    detailPlusButton.configuration = detailPlusButtonConfig
+    #pdbr.state(detailPlusButtonConfig)
+    #contentInsets
+    print(detailPlusButtonConfig.contentInsets)
+
+    detailStackView.addArrangedSubview_(detailLabel)
+    detailStackView.addArrangedSubview_(detailTextField)
+    detailStackView.addArrangedSubview_(detailPlusButton)
+
+    showingHidingExampleStackView.addArrangedSubview_(showingHidingLabel)
+    showingHidingExampleStackView.addArrangedSubview_(detailStackView)
+
+    # --- furtherDetailStackView
+    furtherDetailStackView = UIStackView.alloc().initWithFrame_(
+      CGRectMake(0.0, 74.5, 343.0, 34.0))
+    # todo: 確認用
+    furtherDetailStackView.backgroundColor = UIColor.systemCyanColor()
+    furtherDetailStackView.spacing = 10.0
+
+    furtherDetailLabel = UILabel.new()
+    furtherDetailLabel.text = 'Further Detail'
+    furtherDetailLabel.setFont_(
+      UIFont.preferredFontForTextStyle_(UIFontTextStyleBody))
+
+    furtherDetailTextField = UITextField.alloc().initWithFrame_(
+      CGRectMake(114.0, 0.0, 177.5, 34.0))
+    furtherDetailTextField.borderStyle = UITextBorderStyle.roundedRect
+    furtherDetailTextField.setFont_(UIFont.systemFontOfSize_(14.0))
+    furtherDetailTextField.font.systemMinimumFontSize = 17.0
+
+    furtherDetailMinusButton = UIButton.buttonWithType_(UIButtonType.system)
+    furtherDetailMinusButtonConfig = UIButtonConfiguration.plainButtonConfiguration(
+    )
+    furtherDetailMinusButtonConfig.image = minusSymbol
+    furtherDetailMinusButton.configuration = furtherDetailMinusButtonConfig
+
+    furtherDetailStackView.addArrangedSubview_(furtherDetailLabel)
+    furtherDetailStackView.addArrangedSubview_(furtherDetailTextField)
+    furtherDetailStackView.addArrangedSubview_(furtherDetailMinusButton)
+
+    showingHidingExampleStackView.addArrangedSubview_(furtherDetailStackView)
 
     self.view.addSubview_(showingHidingExampleStackView)
+    # --- Layout
 
   @objc_method
   def viewDidAppear_(self, animated: bool):
