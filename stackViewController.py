@@ -73,19 +73,28 @@ class StackViewController(UIViewController):
     showingHidingLabel.textAlignment = NSTextAlignment.center
     showingHidingLabel.setFont_(
       UIFont.preferredFontForTextStyle_(UIFontTextStyleHeadline))
-
+    
+    
+    
     # --- subShowingHidingStackView
     detailStackView = UIStackView.alloc().initWithFrame_(
       CGRectMake(0.0, 30.5, 343.0, 34.0))
+    #detailStackView = UIStackView.alloc().initWithFrame_(CGRectMake(0.0,0.0,0.0,0.0))
     detailStackView.spacing = 10.0
+    # todo: 確認用
+    detailStackView.backgroundColor = UIColor.systemDarkRedColor()
 
     detailLabel = UILabel.new()
     detailLabel.text = 'Detail'
     detailLabel.setFont_(
       UIFont.preferredFontForTextStyle_(UIFontTextStyleBody))
 
-    detailTextField = UITextField.alloc().initWithFrame_(
-      CGRectMake(114.0, 0.0, 177.5, 34.0))
+    detailLabel.backgroundColor = UIColor.systemOrangeColor()
+    
+    
+    detailTextField = UITextField.alloc().initWithFrame_(CGRectMake(114.0, 0.0, 177.5, 34.0))
+    #detailTextField = UITextField.alloc().initWithFrame_(CGRectMake(0.0, 0.0, 0.0, 0.0))
+    #detailTextField = UITextField.new()
     detailTextField.borderStyle = UITextBorderStyle.roundedRect
     detailTextField.setFont_(UIFont.systemFontOfSize_(14.0))
     detailTextField.font.systemMinimumFontSize = 17.0
@@ -94,9 +103,10 @@ class StackViewController(UIViewController):
     detailPlusButtonConfig = UIButtonConfiguration.plainButtonConfiguration()
     detailPlusButtonConfig.image = plusSymbol
     detailPlusButton.configuration = detailPlusButtonConfig
-    #pdbr.state(detailPlusButtonConfig)
-    #contentInsets
-    print(detailPlusButtonConfig.contentInsets)
+
+    detailPlusButton.backgroundColor = UIColor.systemBrownColor()
+    #pdbr.state(detailPlusButton)
+    detailPlusButton.translatesAutoresizingMaskIntoConstraints = False
 
     detailStackView.addArrangedSubview_(detailLabel)
     detailStackView.addArrangedSubview_(detailTextField)
@@ -108,9 +118,9 @@ class StackViewController(UIViewController):
     # --- furtherDetailStackView
     furtherDetailStackView = UIStackView.alloc().initWithFrame_(
       CGRectMake(0.0, 74.5, 343.0, 34.0))
+    furtherDetailStackView.spacing = 10.0
     # todo: 確認用
     furtherDetailStackView.backgroundColor = UIColor.systemCyanColor()
-    furtherDetailStackView.spacing = 10.0
 
     furtherDetailLabel = UILabel.new()
     furtherDetailLabel.text = 'Further Detail'
@@ -129,6 +139,8 @@ class StackViewController(UIViewController):
     furtherDetailMinusButtonConfig.image = minusSymbol
     furtherDetailMinusButton.configuration = furtherDetailMinusButtonConfig
 
+    furtherDetailMinusButton.backgroundColor = UIColor.systemDarkPurpleColor()
+
     furtherDetailStackView.addArrangedSubview_(furtherDetailLabel)
     furtherDetailStackView.addArrangedSubview_(furtherDetailTextField)
     furtherDetailStackView.addArrangedSubview_(furtherDetailMinusButton)
@@ -137,6 +149,20 @@ class StackViewController(UIViewController):
 
     self.view.addSubview_(showingHidingExampleStackView)
     # --- Layout
+    showingHidingExampleStackView.translatesAutoresizingMaskIntoConstraints = False
+    #detailTextField.translatesAutoresizingMaskIntoConstraints = False
+
+    layoutMarginsGuide = self.view.layoutMarginsGuide
+    safeAreaLayoutGuide = self.view.safeAreaLayoutGuide
+
+    NSLayoutConstraint.activateConstraints_([
+      showingHidingExampleStackView.leadingAnchor.constraintEqualToAnchor_(
+        layoutMarginsGuide.leadingAnchor),
+      showingHidingExampleStackView.trailingAnchor.constraintEqualToAnchor_(
+        layoutMarginsGuide.trailingAnchor),
+      showingHidingExampleStackView.topAnchor.
+      constraintEqualToAnchor_constant_(safeAreaLayoutGuide.topAnchor, 8.0),
+    ])
 
   @objc_method
   def viewDidAppear_(self, animated: bool):
@@ -148,6 +174,7 @@ class StackViewController(UIViewController):
                  ctypes.c_bool,
                ])
     #print('viewDidAppear')
+    #pdbr.state(self.view.subviews()[0].arrangedSubviews[1].arrangedSubviews)
 
   @objc_method
   def viewDidDisappear_(self, animated: bool):
