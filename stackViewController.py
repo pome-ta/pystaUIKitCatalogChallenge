@@ -39,6 +39,7 @@ UIColor = ObjCClass('UIColor')
 UIFontTextStyleHeadline = objc_const(UIKit, 'UIFontTextStyleHeadline')
 UIFontTextStyleBody = objc_const(UIKit, 'UIFontTextStyleBody')
 UIFontTextStyleFootnote = objc_const(UIKit, 'UIFontTextStyleFootnote')
+
 # --- Symbols
 plusSymbol = UIImage.systemImageNamed('plus')
 minusSymbol = UIImage.systemImageNamed('minus')
@@ -76,27 +77,35 @@ class StackViewController(UIViewController):
     # --- --- / detailStackView
     # --- --- ---- detailLabel
     detailLabel = UILabel.new()
+    '''
     detailLabel.setContentHuggingPriority_forAxis_(
       251.0, UILayoutConstraintAxis.horizontal)
     detailLabel.setContentHuggingPriority_forAxis_(
       251.0, UILayoutConstraintAxis.vertical)
+    
+    '''
     detailLabel.text = 'Detail'
     detailLabel.lineBreakMode = NSLineBreakMode.byTruncatingTail
-    detailLabel.numberOfLines = 0
+    #detailLabel.numberOfLines = 0
     detailLabel.setFont_(
       UIFont.preferredFontForTextStyle_(UIFontTextStyleBody))
     # todo: 確認用
     detailLabel.backgroundColor = UIColor.systemOrangeColor()
+    #pdbr.state(detailLabel,1)
+    #print(detailLabel.contentHuggingPriorityForAxis_(UILayoutConstraintAxis.horizontal))
 
     # --- --- ---- detailTextField
     detailTextField = UITextField.new()
+    '''
     detailTextField.setContentHuggingPriority_forAxis_(
       249.0, UILayoutConstraintAxis.horizontal)
+    '''
     detailTextField.setFrame_(CGRectMake(301.5, 0.0, 41.5, 34.0))
     detailTextField.borderStyle = UITextBorderStyle.roundedRect
     detailTextField.setFont_(UIFont.systemFontOfSize_(14.0))
     detailTextField.font.systemMinimumFontSize = 17.0
-    pdbr.state(detailTextField)
+    #pdbr.state(detailTextField)
+    print(detailTextField.contentHuggingPriorityForAxis_(UILayoutConstraintAxis.horizontal))
 
     # --- --- ---- detailPlusButton
     detailPlusButton = UIButton.buttonWithType_(UIButtonType.system)
