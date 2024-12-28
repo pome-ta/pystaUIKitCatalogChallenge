@@ -76,6 +76,10 @@ class StackViewController(UIViewController):
     # --- --- / detailStackView
     # --- --- ---- detailLabel
     detailLabel = UILabel.new()
+    detailLabel.setContentHuggingPriority_forAxis_(
+      251.0, UILayoutConstraintAxis.horizontal)
+    detailLabel.setContentHuggingPriority_forAxis_(
+      251.0, UILayoutConstraintAxis.vertical)
     detailLabel.text = 'Detail'
     detailLabel.lineBreakMode = NSLineBreakMode.byTruncatingTail
     detailLabel.numberOfLines = 0
@@ -86,30 +90,22 @@ class StackViewController(UIViewController):
 
     # --- --- ---- detailTextField
     detailTextField = UITextField.new()
+    detailTextField.setContentHuggingPriority_forAxis_(
+      249.0, UILayoutConstraintAxis.horizontal)
+    detailTextField.setFrame_(CGRectMake(301.5, 0.0, 41.5, 34.0))
     detailTextField.borderStyle = UITextBorderStyle.roundedRect
     detailTextField.setFont_(UIFont.systemFontOfSize_(14.0))
     detailTextField.font.systemMinimumFontSize = 17.0
+    pdbr.state(detailTextField)
 
     # --- --- ---- detailPlusButton
     detailPlusButton = UIButton.buttonWithType_(UIButtonType.system)
+    #detailPlusButton.setFrame_(CGRectMake(114.0, 0.0, 177.5, 34.0))
     _detailPlusButtonConfig = UIButtonConfiguration.plainButtonConfiguration()
     _detailPlusButtonConfig.image = plusSymbol
-    #_detailPlusButtonConfig.setContentInsets_(NSDirectionalEdgeInsetsMake(0.0, 10.0, 0.0, 10.0))
     _detailPlusButtonConfig.contentInsets = NSDirectionalEdgeInsetsMake(
       0.0, 10.0, 0.0, 10.0)
-    #pdbr.state(_detailPlusButtonConfig)
-    '''
-    #pdbr.state(_detailPlusButtonConfig.contentInsets)
-    print(_detailPlusButtonConfig.contentInsets)
-    print(dir(_detailPlusButtonConfig.contentInsets))
-    print(_detailPlusButtonConfig.contentInsets.field_0)
-    print(_detailPlusButtonConfig.contentInsets.field_1)
-    print(_detailPlusButtonConfig.contentInsets.field_2)
-    print(_detailPlusButtonConfig.contentInsets.field_3)
-    '''
-
     detailPlusButton.configuration = _detailPlusButtonConfig
-    pdbr.state(detailPlusButton)
     # todo: 確認用
     detailPlusButton.backgroundColor = UIColor.systemBrownColor()
 
