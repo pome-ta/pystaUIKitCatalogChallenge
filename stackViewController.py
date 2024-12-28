@@ -6,7 +6,7 @@ import ctypes
 from pyrubicon.objc.api import ObjCClass, ObjCInstance
 from pyrubicon.objc.api import objc_method, objc_const
 from pyrubicon.objc.runtime import send_super, objc_id, load_library
-from pyrubicon.objc.types import CGRectMake, CGSizeMake
+from pyrubicon.objc.types import CGRectMake
 
 from rbedge.functions import NSDirectionalEdgeInsetsMake
 
@@ -77,13 +77,14 @@ class StackViewController(UIViewController):
     # --- --- / detailStackView
     # --- --- ---- detailLabel
     detailLabel = UILabel.new()
-    '''
+    detailLabel.setFrame_(CGRectMake(0.0, 0.0, 104.0, 34.0))
+    
     detailLabel.setContentHuggingPriority_forAxis_(
       251.0, UILayoutConstraintAxis.horizontal)
     detailLabel.setContentHuggingPriority_forAxis_(
       251.0, UILayoutConstraintAxis.vertical)
     
-    '''
+    
     detailLabel.text = 'Detail'
     detailLabel.lineBreakMode = NSLineBreakMode.byTruncatingTail
     #detailLabel.numberOfLines = 0
@@ -96,20 +97,16 @@ class StackViewController(UIViewController):
 
     # --- --- ---- detailTextField
     detailTextField = UITextField.new()
-    '''
+    detailTextField.setFrame_(CGRectMake(114.0, 0.0, 177.5, 34.0))
     detailTextField.setContentHuggingPriority_forAxis_(
       249.0, UILayoutConstraintAxis.horizontal)
-    '''
-    detailTextField.setFrame_(CGRectMake(301.5, 0.0, 41.5, 34.0))
     detailTextField.borderStyle = UITextBorderStyle.roundedRect
     detailTextField.setFont_(UIFont.systemFontOfSize_(14.0))
     detailTextField.font.systemMinimumFontSize = 17.0
-    #pdbr.state(detailTextField)
-    print(detailTextField.contentHuggingPriorityForAxis_(UILayoutConstraintAxis.horizontal))
 
     # --- --- ---- detailPlusButton
     detailPlusButton = UIButton.buttonWithType_(UIButtonType.system)
-    #detailPlusButton.setFrame_(CGRectMake(114.0, 0.0, 177.5, 34.0))
+    detailPlusButton.setFrame_(CGRectMake(301.5, 0.0, 41.5, 34.0))
     _detailPlusButtonConfig = UIButtonConfiguration.plainButtonConfiguration()
     _detailPlusButtonConfig.image = plusSymbol
     _detailPlusButtonConfig.contentInsets = NSDirectionalEdgeInsetsMake(
@@ -132,6 +129,10 @@ class StackViewController(UIViewController):
     # --- --- / furtherStackView
     # --- --- --- furtherlLabel
     furtherlLabel = UILabel.new()
+    furtherlLabel.setContentHuggingPriority_forAxis_(
+      251.0, UILayoutConstraintAxis.horizontal)
+    furtherlLabel.setContentHuggingPriority_forAxis_(
+      251.0, UILayoutConstraintAxis.vertical)
     furtherlLabel.text = 'Further Detail'
     furtherlLabel.lineBreakMode = NSLineBreakMode.byTruncatingTail
     furtherlLabel.numberOfLines = 0
@@ -140,6 +141,9 @@ class StackViewController(UIViewController):
 
     # --- --- --- furtherTextField
     furtherTextField = UITextField.new()
+    furtherTextField.setContentHuggingPriority_forAxis_(
+      249.0, UILayoutConstraintAxis.horizontal)
+    
     furtherTextField.borderStyle = UITextBorderStyle.roundedRect
     furtherTextField.setFont_(UIFont.systemFontOfSize_(14.0))
     furtherTextField.font.systemMinimumFontSize = 17.0
@@ -148,6 +152,8 @@ class StackViewController(UIViewController):
     furtherMinusButton = UIButton.buttonWithType_(UIButtonType.system)
     _furtherMinusButtonConfig = UIButtonConfiguration.plainButtonConfiguration(
     )
+    _furtherMinusButtonConfig.contentInsets = NSDirectionalEdgeInsetsMake(
+      0.0, 10.0, 0.0, 10.0)
     _furtherMinusButtonConfig.image = minusSymbol
     furtherMinusButton.configuration = _furtherMinusButtonConfig
     # todo: 確認用
@@ -199,6 +205,15 @@ class StackViewController(UIViewController):
       showingHidingExampleStackView.topAnchor.
       constraintEqualToAnchor_constant_(safeAreaLayoutGuide.topAnchor, 8.0),
     ])
+    
+    NSLayoutConstraint.activateConstraints_([
+      
+      detailTextField.trailingAnchor.constraintEqualToAnchor_(
+        furtherTextField.trailingAnchor),
+      
+      
+    ])
+
 
   @objc_method
   def viewDidAppear_(self, animated: bool):
