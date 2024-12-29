@@ -16,6 +16,7 @@ from rbedge.enumerations import (
   UITextBorderStyle,
   NSLineBreakMode,
   UIButtonType,
+  UIViewContentMode,
   UIControlContentVerticalAlignment,
   UIControlContentHorizontalAlignment,
 )
@@ -79,12 +80,12 @@ class StackViewController(UIViewController):
     # --- --- / detailStackView
     # --- --- ---- detailLabel
     detailLabel = UILabel.new()
-    
+
     detailLabel.setContentHuggingPriority_forAxis_(
       251.0, UILayoutConstraintAxis.horizontal)
     detailLabel.setContentHuggingPriority_forAxis_(
       251.0, UILayoutConstraintAxis.vertical)
-    
+
     detailLabel.text = 'Detail'
     detailLabel.lineBreakMode = NSLineBreakMode.byTruncatingTail
     detailLabel.setFont_(
@@ -97,7 +98,8 @@ class StackViewController(UIViewController):
     detailTextField = UITextField.new()
     #detailTextField.setFrame_(CGRectMake(114.0, 0.0, 177.5, 34.0))
     #detailTextField = UITextField.alloc().initWithFrame_(CGRectMake(114.0, 0.0, 177.5, 34.0))
-    detailTextField.setContentHuggingPriority_forAxis_(249.0, UILayoutConstraintAxis.horizontal)
+    detailTextField.setContentHuggingPriority_forAxis_(
+      249.0, UILayoutConstraintAxis.horizontal)
     detailTextField.borderStyle = UITextBorderStyle.roundedRect
     detailTextField.setFont_(UIFont.systemFontOfSize_(14.0))
     detailTextField.font.systemMinimumFontSize = 17.0
@@ -112,6 +114,7 @@ class StackViewController(UIViewController):
     _detailPlusButtonConfig.contentInsets = NSDirectionalEdgeInsetsMake(
       0.0, 10.0, 0.0, 10.0)
     detailPlusButton.configuration = _detailPlusButtonConfig
+    detailPlusButton.imageView.contentMode = 1#UIViewContentMode.scaleAspectFill
     #detailPlusButton.contentVerticalAlignment = UIControlContentVerticalAlignment.fill
     #detailPlusButton.contentHorizontalAlignment = UIControlContentHorizontalAlignment.fill
     # todo: 確認用
@@ -120,7 +123,10 @@ class StackViewController(UIViewController):
     #contentVerticalAlignment
     #pdbr.state(detailPlusButton, 1)
     #print(detailPlusButton.contentVerticalAlignment)
-    
+    #pdbr.state(_detailPlusButtonConfig)
+    #pdbr.state(detailPlusButton.imageView.contentMode)
+    #detailPlusButton.imageView.contentMode = UIViewContentMode.scaleAspectFit
+    print(detailPlusButton.imageView.contentMode)
 
     # --- --- detailStackView
     detailStackView = UIStackView.alloc().initWithArrangedSubviews_([
