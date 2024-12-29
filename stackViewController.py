@@ -76,15 +76,15 @@ class StackViewController(UIViewController):
 
     # --- --- / detailStackView
     # --- --- ---- detailLabel
-    detailLabel = UILabel.new()
-    detailLabel.setFrame_(CGRectMake(0.0, 0.0, 104.0, 34.0))
-    
+    #detailLabel = UILabel.new()
+    #detailLabel.setFrame_(CGRectMake(0.0, 0.0, 104.0, 34.0))
+    detailLabel = UILabel.alloc().initWithFrame_(
+      CGRectMake(0.0, 0.0, 104.0, 34.0))
+
     detailLabel.setContentHuggingPriority_forAxis_(
       251.0, UILayoutConstraintAxis.horizontal)
     detailLabel.setContentHuggingPriority_forAxis_(
       251.0, UILayoutConstraintAxis.vertical)
-    
-    
     detailLabel.text = 'Detail'
     detailLabel.lineBreakMode = NSLineBreakMode.byTruncatingTail
     #detailLabel.numberOfLines = 0
@@ -92,12 +92,13 @@ class StackViewController(UIViewController):
       UIFont.preferredFontForTextStyle_(UIFontTextStyleBody))
     # todo: 確認用
     detailLabel.backgroundColor = UIColor.systemOrangeColor()
-    #pdbr.state(detailLabel,1)
-    #print(detailLabel.contentHuggingPriorityForAxis_(UILayoutConstraintAxis.horizontal))
+    #
 
     # --- --- ---- detailTextField
-    detailTextField = UITextField.new()
-    detailTextField.setFrame_(CGRectMake(114.0, 0.0, 177.5, 34.0))
+    #detailTextField = UITextField.new()
+    #detailTextField.setFrame_(CGRectMake(114.0, 0.0, 177.5, 34.0))
+    detailTextField = UITextField.alloc().initWithFrame_(
+      CGRectMake(114.0, 0.0, 177.5, 34.0))
     detailTextField.setContentHuggingPriority_forAxis_(
       249.0, UILayoutConstraintAxis.horizontal)
     detailTextField.borderStyle = UITextBorderStyle.roundedRect
@@ -121,6 +122,7 @@ class StackViewController(UIViewController):
       detailTextField,
       detailPlusButton,
     ])
+
     detailStackView.spacing = 10.0
     # todo: 確認用
     detailStackView.backgroundColor = UIColor.systemDarkRedColor()
@@ -129,13 +131,14 @@ class StackViewController(UIViewController):
     # --- --- / furtherStackView
     # --- --- --- furtherlLabel
     furtherlLabel = UILabel.new()
+
     furtherlLabel.setContentHuggingPriority_forAxis_(
       251.0, UILayoutConstraintAxis.horizontal)
     furtherlLabel.setContentHuggingPriority_forAxis_(
       251.0, UILayoutConstraintAxis.vertical)
     furtherlLabel.text = 'Further Detail'
     furtherlLabel.lineBreakMode = NSLineBreakMode.byTruncatingTail
-    furtherlLabel.numberOfLines = 0
+    #furtherlLabel.numberOfLines = 0
     furtherlLabel.setFont_(
       UIFont.preferredFontForTextStyle_(UIFontTextStyleBody))
 
@@ -143,7 +146,7 @@ class StackViewController(UIViewController):
     furtherTextField = UITextField.new()
     furtherTextField.setContentHuggingPriority_forAxis_(
       249.0, UILayoutConstraintAxis.horizontal)
-    
+
     furtherTextField.borderStyle = UITextBorderStyle.roundedRect
     furtherTextField.setFont_(UIFont.systemFontOfSize_(14.0))
     furtherTextField.font.systemMinimumFontSize = 17.0
@@ -191,8 +194,11 @@ class StackViewController(UIViewController):
     showingHidingExampleStackView.backgroundColor = UIColor.systemGreenColor()
 
     self.view.addSubview_(showingHidingExampleStackView)
+
     # --- Layout
     showingHidingExampleStackView.translatesAutoresizingMaskIntoConstraints = False
+    
+    
 
     layoutMarginsGuide = self.view.layoutMarginsGuide
     safeAreaLayoutGuide = self.view.safeAreaLayoutGuide
@@ -205,15 +211,13 @@ class StackViewController(UIViewController):
       showingHidingExampleStackView.topAnchor.
       constraintEqualToAnchor_constant_(safeAreaLayoutGuide.topAnchor, 8.0),
     ])
-    
+    '''
     NSLayoutConstraint.activateConstraints_([
-      
-      detailTextField.trailingAnchor.constraintEqualToAnchor_(
-        furtherTextField.trailingAnchor),
-      
+      detailLabel.trailingAnchor.constraintEqualToAnchor_constant_(
+        detailLabel.leadingAnchor, 100.0),
       
     ])
-
+    '''
 
   @objc_method
   def viewDidAppear_(self, animated: bool):
