@@ -16,6 +16,8 @@ from rbedge.enumerations import (
   UITextBorderStyle,
   NSLineBreakMode,
   UIButtonType,
+  UIControlContentVerticalAlignment,
+  UIControlContentHorizontalAlignment,
 )
 
 from rbedge import pdbr
@@ -77,16 +79,14 @@ class StackViewController(UIViewController):
     # --- --- / detailStackView
     # --- --- ---- detailLabel
     detailLabel = UILabel.new()
-    #detailLabel.setFrame_(CGRectMake(0.0, 0.0, 104.0, 34.0))
-    #detailLabel = UILabel.alloc().initWithFrame_(CGRectMake(0.0, 0.0, 104.0, 34.0))
-
+    
     detailLabel.setContentHuggingPriority_forAxis_(
       251.0, UILayoutConstraintAxis.horizontal)
     detailLabel.setContentHuggingPriority_forAxis_(
       251.0, UILayoutConstraintAxis.vertical)
+    
     detailLabel.text = 'Detail'
     detailLabel.lineBreakMode = NSLineBreakMode.byTruncatingTail
-    #detailLabel.numberOfLines = 0
     detailLabel.setFont_(
       UIFont.preferredFontForTextStyle_(UIFontTextStyleBody))
     # todo: 確認用
@@ -96,10 +96,8 @@ class StackViewController(UIViewController):
     # --- --- ---- detailTextField
     detailTextField = UITextField.new()
     #detailTextField.setFrame_(CGRectMake(114.0, 0.0, 177.5, 34.0))
-    detailTextField = UITextField.alloc().initWithFrame_(
-      CGRectMake(114.0, 0.0, 177.5, 34.0))
-    detailTextField.setContentHuggingPriority_forAxis_(
-      249.0, UILayoutConstraintAxis.horizontal)
+    #detailTextField = UITextField.alloc().initWithFrame_(CGRectMake(114.0, 0.0, 177.5, 34.0))
+    detailTextField.setContentHuggingPriority_forAxis_(249.0, UILayoutConstraintAxis.horizontal)
     detailTextField.borderStyle = UITextBorderStyle.roundedRect
     detailTextField.setFont_(UIFont.systemFontOfSize_(14.0))
     detailTextField.font.systemMinimumFontSize = 17.0
@@ -108,14 +106,21 @@ class StackViewController(UIViewController):
     detailPlusButton = UIButton.buttonWithType_(UIButtonType.system)
     #detailPlusButton.setFrame_(CGRectMake(301.5, 0.0, 41.5, 34.0))
     _detailPlusButtonConfig = UIButtonConfiguration.plainButtonConfiguration()
+    #_detailPlusButtonConfig.titlePadding=0.0
     _detailPlusButtonConfig.image = plusSymbol
     #_detailPlusButtonConfig.titleLineBreakMode = NSLineBreakMode.byTruncatingMiddle
     _detailPlusButtonConfig.contentInsets = NSDirectionalEdgeInsetsMake(
       0.0, 10.0, 0.0, 10.0)
     detailPlusButton.configuration = _detailPlusButtonConfig
+    #detailPlusButton.contentVerticalAlignment = UIControlContentVerticalAlignment.fill
+    #detailPlusButton.contentHorizontalAlignment = UIControlContentHorizontalAlignment.fill
     # todo: 確認用
     detailPlusButton.backgroundColor = UIColor.systemBrownColor()
-    pdbr.state(detailPlusButton)
+    #contentHorizontalAlignment
+    #contentVerticalAlignment
+    #pdbr.state(detailPlusButton, 1)
+    #print(detailPlusButton.contentVerticalAlignment)
+    
 
     # --- --- detailStackView
     detailStackView = UIStackView.alloc().initWithArrangedSubviews_([

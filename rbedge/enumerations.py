@@ -652,3 +652,25 @@ class NSTextAlignment:
   justified: int = 3
   natural: int = 4
 
+
+# ref: [UIControlContentVerticalAlignment | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uicontrol/contentverticalalignment-swift.enum?language=objc)
+@dataclass
+class UIControlContentVerticalAlignment:
+  # ref: [UIControl.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UIControl.rs.html#52)
+  center: int = 0
+  top: int = 1
+  bottom: int = 2
+  fill: int = 3
+
+
+# ref: [UIControlContentHorizontalAlignment | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uicontrol/contenthorizontalalignment-swift.enum?language=objc)
+@dataclass
+class UIControlContentHorizontalAlignment:
+  # ref: [UIControl.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UIControl.rs.html#75)
+  center: int = 0
+  left: int = 1
+  right: int = 2
+  fill: int = 3
+  leading: int = 4
+  trailing: int = 5
+
