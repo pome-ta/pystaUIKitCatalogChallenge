@@ -76,10 +76,9 @@ class StackViewController(UIViewController):
 
     # --- --- / detailStackView
     # --- --- ---- detailLabel
-    #detailLabel = UILabel.new()
+    detailLabel = UILabel.new()
     #detailLabel.setFrame_(CGRectMake(0.0, 0.0, 104.0, 34.0))
-    detailLabel = UILabel.alloc().initWithFrame_(
-      CGRectMake(0.0, 0.0, 104.0, 34.0))
+    #detailLabel = UILabel.alloc().initWithFrame_(CGRectMake(0.0, 0.0, 104.0, 34.0))
 
     detailLabel.setContentHuggingPriority_forAxis_(
       251.0, UILayoutConstraintAxis.horizontal)
@@ -95,7 +94,7 @@ class StackViewController(UIViewController):
     #
 
     # --- --- ---- detailTextField
-    #detailTextField = UITextField.new()
+    detailTextField = UITextField.new()
     #detailTextField.setFrame_(CGRectMake(114.0, 0.0, 177.5, 34.0))
     detailTextField = UITextField.alloc().initWithFrame_(
       CGRectMake(114.0, 0.0, 177.5, 34.0))
@@ -107,14 +106,16 @@ class StackViewController(UIViewController):
 
     # --- --- ---- detailPlusButton
     detailPlusButton = UIButton.buttonWithType_(UIButtonType.system)
-    detailPlusButton.setFrame_(CGRectMake(301.5, 0.0, 41.5, 34.0))
+    #detailPlusButton.setFrame_(CGRectMake(301.5, 0.0, 41.5, 34.0))
     _detailPlusButtonConfig = UIButtonConfiguration.plainButtonConfiguration()
     _detailPlusButtonConfig.image = plusSymbol
+    #_detailPlusButtonConfig.titleLineBreakMode = NSLineBreakMode.byTruncatingMiddle
     _detailPlusButtonConfig.contentInsets = NSDirectionalEdgeInsetsMake(
       0.0, 10.0, 0.0, 10.0)
     detailPlusButton.configuration = _detailPlusButtonConfig
     # todo: 確認用
     detailPlusButton.backgroundColor = UIColor.systemBrownColor()
+    pdbr.state(detailPlusButton)
 
     # --- --- detailStackView
     detailStackView = UIStackView.alloc().initWithArrangedSubviews_([
@@ -197,8 +198,6 @@ class StackViewController(UIViewController):
 
     # --- Layout
     showingHidingExampleStackView.translatesAutoresizingMaskIntoConstraints = False
-    
-    
 
     layoutMarginsGuide = self.view.layoutMarginsGuide
     safeAreaLayoutGuide = self.view.safeAreaLayoutGuide
@@ -211,13 +210,17 @@ class StackViewController(UIViewController):
       showingHidingExampleStackView.topAnchor.
       constraintEqualToAnchor_constant_(safeAreaLayoutGuide.topAnchor, 8.0),
     ])
-    '''
+
+    #pdbr.state(detailLabel.widthAnchor)
+    #height
+    #width
+    #detailTextField
+    #furtherTextField
+
     NSLayoutConstraint.activateConstraints_([
-      detailLabel.trailingAnchor.constraintEqualToAnchor_constant_(
-        detailLabel.leadingAnchor, 100.0),
-      
+      detailLabel.widthAnchor.constraintGreaterThanOrEqualToAnchor_(
+        furtherlLabel.widthAnchor),
     ])
-    '''
 
   @objc_method
   def viewDidAppear_(self, animated: bool):
