@@ -83,12 +83,10 @@ class StackViewController(UIViewController):
     # --- --- / detailStackView
     # --- --- ---- detailLabel
     detailLabel = UILabel.new()
-
     detailLabel.setContentHuggingPriority_forAxis_(
       251.0, UILayoutConstraintAxis.horizontal)
     detailLabel.setContentHuggingPriority_forAxis_(
       251.0, UILayoutConstraintAxis.vertical)
-
     detailLabel.text = 'Detail'
     detailLabel.lineBreakMode = NSLineBreakMode.byTruncatingTail
     detailLabel.setFont_(
@@ -99,8 +97,6 @@ class StackViewController(UIViewController):
 
     # --- --- ---- detailTextField
     detailTextField = UITextField.new()
-    #detailTextField.setFrame_(CGRectMake(114.0, 0.0, 177.5, 34.0))
-    #detailTextField = UITextField.alloc().initWithFrame_(CGRectMake(114.0, 0.0, 177.5, 34.0))
     detailTextField.setContentHuggingPriority_forAxis_(
       249.0, UILayoutConstraintAxis.horizontal)
     detailTextField.borderStyle = UITextBorderStyle.roundedRect
@@ -111,51 +107,8 @@ class StackViewController(UIViewController):
     detailPlusButton = UIButton.buttonWithType_(UIButtonType.system)
     detailPlusButton.setImage_forState_(plusSymbol, UIControlState.normal)
     detailPlusButton.contentEdgeInsets = UIEdgeInsetsMake(0.0, 10.0, 0.0, 10.0)
-    
-    
-    #detailPlusButton.setImageEdgeInsets_(UIEdgeInsetsMake(0.0, 10.0, 0.0, 100.0))
-    '''
-    detailPlusButton.imageView.contentMode = 1#UIViewContentMode.scaleAspectFill
-    detailPlusButton.contentVerticalAlignment = UIControlContentVerticalAlignment.fill
-    detailPlusButton.contentHorizontalAlignment = UIControlContentHorizontalAlignment.fill
-    '''
     # todo: 確認用
     detailPlusButton.backgroundColor = UIColor.systemBrownColor()
-    
-    
-    pdbr.state(detailPlusButton)
-    
-    
-    
-    '''
-    
-    #detailPlusButton.setFrame_(CGRectMake(301.5, 0.0, 41.5, 34.0))
-    _detailPlusButtonConfig = UIButtonConfiguration.plainButtonConfiguration()
-    #_detailPlusButtonConfig.titlePadding=0.0
-    #_detailPlusButtonConfig.image = plusSymbol
-    #_detailPlusButtonConfig.titleLineBreakMode = NSLineBreakMode.byTruncatingMiddle
-    _detailPlusButtonConfig.contentInsets = NSDirectionalEdgeInsetsMake(
-      0.0, 10.0, 0.0, 10.0)
-    detailPlusButton.configuration = _detailPlusButtonConfig
-    #detailPlusButton.imageView.contentMode = 1#UIViewContentMode.scaleAspectFill
-    #detailPlusButton.contentVerticalAlignment = UIControlContentVerticalAlignment.fill
-    #detailPlusButton.contentHorizontalAlignment = UIControlContentHorizontalAlignment.fill
-    # todo: 確認用
-    detailPlusButton.backgroundColor = UIColor.systemBrownColor()
-    #contentHorizontalAlignment
-    #contentVerticalAlignment
-    #pdbr.state(detailPlusButton, 1)
-    #print(detailPlusButton.contentVerticalAlignment)
-    #pdbr.state(_detailPlusButtonConfig)
-    #pdbr.state(detailPlusButton.imageView.contentMode)
-    #detailPlusButton.imageView.contentMode = UIViewContentMode.scaleAspectFit
-    #print(detailPlusButton.imageView.contentMode)
-    #pdbr.state(detailPlusButton)
-    '''
-    
-    
-    
-    
 
     # --- --- detailStackView
     detailStackView = UIStackView.alloc().initWithArrangedSubviews_([
@@ -172,14 +125,12 @@ class StackViewController(UIViewController):
     # --- --- / furtherStackView
     # --- --- --- furtherlLabel
     furtherlLabel = UILabel.new()
-
     furtherlLabel.setContentHuggingPriority_forAxis_(
       251.0, UILayoutConstraintAxis.horizontal)
     furtherlLabel.setContentHuggingPriority_forAxis_(
       251.0, UILayoutConstraintAxis.vertical)
     furtherlLabel.text = 'Further Detail'
     furtherlLabel.lineBreakMode = NSLineBreakMode.byTruncatingTail
-    #furtherlLabel.numberOfLines = 0
     furtherlLabel.setFont_(
       UIFont.preferredFontForTextStyle_(UIFontTextStyleBody))
 
@@ -187,19 +138,15 @@ class StackViewController(UIViewController):
     furtherTextField = UITextField.new()
     furtherTextField.setContentHuggingPriority_forAxis_(
       249.0, UILayoutConstraintAxis.horizontal)
-
     furtherTextField.borderStyle = UITextBorderStyle.roundedRect
     furtherTextField.setFont_(UIFont.systemFontOfSize_(14.0))
     furtherTextField.font.systemMinimumFontSize = 17.0
 
     # --- --- --- furtherMinusButton
     furtherMinusButton = UIButton.buttonWithType_(UIButtonType.system)
-    _furtherMinusButtonConfig = UIButtonConfiguration.plainButtonConfiguration(
-    )
-    _furtherMinusButtonConfig.contentInsets = NSDirectionalEdgeInsetsMake(
-      0.0, 10.0, 0.0, 10.0)
-    _furtherMinusButtonConfig.image = minusSymbol
-    furtherMinusButton.configuration = _furtherMinusButtonConfig
+    furtherMinusButton.setImage_forState_(minusSymbol, UIControlState.normal)
+    furtherMinusButton.contentEdgeInsets = UIEdgeInsetsMake(0.0, 10.0, 0.0, 10.0)
+    
     # todo: 確認用
     furtherMinusButton.backgroundColor = UIColor.systemDarkPurpleColor()
 
@@ -233,11 +180,43 @@ class StackViewController(UIViewController):
     showingHidingExampleStackView.spacing = 10.0
     # todo: 確認用
     showingHidingExampleStackView.backgroundColor = UIColor.systemGreenColor()
+    
+    # --- addRemoveExampleStackView
+    # --- --- ---- addRemoveLabel
+    addRemoveLabel = UILabel.new()
+    addRemoveLabel.text = 'Showing/hiding views'
+    addRemoveLabel.textAlignment = NSTextAlignment.center
+    addRemoveLabel.setFont_(
+      UIFont.preferredFontForTextStyle_(UIFontTextStyleHeadline))
+    
+    
+    # --- --- ---- addbutton
+    addbutton = UIButton.buttonWithType_(UIButtonType.system)
+    addbutton.setImage_forState_(plusSymbol, UIControlState.normal)
+    addbutton.contentEdgeInsets = UIEdgeInsetsMake(10.0, 10.0, 10.0, 10.0)
+    
+    # --- --- ---- removebutton
+    removebutton = UIButton.buttonWithType_(UIButtonType.system)
+    removebutton.setImage_forState_(minusSymbol, UIControlState.normal)
+    removebutton.contentEdgeInsets = UIEdgeInsetsMake(10.0, 10.0, 10.0, 10.0)
+    
+    
+    # --- addRemoveExampleStackView
+
+    addRemoveExampleStackView = UIStackView.alloc(
+    ).initWithArrangedSubviews_([
+      addRemoveLabel,
+      addbutton,
+      removebutton,
+    ])
+    
 
     self.view.addSubview_(showingHidingExampleStackView)
+    self.view.addSubview_(addRemoveExampleStackView)
 
     # --- Layout
     showingHidingExampleStackView.translatesAutoresizingMaskIntoConstraints = False
+    addRemoveExampleStackView.translatesAutoresizingMaskIntoConstraints = False
 
     layoutMarginsGuide = self.view.layoutMarginsGuide
     safeAreaLayoutGuide = self.view.safeAreaLayoutGuide
@@ -251,15 +230,19 @@ class StackViewController(UIViewController):
       constraintEqualToAnchor_constant_(safeAreaLayoutGuide.topAnchor, 8.0),
     ])
 
-    #pdbr.state(detailLabel.widthAnchor)
-    #height
-    #width
-    #detailTextField
-    #furtherTextField
-
     NSLayoutConstraint.activateConstraints_([
       detailLabel.widthAnchor.constraintGreaterThanOrEqualToAnchor_(
         furtherlLabel.widthAnchor),
+    ])
+    
+    NSLayoutConstraint.activateConstraints_([
+      
+      addRemoveExampleStackView.topAnchor.
+      constraintEqualToAnchor_constant_(showingHidingExampleStackView.bottomAnchor, 20.0),
+      addRemoveExampleStackView.leadingAnchor.constraintEqualToAnchor_(
+        showingHidingExampleStackView.leadingAnchor),
+      addRemoveExampleStackView.trailingAnchor.constraintEqualToAnchor_(
+        showingHidingExampleStackView.trailingAnchor),
     ])
 
   @objc_method
