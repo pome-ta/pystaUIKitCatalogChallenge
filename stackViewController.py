@@ -154,6 +154,8 @@ class StackViewController(UIViewController):
     furtherMinusButton.setImage_forState_(minusSymbol, UIControlState.normal)
     furtherMinusButton.contentEdgeInsets = UIEdgeInsetsMake(
       0.0, 10.0, 0.0, 10.0)
+    furtherMinusButton.addTarget_action_forControlEvents_(
+      self, SEL('hideFurtherDetail:'), touchUpInside)
     # todo: 確認用
     #furtherMinusButton.backgroundColor = UIColor.systemDarkPurpleColor()
 
@@ -350,7 +352,21 @@ class StackViewController(UIViewController):
                                          UIViewAnimationCurve.easeIn,
                                          animationsBlock)
     showDetailAnimator.startAnimation()
-    
+
+  @objc_method
+  def hideFurtherDetail_(self, _):
+    # Animate the changes by performing them in a `UIViewPropertyAnimator` animation block.
+    @Block
+    def animationsBlock() -> None:
+      # Reveal the further details stack view and hide the plus button.
+      self.furtherDetailStackView.setHidden_(True)
+      self.plusButton.setHidden_(False)
+
+    hideDetailAnimator = UIViewPropertyAnimator.alloc(
+    ).initWithDuration_curve_animations_(NSTimeInterval(0.25),
+                                         UIViewAnimationCurve.easeOut,
+                                         animationsBlock)
+    hideDetailAnimator.startAnimation()
 
   # MARK: - Convenience
   @objc_method
@@ -372,8 +388,4 @@ if __name__ == '__main__':
 
   presentation_style = UIModalPresentationStyle.fullScreen
   present_viewController(main_vc, presentation_style)
-
-
-
-
 
