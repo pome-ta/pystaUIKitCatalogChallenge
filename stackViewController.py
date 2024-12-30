@@ -215,7 +215,6 @@ class StackViewController(UIViewController):
     removebutton.backgroundColor = UIColor.systemBrownColor()
 
     # --- addRemoveExampleStackView
-
     addRemoveExampleStackView = UIStackView.alloc().initWithArrangedSubviews_([
       addRemoveLabel,
       addbutton,
@@ -234,6 +233,7 @@ class StackViewController(UIViewController):
     layoutMarginsGuide = self.view.layoutMarginsGuide
     safeAreaLayoutGuide = self.view.safeAreaLayoutGuide
 
+    # --- showingHidingExampleStackView
     NSLayoutConstraint.activateConstraints_([
       showingHidingExampleStackView.leadingAnchor.constraintEqualToAnchor_(
         layoutMarginsGuide.leadingAnchor),
@@ -244,17 +244,18 @@ class StackViewController(UIViewController):
     ])
 
     NSLayoutConstraint.activateConstraints_([
-      detailLabel.widthAnchor.constraintGreaterThanOrEqualToAnchor_(
+      detailLabel.widthAnchor.constraintEqualToAnchor_(
         furtherlLabel.widthAnchor),
     ])
 
+    # --- addRemoveExampleStackView
     NSLayoutConstraint.activateConstraints_([
       addRemoveExampleStackView.topAnchor.constraintEqualToAnchor_constant_(
         showingHidingExampleStackView.bottomAnchor, 20.0),
       addRemoveExampleStackView.leadingAnchor.constraintEqualToAnchor_(
-        showingHidingExampleStackView.leadingAnchor),
+        layoutMarginsGuide.leadingAnchor),
       addRemoveExampleStackView.trailingAnchor.constraintEqualToAnchor_(
-        showingHidingExampleStackView.trailingAnchor),
+        layoutMarginsGuide.trailingAnchor),
     ])
 
   @objc_method
@@ -267,7 +268,6 @@ class StackViewController(UIViewController):
                  ctypes.c_bool,
                ])
     #print('viewDidAppear')
-    #pdbr.state(self.view.subviews()[0].arrangedSubviews[1].arrangedSubviews)
 
   @objc_method
   def viewDidDisappear_(self, animated: bool):
