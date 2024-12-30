@@ -8,7 +8,7 @@ import ctypes
 from pyrubicon.objc.api import ObjCClass, ObjCInstance
 from pyrubicon.objc.api import objc_method, objc_const
 from pyrubicon.objc.runtime import send_super, objc_id, load_library
-from pyrubicon.objc.types import CGRectMake,UIEdgeInsetsMake
+from pyrubicon.objc.types import CGRectMake, UIEdgeInsetsMake
 
 from rbedge.functions import NSDirectionalEdgeInsetsMake
 
@@ -145,8 +145,9 @@ class StackViewController(UIViewController):
     # --- --- --- furtherMinusButton
     furtherMinusButton = UIButton.buttonWithType_(UIButtonType.system)
     furtherMinusButton.setImage_forState_(minusSymbol, UIControlState.normal)
-    furtherMinusButton.contentEdgeInsets = UIEdgeInsetsMake(0.0, 10.0, 0.0, 10.0)
-    
+    furtherMinusButton.contentEdgeInsets = UIEdgeInsetsMake(
+      0.0, 10.0, 0.0, 10.0)
+
     # todo: 確認用
     furtherMinusButton.backgroundColor = UIColor.systemDarkPurpleColor()
 
@@ -180,36 +181,48 @@ class StackViewController(UIViewController):
     showingHidingExampleStackView.spacing = 10.0
     # todo: 確認用
     showingHidingExampleStackView.backgroundColor = UIColor.systemGreenColor()
-    
+
     # --- addRemoveExampleStackView
     # --- --- ---- addRemoveLabel
     addRemoveLabel = UILabel.new()
-    addRemoveLabel.text = 'Showing/hiding views'
+    addRemoveLabel.setContentHuggingPriority_forAxis_(
+      251.0, UILayoutConstraintAxis.horizontal)
+    addRemoveLabel.setContentHuggingPriority_forAxis_(
+      251.0, UILayoutConstraintAxis.vertical)
+    addRemoveLabel.text = 'Add/remove views'
     addRemoveLabel.textAlignment = NSTextAlignment.center
     addRemoveLabel.setFont_(
       UIFont.preferredFontForTextStyle_(UIFontTextStyleHeadline))
-    
-    
+    # todo: 確認用
+    addRemoveLabel.backgroundColor = UIColor.systemOrangeColor()
+
     # --- --- ---- addbutton
     addbutton = UIButton.buttonWithType_(UIButtonType.system)
     addbutton.setImage_forState_(plusSymbol, UIControlState.normal)
+    addbutton.setContentHuggingPriority_forAxis_(
+      252.0, UILayoutConstraintAxis.horizontal)
     addbutton.contentEdgeInsets = UIEdgeInsetsMake(10.0, 10.0, 10.0, 10.0)
-    
+    # todo: 確認用
+    addbutton.backgroundColor = UIColor.systemDarkPurpleColor()
+
     # --- --- ---- removebutton
     removebutton = UIButton.buttonWithType_(UIButtonType.system)
     removebutton.setImage_forState_(minusSymbol, UIControlState.normal)
+    removebutton.setContentHuggingPriority_forAxis_(
+      253.0, UILayoutConstraintAxis.horizontal)
     removebutton.contentEdgeInsets = UIEdgeInsetsMake(10.0, 10.0, 10.0, 10.0)
-    
-    
+    # todo: 確認用
+    removebutton.backgroundColor = UIColor.systemBrownColor()
+
     # --- addRemoveExampleStackView
 
-    addRemoveExampleStackView = UIStackView.alloc(
-    ).initWithArrangedSubviews_([
+    addRemoveExampleStackView = UIStackView.alloc().initWithArrangedSubviews_([
       addRemoveLabel,
       addbutton,
       removebutton,
     ])
-    
+    # xxx: 確認用
+    addRemoveExampleStackView.backgroundColor = UIColor.systemYellowColor()
 
     self.view.addSubview_(showingHidingExampleStackView)
     self.view.addSubview_(addRemoveExampleStackView)
@@ -234,11 +247,10 @@ class StackViewController(UIViewController):
       detailLabel.widthAnchor.constraintGreaterThanOrEqualToAnchor_(
         furtherlLabel.widthAnchor),
     ])
-    
+
     NSLayoutConstraint.activateConstraints_([
-      
-      addRemoveExampleStackView.topAnchor.
-      constraintEqualToAnchor_constant_(showingHidingExampleStackView.bottomAnchor, 20.0),
+      addRemoveExampleStackView.topAnchor.constraintEqualToAnchor_constant_(
+        showingHidingExampleStackView.bottomAnchor, 20.0),
       addRemoveExampleStackView.leadingAnchor.constraintEqualToAnchor_(
         showingHidingExampleStackView.leadingAnchor),
       addRemoveExampleStackView.trailingAnchor.constraintEqualToAnchor_(
