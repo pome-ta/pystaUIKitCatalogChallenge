@@ -9,7 +9,7 @@ import ctypes
 
 from pyrubicon.objc.api import ObjCClass, ObjCInstance
 from pyrubicon.objc.api import objc_method, objc_const
-from pyrubicon.objc.runtime import send_super, objc_id, load_library
+from pyrubicon.objc.runtime import send_super, objc_id, load_library, SEL
 from pyrubicon.objc.types import CGRectMake, UIEdgeInsetsMake
 
 from rbedge.functions import NSDirectionalEdgeInsetsMake
@@ -20,6 +20,7 @@ from rbedge.enumerations import (
   UITextBorderStyle,
   UIButtonType,
   UIControlState,
+  UIControlEvents,
   NSLineBreakMode,
   UIStackViewAlignment,
 )
@@ -67,7 +68,7 @@ class StackViewController(UIViewController):
       title := self.navigationItem.title) is None else title
 
     #self.view.backgroundColor = UIColor.systemBackgroundColor()
-    self.view.backgroundColor = UIColor.systemIndigoColor()
+    #self.view.backgroundColor = UIColor.systemIndigoColor()
 
     # xxx: あとで、`setup` 的なのを作る
     # --- showingHidingStackView
@@ -80,7 +81,7 @@ class StackViewController(UIViewController):
     showingHidingLabel.setFont_(
       UIFont.preferredFontForTextStyle_(UIFontTextStyleHeadline))
     # xxx: 確認用
-    showingHidingLabel.backgroundColor = UIColor.systemYellowColor()
+    #showingHidingLabel.backgroundColor = UIColor.systemYellowColor()
 
     # --- --- / detailStackView
     detailStackView = UIStackView.alloc()
@@ -95,7 +96,7 @@ class StackViewController(UIViewController):
     detailLabel.setFont_(
       UIFont.preferredFontForTextStyle_(UIFontTextStyleBody))
     # todo: 確認用
-    detailLabel.backgroundColor = UIColor.systemOrangeColor()
+    #detailLabel.backgroundColor = UIColor.systemOrangeColor()
 
     # --- --- ---- detailTextField
     detailTextField = UITextField.new()
@@ -109,8 +110,10 @@ class StackViewController(UIViewController):
     detailPlusButton = UIButton.buttonWithType_(UIButtonType.system)
     detailPlusButton.setImage_forState_(plusSymbol, UIControlState.normal)
     detailPlusButton.contentEdgeInsets = UIEdgeInsetsMake(0.0, 10.0, 0.0, 10.0)
+    detailPlusButton.addTarget_action_forControlEvents_(
+      self, SEL('showFurtherDetail:'), UIControlEvents.touchUpInside)
     # todo: 確認用
-    detailPlusButton.backgroundColor = UIColor.systemBrownColor()
+    #detailPlusButton.backgroundColor = UIColor.systemBrownColor()
 
     # --- --- arrangedSubviews
     detailStackView.initWithArrangedSubviews_([
@@ -120,7 +123,7 @@ class StackViewController(UIViewController):
     ])
     detailStackView.spacing = 10.0
     # todo: 確認用
-    detailStackView.backgroundColor = UIColor.systemDarkRedColor()
+    #detailStackView.backgroundColor = UIColor.systemDarkRedColor()
     # --- --- detailStackView /
 
     # --- --- / furtherStackView
@@ -150,7 +153,7 @@ class StackViewController(UIViewController):
     furtherMinusButton.contentEdgeInsets = UIEdgeInsetsMake(
       0.0, 10.0, 0.0, 10.0)
     # todo: 確認用
-    furtherMinusButton.backgroundColor = UIColor.systemDarkPurpleColor()
+    #furtherMinusButton.backgroundColor = UIColor.systemDarkPurpleColor()
 
     # --- --- arrangedSubviews
     furtherStackView.initWithArrangedSubviews_([
@@ -160,7 +163,7 @@ class StackViewController(UIViewController):
     ])
     furtherStackView.spacing = 10.0
     # todo: 確認用
-    furtherStackView.backgroundColor = UIColor.systemCyanColor()
+    #furtherStackView.backgroundColor = UIColor.systemCyanColor()
     # --- --- furtherStackView /
 
     footerLabel = UILabel.new()
@@ -179,7 +182,7 @@ class StackViewController(UIViewController):
     showingHidingStackView.axis = UILayoutConstraintAxis.vertical
     showingHidingStackView.spacing = 10.0
     # todo: 確認用
-    showingHidingStackView.backgroundColor = UIColor.systemGreenColor()
+    #showingHidingStackView.backgroundColor = UIColor.systemGreenColor()
 
     # --- addRemoveStackView
     addRemoveStackView = UIStackView.alloc()
@@ -194,7 +197,7 @@ class StackViewController(UIViewController):
     addRemoveLabel.setFont_(
       UIFont.preferredFontForTextStyle_(UIFontTextStyleHeadline))
     # todo: 確認用
-    addRemoveLabel.backgroundColor = UIColor.systemOrangeColor()
+    #addRemoveLabel.backgroundColor = UIColor.systemOrangeColor()
 
     # --- --- ---- addbutton
     addbutton = UIButton.buttonWithType_(UIButtonType.system)
@@ -203,7 +206,7 @@ class StackViewController(UIViewController):
       252.0, UILayoutConstraintAxis.horizontal)
     addbutton.contentEdgeInsets = UIEdgeInsetsMake(10.0, 10.0, 10.0, 10.0)
     # todo: 確認用
-    addbutton.backgroundColor = UIColor.systemDarkPurpleColor()
+    #addbutton.backgroundColor = UIColor.systemDarkPurpleColor()
 
     # --- --- ---- removebutton
     removebutton = UIButton.buttonWithType_(UIButtonType.system)
@@ -212,7 +215,7 @@ class StackViewController(UIViewController):
       253.0, UILayoutConstraintAxis.horizontal)
     removebutton.contentEdgeInsets = UIEdgeInsetsMake(10.0, 10.0, 10.0, 10.0)
     # todo: 確認用
-    removebutton.backgroundColor = UIColor.systemBrownColor()
+    #removebutton.backgroundColor = UIColor.systemBrownColor()
 
     # --- --- arrangedSubviews
     addRemoveStackView.initWithArrangedSubviews_([
@@ -221,7 +224,7 @@ class StackViewController(UIViewController):
       removebutton,
     ])
     # xxx: 確認用
-    addRemoveStackView.backgroundColor = UIColor.systemYellowColor()
+    #addRemoveStackView.backgroundColor = UIColor.systemYellowColor()
 
     # --- addRemoveExampleStackView
     addRemoveExampleStackView = UIStackView.new()
@@ -285,8 +288,22 @@ class StackViewController(UIViewController):
     self.addRemoveExampleStackView = addRemoveExampleStackView
     self.addArrangedViewButton = addbutton
     self.removeArrangedViewButton = removebutton
-    
+
     self.maximumArrangedSubviewCount = 3
+
+  # MARK: - View Life Cycle
+  @objc_method
+  def viewWillAppear_(self, animated: bool):
+    send_super(__class__,
+               self,
+               'viewWillAppear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    self.furtherDetailStackView.setHidden_(True)
+    self.plusButton.setHidden_(False)
+    self.updateAddRemoveButtons()
 
   @objc_method
   def viewDidAppear_(self, animated: bool):
@@ -298,9 +315,6 @@ class StackViewController(UIViewController):
                  ctypes.c_bool,
                ])
     #print('viewDidAppear')
-    #pdbr.state(self.furtherDetailStackView)
-    #self.furtherDetailStackView.isHidden = True
-    self.furtherDetailStackView.setHidden_(True)
 
   @objc_method
   def viewDidDisappear_(self, animated: bool):
@@ -317,6 +331,20 @@ class StackViewController(UIViewController):
   def didReceiveMemoryWarning(self):
     send_super(__class__, self, 'didReceiveMemoryWarning')
     print(f'{__class__}: didReceiveMemoryWarning')
+
+  # MARK: - Actions
+  @objc_method
+  def showFurtherDetail_(self, _):
+    # Animate the changes by performing them in a `UIViewPropertyAnimator` animation block.
+    print(_)
+
+  # MARK: - Convenience
+  @objc_method
+  def updateAddRemoveButtons(self):
+    arrangedSubviewCount = len(self.addRemoveExampleStackView.arrangedSubviews)
+    self.addArrangedViewButton.setEnabled_(
+      arrangedSubviewCount < self.maximumArrangedSubviewCount)
+    self.removeArrangedViewButton.setEnabled_(arrangedSubviewCount > 0)
 
 
 if __name__ == '__main__':
