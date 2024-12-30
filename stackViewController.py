@@ -1,6 +1,7 @@
 '''
   note: Storyboard 実装なし
   todo: 
+    - 時々落ちる、稀に無限クラッシュ
     - 不要な呼び出しを整理
 '''
 import ctypes
@@ -70,8 +71,8 @@ class StackViewController(UIViewController):
     self.view.backgroundColor = UIColor.systemIndigoColor()
 
     # xxx: あとで、`setup` 的なのを作る
-    # --- showingHidingExampleStackView
-    showingHidingExampleStackView = UIStackView.alloc()
+    # --- showingHidingStackView
+    showingHidingStackView = UIStackView.alloc()
 
     # --- --- showingHidingLabel
     showingHidingLabel = UILabel.new()
@@ -170,16 +171,16 @@ class StackViewController(UIViewController):
       UIFont.preferredFontForTextStyle_(UIFontTextStyleFootnote))
 
     # --- --- arrangedSubviews
-    showingHidingExampleStackView.initWithArrangedSubviews_([
+    showingHidingStackView.initWithArrangedSubviews_([
       showingHidingLabel,
       detailStackView,
       furtherStackView,
       footerLabel,
     ])
-    showingHidingExampleStackView.axis = UILayoutConstraintAxis.vertical
-    showingHidingExampleStackView.spacing = 10.0
+    showingHidingStackView.axis = UILayoutConstraintAxis.vertical
+    showingHidingStackView.spacing = 10.0
     # todo: 確認用
-    showingHidingExampleStackView.backgroundColor = UIColor.systemGreenColor()
+    showingHidingStackView.backgroundColor = UIColor.systemGreenColor()
 
     # --- addRemoveExampleStackView
     addRemoveExampleStackView = UIStackView.alloc()
@@ -223,23 +224,23 @@ class StackViewController(UIViewController):
     # xxx: 確認用
     addRemoveExampleStackView.backgroundColor = UIColor.systemYellowColor()
 
-    self.view.addSubview_(showingHidingExampleStackView)
+    self.view.addSubview_(showingHidingStackView)
     self.view.addSubview_(addRemoveExampleStackView)
 
     # --- Layout
-    showingHidingExampleStackView.translatesAutoresizingMaskIntoConstraints = False
+    showingHidingStackView.translatesAutoresizingMaskIntoConstraints = False
     addRemoveExampleStackView.translatesAutoresizingMaskIntoConstraints = False
 
     layoutMarginsGuide = self.view.layoutMarginsGuide
     safeAreaLayoutGuide = self.view.safeAreaLayoutGuide
 
-    # --- showingHidingExampleStackView
+    # --- showingHidingStackView
     NSLayoutConstraint.activateConstraints_([
-      showingHidingExampleStackView.leadingAnchor.constraintEqualToAnchor_(
+      showingHidingStackView.leadingAnchor.constraintEqualToAnchor_(
         layoutMarginsGuide.leadingAnchor),
-      showingHidingExampleStackView.trailingAnchor.constraintEqualToAnchor_(
+      showingHidingStackView.trailingAnchor.constraintEqualToAnchor_(
         layoutMarginsGuide.trailingAnchor),
-      showingHidingExampleStackView.topAnchor.
+      showingHidingStackView.topAnchor.
       constraintEqualToAnchor_constant_(safeAreaLayoutGuide.topAnchor, 8.0),
     ])
 
@@ -252,7 +253,7 @@ class StackViewController(UIViewController):
     # --- addRemoveExampleStackView
     NSLayoutConstraint.activateConstraints_([
       addRemoveExampleStackView.topAnchor.constraintEqualToAnchor_constant_(
-        showingHidingExampleStackView.bottomAnchor, 20.0),
+        showingHidingStackView.bottomAnchor, 20.0),
       addRemoveExampleStackView.leadingAnchor.constraintEqualToAnchor_(
         layoutMarginsGuide.leadingAnchor),
       addRemoveExampleStackView.trailingAnchor.constraintEqualToAnchor_(
