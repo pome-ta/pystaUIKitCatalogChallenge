@@ -7,12 +7,10 @@
 '''
 import ctypes
 
-from pyrubicon.objc.api import ObjCClass, ObjCInstance
+from pyrubicon.objc.api import ObjCClass, ObjCInstance, Block
 from pyrubicon.objc.api import objc_method, objc_const
 from pyrubicon.objc.runtime import send_super, objc_id, load_library, SEL
-from pyrubicon.objc.types import CGRectMake, UIEdgeInsetsMake
-
-from rbedge.functions import NSDirectionalEdgeInsetsMake
+from pyrubicon.objc.types import CGRectMake, UIEdgeInsetsMake, NSTimeInterval
 
 from rbedge.enumerations import (
   UILayoutConstraintAxis,
@@ -23,8 +21,9 @@ from rbedge.enumerations import (
   UIControlEvents,
   NSLineBreakMode,
   UIStackViewAlignment,
+  UIViewAnimationCurve,
 )
-
+from rbedge.functions import NSDirectionalEdgeInsetsMake
 from rbedge import pdbr
 
 UIKit = load_library('UIKit')
@@ -39,17 +38,14 @@ UITextField = ObjCClass('UITextField')
 UIButton = ObjCClass('UIButton')
 UIButtonConfiguration = ObjCClass('UIButtonConfiguration')
 UIImage = ObjCClass('UIImage')
-
 UIColor = ObjCClass('UIColor')
+
+UIViewPropertyAnimator = ObjCClass('UIViewPropertyAnimator')
 
 # --- Global Variables
 UIFontTextStyleHeadline = objc_const(UIKit, 'UIFontTextStyleHeadline')
 UIFontTextStyleBody = objc_const(UIKit, 'UIFontTextStyleBody')
 UIFontTextStyleFootnote = objc_const(UIKit, 'UIFontTextStyleFootnote')
-
-# --- Symbols
-plusSymbol = UIImage.systemImageNamed('plus')
-minusSymbol = UIImage.systemImageNamed('minus')
 
 
 class StackViewController(UIViewController):
@@ -67,10 +63,16 @@ class StackViewController(UIViewController):
     self.navigationItem.title = localizedString('StackViewsTitle') if (
       title := self.navigationItem.title) is None else title
 
-    #self.view.backgroundColor = UIColor.systemBackgroundColor()
+    self.view.backgroundColor = UIColor.systemBackgroundColor()
     #self.view.backgroundColor = UIColor.systemIndigoColor()
 
-    # xxx: あとで、`setup` 的なのを作る
+    # xxx: あとで、`setup` 的なのを作る？
+    # --- Symbols
+    plusSymbol = UIImage.systemImageNamed('plus')
+    minusSymbol = UIImage.systemImageNamed('minus')
+
+    touchUpInside = UIControlEvents.touchUpInside
+
     # --- showingHidingStackView
     showingHidingStackView = UIStackView.alloc()
 
@@ -111,7 +113,7 @@ class StackViewController(UIViewController):
     detailPlusButton.setImage_forState_(plusSymbol, UIControlState.normal)
     detailPlusButton.contentEdgeInsets = UIEdgeInsetsMake(0.0, 10.0, 0.0, 10.0)
     detailPlusButton.addTarget_action_forControlEvents_(
-      self, SEL('showFurtherDetail:'), UIControlEvents.touchUpInside)
+      self, SEL('showFurtherDetail:'), touchUpInside)
     # todo: 確認用
     #detailPlusButton.backgroundColor = UIColor.systemBrownColor()
 
@@ -336,7 +338,19 @@ class StackViewController(UIViewController):
   @objc_method
   def showFurtherDetail_(self, _):
     # Animate the changes by performing them in a `UIViewPropertyAnimator` animation block.
-    print(_)
+
+    @Block
+    def animationsBlock() -> None:
+      # Reveal the further details stack view and hide the plus button.
+      self.furtherDetailStackView.setHidden_(False)
+      self.plusButton.setHidden_(True)
+
+    showDetailAnimator = UIViewPropertyAnimator.alloc(
+    ).initWithDuration_curve_animations_(NSTimeInterval(0.25),
+                                         UIViewAnimationCurve.easeIn,
+                                         animationsBlock)
+    showDetailAnimator.startAnimation()
+    
 
   # MARK: - Convenience
   @objc_method
