@@ -71,6 +71,8 @@ class StackViewController(UIViewController):
 
     # xxx: あとで、`setup` 的なのを作る
     # --- showingHidingExampleStackView
+    showingHidingExampleStackView = UIStackView.alloc()
+
     # --- --- showingHidingLabel
     showingHidingLabel = UILabel.new()
     showingHidingLabel.text = 'Showing/hiding views'
@@ -81,6 +83,7 @@ class StackViewController(UIViewController):
     showingHidingLabel.backgroundColor = UIColor.systemYellowColor()
 
     # --- --- / detailStackView
+    detailStackView = UIStackView.alloc()
     # --- --- ---- detailLabel
     detailLabel = UILabel.new()
     detailLabel.setContentHuggingPriority_forAxis_(
@@ -93,7 +96,6 @@ class StackViewController(UIViewController):
       UIFont.preferredFontForTextStyle_(UIFontTextStyleBody))
     # todo: 確認用
     detailLabel.backgroundColor = UIColor.systemOrangeColor()
-    #
 
     # --- --- ---- detailTextField
     detailTextField = UITextField.new()
@@ -110,19 +112,19 @@ class StackViewController(UIViewController):
     # todo: 確認用
     detailPlusButton.backgroundColor = UIColor.systemBrownColor()
 
-    # --- --- detailStackView
-    detailStackView = UIStackView.alloc().initWithArrangedSubviews_([
+    # --- --- arrangedSubviews
+    detailStackView.initWithArrangedSubviews_([
       detailLabel,
       detailTextField,
       detailPlusButton,
     ])
-
     detailStackView.spacing = 10.0
     # todo: 確認用
     detailStackView.backgroundColor = UIColor.systemDarkRedColor()
     # --- --- detailStackView /
 
     # --- --- / furtherStackView
+    furtherStackView = UIStackView.alloc()
     # --- --- --- furtherlLabel
     furtherlLabel = UILabel.new()
     furtherlLabel.setContentHuggingPriority_forAxis_(
@@ -147,12 +149,11 @@ class StackViewController(UIViewController):
     furtherMinusButton.setImage_forState_(minusSymbol, UIControlState.normal)
     furtherMinusButton.contentEdgeInsets = UIEdgeInsetsMake(
       0.0, 10.0, 0.0, 10.0)
-
     # todo: 確認用
     furtherMinusButton.backgroundColor = UIColor.systemDarkPurpleColor()
 
-    # --- --- furtherStackView
-    furtherStackView = UIStackView.alloc().initWithArrangedSubviews_([
+    # --- --- arrangedSubviews
+    furtherStackView.initWithArrangedSubviews_([
       furtherlLabel,
       furtherTextField,
       furtherMinusButton,
@@ -168,10 +169,8 @@ class StackViewController(UIViewController):
     footerLabel.setFont_(
       UIFont.preferredFontForTextStyle_(UIFontTextStyleFootnote))
 
-    # --- showingHidingExampleStackView
-
-    showingHidingExampleStackView = UIStackView.alloc(
-    ).initWithArrangedSubviews_([
+    # --- --- arrangedSubviews
+    showingHidingExampleStackView.initWithArrangedSubviews_([
       showingHidingLabel,
       detailStackView,
       furtherStackView,
@@ -183,6 +182,7 @@ class StackViewController(UIViewController):
     showingHidingExampleStackView.backgroundColor = UIColor.systemGreenColor()
 
     # --- addRemoveExampleStackView
+    addRemoveExampleStackView = UIStackView.alloc()
     # --- --- ---- addRemoveLabel
     addRemoveLabel = UILabel.new()
     addRemoveLabel.setContentHuggingPriority_forAxis_(
@@ -214,8 +214,8 @@ class StackViewController(UIViewController):
     # todo: 確認用
     removebutton.backgroundColor = UIColor.systemBrownColor()
 
-    # --- addRemoveExampleStackView
-    addRemoveExampleStackView = UIStackView.alloc().initWithArrangedSubviews_([
+    # --- --- arrangedSubviews
+    addRemoveExampleStackView.initWithArrangedSubviews_([
       addRemoveLabel,
       addbutton,
       removebutton,
@@ -243,6 +243,7 @@ class StackViewController(UIViewController):
       constraintEqualToAnchor_constant_(safeAreaLayoutGuide.topAnchor, 8.0),
     ])
 
+    # todo: `detailLabel` と`furtherlLabel` の幅を連動
     NSLayoutConstraint.activateConstraints_([
       detailLabel.widthAnchor.constraintEqualToAnchor_(
         furtherlLabel.widthAnchor),
