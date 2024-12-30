@@ -182,8 +182,8 @@ class StackViewController(UIViewController):
     # todo: 確認用
     showingHidingStackView.backgroundColor = UIColor.systemGreenColor()
 
-    # --- addRemoveExampleStackView
-    addRemoveExampleStackView = UIStackView.alloc()
+    # --- addRemoveStackView
+    addRemoveStackView = UIStackView.alloc()
     # --- --- ---- addRemoveLabel
     addRemoveLabel = UILabel.new()
     addRemoveLabel.setContentHuggingPriority_forAxis_(
@@ -216,20 +216,20 @@ class StackViewController(UIViewController):
     removebutton.backgroundColor = UIColor.systemBrownColor()
 
     # --- --- arrangedSubviews
-    addRemoveExampleStackView.initWithArrangedSubviews_([
+    addRemoveStackView.initWithArrangedSubviews_([
       addRemoveLabel,
       addbutton,
       removebutton,
     ])
     # xxx: 確認用
-    addRemoveExampleStackView.backgroundColor = UIColor.systemYellowColor()
+    addRemoveStackView.backgroundColor = UIColor.systemYellowColor()
 
     self.view.addSubview_(showingHidingStackView)
-    self.view.addSubview_(addRemoveExampleStackView)
+    self.view.addSubview_(addRemoveStackView)
 
     # --- Layout
     showingHidingStackView.translatesAutoresizingMaskIntoConstraints = False
-    addRemoveExampleStackView.translatesAutoresizingMaskIntoConstraints = False
+    addRemoveStackView.translatesAutoresizingMaskIntoConstraints = False
 
     layoutMarginsGuide = self.view.layoutMarginsGuide
     safeAreaLayoutGuide = self.view.safeAreaLayoutGuide
@@ -240,8 +240,8 @@ class StackViewController(UIViewController):
         layoutMarginsGuide.leadingAnchor),
       showingHidingStackView.trailingAnchor.constraintEqualToAnchor_(
         layoutMarginsGuide.trailingAnchor),
-      showingHidingStackView.topAnchor.
-      constraintEqualToAnchor_constant_(safeAreaLayoutGuide.topAnchor, 8.0),
+      showingHidingStackView.topAnchor.constraintEqualToAnchor_constant_(
+        safeAreaLayoutGuide.topAnchor, 8.0),
     ])
 
     # todo: `detailLabel` と`furtherlLabel` の幅を連動
@@ -250,13 +250,13 @@ class StackViewController(UIViewController):
         furtherlLabel.widthAnchor),
     ])
 
-    # --- addRemoveExampleStackView
+    # --- addRemoveStackView
     NSLayoutConstraint.activateConstraints_([
-      addRemoveExampleStackView.topAnchor.constraintEqualToAnchor_constant_(
+      addRemoveStackView.topAnchor.constraintEqualToAnchor_constant_(
         showingHidingStackView.bottomAnchor, 20.0),
-      addRemoveExampleStackView.leadingAnchor.constraintEqualToAnchor_(
+      addRemoveStackView.leadingAnchor.constraintEqualToAnchor_(
         layoutMarginsGuide.leadingAnchor),
-      addRemoveExampleStackView.trailingAnchor.constraintEqualToAnchor_(
+      addRemoveStackView.trailingAnchor.constraintEqualToAnchor_(
         layoutMarginsGuide.trailingAnchor),
     ])
 
