@@ -3,6 +3,9 @@
 
 ## xcode とiPhone を繋げてBildとログ確認
 
+### textview のところ
+
+もしかしたら、Pythonista3 のキーボードが悪さしているか？
 
 ```
 [com.omz-software.Pythonista3.PythonistaKeyboard(3.4)] RB query for the extension process state failed with error: Error Domain=RBSServiceErrorDomain Code=1 "Client not entitled" UserInfo={RBSEntitlement=com.apple.runningboard.process-state, NSLocalizedFailureReason=Client not entitled, RBSPermanent=false}
