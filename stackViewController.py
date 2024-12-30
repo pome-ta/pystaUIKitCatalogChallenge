@@ -3,6 +3,7 @@
   todo: 
     - 時々落ちる、稀に無限クラッシュ
     - 不要な呼び出しを整理
+    - `viewDidLoad` 肥大化問題
 '''
 import ctypes
 
@@ -279,6 +280,14 @@ class StackViewController(UIViewController):
       #addRemoveExampleStackView.heightAnchor.constraintEqualToConstant_(42.0),
     ])
 
+    self.plusButton = detailPlusButton
+    self.furtherDetailStackView = furtherStackView
+    self.addRemoveExampleStackView = addRemoveExampleStackView
+    self.addArrangedViewButton = addbutton
+    self.removeArrangedViewButton = removebutton
+    
+    self.maximumArrangedSubviewCount = 3
+
   @objc_method
   def viewDidAppear_(self, animated: bool):
     send_super(__class__,
@@ -289,6 +298,9 @@ class StackViewController(UIViewController):
                  ctypes.c_bool,
                ])
     #print('viewDidAppear')
+    #pdbr.state(self.furtherDetailStackView)
+    #self.furtherDetailStackView.isHidden = True
+    self.furtherDetailStackView.setHidden_(True)
 
   @objc_method
   def viewDidDisappear_(self, animated: bool):
