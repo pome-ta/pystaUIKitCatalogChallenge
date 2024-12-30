@@ -674,3 +674,17 @@ class UIControlContentHorizontalAlignment:
   leading: int = 4
   trailing: int = 5
 
+
+# ref: [UIStackViewAlignment | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uistackview/alignment-swift.enum?language=objc)
+@dataclass
+class UIStackViewAlignment:
+  # ref: [UIStackView.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UIStackView.rs.html#39)
+  fill: int = 0
+  leading: int = 1
+  top: int = 1  # xxx: [UIStackViewAlignment Enum (UIKit) | Microsoft Learn](https://learn.microsoft.com/en-us/dotnet/api/uikit.uistackviewalignment?view=xamarin-ios-sdk-12)
+  firstBaseline: int = 2
+  center: int = 3
+  trailing: int = 4
+  bottom: int = 4  # xxx: [UIStackViewAlignment Enum (UIKit) | Microsoft Learn](https://learn.microsoft.com/en-us/dotnet/api/uikit.uistackviewalignment?view=xamarin-ios-sdk-12)
+  lastBaseline: int = 5
+

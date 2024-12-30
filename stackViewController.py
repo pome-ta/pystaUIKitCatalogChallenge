@@ -17,12 +17,10 @@ from rbedge.enumerations import (
   UILayoutConstraintAxis,
   NSTextAlignment,
   UITextBorderStyle,
-  NSLineBreakMode,
   UIButtonType,
   UIControlState,
-  UIViewContentMode,
-  UIControlContentVerticalAlignment,
-  UIControlContentHorizontalAlignment,
+  NSLineBreakMode,
+  UIStackViewAlignment,
 )
 
 from rbedge import pdbr
@@ -224,12 +222,22 @@ class StackViewController(UIViewController):
     # xxx: 確認用
     addRemoveStackView.backgroundColor = UIColor.systemYellowColor()
 
+    # --- addRemoveExampleStackView
+    addRemoveExampleStackView = UIStackView.new()
+    addRemoveExampleStackView.axis = UILayoutConstraintAxis.vertical
+    addRemoveExampleStackView.alignment = UIStackViewAlignment.center
+    addRemoveExampleStackView.spacing = 10.0
+    # todo: 確認用
+    addRemoveExampleStackView.backgroundColor = UIColor.systemGreenColor()
+
     self.view.addSubview_(showingHidingStackView)
     self.view.addSubview_(addRemoveStackView)
+    self.view.addSubview_(addRemoveExampleStackView)
 
     # --- Layout
     showingHidingStackView.translatesAutoresizingMaskIntoConstraints = False
     addRemoveStackView.translatesAutoresizingMaskIntoConstraints = False
+    addRemoveExampleStackView.translatesAutoresizingMaskIntoConstraints = False
 
     layoutMarginsGuide = self.view.layoutMarginsGuide
     safeAreaLayoutGuide = self.view.safeAreaLayoutGuide
@@ -258,6 +266,17 @@ class StackViewController(UIViewController):
         layoutMarginsGuide.leadingAnchor),
       addRemoveStackView.trailingAnchor.constraintEqualToAnchor_(
         layoutMarginsGuide.trailingAnchor),
+    ])
+
+    # --- addRemoveExampleStackView
+    NSLayoutConstraint.activateConstraints_([
+      addRemoveExampleStackView.topAnchor.constraintEqualToAnchor_constant_(
+        addRemoveStackView.bottomAnchor, 8.0),
+      addRemoveExampleStackView.leadingAnchor.constraintEqualToAnchor_(
+        layoutMarginsGuide.leadingAnchor),
+      addRemoveExampleStackView.trailingAnchor.constraintEqualToAnchor_(
+        layoutMarginsGuide.trailingAnchor),
+      #addRemoveExampleStackView.heightAnchor.constraintEqualToConstant_(42.0),
     ])
 
   @objc_method
