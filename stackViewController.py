@@ -10,7 +10,7 @@ import ctypes
 from pyrubicon.objc.api import ObjCClass, ObjCInstance, Block
 from pyrubicon.objc.api import objc_method, objc_const
 from pyrubicon.objc.runtime import send_super, objc_id, load_library, SEL
-from pyrubicon.objc.types import CGRectMake, UIEdgeInsetsMake, NSTimeInterval
+from pyrubicon.objc.types import CGRect, CGRectMake, CGSizeMake, NSZeroPoint, UIEdgeInsetsMake, NSTimeInterval
 
 from rbedge.enumerations import (
   UILayoutConstraintAxis,
@@ -41,6 +41,7 @@ UIImage = ObjCClass('UIImage')
 UIColor = ObjCClass('UIColor')
 
 UIViewPropertyAnimator = ObjCClass('UIViewPropertyAnimator')
+UIView = ObjCClass('UIView')
 
 # --- Global Variables
 UIFontTextStyleHeadline = objc_const(UIKit, 'UIFontTextStyleHeadline')
@@ -209,6 +210,9 @@ class StackViewController(UIViewController):
     addbutton.setContentHuggingPriority_forAxis_(
       252.0, UILayoutConstraintAxis.horizontal)
     addbutton.contentEdgeInsets = UIEdgeInsetsMake(10.0, 10.0, 10.0, 10.0)
+    addbutton.addTarget_action_forControlEvents_(
+      self, SEL('addArrangedSubviewToStack:'), touchUpInside)
+
     # todo: 確認用
     #addbutton.backgroundColor = UIColor.systemDarkPurpleColor()
 
@@ -228,7 +232,7 @@ class StackViewController(UIViewController):
       removebutton,
     ])
     # xxx: 確認用
-    #addRemoveStackView.backgroundColor = UIColor.systemYellowColor()
+    addRemoveStackView.backgroundColor = UIColor.systemYellowColor()
 
     # --- addRemoveExampleStackView
     addRemoveExampleStackView = UIStackView.new()
@@ -284,7 +288,7 @@ class StackViewController(UIViewController):
         layoutMarginsGuide.leadingAnchor),
       addRemoveExampleStackView.trailingAnchor.constraintEqualToAnchor_(
         layoutMarginsGuide.trailingAnchor),
-      #addRemoveExampleStackView.heightAnchor.constraintEqualToConstant_(42.0),
+      #addRemoveExampleStackView.heightAnchor.constraintEqualToConstant_(42.0),  # xxx: `placeholder="YES"` ?
     ])
 
     self.plusButton = detailPlusButton
@@ -367,6 +371,23 @@ class StackViewController(UIViewController):
                                          UIViewAnimationCurve.easeOut,
                                          animationsBlock)
     hideDetailAnimator.startAnimation()
+
+  @objc_method
+  def addArrangedSubviewToStack_(self, _):
+    # Create a simple, fixed-size, square view to add to the stack view.
+    newViewSize = CGSizeMake(38.0, 38.0)
+    newView = UIView.alloc().initWithFrame_(CGRect(NSZeroPoint, newViewSize))
+
+    newView.backgroundColor = UIColor.systemCyanColor()
+
+    NSLayoutConstraint.activateConstraints_([
+      newView.widthAnchor.constraintEqualToConstant_(newViewSize.width),
+      newView.heightAnchor.constraintEqualToConstant_(newViewSize.height),
+    ])
+    # Adding an arranged subview automatically adds it as a child of the stack view.
+    self.addRemoveExampleStackView.addArrangedSubview_(newView)
+
+    self.updateAddRemoveButtons()
 
   # MARK: - Convenience
   @objc_method
