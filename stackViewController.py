@@ -1,12 +1,14 @@
 '''
   note: Storyboard 実装なし
+  todo: 
+    - 不要な呼び出しを整理
 '''
 import ctypes
 
 from pyrubicon.objc.api import ObjCClass, ObjCInstance
 from pyrubicon.objc.api import objc_method, objc_const
 from pyrubicon.objc.runtime import send_super, objc_id, load_library
-from pyrubicon.objc.types import CGRectMake
+from pyrubicon.objc.types import CGRectMake,UIEdgeInsetsMake
 
 from rbedge.functions import NSDirectionalEdgeInsetsMake
 
@@ -16,6 +18,7 @@ from rbedge.enumerations import (
   UITextBorderStyle,
   NSLineBreakMode,
   UIButtonType,
+  UIControlState,
   UIViewContentMode,
   UIControlContentVerticalAlignment,
   UIControlContentHorizontalAlignment,
@@ -106,15 +109,35 @@ class StackViewController(UIViewController):
 
     # --- --- ---- detailPlusButton
     detailPlusButton = UIButton.buttonWithType_(UIButtonType.system)
+    detailPlusButton.setImage_forState_(plusSymbol, UIControlState.normal)
+    detailPlusButton.contentEdgeInsets = UIEdgeInsetsMake(0.0, 10.0, 0.0, 10.0)
+    
+    
+    #detailPlusButton.setImageEdgeInsets_(UIEdgeInsetsMake(0.0, 10.0, 0.0, 100.0))
+    '''
+    detailPlusButton.imageView.contentMode = 1#UIViewContentMode.scaleAspectFill
+    detailPlusButton.contentVerticalAlignment = UIControlContentVerticalAlignment.fill
+    detailPlusButton.contentHorizontalAlignment = UIControlContentHorizontalAlignment.fill
+    '''
+    # todo: 確認用
+    detailPlusButton.backgroundColor = UIColor.systemBrownColor()
+    
+    
+    pdbr.state(detailPlusButton)
+    
+    
+    
+    '''
+    
     #detailPlusButton.setFrame_(CGRectMake(301.5, 0.0, 41.5, 34.0))
     _detailPlusButtonConfig = UIButtonConfiguration.plainButtonConfiguration()
     #_detailPlusButtonConfig.titlePadding=0.0
-    _detailPlusButtonConfig.image = plusSymbol
+    #_detailPlusButtonConfig.image = plusSymbol
     #_detailPlusButtonConfig.titleLineBreakMode = NSLineBreakMode.byTruncatingMiddle
     _detailPlusButtonConfig.contentInsets = NSDirectionalEdgeInsetsMake(
       0.0, 10.0, 0.0, 10.0)
     detailPlusButton.configuration = _detailPlusButtonConfig
-    detailPlusButton.imageView.contentMode = 1#UIViewContentMode.scaleAspectFill
+    #detailPlusButton.imageView.contentMode = 1#UIViewContentMode.scaleAspectFill
     #detailPlusButton.contentVerticalAlignment = UIControlContentVerticalAlignment.fill
     #detailPlusButton.contentHorizontalAlignment = UIControlContentHorizontalAlignment.fill
     # todo: 確認用
@@ -126,7 +149,13 @@ class StackViewController(UIViewController):
     #pdbr.state(_detailPlusButtonConfig)
     #pdbr.state(detailPlusButton.imageView.contentMode)
     #detailPlusButton.imageView.contentMode = UIViewContentMode.scaleAspectFit
-    print(detailPlusButton.imageView.contentMode)
+    #print(detailPlusButton.imageView.contentMode)
+    #pdbr.state(detailPlusButton)
+    '''
+    
+    
+    
+    
 
     # --- --- detailStackView
     detailStackView = UIStackView.alloc().initWithArrangedSubviews_([
