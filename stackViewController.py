@@ -65,7 +65,6 @@ class StackViewController(UIViewController):
       title := self.navigationItem.title) is None else title
 
     self.view.backgroundColor = UIColor.systemBackgroundColor()
-    #self.view.backgroundColor = UIColor.systemIndigoColor()
 
     # xxx: あとで、`setup` 的なのを作る？
     # --- Symbols
@@ -83,8 +82,6 @@ class StackViewController(UIViewController):
     showingHidingLabel.textAlignment = NSTextAlignment.center
     showingHidingLabel.setFont_(
       UIFont.preferredFontForTextStyle_(UIFontTextStyleHeadline))
-    # xxx: 確認用
-    #showingHidingLabel.backgroundColor = UIColor.systemYellowColor()
 
     # --- --- / detailStackView
     detailStackView = UIStackView.alloc()
@@ -98,8 +95,6 @@ class StackViewController(UIViewController):
     detailLabel.lineBreakMode = NSLineBreakMode.byTruncatingTail
     detailLabel.setFont_(
       UIFont.preferredFontForTextStyle_(UIFontTextStyleBody))
-    # todo: 確認用
-    #detailLabel.backgroundColor = UIColor.systemOrangeColor()
 
     # --- --- ---- detailTextField
     detailTextField = UITextField.new()
@@ -115,8 +110,6 @@ class StackViewController(UIViewController):
     detailPlusButton.contentEdgeInsets = UIEdgeInsetsMake(0.0, 10.0, 0.0, 10.0)
     detailPlusButton.addTarget_action_forControlEvents_(
       self, SEL('showFurtherDetail:'), touchUpInside)
-    # todo: 確認用
-    #detailPlusButton.backgroundColor = UIColor.systemBrownColor()
 
     # --- --- arrangedSubviews
     detailStackView.initWithArrangedSubviews_([
@@ -125,8 +118,6 @@ class StackViewController(UIViewController):
       detailPlusButton,
     ])
     detailStackView.spacing = 10.0
-    # todo: 確認用
-    #detailStackView.backgroundColor = UIColor.systemDarkRedColor()
     # --- --- detailStackView /
 
     # --- --- / furtherStackView
@@ -157,8 +148,6 @@ class StackViewController(UIViewController):
       0.0, 10.0, 0.0, 10.0)
     furtherMinusButton.addTarget_action_forControlEvents_(
       self, SEL('hideFurtherDetail:'), touchUpInside)
-    # todo: 確認用
-    #furtherMinusButton.backgroundColor = UIColor.systemDarkPurpleColor()
 
     # --- --- arrangedSubviews
     furtherStackView.initWithArrangedSubviews_([
@@ -167,8 +156,6 @@ class StackViewController(UIViewController):
       furtherMinusButton,
     ])
     furtherStackView.spacing = 10.0
-    # todo: 確認用
-    #furtherStackView.backgroundColor = UIColor.systemCyanColor()
     # --- --- furtherStackView /
 
     footerLabel = UILabel.new()
@@ -186,8 +173,6 @@ class StackViewController(UIViewController):
     ])
     showingHidingStackView.axis = UILayoutConstraintAxis.vertical
     showingHidingStackView.spacing = 10.0
-    # todo: 確認用
-    #showingHidingStackView.backgroundColor = UIColor.systemGreenColor()
 
     # --- addRemoveStackView
     addRemoveStackView = UIStackView.alloc()
@@ -201,8 +186,6 @@ class StackViewController(UIViewController):
     addRemoveLabel.textAlignment = NSTextAlignment.center
     addRemoveLabel.setFont_(
       UIFont.preferredFontForTextStyle_(UIFontTextStyleHeadline))
-    # todo: 確認用
-    #addRemoveLabel.backgroundColor = UIColor.systemOrangeColor()
 
     # --- --- ---- addbutton
     addbutton = UIButton.buttonWithType_(UIButtonType.system)
@@ -213,9 +196,6 @@ class StackViewController(UIViewController):
     addbutton.addTarget_action_forControlEvents_(
       self, SEL('addArrangedSubviewToStack:'), touchUpInside)
 
-    # todo: 確認用
-    #addbutton.backgroundColor = UIColor.systemDarkPurpleColor()
-
     # --- --- ---- removebutton
     removebutton = UIButton.buttonWithType_(UIButtonType.system)
     removebutton.setImage_forState_(minusSymbol, UIControlState.normal)
@@ -225,31 +205,24 @@ class StackViewController(UIViewController):
     removebutton.addTarget_action_forControlEvents_(
       self, SEL('removeArrangedSubviewFromStack:'), touchUpInside)
 
-    # todo: 確認用
-    #removebutton.backgroundColor = UIColor.systemBrownColor()
-
     # --- --- arrangedSubviews
     addRemoveStackView.initWithArrangedSubviews_([
       addRemoveLabel,
       addbutton,
       removebutton,
     ])
-    # xxx: 確認用
-    #addRemoveStackView.backgroundColor = UIColor.systemYellowColor()
 
     # --- addRemoveExampleStackView
     addRemoveExampleStackView = UIStackView.new()
     addRemoveExampleStackView.axis = UILayoutConstraintAxis.vertical
     addRemoveExampleStackView.alignment = UIStackViewAlignment.center
     addRemoveExampleStackView.spacing = 10.0
-    # todo: 確認用
-    #addRemoveExampleStackView.backgroundColor = UIColor.systemGreenColor()
 
+    # --- Layout
     self.view.addSubview_(showingHidingStackView)
     self.view.addSubview_(addRemoveStackView)
     self.view.addSubview_(addRemoveExampleStackView)
 
-    # --- Layout
     showingHidingStackView.translatesAutoresizingMaskIntoConstraints = False
     addRemoveStackView.translatesAutoresizingMaskIntoConstraints = False
     addRemoveExampleStackView.translatesAutoresizingMaskIntoConstraints = False
