@@ -9,6 +9,7 @@ from .enumerations import UIRectEdge, UIBarButtonSystemItem
 UINavigationController = ObjCClass('UINavigationController')
 UINavigationControllerDelegate = ObjCProtocol('UINavigationControllerDelegate')
 UINavigationBarAppearance = ObjCClass('UINavigationBarAppearance')
+UIToolbarAppearance = ObjCClass('UIToolbarAppearance')
 UIBarButtonItem = ObjCClass('UIBarButtonItem')
 
 
@@ -17,14 +18,24 @@ class RootNavigationController(UINavigationController,
 
   @objc_method
   def viewDidLoad(self):
-    appearance = UINavigationBarAppearance.new()
-    appearance.configureWithDefaultBackground()
+    navigationBarAppearance = UINavigationBarAppearance.new()
+    navigationBarAppearance.configureWithDefaultBackground()
 
     navigationBar = self.navigationBar
-    navigationBar.standardAppearance = appearance
-    navigationBar.scrollEdgeAppearance = appearance
-    navigationBar.compactAppearance = appearance
-    navigationBar.compactScrollEdgeAppearance = appearance
+    navigationBar.standardAppearance = navigationBarAppearance
+    navigationBar.scrollEdgeAppearance = navigationBarAppearance
+    navigationBar.compactAppearance = navigationBarAppearance
+    navigationBar.compactScrollEdgeAppearance = navigationBarAppearance
+
+    toolbarAppearance = UIToolbarAppearance.new()
+    toolbarAppearance.configureWithDefaultBackground()
+    #toolbarAppearance.configureWithOpaqueBackground()
+
+    toolbar = self.toolbar
+    toolbar.standardAppearance = toolbarAppearance
+    toolbar.scrollEdgeAppearance = toolbarAppearance
+    toolbar.compactAppearance = toolbarAppearance
+    toolbar.compactScrollEdgeAppearance = toolbarAppearance
 
     self.delegate = self
 

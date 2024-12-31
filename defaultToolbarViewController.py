@@ -5,7 +5,12 @@ import ctypes
 
 from pyrubicon.objc.api import ObjCClass, ObjCInstance
 from pyrubicon.objc.api import objc_method
-from pyrubicon.objc.runtime import send_super, objc_id
+from pyrubicon.objc.runtime import send_super, objc_id, SEL
+
+from rbedge.enumerations import (
+  UIBarButtonSystemItem,
+  UIViewAutoresizing,
+)
 
 from rbedge import pdbr
 
@@ -13,6 +18,12 @@ UIViewController = ObjCClass('UIViewController')
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
 UIColor = ObjCClass('UIColor')
 
+UIToolbar = ObjCClass('UIToolbar')
+UIBarButtonItem = ObjCClass('UIBarButtonItem')
+
+#UIToolbarAppearance = ObjCClass('UIToolbarAppearance')
+
+#pdbr.state(ObjCClass('UIToolbarAppearance').new())
 
 class DefaultToolbarViewController(UIViewController):
 
@@ -22,6 +33,7 @@ class DefaultToolbarViewController(UIViewController):
     #print('\tdealloc')
     pass
 
+  # MARK: - View Life Cycle
   @objc_method
   def viewDidLoad(self):
     send_super(__class__, self, 'viewDidLoad')
@@ -29,6 +41,27 @@ class DefaultToolbarViewController(UIViewController):
       title := self.navigationItem.title) is None else title
 
     self.view.backgroundColor = UIColor.systemBackgroundColor()
+    #self.view.backgroundColor = UIColor.systemDarkRedColor()
+
+    self.navigationController.setToolbarHidden_(False)
+    #self.navigationController.toolbar.setTranslucent_(True)
+
+    # MARK: - UIBarButtonItem Creation and Configuration
+    trashBarButtonItem = UIBarButtonItem.alloc().initWithBarButtonSystemItem(
+      UIBarButtonSystemItem.trash,
+      target=self,
+      action=SEL('barButtonItemClicked:'))
+
+    toolbarButtonItems = [
+      trashBarButtonItem,
+    ]
+    self.setToolbarItems_animated_(toolbarButtonItems, True)
+    #pdbr.state(self.navigationController.toolbar.backgroundColor)
+    #pdbr.state(self.navigationController.navigationBar.backgroundColor)
+    
+    #print(self.navigationController.toolbar.barStyle)
+    #print(self.navigationController.toolbar.isTranslucent())
+    #pdbr.state(self.navigationController, 1)
 
   @objc_method
   def viewWillAppear_(self, animated: bool):
@@ -67,6 +100,13 @@ class DefaultToolbarViewController(UIViewController):
   def didReceiveMemoryWarning(self):
     send_super(__class__, self, 'didReceiveMemoryWarning')
     print(f'{__class__}: didReceiveMemoryWarning')
+
+  # MARK: - Actions
+  @objc_method
+  def barButtonItemClicked_(self, barButtonItem):
+    print(
+      f'A bar button item on the default toolbar was clicked: {barButtonItem}.'
+    )
 
 
 if __name__ == '__main__':
