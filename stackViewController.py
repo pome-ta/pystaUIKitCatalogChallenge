@@ -222,6 +222,9 @@ class StackViewController(UIViewController):
     removebutton.setContentHuggingPriority_forAxis_(
       253.0, UILayoutConstraintAxis.horizontal)
     removebutton.contentEdgeInsets = UIEdgeInsetsMake(10.0, 10.0, 10.0, 10.0)
+    removebutton.addTarget_action_forControlEvents_(
+      self, SEL('removeArrangedSubviewFromStack:'), touchUpInside)
+
     # todo: 確認用
     #removebutton.backgroundColor = UIColor.systemBrownColor()
 
@@ -386,6 +389,20 @@ class StackViewController(UIViewController):
     ])
     # Adding an arranged subview automatically adds it as a child of the stack view.
     self.addRemoveExampleStackView.addArrangedSubview_(newView)
+
+    self.updateAddRemoveButtons()
+
+  @objc_method
+  def removeArrangedSubviewFromStack_(self, _):
+    # Make sure there is an arranged view to remove.
+    if (viewToRemove :=
+        self.addRemoveExampleStackView.arrangedSubviews.lastObject()) is None:
+      return
+
+    self.addRemoveExampleStackView.removeArrangedSubview_(viewToRemove)
+    # Calling `removeArrangedSubview` does not remove the provided view from the stack view's `subviews` array. Since we no longer want the view we removed to appear, we have to explicitly remove it from its superview.
+    # `removeArrangedSubview` を呼び出しても、スタック ビューの `subviews` 配列から指定されたビューは削除されません。削除したビューを表示したくないので、スーパービューから明示的に削除する必要があります。
+    viewToRemove.removeFromSuperview()
 
     self.updateAddRemoveButtons()
 
