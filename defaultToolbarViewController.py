@@ -3,14 +3,12 @@
 '''
 import ctypes
 
-from pyrubicon.objc.api import ObjCClass, ObjCInstance
+from pyrubicon.objc.api import ObjCClass, ObjCInstance, Block
 from pyrubicon.objc.api import objc_method
 from pyrubicon.objc.runtime import send_super, objc_id, SEL
 
 from rbedge.enumerations import (
-  UIBarButtonSystemItem,
-  UIViewAutoresizing,
-)
+  UIBarButtonSystemItem, )
 
 from rbedge import pdbr
 
@@ -18,12 +16,11 @@ UIViewController = ObjCClass('UIViewController')
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
 UIColor = ObjCClass('UIColor')
 
-UIToolbar = ObjCClass('UIToolbar')
 UIBarButtonItem = ObjCClass('UIBarButtonItem')
+UIImage = ObjCClass('UIImage')
+UIMenu = ObjCClass('UIMenu')
+UIAction = ObjCClass('UIAction')
 
-#UIToolbarAppearance = ObjCClass('UIToolbarAppearance')
-
-#pdbr.state(ObjCClass('UIToolbarAppearance').new())
 
 class DefaultToolbarViewController(UIViewController):
 
@@ -41,10 +38,6 @@ class DefaultToolbarViewController(UIViewController):
       title := self.navigationItem.title) is None else title
 
     self.view.backgroundColor = UIColor.systemBackgroundColor()
-    #self.view.backgroundColor = UIColor.systemDarkRedColor()
-
-    self.navigationController.setToolbarHidden_(False)
-    #self.navigationController.toolbar.setTranslucent_(True)
 
     # MARK: - UIBarButtonItem Creation and Configuration
     trashBarButtonItem = UIBarButtonItem.alloc().initWithBarButtonSystemItem(
@@ -52,16 +45,26 @@ class DefaultToolbarViewController(UIViewController):
       target=self,
       action=SEL('barButtonItemClicked:'))
 
+    flexibleSpaceBarButtonItem = UIBarButtonItem.alloc(
+    ).initWithBarButtonSystemItem(UIBarButtonSystemItem.flexibleSpace,
+                                  target=None,
+                                  action=None)
+
+    buttonMenu = UIMenu.menuWithTitle_children_('', [
+      UIAction.actionWithTitle_image_identifier_handler_(
+        f'Option {i + 1}', None, None,
+        Block(self.menuHandler_, None, ctypes.c_void_p)) for i in range(5)
+    ])
+    customTitleBarButtonItem = UIBarButtonItem.alloc().initWithImage_menu_(
+      UIImage.systemImageNamed('list.number'), buttonMenu)
+
     toolbarButtonItems = [
       trashBarButtonItem,
+      flexibleSpaceBarButtonItem,
+      customTitleBarButtonItem,
     ]
     self.setToolbarItems_animated_(toolbarButtonItems, True)
-    #pdbr.state(self.navigationController.toolbar.backgroundColor)
-    #pdbr.state(self.navigationController.navigationBar.backgroundColor)
-    
-    #print(self.navigationController.toolbar.barStyle)
-    #print(self.navigationController.toolbar.isTranslucent())
-    #pdbr.state(self.navigationController, 1)
+    self.navigationController.setToolbarHidden_(False)
 
   @objc_method
   def viewWillAppear_(self, animated: bool):
@@ -100,6 +103,11 @@ class DefaultToolbarViewController(UIViewController):
   def didReceiveMemoryWarning(self):
     send_super(__class__, self, 'didReceiveMemoryWarning')
     print(f'{__class__}: didReceiveMemoryWarning')
+
+  @objc_method
+  def menuHandler_(self, _action: ctypes.c_void_p) -> None:
+    action = ObjCInstance(_action)
+    print(f'Menu Action "{action.title}"')
 
   # MARK: - Actions
   @objc_method
