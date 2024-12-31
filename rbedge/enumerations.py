@@ -688,3 +688,13 @@ class UIStackViewAlignment:
   bottom: int = 4  # xxx: [UIStackViewAlignment Enum (UIKit) | Microsoft Learn](https://learn.microsoft.com/en-us/dotnet/api/uikit.uistackviewalignment?view=xamarin-ios-sdk-12)
   lastBaseline: int = 5
 
+
+# ref: [UIBarStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uibarstyle?language=objc)
+@dataclass
+class UIBarStyle:
+  # ref: [UIInterface.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UIInterface.rs.html#12)
+  default: int = 0
+  black: int = 1
+  blackOpaque: int = 1  # xxx: deprecated
+  blackTranslucent: int = 2  # xxx: deprecated
+
