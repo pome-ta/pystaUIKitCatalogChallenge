@@ -1,8 +1,8 @@
 import ctypes
 
 from pyrubicon.objc.api import ObjCInstance
-from pyrubicon.objc.types import CGFloat,with_preferred_encoding, __LP64__
-from pyrubicon.objc.runtime import Foundation, Class
+from pyrubicon.objc.types import CGFloat, with_preferred_encoding, __LP64__
+from pyrubicon.objc.runtime import libc, Foundation, Class
 
 
 def NSStringFromClass(cls: Class) -> ObjCInstance:
@@ -36,4 +36,8 @@ class NSDirectionalEdgeInsets(ctypes.Structure):
 
 def NSDirectionalEdgeInsetsMake(top, leading, bottom, trailing):
   return NSDirectionalEdgeInsets(top, leading, bottom, trailing)
+
+
+def arc4random_uniform(value: ctypes.c_uint32) -> int:
+  return libc.arc4random_uniform(value)
 

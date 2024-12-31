@@ -23,7 +23,7 @@ from rbedge.enumerations import (
   UIStackViewAlignment,
   UIViewAnimationCurve,
 )
-from rbedge.functions import NSDirectionalEdgeInsetsMake
+from rbedge.functions import arc4random_uniform
 from rbedge import pdbr
 
 UIKit = load_library('UIKit')
@@ -235,7 +235,7 @@ class StackViewController(UIViewController):
       removebutton,
     ])
     # xxx: 確認用
-    addRemoveStackView.backgroundColor = UIColor.systemYellowColor()
+    #addRemoveStackView.backgroundColor = UIColor.systemYellowColor()
 
     # --- addRemoveExampleStackView
     addRemoveExampleStackView = UIStackView.new()
@@ -243,7 +243,7 @@ class StackViewController(UIViewController):
     addRemoveExampleStackView.alignment = UIStackViewAlignment.center
     addRemoveExampleStackView.spacing = 10.0
     # todo: 確認用
-    addRemoveExampleStackView.backgroundColor = UIColor.systemGreenColor()
+    #addRemoveExampleStackView.backgroundColor = UIColor.systemGreenColor()
 
     self.view.addSubview_(showingHidingStackView)
     self.view.addSubview_(addRemoveStackView)
@@ -381,7 +381,7 @@ class StackViewController(UIViewController):
     newViewSize = CGSizeMake(38.0, 38.0)
     newView = UIView.alloc().initWithFrame_(CGRect(NSZeroPoint, newViewSize))
 
-    newView.backgroundColor = UIColor.systemCyanColor()
+    newView.backgroundColor = self.randomColor()
 
     NSLayoutConstraint.activateConstraints_([
       newView.widthAnchor.constraintEqualToConstant_(newViewSize.width),
@@ -413,6 +413,13 @@ class StackViewController(UIViewController):
     self.addArrangedViewButton.setEnabled_(
       arrangedSubviewCount < self.maximumArrangedSubviewCount)
     self.removeArrangedViewButton.setEnabled_(arrangedSubviewCount > 0)
+
+  @objc_method
+  def randomColor(self):
+    red = arc4random_uniform(255) / 255.0
+    green = arc4random_uniform(255) / 255.0
+    blue = arc4random_uniform(255) / 255.0
+    return UIColor.colorWithRed_green_blue_alpha_(red, green, blue, 1.0)
 
 
 if __name__ == '__main__':
