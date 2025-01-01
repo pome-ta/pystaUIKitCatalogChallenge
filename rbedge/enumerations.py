@@ -698,3 +698,13 @@ class UIBarStyle:
   blackOpaque: int = 1  # xxx: deprecated
   blackTranslucent: int = 2  # xxx: deprecated
 
+
+# ref: [UIBarPosition | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uibarposition?language=objc)
+@dataclass
+class UIBarPosition:
+  # ref: [UIBarCommon.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UIBarCommon.rs.html#40)
+  any: int = 0
+  bottom: int = 1
+  top: int = 2
+  topAttached: int = 3
+

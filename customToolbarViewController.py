@@ -24,7 +24,7 @@ UIColor = ObjCClass('UIColor')
 UIBarButtonItem = ObjCClass('UIBarButtonItem')
 NSURL = ObjCClass('NSURL')
 UIImage = ObjCClass('UIImage')
-UIActivityViewController = ObjCClass('UIActivityViewController')
+UIScreen = ObjCClass('UIScreen')
 
 
 class CustomToolbarViewController(UIViewController):
@@ -44,7 +44,21 @@ class CustomToolbarViewController(UIViewController):
 
     self.view.backgroundColor = UIColor.systemBackgroundColor()
 
-    # See the `UIBarStyle` enum for more styles, including `.Default`.
+    scale = int(UIScreen.mainScreen.scale)
+    #initWithData_scale_
+    # xxx: `lambda` の使い方が悪い
+    dataWithContentsOfURL = lambda path_str: NSData.dataWithContentsOfURL_(
+      NSURL.fileURLWithPath_(str(Path(path_str).absolute())))
+
+    image_path = f'./UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/toolbar_background.imageset/toolbar_background_{scale}x.png'
+
+    toolbarBackgroundImage = UIImage.alloc().initWithData_scale_(
+      dataWithContentsOfURL(image_path), scale)
+    pdbr.state(self.navigationController.toolbar)
+    #setBackgroundImage_forToolbarPosition_barMetrics_
+    
+    '''
+    image_path = './UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/Flowers_1.imageset/Flowers_1.png'
     self.navigationController.toolbar.setBarStyle_(UIBarStyle.black)
     self.navigationController.toolbar.setTranslucent_(False)
     self.navigationController.toolbar.setTintColor_(UIColor.systemGreenColor())
@@ -74,6 +88,7 @@ class CustomToolbarViewController(UIViewController):
       actionBarButtonItem,
     ]
     self.setToolbarItems_animated_(toolbarButtonItems, True)
+    '''
     self.navigationController.setToolbarHidden_(False)
 
   @objc_method
