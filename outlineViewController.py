@@ -41,6 +41,7 @@ from progressViewController import ProgressViewController
 from stackViewController import StackViewController
 from defaultToolbarViewController import DefaultToolbarViewController
 from tintedToolbarViewController import TintedToolbarViewController
+from customToolbarViewController import CustomToolbarViewController
 # --- /
 
 UIKit = load_library('UIKit')  # todo: `objc_const` 用
@@ -229,7 +230,7 @@ viewsOutlineItem = OutlineItem(
                               storyboardName=TintedToolbarViewController),
                   OutlineItem(title='CustomToolbarBarTitle',
                               imageName=None,
-                              storyboardName='CustomToolbarViewController'),
+                              storyboardName=CustomToolbarViewController),
                 ]),
     OutlineItem(title='VisualEffectTitle',
                 imageName=None,

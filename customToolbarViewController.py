@@ -11,6 +11,8 @@ from pyrubicon.objc.runtime import send_super, objc_id, SEL
 from rbedge.enumerations import (
   UIBarStyle,
   UIBarButtonSystemItem,
+  UIBarPosition,
+  UIBarMetrics,
 )
 
 from rbedge import pdbr
@@ -54,8 +56,12 @@ class CustomToolbarViewController(UIViewController):
 
     toolbarBackgroundImage = UIImage.alloc().initWithData_scale_(
       dataWithContentsOfURL(image_path), scale)
-    pdbr.state(self.navigationController.toolbar)
-    #setBackgroundImage_forToolbarPosition_barMetrics_
+    #pdbr.state(self.navigationController.toolbar)
+    #pdbr.state(toolbarBackgroundImage)
+    self.navigationController.toolbar.setBackgroundImage_forToolbarPosition_barMetrics_(
+      toolbarBackgroundImage, UIBarPosition.bottom, UIBarMetrics.default)
+    
+    # MARK: - UIBarButtonItem Creation and Configuration
     
     '''
     image_path = './UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/Flowers_1.imageset/Flowers_1.png'
@@ -66,29 +72,34 @@ class CustomToolbarViewController(UIViewController):
       UIColor.systemBlueColor())
 
     # MARK: - `UIBarButtonItem` Creation and Configuration
+    '''
+    
+    
     refreshBarButtonItem = UIBarButtonItem.alloc().initWithBarButtonSystemItem(
       UIBarButtonSystemItem.refresh,
       target=self,
       action=SEL('barButtonItemClicked:'))
-
+    # MARK: - UIBarButtonItem Creation and Configuration
     # Note that there's no target/action since this represents empty space.
     flexibleSpaceBarButtonItem = UIBarButtonItem.alloc(
     ).initWithBarButtonSystemItem(UIBarButtonSystemItem.flexibleSpace,
                                   target=None,
                                   action=None)
 
+    '''
     actionBarButtonItem = UIBarButtonItem.alloc().initWithBarButtonSystemItem(
       UIBarButtonSystemItem.action,
       target=self,
       action=SEL('actionBarButtonItemClicked:'))
 
+    '''
     toolbarButtonItems = [
       refreshBarButtonItem,
       flexibleSpaceBarButtonItem,
-      actionBarButtonItem,
+      
     ]
     self.setToolbarItems_animated_(toolbarButtonItems, True)
-    '''
+    
     self.navigationController.setToolbarHidden_(False)
 
   @objc_method
