@@ -386,8 +386,6 @@ class OutlineViewController(UIViewController):
           UITableViewStyle.grouped)
       else:
         viewController = storyboardName.new()
-
-      #pdbr.state(self)
       self.pushOrPresentViewController_(viewController)
     except Exception as e:
       print(f'{e}')
@@ -427,11 +425,6 @@ class OutlineViewController(UIViewController):
         toolbar.compactScrollEdgeAppearance = toolbarAppearance
         navigationController.setToolbarHidden_(True)
         
-      #print('f')
-      #print(self.navigationController)
-
-      #pdbr.state(self.navigationController)
-      #self.navigationController.initToolbarAppearance()
       self.navigationController.pushViewController_animated_(
         viewController, True)
 
