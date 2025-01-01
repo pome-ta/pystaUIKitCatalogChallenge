@@ -58,11 +58,17 @@ class CustomToolbarViewController(UIViewController):
       dataWithContentsOfURL(image_path), scale)
     #pdbr.state(self.navigationController.toolbar)
     #pdbr.state(toolbarBackgroundImage)
-    self.navigationController.toolbar.setBackgroundImage_forToolbarPosition_barMetrics_(
-      toolbarBackgroundImage, UIBarPosition.bottom, UIBarMetrics.default)
     
+    #any
+    #bottom
+    self.navigationController.toolbar.setBackgroundImage(
+      toolbarBackgroundImage,
+      forToolbarPosition=UIBarPosition.any,
+      barMetrics=UIBarMetrics.default)
+    
+    #pdbr.state(self.navigationController.toolbar.standardAppearance)
+
     # MARK: - UIBarButtonItem Creation and Configuration
-    
     '''
     image_path = './UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/Flowers_1.imageset/Flowers_1.png'
     self.navigationController.toolbar.setBarStyle_(UIBarStyle.black)
@@ -73,8 +79,7 @@ class CustomToolbarViewController(UIViewController):
 
     # MARK: - `UIBarButtonItem` Creation and Configuration
     '''
-    
-    
+
     refreshBarButtonItem = UIBarButtonItem.alloc().initWithBarButtonSystemItem(
       UIBarButtonSystemItem.refresh,
       target=self,
@@ -85,7 +90,6 @@ class CustomToolbarViewController(UIViewController):
     ).initWithBarButtonSystemItem(UIBarButtonSystemItem.flexibleSpace,
                                   target=None,
                                   action=None)
-
     '''
     actionBarButtonItem = UIBarButtonItem.alloc().initWithBarButtonSystemItem(
       UIBarButtonSystemItem.action,
@@ -96,10 +100,9 @@ class CustomToolbarViewController(UIViewController):
     toolbarButtonItems = [
       refreshBarButtonItem,
       flexibleSpaceBarButtonItem,
-      
     ]
     self.setToolbarItems_animated_(toolbarButtonItems, True)
-    
+
     self.navigationController.setToolbarHidden_(False)
 
   @objc_method
