@@ -708,3 +708,15 @@ class UIBarPosition:
   top: int = 2
   topAttached: int = 3
 
+
+# ref: [UIBarMetrics | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uibarmetrics?language=objc)
+@dataclass
+class UIBarMetrics:
+  # ref: [UIBarCommon.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UIBarCommon.rs.html#11)
+  default: int = 0
+  compact: int = 1
+  defaultPrompt: int = 101
+  compactPrompt: int = 102
+  landscapePhone: int = default  # xxx: deprecated
+  landscapePhonePrompt: int = default  # xxx: deprecated
+
