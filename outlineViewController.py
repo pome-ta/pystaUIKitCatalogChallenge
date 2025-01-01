@@ -15,6 +15,7 @@ from rbedge.enumerations import (
 from pyLocalizedString import localizedString
 from rbedge import pdbr
 
+from rbedge.rootNavigationController import RootNavigationController  # todo: 型確認
 from baseTableViewController import BaseTableViewController  # todo: 型確認
 
 # --- UIKitCatalog ViewControllers
@@ -46,6 +47,7 @@ UIKit = load_library('UIKit')  # todo: `objc_const` 用
 UIViewController = ObjCClass('UIViewController')
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
 UINavigationController = ObjCClass('UINavigationController')
+UIToolbarAppearance = ObjCClass('UIToolbarAppearance')
 
 # --- UICollectionView
 UICollectionView = ObjCClass('UICollectionView')
@@ -385,6 +387,7 @@ class OutlineViewController(UIViewController):
       else:
         viewController = storyboardName.new()
 
+      #pdbr.state(self)
       self.pushOrPresentViewController_(viewController)
     except Exception as e:
       print(f'{e}')
@@ -403,9 +406,32 @@ class OutlineViewController(UIViewController):
     if self.splitViewWantsToShowDetail():
       navVC = UINavigationController.alloc().initWithRootViewController_(
         viewController)
-
       self.splitViewController.showDetailViewController_sender_(navVC, navVC)
     else:
+
+      # todo: `toolbar` の情報を引き継いでしまうため、初期化
+      # xxx: `RootNavigationController` でやらなくても、ここで一括でいい？
+      if (navigationController :=
+          self.navigationController).isKindOfClass_(RootNavigationController):
+        navigationController.initToolbarAppearance()
+      else:
+        toolbarAppearance = UIToolbarAppearance.new()
+        toolbarAppearance.configureWithDefaultBackground()
+        #toolbarAppearance.configureWithOpaqueBackground()
+        #toolbarAppearance.configureWithTransparentBackground()
+        
+        toolbar = navigationController.toolbar
+        toolbar.standardAppearance = toolbarAppearance
+        toolbar.scrollEdgeAppearance = toolbarAppearance
+        toolbar.compactAppearance = toolbarAppearance
+        toolbar.compactScrollEdgeAppearance = toolbarAppearance
+        navigationController.setToolbarHidden_(True)
+        
+      #print('f')
+      #print(self.navigationController)
+
+      #pdbr.state(self.navigationController)
+      #self.navigationController.initToolbarAppearance()
       self.navigationController.pushViewController_animated_(
         viewController, True)
 

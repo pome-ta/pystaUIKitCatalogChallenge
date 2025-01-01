@@ -18,6 +18,9 @@ class RootNavigationController(UINavigationController,
 
   @objc_method
   def viewDidLoad(self):
+    self.initNavigationBarAppearance()
+    self.initToolbarAppearance()
+    '''
     navigationBarAppearance = UINavigationBarAppearance.new()
     navigationBarAppearance.configureWithDefaultBackground()
 
@@ -32,14 +35,41 @@ class RootNavigationController(UINavigationController,
     #toolbarAppearance.configureWithOpaqueBackground()
     #toolbarAppearance.configureWithTransparentBackground()
     
-
     toolbar = self.toolbar
     toolbar.standardAppearance = toolbarAppearance
     toolbar.scrollEdgeAppearance = toolbarAppearance
     toolbar.compactAppearance = toolbarAppearance
     toolbar.compactScrollEdgeAppearance = toolbarAppearance
+    '''
 
     self.delegate = self
+
+  @objc_method
+  def initNavigationBarAppearance(self):
+    navigationBarAppearance = UINavigationBarAppearance.new()
+    navigationBarAppearance.configureWithDefaultBackground()
+
+    navigationBar = self.navigationBar
+    navigationBar.standardAppearance = navigationBarAppearance
+    navigationBar.scrollEdgeAppearance = navigationBarAppearance
+    navigationBar.compactAppearance = navigationBarAppearance
+    navigationBar.compactScrollEdgeAppearance = navigationBarAppearance
+
+  @objc_method
+  def initToolbarAppearance(self):
+    toolbarAppearance = UIToolbarAppearance.new()
+    toolbarAppearance.configureWithDefaultBackground()
+    #toolbarAppearance.configureWithOpaqueBackground()
+    #toolbarAppearance.configureWithTransparentBackground()
+    
+    toolbar = self.toolbar
+    toolbar.standardAppearance = toolbarAppearance
+    toolbar.scrollEdgeAppearance = toolbarAppearance
+    toolbar.compactAppearance = toolbarAppearance
+    toolbar.compactScrollEdgeAppearance = toolbarAppearance
+    
+    self.setToolbarHidden_(True)
+
 
   @objc_method
   def doneButtonTapped_(self, sender):
