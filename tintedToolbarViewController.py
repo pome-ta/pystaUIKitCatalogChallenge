@@ -2,8 +2,9 @@
   note: Storyboard 実装なし
 '''
 import ctypes
+from pathlib import Path
 
-from pyrubicon.objc.api import ObjCClass, ObjCInstance, Block
+from pyrubicon.objc.api import ObjCClass, ObjCInstance, Block, NSData
 from pyrubicon.objc.api import objc_method
 from pyrubicon.objc.runtime import send_super, objc_id, SEL
 
@@ -19,9 +20,9 @@ NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
 UIColor = ObjCClass('UIColor')
 
 UIBarButtonItem = ObjCClass('UIBarButtonItem')
+NSURL = ObjCClass('NSURL')
 UIImage = ObjCClass('UIImage')
-UIMenu = ObjCClass('UIMenu')
-UIAction = ObjCClass('UIAction')
+UIActivityViewController = ObjCClass('UIActivityViewController')
 
 
 class TintedToolbarViewController(UIViewController):
@@ -119,7 +120,26 @@ class TintedToolbarViewController(UIViewController):
 
   @objc_method
   def actionBarButtonItemClicked_(self, barButtonItem):
-    print('h')
+    # xxx: `lambda` の使い方が悪い
+    dataWithContentsOfURL = lambda path_str: NSData.dataWithContentsOfURL_(
+      NSURL.fileURLWithPath_(str(Path(path_str).absolute())))
+
+    image_path = './UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/Flowers_1.imageset/Flowers_1.png'
+    if (image :=
+        UIImage.alloc().initWithData_(dataWithContentsOfURL(image_path))):
+      activityItems = [
+        'Shared piece of text',
+        image,
+      ]
+      activityViewController = UIActivityViewController.alloc(
+      ).initWithActivityItems_applicationActivities_(activityItems, None)
+      if (popoverPresentationController :=
+          activityViewController.popoverPresentationController()) is not None:
+        # xxx: 挙動未確認
+        popoverPresentationController.barButtonItem = barButtonItem
+      self.presentViewController(activityViewController,
+                                 animated=True,
+                                 completion=None)
 
 
 if __name__ == '__main__':
