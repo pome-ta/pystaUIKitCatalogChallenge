@@ -26,6 +26,8 @@ from rbedge.enumerations import (
 from rbedge.functions import arc4random_uniform
 from rbedge import pdbr
 
+from pyLocalizedString import localizedString
+
 UIKit = load_library('UIKit')
 UIViewController = ObjCClass('UIViewController')
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')

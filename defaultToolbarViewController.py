@@ -12,6 +12,8 @@ from rbedge.enumerations import (
 
 from rbedge import pdbr
 
+from pyLocalizedString import localizedString
+
 UIViewController = ObjCClass('UIViewController')
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
 UIColor = ObjCClass('UIColor')

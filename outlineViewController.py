@@ -37,6 +37,9 @@ from textViewController import TextViewController
 from imageViewController import ImageViewController
 from symbolViewController import SymbolViewController
 from progressViewController import ProgressViewController
+from stackViewController import StackViewController
+from defaultToolbarViewController import DefaultToolbarViewController
+from tintedToolbarViewController import TintedToolbarViewController
 # --- /
 
 UIKit = load_library('UIKit')  # todo: `objc_const` 用
@@ -212,16 +215,16 @@ viewsOutlineItem = OutlineItem(
                 storyboardName=ProgressViewController),
     OutlineItem(title='StackViewsTitle',
                 imageName=None,
-                storyboardName='StackViewController'),
+                storyboardName=StackViewController),
     OutlineItem(title='ToolbarsTitle',
                 imageName='hammer',
                 subitems=[
                   OutlineItem(title='DefaultToolBarTitle',
                               imageName=None,
-                              storyboardName='DefaultToolbarViewController'),
+                              storyboardName=DefaultToolbarViewController),
                   OutlineItem(title='TintedToolbarTitle',
                               imageName=None,
-                              storyboardName='TintedToolbarViewController'),
+                              storyboardName=TintedToolbarViewController),
                   OutlineItem(title='CustomToolbarBarTitle',
                               imageName=None,
                               storyboardName='CustomToolbarViewController'),
