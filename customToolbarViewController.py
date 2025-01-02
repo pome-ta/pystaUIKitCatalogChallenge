@@ -56,15 +56,19 @@ class CustomToolbarViewController(UIViewController):
 
     toolbarBackgroundImage = UIImage.alloc().initWithData_scale_(
       dataWithContentsOfURL(image_path), scale)
-    #pdbr.state(self.navigationController.toolbar)
+    pdbr.state(self.navigationController.toolbar.standardAppearance)
     #pdbr.state(toolbarBackgroundImage)
 
     #any
     #bottom
+    
+
     self.navigationController.toolbar.setBackgroundImage(
       toolbarBackgroundImage,
       forToolbarPosition=UIBarPosition.any,
       barMetrics=UIBarMetrics.default)
+    
+    #self.navigationController.toolbar.standardAppearance.setBackgroundImage_(toolbarBackgroundImage)
 
     #pdbr.state(self.navigationController.toolbar.standardAppearance)
 
