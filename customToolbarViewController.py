@@ -58,14 +58,14 @@ class CustomToolbarViewController(UIViewController):
       dataWithContentsOfURL(image_path), scale)
     #pdbr.state(self.navigationController.toolbar)
     #pdbr.state(toolbarBackgroundImage)
-    
+
     #any
     #bottom
     self.navigationController.toolbar.setBackgroundImage(
       toolbarBackgroundImage,
       forToolbarPosition=UIBarPosition.any,
       barMetrics=UIBarMetrics.default)
-    
+
     #pdbr.state(self.navigationController.toolbar.standardAppearance)
 
     # MARK: - UIBarButtonItem Creation and Configuration
