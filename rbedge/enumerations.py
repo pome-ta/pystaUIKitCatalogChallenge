@@ -720,3 +720,30 @@ class UIBarMetrics:
   landscapePhone: int = default  # xxx: deprecated
   landscapePhonePrompt: int = default  # xxx: deprecated
 
+
+# ref: [UIBlurEffectStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uiblureffect/style?language=objc)
+@dataclass
+class UIBlurEffectStyle:
+  # ref: [UIBlurEffect.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UIBlurEffect.rs.html#12)
+  extraLight: int = 0
+  light: int = 1
+  dark: int = 2
+  extraDark: int = 3
+  regular: int = 4
+  prominent: int = 5
+  systemUltraThinMaterial: int = 6
+  systemThinMaterial: int = 7
+  systemMaterial: int = 8
+  systemThickMaterial: int = 9
+  systemChromeMaterial: int = 10
+  systemUltraThinMaterialLight: int = 11
+  systemThinMaterialLight: int = 12
+  systemMaterialLight: int = 13
+  systemThickMaterialLight: int = 14
+  systemChromeMaterialLight: int = 15
+  systemUltraThinMaterialDark: int = 16
+  systemThinMaterialDark: int = 17
+  systemMaterialDark: int = 18
+  systemThickMaterialDark: int = 19
+  systemChromeMaterialDark: int = 20
+
