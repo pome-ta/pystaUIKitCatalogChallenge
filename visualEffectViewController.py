@@ -5,24 +5,30 @@ import ctypes
 from pathlib import Path
 
 from pyrubicon.objc.api import ObjCClass, ObjCInstance, NSData
-from pyrubicon.objc.api import objc_method
-from pyrubicon.objc.runtime import send_super, objc_id
+from pyrubicon.objc.api import objc_method, objc_const
+from pyrubicon.objc.runtime import send_super, objc_id, load_library
 
 from rbedge.enumerations import (
-  UIBlurEffectStyle, )
+  UIBlurEffectStyle,
+  UIFontDescriptorSymbolicTraits,
+)
 
 from rbedge import pdbr
 from pyLocalizedString import localizedString
 
+UIKit = load_library('UIKit')  # todo: `objc_const` 用
 UIViewController = ObjCClass('UIViewController')
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
 UIColor = ObjCClass('UIColor')
 
 UIVisualEffectView = ObjCClass('UIVisualEffectView')
 UIBlurEffect = ObjCClass('UIBlurEffect')
+UITextView = ObjCClass('UITextView')
+UIFont = ObjCClass('UIFont')
+UIFontDescriptor = ObjCClass('UIFontDescriptor')
 
-pdbr.state(UIBlurEffect)
-#effectWithStyle_
+# --- Global Variables
+UIFontTextStyleBody = objc_const(UIKit, 'UIFontTextStyleBody')
 
 
 class VisualEffectViewController(UIViewController):
@@ -33,11 +39,6 @@ class VisualEffectViewController(UIViewController):
     #print('\tdealloc')
     pass
 
-  # --- private
-  @objc_method
-  def visualEffect(self):
-    pass
-
   # MARK: - View Life Cycle
   @objc_method
   def viewDidLoad(self):
@@ -46,6 +47,29 @@ class VisualEffectViewController(UIViewController):
       title := self.navigationItem.title) is None else title
 
     self.view.backgroundColor = UIColor.systemBackgroundColor()
+
+    # xxx: 関数で返すと落ちるので
+    visualEffect = UIVisualEffectView.alloc().initWithEffect_(
+      UIBlurEffect.effectWithStyle_(UIBlurEffectStyle.regular))
+    visualEffect.translatesAutoresizingMaskIntoConstraints = False
+
+    # xxx: 関数で返すと落ちるので
+    textView = UITextView.new()
+    textView.setFont_(UIFont.systemFontOfSize_(14.0))
+    textView.setText_(localizedString('VisualEffectTextContent'))
+    textView.translatesAutoresizingMaskIntoConstraints = False
+    textView.backgroundColor = UIColor.clearColor
+    if (fontDescriptor :=
+        UIFontDescriptor.preferredFontDescriptorWithTextStyle_(
+          UIFontTextStyleBody).fontDescriptorWithSymbolicTraits_(
+            UIFontDescriptorSymbolicTraits.traitLooseLeading)):
+
+      looseLeadingFont = UIFont.fontWithDescriptor_size_(fontDescriptor, 0.0)
+      textView.setFont_(looseLeadingFont)
+
+    #preferredFontDescriptorWithTextStyle
+
+    #pdbr.state(textView)
 
   @objc_method
   def viewWillAppear_(self, animated: bool):
