@@ -18,8 +18,9 @@ class RootNavigationController(UINavigationController,
 
   @objc_method
   def viewDidLoad(self):
-    self.initNavigationBarAppearance()
-    self.initToolbarAppearance()
+    # wip: toolbar 周りの調査のため一旦様子見
+    #self.initNavigationBarAppearance()
+    #self.initToolbarAppearance()
     '''
     navigationBarAppearance = UINavigationBarAppearance.new()
     navigationBarAppearance.configureWithDefaultBackground()
