@@ -41,7 +41,7 @@ from progressViewController import ProgressViewController
 from stackViewController import StackViewController
 from defaultToolbarViewController import DefaultToolbarViewController
 from tintedToolbarViewController import TintedToolbarViewController
-from customToolbarViewController import CustomToolbarViewController
+from customToolbarViewController import CustomToolbarViewController  # xxx: ペンディング
 from visualEffectViewController import VisualEffectViewController
 from webViewController import WebViewController
 # --- /
