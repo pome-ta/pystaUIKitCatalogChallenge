@@ -48,10 +48,16 @@ class WebViewController(UIViewController):
     self.view.backgroundColor = UIColor.systemBackgroundColor()
 
     _zero = CGRectMake(0.0, 0.0, 0.0, 0.0)
-    wkWebView = WKWebView.new()
+
+    _configuration = WKWebViewConfiguration.new()
+    _configuration.setMediaPlaybackRequiresUserAction_(True)
+
+    wkWebView = WKWebView.alloc().initWithFrame_configuration_(
+      _zero, _configuration)
+    # So we can capture failures in "didFailProvisionalNavigation".
+    wkWebView.navigationDelegate = self
 
     # --- Layout
-    layoutMarginsGuide = self.view.layoutMarginsGuide
     safeAreaLayoutGuide = self.view.safeAreaLayoutGuide
 
     self.view.addSubview_(wkWebView)
@@ -124,6 +130,11 @@ class WebViewController(UIViewController):
   def webView_didFailProvisionalNavigation_withError_(self, webView,
                                                       navigation, error):
     webKitError = error
+    if webKitError.code == NSURLErrorNotConnectedToInternet:
+      localizedErrorMessage = localizedString('An error occurred:')
+      message = f'{localizedErrorMessage} {error.localizedDescription}'
+      errorHTML = f'<!doctype html><html><body><font color = "red"><div style=\"width: 100%%; text-align: center; font-size: 36pt;\">{message}</div></font></body></html>'
+      webView.loadHTMLString_baseURL_(errorHTML, None)
 
 
 if __name__ == '__main__':
