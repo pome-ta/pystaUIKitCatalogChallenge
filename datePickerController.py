@@ -7,6 +7,9 @@ from pyrubicon.objc.api import ObjCClass, ObjCInstance
 from pyrubicon.objc.api import objc_method, objc_const
 from pyrubicon.objc.runtime import send_super, objc_id
 
+from rbedge.enumerations import (
+  UIDatePickerMode, )
+
 from rbedge import pdbr
 from pyLocalizedString import localizedString
 
@@ -35,8 +38,8 @@ class DatePickerController(UIViewController):
 
     datePicker = UIDatePicker.new()
     # todo: Default
-    #setDatePickerMode_
-    #setMinuteInterval_(1)
+    datePicker.setDatePickerMode_(UIDatePickerMode.dateAndTime)
+    datePicker.setMinuteInterval_(1)
 
     # todo: 確認用
     datePicker.setBackgroundColor_(UIColor.systemDarkPurpleColor())
