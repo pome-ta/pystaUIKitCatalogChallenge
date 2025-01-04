@@ -191,10 +191,9 @@ pickerSubItems = [
 # todo: traitCollection.userInterfaceIdiom != .mac
 if True:
   pickerViewItem = OutlineItem(title='PickerViewTitle',
-                            imageName=None,
-                            storyboardName='PickerViewController')
+                               imageName=None,
+                               storyboardName='PickerViewController')
   pickerSubItems.append(pickerViewItem)
-
 
 pickersOutlineItem = OutlineItem(title='Pickers',
                                  imageName='list.bullet',
@@ -428,14 +427,14 @@ class OutlineViewController(UIViewController):
         toolbarAppearance.configureWithDefaultBackground()
         #toolbarAppearance.configureWithOpaqueBackground()
         #toolbarAppearance.configureWithTransparentBackground()
-        
+
         toolbar = navigationController.toolbar
         toolbar.standardAppearance = toolbarAppearance
         toolbar.scrollEdgeAppearance = toolbarAppearance
         toolbar.compactAppearance = toolbarAppearance
         toolbar.compactScrollEdgeAppearance = toolbarAppearance
         navigationController.setToolbarHidden_(True)
-        
+
       self.navigationController.pushViewController_animated_(
         viewController, True)
 
