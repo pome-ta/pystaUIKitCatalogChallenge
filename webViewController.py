@@ -7,6 +7,7 @@ from pathlib import Path
 from pyrubicon.objc.api import ObjCClass, ObjCInstance
 from pyrubicon.objc.api import objc_method, objc_const
 from pyrubicon.objc.runtime import send_super, objc_id
+from pyrubicon.objc.types import CGRectMake
 
 from rbedge import pdbr
 from pyLocalizedString import localizedString
@@ -26,8 +27,6 @@ NSURL = ObjCClass('NSURL')
     インターネット上のどこからでも Web サイトを表示したい場合は、SFSafariViewController クラスを使用します。
 """
 
-#./UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Base.lproj/content.html
-
 
 class WebViewController(UIViewController):
 
@@ -43,10 +42,11 @@ class WebViewController(UIViewController):
     send_super(__class__, self, 'viewDidLoad')
     self.navigationItem.title = localizedString('WebViewTitle') if (
       title := self.navigationItem.title) is None else title
-    #self.view.backgroundColor = UIColor.systemBackgroundColor()
+    self.view.backgroundColor = UIColor.systemBackgroundColor()
 
+    _zero = CGRectMake(0.0, 0.0, 0.0, 0.0)
     wkWebView = WKWebView.new()
-    
+
     # --- Layout
     layoutMarginsGuide = self.view.layoutMarginsGuide
     safeAreaLayoutGuide = self.view.safeAreaLayoutGuide
@@ -60,9 +60,10 @@ class WebViewController(UIViewController):
         safeAreaLayoutGuide.leadingAnchor),
       wkWebView.trailingAnchor.constraintEqualToAnchor_(
         safeAreaLayoutGuide.trailingAnchor),
-      wkWebView.bottomAnchor.constraintEqualToAnchor_(safeAreaLayoutGuide.bottomAnchor),
+      wkWebView.bottomAnchor.constraintEqualToAnchor_(
+        safeAreaLayoutGuide.bottomAnchor),
     ])
-    
+
     self.wkWebView = wkWebView
     self.loadAddressURL()
 
@@ -75,7 +76,7 @@ class WebViewController(UIViewController):
           Path(
             './UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Base.lproj/content.html'
           ).absolute()))):
-      self.wkWebView.loadFileURL_allowingReadAccessToURL_(url,url)
+      self.wkWebView.loadFileURL_allowingReadAccessToURL_(url, url)
 
   @objc_method
   def viewWillAppear_(self, animated: bool):
