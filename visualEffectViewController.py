@@ -11,6 +11,7 @@ from pyrubicon.objc.runtime import send_super, objc_id, load_library
 from rbedge.enumerations import (
   UIBlurEffectStyle,
   UIFontDescriptorSymbolicTraits,
+  UILayoutConstraintAxis,
 )
 
 from rbedge import pdbr
@@ -20,6 +21,11 @@ UIKit = load_library('UIKit')  # todo: `objc_const` 用
 UIViewController = ObjCClass('UIViewController')
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
 UIColor = ObjCClass('UIColor')
+
+UIImageView = ObjCClass('UIImageView')
+UIImage = ObjCClass('UIImage')
+NSURL = ObjCClass('NSURL')
+UIToolTipInteraction = ObjCClass('UIToolTipInteraction')
 
 UIVisualEffectView = ObjCClass('UIVisualEffectView')
 UIBlurEffect = ObjCClass('UIBlurEffect')
@@ -45,8 +51,20 @@ class VisualEffectViewController(UIViewController):
     send_super(__class__, self, 'viewDidLoad')
     self.navigationItem.title = localizedString('VisualEffectTitle') if (
       title := self.navigationItem.title) is None else title
-
     self.view.backgroundColor = UIColor.systemBackgroundColor()
+
+    image_path = './UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/Flowers_2.imageset/Flowers_2.png'
+    # xxx: `lambda` の使い方が悪い
+    dataWithContentsOfURL = lambda path_str: NSData.dataWithContentsOfURL_(
+      NSURL.fileURLWithPath_(str(Path(path_str).absolute())))
+
+    imageReference = UIImage.alloc().initWithData_(
+      dataWithContentsOfURL(image_path))
+    imageView = UIImageView.alloc().initWithImage_(imageReference)
+    imageView.setContentHuggingPriority_forAxis_(
+      251.0, UILayoutConstraintAxis.horizontal)
+    imageView.setContentHuggingPriority_forAxis_(
+      251.0, UILayoutConstraintAxis.vertical)
 
     # xxx: 関数で返すと落ちるので
     visualEffect = UIVisualEffectView.alloc().initWithEffect_(
@@ -67,9 +85,52 @@ class VisualEffectViewController(UIViewController):
       looseLeadingFont = UIFont.fontWithDescriptor_size_(fontDescriptor, 0.0)
       textView.setFont_(looseLeadingFont)
 
-    #preferredFontDescriptorWithTextStyle
+    # --- Layout
+    layoutMarginsGuide = self.view.layoutMarginsGuide
+    safeAreaLayoutGuide = self.view.safeAreaLayoutGuide
 
-    #pdbr.state(textView)
+    self.view.addSubview_(imageView)
+    imageView.translatesAutoresizingMaskIntoConstraints = False
+    NSLayoutConstraint.activateConstraints_([
+      imageView.heightAnchor.constraintEqualToConstant_(215.0),
+      imageView.widthAnchor.constraintEqualToConstant_(343.0),
+      imageView.centerXAnchor.constraintEqualToAnchor_(
+        safeAreaLayoutGuide.centerXAnchor),
+      imageView.centerYAnchor.constraintEqualToAnchor_(
+        safeAreaLayoutGuide.centerYAnchor),
+    ])
+
+    self.view.addSubview_(visualEffect)
+    visualEffect.translatesAutoresizingMaskIntoConstraints = False
+    NSLayoutConstraint.activateConstraints_([
+      visualEffect.topAnchor.constraintEqualToAnchor_(imageView.topAnchor),
+      visualEffect.leadingAnchor.constraintEqualToAnchor_(
+        imageView.leadingAnchor),
+      visualEffect.trailingAnchor.constraintEqualToAnchor_(
+        imageView.trailingAnchor),
+      visualEffect.bottomAnchor.constraintEqualToAnchor_(
+        imageView.bottomAnchor),
+    ])
+
+    self.view.addSubview_(textView)
+    textView.translatesAutoresizingMaskIntoConstraints = False
+    NSLayoutConstraint.activateConstraints_([
+      textView.topAnchor.constraintEqualToAnchor_(
+        visualEffect.safeAreaLayoutGuide.topAnchor),
+      textView.leadingAnchor.constraintEqualToAnchor_(
+        visualEffect.safeAreaLayoutGuide.leadingAnchor),
+      textView.trailingAnchor.constraintEqualToAnchor_(
+        visualEffect.safeAreaLayoutGuide.trailingAnchor),
+      textView.bottomAnchor.constraintEqualToAnchor_(
+        visualEffect.safeAreaLayoutGuide.bottomAnchor),
+    ])
+
+    if True:  # wip: `available(iOS 15, *)`
+      # Use UIToolTipInteraction which is available on iOS 15 or later, add it to the image view.
+      toolTipString = localizedString('VisualEffectToolTipTitle')
+      interaction = UIToolTipInteraction.alloc().initWithDefaultToolTip_(
+        toolTipString)
+      imageView.addInteraction_(interaction)
 
   @objc_method
   def viewWillAppear_(self, animated: bool):
