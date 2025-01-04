@@ -781,3 +781,44 @@ class NSDateFormatterStyle:
   long: int = 3
   full: int = 4
 
+
+# ref: [NSCalendarUnit | Apple Developer Documentation](https://developer.apple.com/documentation/foundation/nscalendarunit)
+@dataclass
+class NSCalendarUnit:
+  # ref: [NSCalendar.rs - source](https://docs.rs/objc2-foundation/0.2.2/aarch64-apple-ios/src/objc2_foundation/generated/NSCalendar.rs.html#94)
+  era: int = 2
+  year: int = 4
+  month: int = 8
+  day: int = 16
+  hour: int = 32
+  minute: int = 64
+  second: int = 128
+  weekday: int = 512
+  weekdayOrdinal: int = 1024
+  quarter: int = 2048
+  weekOfMonth: int = 4096
+  weekOfYear: int = 8192
+  yearForWeekOfYear: int = 16384
+  nanosecond: int = 32768
+  calendar: int = 1048576
+  timeZone: int = 2097152
+  # deprecated ---
+  NSEraCalendarUnit: int = 2
+  NSYearCalendarUnit: int = 4
+  NSMonthCalendarUnit: int = 8
+  NSDayCalendarUnit: int = 16
+  NSHourCalendarUnit: int = 32
+  NSMinuteCalendarUnit: int = 64
+  NSSecondCalendarUnit: int = 128
+  # `NSCalendarUnitWeekOfMonth` or `NSCalendarUnitWeekOfYear` , depending on which you mean
+  NSWeekCalendarUnit: int = 256
+  NSWeekdayCalendarUnit: int = 512
+  NSWeekdayOrdinalCalendarUnit: int = 1024
+  NSQuarterCalendarUnit: int = 2048
+  NSWeekOfMonthCalendarUnit: int = 4096
+  NSWeekOfYearCalendarUnit: int = 8192
+  NSYearForWeekOfYearCalendarUnit: int = 16384
+  NSCalendarCalendarUnit: int = 1048576
+  NSTimeZoneCalendarUnit: int = 2097152
+  # --- deprecated
+
