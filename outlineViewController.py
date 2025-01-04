@@ -188,6 +188,14 @@ pickerSubItems = [
               storyboardName='ImagePickerViewController'),
 ]
 
+# todo: traitCollection.userInterfaceIdiom != .mac
+if True:
+  pickerViewItem = OutlineItem(title='PickerViewTitle',
+                            imageName=None,
+                            storyboardName='PickerViewController')
+  pickerSubItems.append(pickerViewItem)
+
+
 pickersOutlineItem = OutlineItem(title='Pickers',
                                  imageName='list.bullet',
                                  subitems=pickerSubItems)
