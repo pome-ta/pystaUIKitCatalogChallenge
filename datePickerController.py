@@ -8,7 +8,11 @@ from pyrubicon.objc.api import objc_method, objc_const
 from pyrubicon.objc.runtime import send_super, objc_id
 
 from rbedge.enumerations import (
-  UIDatePickerMode, )
+  UIDatePickerMode,
+  UIControlContentHorizontalAlignment,
+  UIControlContentVerticalAlignment,
+  UIDatePickerStyle,
+)
 
 from rbedge import pdbr
 from pyLocalizedString import localizedString
@@ -18,6 +22,7 @@ NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
 UIColor = ObjCClass('UIColor')
 
 UIDatePicker = ObjCClass('UIDatePicker')
+NSDate = ObjCClass('NSDate')
 
 
 class DatePickerController(UIViewController):
@@ -40,11 +45,13 @@ class DatePickerController(UIViewController):
     # todo: Default
     datePicker.setDatePickerMode_(UIDatePickerMode.dateAndTime)
     datePicker.setMinuteInterval_(1)
-
+    datePicker.setContentHorizontalAlignment_(
+      UIControlContentHorizontalAlignment.center)
+    datePicker.setContentVerticalAlignment_(
+      UIControlContentVerticalAlignment.center)
 
     # todo: 確認用
     datePicker.setBackgroundColor_(UIColor.systemDarkPurpleColor())
-    
 
     # --- Layout
     safeAreaLayoutGuide = self.view.safeAreaLayoutGuide
@@ -57,20 +64,24 @@ class DatePickerController(UIViewController):
       datePicker.centerYAnchor.constraintEqualToAnchor_(
         self.view.centerYAnchor),
     ])
-    
+
     self.datePicker = datePicker
     self.configureDatePicker()
-
 
   # MARK: - Configuration
   @objc_method
   def configureDatePicker(self):
     self.datePicker.datePickerMode = UIDatePickerMode.dateAndTime
-    
+
     # Set min/max date for the date picker. As an example we will limit the date between now and 7 days from now.
     # 日付ピッカーの最小/最大日付を設定します。例として、日付を現在から 7 日後までに制限します。
-    
-
+    now = NSDate.now()  # todo: `new()` 、`alloc().init()` と同義
+    self.datePicker.minimumDate = now
+    # Decide the best date picker style based on the trait collection's vertical size.
+    # 特性コレクションの垂直サイズに基づいて、最適な日付ピッカー スタイルを決定します。
+    #pdbr.state(self, 1)
+    pdbr.state(self.traitCollection)
+    print(self.traitCollection.verticalSizeClass)
 
   @objc_method
   def viewWillAppear_(self, animated: bool):

@@ -1,5 +1,8 @@
 from dataclasses import dataclass
 
+# ref: [NSURLErrorNotConnectedToInternet | Apple Developer Documentation](https://developer.apple.com/documentation/foundation/1508628-url_loading_system_error_codes/nsurlerrornotconnectedtointernet?language=objc)
+NSURLErrorNotConnectedToInternet = -1009
+
 
 # ref: [UIModalPresentationStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uimodalpresentationstyle)
 @dataclass
@@ -759,6 +762,12 @@ class UIDatePickerMode:
   yearAndMonth: int = 4
 
 
-# ref: [NSURLErrorNotConnectedToInternet | Apple Developer Documentation](https://developer.apple.com/documentation/foundation/1508628-url_loading_system_error_codes/nsurlerrornotconnectedtointernet?language=objc)
-NSURLErrorNotConnectedToInternet = -1009
+# ref: [UIDatePickerStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uidatepickerstyle?language=objc)
+@dataclass
+class UIDatePickerStyle:
+  # ref: [UIDatePicker.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UIDatePicker.rs.html#40)
+  automatic: int = 0
+  wheels: int = 1
+  compact: int = 2
+  inline: int = 3
 
