@@ -42,6 +42,7 @@ from stackViewController import StackViewController
 from defaultToolbarViewController import DefaultToolbarViewController
 from tintedToolbarViewController import TintedToolbarViewController
 from customToolbarViewController import CustomToolbarViewController
+from visualEffectViewController import VisualEffectViewController
 # --- /
 
 UIKit = load_library('UIKit')  # todo: `objc_const` 用
@@ -234,7 +235,7 @@ viewsOutlineItem = OutlineItem(
                 ]),
     OutlineItem(title='VisualEffectTitle',
                 imageName=None,
-                storyboardName='VisualEffectViewController'),
+                storyboardName=VisualEffectViewController),
     OutlineItem(title='WebViewTitle',
                 imageName=None,
                 storyboardName='WebViewController'),
