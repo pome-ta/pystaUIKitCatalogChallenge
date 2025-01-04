@@ -771,3 +771,13 @@ class UIDatePickerStyle:
   compact: int = 2
   inline: int = 3
 
+
+# ref: [NSDateFormatterStyle | Apple Developer Documentation](https://developer.apple.com/documentation/foundation/nsdateformatterstyle?language=objc)
+@dataclass
+class NSDateFormatterStyle:
+  none: int = 0
+  short: int = 1
+  medium: int = 2
+  long: int = 3
+  full: int = 4
+

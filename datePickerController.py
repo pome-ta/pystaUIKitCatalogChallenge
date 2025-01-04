@@ -11,6 +11,7 @@ from rbedge.enumerations import (
   UIDatePickerMode,
   UIControlContentHorizontalAlignment,
   UIControlContentVerticalAlignment,
+  UIUserInterfaceSizeClass,
   UIDatePickerStyle,
 )
 
@@ -23,6 +24,7 @@ UIColor = ObjCClass('UIColor')
 
 UIDatePicker = ObjCClass('UIDatePicker')
 NSDate = ObjCClass('NSDate')
+NSDateFormatter = ObjCClass('NSDateFormatter')
 
 
 class DatePickerController(UIViewController):
@@ -79,9 +81,14 @@ class DatePickerController(UIViewController):
     self.datePicker.minimumDate = now
     # Decide the best date picker style based on the trait collection's vertical size.
     # 特性コレクションの垂直サイズに基づいて、最適な日付ピッカー スタイルを決定します。
-    #pdbr.state(self, 1)
-    pdbr.state(self.traitCollection)
-    print(self.traitCollection.verticalSizeClass)
+    self.datePicker.preferredDatePickerStyle = UIDatePickerStyle.compact if self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClass.compact else UIDatePickerStyle.inline
+    
+    # A date formatter to format the `date` property of `datePicker`.
+    # xxx: 関数化すると落ちるので、ここに展開
+    dateFormatter = NSDateFormatter.new()
+    pdbr.state(dateFormatter)
+    
+    
 
   @objc_method
   def viewWillAppear_(self, animated: bool):
