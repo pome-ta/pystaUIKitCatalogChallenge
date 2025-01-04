@@ -14,6 +14,7 @@ from rbedge.enumerations import (
   UIUserInterfaceSizeClass,
   UIDatePickerStyle,
   NSDateFormatterStyle,
+  NSCalendarUnit,
 )
 
 from rbedge import pdbr
@@ -26,6 +27,7 @@ UIColor = ObjCClass('UIColor')
 UIDatePicker = ObjCClass('UIDatePicker')
 NSDate = ObjCClass('NSDate')
 NSDateFormatter = ObjCClass('NSDateFormatter')
+NSDateComponents = ObjCClass('NSDateComponents')
 NSCalendar = ObjCClass('NSCalendar')
 
 
@@ -91,9 +93,12 @@ class DatePickerController(UIViewController):
     dateFormatter.setDateStyle_(NSDateFormatterStyle.medium)
     dateFormatter.setTimeStyle_(NSDateFormatterStyle.short)
     
-    dateComponents = dateFormatter
-    pdbr.state(NSCalendar.currentCalendar)
-    #dateByAddingUnit_value_toDate_options_
+    dateComponents = NSDateComponents.new()
+    dateComponents.day = 7
+    
+    #pdbr.state(NSCalendar.currentCalendar)
+    sevenDaysFromNow = NSCalendar.currentCalendar.dateByAddingUnit_value_toDate_options_(NSCalendarUnit.day, 7, now, None)
+    #pdbr.state(sevenDaysFromNow)
     
     
 
