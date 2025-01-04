@@ -2,6 +2,8 @@
   note: Storyboard 実装なし
 '''
 import ctypes
+from pathlib import Path
+
 from pyrubicon.objc.api import ObjCClass, ObjCInstance
 from pyrubicon.objc.api import objc_method, objc_const
 from pyrubicon.objc.runtime import send_super, objc_id
@@ -12,6 +14,19 @@ from pyLocalizedString import localizedString
 UIViewController = ObjCClass('UIViewController')
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
 UIColor = ObjCClass('UIColor')
+
+WKWebView = ObjCClass('WKWebView')
+WKWebViewConfiguration = ObjCClass('WKWebViewConfiguration')
+NSURL = ObjCClass('NSURL')
+"""
+  NOTE:
+    If your app customizes, interacts with, or controls the display of web content, use the WKWebView class.
+    If you want to view a website from anywhere on the Internet, use the SFSafariViewController class.
+    アプリが Web コンテンツの表示をカスタマイズ、操作、または制御する場合は、WKWebView クラスを使用します。
+    インターネット上のどこからでも Web サイトを表示したい場合は、SFSafariViewController クラスを使用します。
+"""
+
+#./UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Base.lproj/content.html
 
 
 class WebViewController(UIViewController):
@@ -29,6 +44,38 @@ class WebViewController(UIViewController):
     self.navigationItem.title = localizedString('WebViewTitle') if (
       title := self.navigationItem.title) is None else title
     #self.view.backgroundColor = UIColor.systemBackgroundColor()
+
+    wkWebView = WKWebView.new()
+    
+    # --- Layout
+    layoutMarginsGuide = self.view.layoutMarginsGuide
+    safeAreaLayoutGuide = self.view.safeAreaLayoutGuide
+
+    self.view.addSubview_(wkWebView)
+    wkWebView.translatesAutoresizingMaskIntoConstraints = False
+    NSLayoutConstraint.activateConstraints_([
+      wkWebView.topAnchor.constraintEqualToAnchor_(
+        safeAreaLayoutGuide.topAnchor),
+      wkWebView.leadingAnchor.constraintEqualToAnchor_(
+        safeAreaLayoutGuide.leadingAnchor),
+      wkWebView.trailingAnchor.constraintEqualToAnchor_(
+        safeAreaLayoutGuide.trailingAnchor),
+      wkWebView.bottomAnchor.constraintEqualToAnchor_(safeAreaLayoutGuide.bottomAnchor),
+    ])
+    
+    self.wkWebView = wkWebView
+    self.loadAddressURL()
+
+  # MARK: - Loading
+  @objc_method
+  def loadAddressURL(self):
+    # Set the content to local html in our app bundle.
+    if (url := NSURL.fileURLWithPath_(
+        str(
+          Path(
+            './UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Base.lproj/content.html'
+          ).absolute()))):
+      self.wkWebView.loadFileURL_allowingReadAccessToURL_(url,url)
 
   @objc_method
   def viewWillAppear_(self, animated: bool):
