@@ -9,6 +9,9 @@ from pyrubicon.objc.api import objc_method, objc_const
 from pyrubicon.objc.runtime import send_super, objc_id
 from pyrubicon.objc.types import CGRectMake
 
+from rbedge.enumerations import (
+  NSURLErrorNotConnectedToInternet, )
+
 from rbedge import pdbr
 from pyLocalizedString import localizedString
 
@@ -115,6 +118,12 @@ class WebViewController(UIViewController):
   def didReceiveMemoryWarning(self):
     send_super(__class__, self, 'didReceiveMemoryWarning')
     print(f'{__class__}: didReceiveMemoryWarning')
+
+  # MARK: - WKNavigationDelegate
+  @objc_method
+  def webView_didFailProvisionalNavigation_withError_(self, webView,
+                                                      navigation, error):
+    webKitError = error
 
 
 if __name__ == '__main__':

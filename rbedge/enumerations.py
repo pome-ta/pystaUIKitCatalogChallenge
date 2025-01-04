@@ -747,3 +747,5 @@ class UIBlurEffectStyle:
   systemThickMaterialDark: int = 19
   systemChromeMaterialDark: int = 20
 
+# ref: [NSURLErrorNotConnectedToInternet | Apple Developer Documentation](https://developer.apple.com/documentation/foundation/1508628-url_loading_system_error_codes/nsurlerrornotconnectedtointernet?language=objc)
+NSURLErrorNotConnectedToInternet = -1009
