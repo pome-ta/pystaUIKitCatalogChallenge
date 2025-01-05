@@ -97,7 +97,7 @@ class DatePickerController(UIViewController):
     dateComponents.day = 7
     
     #pdbr.state(NSCalendar.currentCalendar)
-    sevenDaysFromNow = NSCalendar.currentCalendar.dateByAddingUnit_value_toDate_options_(NSCalendarUnit.day, 7, now, None)
+    sevenDaysFromNow = NSCalendar.currentCalendar.dateByAddingUnit(NSCalendarUnit.day, value=7, toDate=now, options=[])
     #pdbr.state(sevenDaysFromNow)
     
     
