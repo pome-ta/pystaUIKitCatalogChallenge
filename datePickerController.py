@@ -5,7 +5,7 @@ import ctypes
 
 from pyrubicon.objc.api import ObjCClass, ObjCInstance
 from pyrubicon.objc.api import objc_method, objc_const
-from pyrubicon.objc.runtime import send_super, objc_id
+from pyrubicon.objc.runtime import send_super, objc_id, SEL
 
 from rbedge.enumerations import (
   UIDatePickerMode,
@@ -15,6 +15,7 @@ from rbedge.enumerations import (
   UIDatePickerStyle,
   NSDateFormatterStyle,
   NSCalendarUnit,
+  UIControlEvents,
 )
 
 from rbedge import pdbr
@@ -58,6 +59,11 @@ class DatePickerController(UIViewController):
 
     # todo: 確認用
     datePicker.setBackgroundColor_(UIColor.systemDarkPurpleColor())
+    # A date formatter to format the `date` property of `datePicker`.
+    # xxx: 関数化すると落ちるので、ここに展開
+    dateFormatter = NSDateFormatter.new()
+    dateFormatter.setDateStyle_(NSDateFormatterStyle.medium)
+    dateFormatter.setTimeStyle_(NSDateFormatterStyle.short)
 
     # --- Layout
     safeAreaLayoutGuide = self.view.safeAreaLayoutGuide
@@ -72,6 +78,7 @@ class DatePickerController(UIViewController):
     ])
 
     self.datePicker = datePicker
+    self.dateFormatter = dateFormatter
     self.configureDatePicker()
 
   # MARK: - Configuration
@@ -87,12 +94,6 @@ class DatePickerController(UIViewController):
     # 特性コレクションの垂直サイズに基づいて、最適な日付ピッカー スタイルを決定します。
     self.datePicker.preferredDatePickerStyle = UIDatePickerStyle.compact if self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClass.compact else UIDatePickerStyle.inline
 
-    # A date formatter to format the `date` property of `datePicker`.
-    # xxx: 関数化すると落ちるので、ここに展開
-    dateFormatter = NSDateFormatter.new()
-    dateFormatter.setDateStyle_(NSDateFormatterStyle.medium)
-    dateFormatter.setTimeStyle_(NSDateFormatterStyle.short)
-
     # xxx: `dateComponents` 使わない、、、？
     dateComponents = NSDateComponents.new()
     dateComponents.day = 7
@@ -101,7 +102,19 @@ class DatePickerController(UIViewController):
       NSCalendarUnit.day, value=7, toDate=now, options=0)
     self.datePicker.maximumDate = sevenDaysFromNow
     self.datePicker.minuteInterval = 2
-    pdbr.state(self.datePicker)
+
+    self.datePicker.addTarget(self,
+                              action=SEL('updateDatePickerLabel'),
+                              forControlEvents=UIControlEvents.valueChanged)
+    self.updateDatePickerLabel()
+
+  # MARK: - Actions
+  @objc_method
+  def updateDatePickerLabel(self):
+    # todo: `print` でも呼び出すので、変数化
+    _date_text = self.dateFormatter.stringFromDate_(self.datePicker.date)
+
+    print(f'Chosen date: {_date_text}')
 
   @objc_method
   def viewWillAppear_(self, animated: bool):
