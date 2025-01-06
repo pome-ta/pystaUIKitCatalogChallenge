@@ -57,10 +57,8 @@ class DatePickerController(UIViewController):
     datePicker.setContentVerticalAlignment_(
       UIControlContentVerticalAlignment.center)
 
-    # todo: 確認用
-    datePicker.setBackgroundColor_(UIColor.systemDarkPurpleColor())
     # A date formatter to format the `date` property of `datePicker`.
-    # xxx: 関数化すると落ちるので、ここに展開
+    # xxx: 関数化すると落ちる（かも？な）ので、ここに展開
     dateFormatter = NSDateFormatter.new()
     dateFormatter.setDateStyle_(NSDateFormatterStyle.medium)
     dateFormatter.setTimeStyle_(NSDateFormatterStyle.short)
@@ -80,6 +78,7 @@ class DatePickerController(UIViewController):
     self.datePicker = datePicker
     self.dateFormatter = dateFormatter
     self.configureDatePicker()
+    #pdbr.state(self)
 
   # MARK: - Configuration
   @objc_method
@@ -107,6 +106,22 @@ class DatePickerController(UIViewController):
                               action=SEL('updateDatePickerLabel'),
                               forControlEvents=UIControlEvents.valueChanged)
     self.updateDatePickerLabel()
+
+  @objc_method  # override
+  def traitCollectionDidChange_(self, previousTraitCollection):
+    # xxx: iOS 17 からはDeprecated
+    # note: [iOS 17 からの画面サイズ変化への対応方法](https://zenn.dev/matsuei/articles/a9143244622d01)
+    # ref: [traitCollectionDidChange: | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uitraitenvironment/traitcollectiondidchange(_:)?language=objc)
+    # ref: [registerForTraitChanges:withHandler: | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uitraitchangeobservable-7qoet/registerfortraitchanges:withhandler:?language=objc)
+    send_super(__class__,
+               self,
+               'traitCollectionDidChange:',
+               previousTraitCollection,
+               argtypes=[
+                 objc_id,
+               ])
+    # Adjust the date picker style due to the trait collection's vertical size.
+    self.datePicker.preferredDatePickerStyle = UIDatePickerStyle.compact if self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClass.compact else UIDatePickerStyle.inline
 
   # MARK: - Actions
   @objc_method
