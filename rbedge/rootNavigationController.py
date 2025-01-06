@@ -84,12 +84,12 @@ class RootNavigationController(UINavigationController,
     viewController.setEdgesForExtendedLayout_(extendedLayout)
 
     barButtonSystemItem = UIBarButtonSystemItem.close
-    doneButton = UIBarButtonItem.alloc(
+    closeButton = UIBarButtonItem.alloc(
     ).initWithBarButtonSystemItem_target_action_(barButtonSystemItem,
                                                  navigationController,
                                                  SEL('doneButtonTapped:'))
     visibleViewController = navigationController.visibleViewController
 
     navigationItem = visibleViewController.navigationItem
-    navigationItem.rightBarButtonItem = doneButton
+    navigationItem.rightBarButtonItem = closeButton
 
