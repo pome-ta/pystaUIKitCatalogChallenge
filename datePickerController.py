@@ -93,13 +93,15 @@ class DatePickerController(UIViewController):
     dateFormatter.setDateStyle_(NSDateFormatterStyle.medium)
     dateFormatter.setTimeStyle_(NSDateFormatterStyle.short)
 
+    # xxx: `dateComponents` 使わない、、、？
     dateComponents = NSDateComponents.new()
     dateComponents.day = 7
 
-    #pdbr.state(NSCalendar.currentCalendar)
     sevenDaysFromNow = NSCalendar.currentCalendar.dateByAddingUnit(
-      NSCalendarUnit.day, value=7, toDate=now, options=[])
-    #pdbr.state(sevenDaysFromNow)
+      NSCalendarUnit.day, value=7, toDate=now, options=0)
+    self.datePicker.maximumDate = sevenDaysFromNow
+    self.datePicker.minuteInterval = 2
+    pdbr.state(self.datePicker)
 
   @objc_method
   def viewWillAppear_(self, animated: bool):
