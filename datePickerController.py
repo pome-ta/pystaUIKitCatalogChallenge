@@ -11,11 +11,14 @@ from rbedge.enumerations import (
   UIDatePickerMode,
   UIControlContentHorizontalAlignment,
   UIControlContentVerticalAlignment,
+  UILayoutConstraintAxis,
   UIUserInterfaceSizeClass,
   UIDatePickerStyle,
   NSDateFormatterStyle,
   NSCalendarUnit,
   UIControlEvents,
+  NSTextAlignment,
+  NSLineBreakMode,
 )
 
 from rbedge import pdbr
@@ -30,6 +33,9 @@ NSDate = ObjCClass('NSDate')
 NSDateFormatter = ObjCClass('NSDateFormatter')
 NSDateComponents = ObjCClass('NSDateComponents')
 NSCalendar = ObjCClass('NSCalendar')
+
+UILabel = ObjCClass('UILabel')
+UIFont = ObjCClass('UIFont')
 
 
 class DatePickerController(UIViewController):
@@ -48,6 +54,12 @@ class DatePickerController(UIViewController):
       title := self.navigationItem.title) is None else title
     self.view.backgroundColor = UIColor.systemBackgroundColor()
 
+    # A date formatter to format the `date` property of `datePicker`.
+    # xxx: 関数化すると落ちる(かも?な)ので、ここに展開
+    dateFormatter = NSDateFormatter.new()
+    dateFormatter.setDateStyle_(NSDateFormatterStyle.medium)
+    dateFormatter.setTimeStyle_(NSDateFormatterStyle.short)
+
     datePicker = UIDatePicker.new()
     # todo: Default
     datePicker.setDatePickerMode_(UIDatePickerMode.dateAndTime)
@@ -57,28 +69,52 @@ class DatePickerController(UIViewController):
     datePicker.setContentVerticalAlignment_(
       UIControlContentVerticalAlignment.center)
 
-    # A date formatter to format the `date` property of `datePicker`.
-    # xxx: 関数化すると落ちる（かも？な）ので、ここに展開
-    dateFormatter = NSDateFormatter.new()
-    dateFormatter.setDateStyle_(NSDateFormatterStyle.medium)
-    dateFormatter.setTimeStyle_(NSDateFormatterStyle.short)
+    dateLabel = UILabel.new()
+    dateLabel.setContentHuggingPriority_forAxis_(
+      251.0, UILayoutConstraintAxis.horizontal)
+    dateLabel.setContentHuggingPriority_forAxis_(
+      251.0, UILayoutConstraintAxis.vertical)
+    dateLabel.text = 'Label'
+    dateLabel.textAlignment = NSTextAlignment.center
+    dateLabel.lineBreakMode = NSLineBreakMode.byTruncatingTail
+    dateLabel.font = UIFont.systemFontOfSize_(17.0)
+    dateLabel.textColor = UIColor.secondaryLabelColor()
+
+    if True:  # wip: `available(iOS 15, *)`
+      # In case the label's content is too large to fit inside the label (causing truncation),
+      # use this to reveal the label's full text drawn as a tool tip.
+      dateLabel.showsExpansionTextWhenTruncated = True
 
     # --- Layout
     safeAreaLayoutGuide = self.view.safeAreaLayoutGuide
+    layoutMarginsGuide = self.view.layoutMarginsGuide
 
     self.view.addSubview_(datePicker)
     datePicker.translatesAutoresizingMaskIntoConstraints = False
+    # xxx: `datePicker.centerYAnchor` が画面全体を取ってる模様で中心ではないが、表記の通りに実装
     NSLayoutConstraint.activateConstraints_([
-      datePicker.centerXAnchor.constraintEqualToAnchor_(
-        safeAreaLayoutGuide.centerXAnchor),
       datePicker.centerYAnchor.constraintEqualToAnchor_(
         self.view.centerYAnchor),
+      datePicker.centerXAnchor.constraintEqualToAnchor_(
+        safeAreaLayoutGuide.centerXAnchor),
     ])
 
-    self.datePicker = datePicker
+    self.view.addSubview_(dateLabel)
+    dateLabel.translatesAutoresizingMaskIntoConstraints = False
+    NSLayoutConstraint.activateConstraints_([
+      dateLabel.topAnchor.constraintEqualToAnchor_constant_(
+        datePicker.bottomAnchor, 19.0),
+      dateLabel.leadingAnchor.constraintEqualToAnchor_(
+        layoutMarginsGuide.leadingAnchor),
+      dateLabel.trailingAnchor.constraintEqualToAnchor_(
+        layoutMarginsGuide.trailingAnchor),
+    ])
+
     self.dateFormatter = dateFormatter
+    self.datePicker = datePicker
+    self.dateLabel = dateLabel
+
     self.configureDatePicker()
-    #pdbr.state(self)
 
   # MARK: - Configuration
   @objc_method
@@ -128,6 +164,7 @@ class DatePickerController(UIViewController):
   def updateDatePickerLabel(self):
     # todo: `print` でも呼び出すので、変数化
     _date_text = self.dateFormatter.stringFromDate_(self.datePicker.date)
+    self.dateLabel.text = _date_text
 
     print(f'Chosen date: {_date_text}')
 

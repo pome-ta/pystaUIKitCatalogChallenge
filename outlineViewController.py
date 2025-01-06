@@ -44,6 +44,8 @@ from tintedToolbarViewController import TintedToolbarViewController
 from customToolbarViewController import CustomToolbarViewController  # xxx: ペンディング
 from visualEffectViewController import VisualEffectViewController
 from webViewController import WebViewController
+# --- --- pickersOutlineItem
+from datePickerController import DatePickerController
 # --- /
 
 UIKit = load_library('UIKit')  # todo: `objc_const` 用
@@ -176,7 +178,7 @@ controlsOutlineItem = OutlineItem(title='Controls',
 pickerSubItems = [
   OutlineItem(title='DatePickerTitle',
               imageName=None,
-              storyboardName='DatePickerController'),
+              storyboardName=DatePickerController),
   OutlineItem(title='ColorPickerTitle',
               imageName=None,
               storyboardName='ColorPickerViewController'),
