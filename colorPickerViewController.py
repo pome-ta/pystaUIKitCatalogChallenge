@@ -5,7 +5,7 @@ import ctypes
 
 from pyrubicon.objc.api import ObjCClass, ObjCInstance, Block
 from pyrubicon.objc.api import objc_method, objc_const
-from pyrubicon.objc.runtime import send_super, objc_id
+from pyrubicon.objc.runtime import send_super, objc_id, SEL
 from pyrubicon.objc.types import CGRectMake
 
 from rbedge.enumerations import (
@@ -44,10 +44,21 @@ class ColorPickerViewController(UIViewController):
       title := self.navigationItem.title) is None else title
     self.view.backgroundColor = UIColor.systemBackgroundColor()
 
-    pickerBarButton = UIBarButtonItem
-    pdbr.state(pickerBarButton.new())
-    
-    
+    pickerBarButton = UIBarButtonItem.alloc(
+    ).initWithTitle_style_target_action_('Picker', UIBarButtonItemStyle.plain,
+                                         self,
+                                         SEL('presentColorPickerByBarButton:'))
+    #pdbr.state(pickerBarButton.new())
+    #pdbr.state(pickerBarButton)
+    self.navigationItem.leftBarButtonItem = pickerBarButton
+    #self.navigationItem.rightBarButtonItem = pickerBarButton
+    #pdbr.state(self.navigationItem.leftBarButtonItem)
+    '''
+    self.navigationItem.setRightBarButtonItems_animated_([
+      pickerBarButton,
+    ], True)
+    '''
+
     colorView = UIView.new()
 
     colorView.backgroundColor = UIColor.systemDarkYellowColor()
@@ -78,7 +89,7 @@ class ColorPickerViewController(UIViewController):
   @objc_method
   def colorWellHandler_(self, _action: ctypes.c_void_p) -> None:
     action = ObjCInstance(_action)
-    pdbr.state(action)
+    #pdbr.state(action)
 
   @objc_method
   def configureColorWell(self):
@@ -102,12 +113,15 @@ class ColorPickerViewController(UIViewController):
       # For iOS, the UIColorWell is placed inside the navigation bar as a UIBarButtonItem.
       colorWellBarItem = UIBarButtonItem.alloc().initWithCustomView_(colorWell)
       fixedBarItem = UIBarButtonItem.fixedSpaceItemOfWidth_(20.0)
-      '''
+      #print(self.navigationItem.rightBarButtonItems)
+      #rightBarButtonItems = self.navigationItem.rightBarButtonItems
+
       self.navigationItem.setRightBarButtonItems_animated_([
         fixedBarItem,
         colorWellBarItem,
+        
       ], True)
-      '''
+
     #pdbr.state(self.navigationItem.rightBarButtonItems)
 
   # MARK: - UIColorPickerViewController
@@ -119,6 +133,12 @@ class ColorPickerViewController(UIViewController):
     colorPicker.delegate = self
 
     self.colorPicker = colorPicker
+
+  # Present the color picker from the UIBarButtonItem, iOS only.
+  # This will present it as a popover (preferred), or for compact mode as a modal sheet.
+  @objc_method
+  def presentColorPickerByBarButton_(self, sender):
+    pdbr.state(colorPicker)
 
   # MARK: - UIColorPickerViewControllerDelegate
   # Color returned from the color picker via UIBarButtonItem - iOS 15.0
@@ -235,7 +255,7 @@ if __name__ == '__main__':
 
   main_vc = ColorPickerViewController.new()
   _title = NSStringFromClass(ColorPickerViewController)
-  main_vc.navigationItem.title = _title
+  #main_vc.navigationItem.title = _title
 
   presentation_style = UIModalPresentationStyle.fullScreen
   present_viewController(main_vc, presentation_style)
