@@ -822,3 +822,12 @@ class NSCalendarUnit:
   NSTimeZoneCalendarUnit: int = 2097152
   # --- deprecated
 
+
+# ref: [UIBarButtonItemStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uibarbuttonitem/style-swift.enum?language=objc)
+@dataclass
+class UIBarButtonItemStyle:
+  # ref: [UIBarButtonItem.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UIBarButtonItem.rs.html#14)
+  plain: int = 0
+  bordered: int = 1  # Deprecated
+  done: int = 2
+
