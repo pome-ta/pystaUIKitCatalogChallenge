@@ -62,15 +62,14 @@ class RootNavigationController(UINavigationController,
     toolbarAppearance.configureWithDefaultBackground()
     #toolbarAppearance.configureWithOpaqueBackground()
     #toolbarAppearance.configureWithTransparentBackground()
-    
+
     toolbar = self.toolbar
     toolbar.standardAppearance = toolbarAppearance
     toolbar.scrollEdgeAppearance = toolbarAppearance
     toolbar.compactAppearance = toolbarAppearance
     toolbar.compactScrollEdgeAppearance = toolbarAppearance
-    
-    self.setToolbarHidden_(True)
 
+    self.setToolbarHidden_(True)
 
   @objc_method
   def doneButtonTapped_(self, sender):
@@ -83,13 +82,20 @@ class RootNavigationController(UINavigationController,
     extendedLayout = UIRectEdge.none
     viewController.setEdgesForExtendedLayout_(extendedLayout)
 
-    barButtonSystemItem = UIBarButtonSystemItem.close
-    closeButton = UIBarButtonItem.alloc(
-    ).initWithBarButtonSystemItem_target_action_(barButtonSystemItem,
-                                                 navigationController,
-                                                 SEL('doneButtonTapped:'))
+    closeButtonItem = UIBarButtonItem.alloc().initWithBarButtonSystemItem(
+      UIBarButtonSystemItem.close,
+      target=navigationController,
+      action=SEL('doneButtonTapped:'))
+
     visibleViewController = navigationController.visibleViewController
 
     navigationItem = visibleViewController.navigationItem
-    navigationItem.rightBarButtonItem = closeButton
+    if (rightBarButtonItems := navigationItem.rightBarButtonItems):
+      # todo: `UIViewController` で、`rightBarButtonItem` が存在していた場合、`closeButtonItem` を右端に
+      navigationItem.setRightBarButtonItems_animated_([
+        closeButtonItem,
+        *rightBarButtonItems,
+      ], True)
+    else:
+      navigationItem.rightBarButtonItem = closeButtonItem
 

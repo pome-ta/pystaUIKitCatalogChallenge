@@ -50,8 +50,8 @@ class ColorPickerViewController(UIViewController):
                                          SEL('presentColorPickerByBarButton:'))
     #pdbr.state(pickerBarButton.new())
     #pdbr.state(pickerBarButton)
-    self.navigationItem.leftBarButtonItem = pickerBarButton
-    #self.navigationItem.rightBarButtonItem = pickerBarButton
+    #self.navigationItem.leftBarButtonItem = pickerBarButton
+    self.navigationItem.rightBarButtonItem = pickerBarButton
     #pdbr.state(self.navigationItem.leftBarButtonItem)
     '''
     self.navigationItem.setRightBarButtonItems_animated_([
@@ -114,12 +114,13 @@ class ColorPickerViewController(UIViewController):
       colorWellBarItem = UIBarButtonItem.alloc().initWithCustomView_(colorWell)
       fixedBarItem = UIBarButtonItem.fixedSpaceItemOfWidth_(20.0)
       #print(self.navigationItem.rightBarButtonItems)
-      #rightBarButtonItems = self.navigationItem.rightBarButtonItems
+      rightBarButtonItems = self.navigationItem.rightBarButtonItems
+      #pdbr.state(rightBarButtonItems)
 
       self.navigationItem.setRightBarButtonItems_animated_([
+        *rightBarButtonItems,
         fixedBarItem,
         colorWellBarItem,
-        
       ], True)
 
     #pdbr.state(self.navigationItem.rightBarButtonItems)
@@ -255,8 +256,9 @@ if __name__ == '__main__':
 
   main_vc = ColorPickerViewController.new()
   _title = NSStringFromClass(ColorPickerViewController)
-  #main_vc.navigationItem.title = _title
+  main_vc.navigationItem.title = _title
 
   presentation_style = UIModalPresentationStyle.fullScreen
+  #presentation_style = UIModalPresentationStyle.pageSheet
   present_viewController(main_vc, presentation_style)
 
