@@ -210,7 +210,6 @@ class ColorPickerViewController(UIViewController):
     解雇と同時にアニメーション化するために使用できます。
     """
     print('colorPickerViewControllerDidFinish:')
-    pass
 
   @objc_method
   def viewWillAppear_(self, animated: bool):
