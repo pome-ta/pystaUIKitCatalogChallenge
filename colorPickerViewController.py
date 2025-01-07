@@ -56,9 +56,11 @@ class ColorPickerViewController(UIViewController):
 
     # --- pickerButton
     pickerButton = UIButton
-    colorView = UIView.new()
 
+    # --- colorView
+    colorView = UIView.new()
     #colorView.backgroundColor = UIColor.systemDarkYellowColor()
+
     # --- Layout
     safeAreaLayoutGuide = self.view.safeAreaLayoutGuide
     layoutMarginsGuide = self.view.layoutMarginsGuide
@@ -148,9 +150,10 @@ class ColorPickerViewController(UIViewController):
   # Color returned from the color picker via UIBarButtonItem - iOS 15.0
   # UIBarButtonItem 経由でカラーピッカーから返される色 - iOS 15.0
   # @available(iOS 15.0, *)
+
   @objc_method
   def colorPickerViewController_didSelectColor_continuously_(
-      self, viewController, color, continuously):
+      self, viewController, color, continuously: ctypes.c_bool):
     # User has chosen a color.
     chosenColor = viewController.selectedColor
     self.colorView.backgroundColor = chosenColor
@@ -171,20 +174,22 @@ class ColorPickerViewController(UIViewController):
     ポップオーバーの場合、色がロックされているときにポップオーバーを解除したいと考えています。
     モーダルの場合、ピッカーには閉じるボタンがあります。
     """
-    print('colorPickerViewController:didSelectColor:continuously:')
+    #print('colorPickerViewController:didSelectColor:continuously:')
 
     if not continuously:
       if self.traitCollection.horizontalSizeClass != UIUserInterfaceSizeClass.compact:
-        #viewController.dismissViewControllerAnimated_completion_(True, Block(lambda: print(f'{chosenColor}'), None))
-        pass
+        viewController.dismissViewControllerAnimated_completion_(True, Block(lambda: print(f'{chosenColor}'), None))
+        
 
   # Color returned from the color picker - iOS 14.x and earlier.
   # カラー ピッカーから返された色 - iOS 14.x 以前。
+
   @objc_method
   def colorPickerViewControllerDidSelectColor_(self, viewController):
+    # xxx: `colorPickerViewController_didSelectColor_continuously_` が実行されたら、呼ばれない（よきこと）
     # User has chosen a color.
-    chosenColor = viewController.selectedColor
-    self.colorView.backgroundColor = chosenColor
+    #chosenColor = viewController.selectedColor
+    #self.colorView.backgroundColor = chosenColor
     # Use the following check to determine how the color picker was presented (modal or popover).
     # For popover, we want to dismiss it when a color is locked.
     # For modal, the picker has a close button.
