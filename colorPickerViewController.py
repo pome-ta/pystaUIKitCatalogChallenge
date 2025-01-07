@@ -58,7 +58,7 @@ class ColorPickerViewController(UIViewController):
     pickerButton = UIButton
     colorView = UIView.new()
 
-    colorView.backgroundColor = UIColor.systemDarkYellowColor()
+    #colorView.backgroundColor = UIColor.systemDarkYellowColor()
     # --- Layout
     safeAreaLayoutGuide = self.view.safeAreaLayoutGuide
     layoutMarginsGuide = self.view.layoutMarginsGuide
@@ -89,7 +89,8 @@ class ColorPickerViewController(UIViewController):
   @objc_method
   def colorWellHandler_(self, _action: ctypes.c_void_p) -> None:
     action = ObjCInstance(_action)
-    #pdbr.state(action)
+    if (colorWell := action.sender).isKindOfClass_(UIColorWell):
+      self.colorView.backgroundColor = colorWell.selectedColor
 
   @objc_method
   def configureColorWell(self):
@@ -138,7 +139,7 @@ class ColorPickerViewController(UIViewController):
     self.colorPicker.modalPresentationStyle = UIModalPresentationStyle.popover  # will display as popover for iPad or sheet for compact screens.
     popover = self.colorPicker.popoverPresentationController()
     popover.barButtonItem = sender
-  
+
     self.presentViewController(self.colorPicker,
                                animated=True,
                                completion=None)
