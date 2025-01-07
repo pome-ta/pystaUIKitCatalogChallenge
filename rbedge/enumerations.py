@@ -446,15 +446,6 @@ class UIKeyboardType:
   asciiCapableNumberPad: int = 11
 
 
-# ref: [UISplitViewControllerColumn | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uisplitviewcontrollercolumn?language=objc)
-@dataclass
-class UISplitViewControllerColumn:
-  primary: int = 0
-  supplementary: int = 1
-  secondary: int = 2
-  compact: int = 3
-
-
 # ref: [UISplitViewControllerDisplayMode | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uisplitviewcontrollerdisplaymode?language=objc)
 @dataclass
 class UISplitViewControllerDisplayMode:

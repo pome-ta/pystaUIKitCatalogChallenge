@@ -111,6 +111,7 @@ class ColorPickerViewController(UIViewController):
 
     # For Mac Catalyst, the UIColorWell is placed in the main view.
     if self.navigationController.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiom.mac:
+      #self.pickerWellView.addSubview_(colorWell)
       pass
     else:
       # For iOS, the UIColorWell is placed inside the navigation bar as a UIBarButtonItem.
@@ -150,7 +151,6 @@ class ColorPickerViewController(UIViewController):
   # Color returned from the color picker via UIBarButtonItem - iOS 15.0
   # UIBarButtonItem 経由でカラーピッカーから返される色 - iOS 15.0
   # @available(iOS 15.0, *)
-
   @objc_method
   def colorPickerViewController_didSelectColor_continuously_(
       self, viewController, color, continuously: ctypes.c_bool):
@@ -174,7 +174,8 @@ class ColorPickerViewController(UIViewController):
     ポップオーバーの場合、色がロックされているときにポップオーバーを解除したいと考えています。
     モーダルの場合、ピッカーには閉じるボタンがあります。
     """
-    #print('colorPickerViewController:didSelectColor:continuously:')
+    print('colorPickerViewController:didSelectColor:continuously:')
+    print(continuously)
 
     if not continuously:
       if self.traitCollection.horizontalSizeClass != UIUserInterfaceSizeClass.compact:
@@ -186,7 +187,7 @@ class ColorPickerViewController(UIViewController):
 
   @objc_method
   def colorPickerViewControllerDidSelectColor_(self, viewController):
-    # xxx: `colorPickerViewController_didSelectColor_continuously_` が実行されたら、呼ばれない（よきこと）
+    # xxx: `colorPickerViewController_didSelectColor_continuously_` が実行されたら、呼ばれない（よきこと？）
     # User has chosen a color.
     #chosenColor = viewController.selectedColor
     #self.colorView.backgroundColor = chosenColor
@@ -200,8 +201,7 @@ class ColorPickerViewController(UIViewController):
     """
     print('colorPickerViewControllerDidSelectColor:')
     if self.traitCollection.horizontalSizeClass != UIUserInterfaceSizeClass.compact:
-      #viewController.dismissViewControllerAnimated_completion_(True, Block(lambda: print(f'{chosenColor}'), None))
-      pass
+      viewController.dismissViewControllerAnimated_completion_(True, Block(lambda: print(f'{chosenColor}'), None))
 
   @objc_method
   def colorPickerViewControllerDidFinish_(self, viewController):
