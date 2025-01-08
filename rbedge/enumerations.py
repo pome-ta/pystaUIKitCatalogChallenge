@@ -822,3 +822,30 @@ class UIBarButtonItemStyle:
   bordered: int = 1  # Deprecated
   done: int = 2
 
+
+# ref: [UIFontDescriptorSymbolicTraits | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uifontdescriptor/symbolictraits-swift.struct?language=objc)
+@dataclass
+class UIFontDescriptorSymbolicTraits:
+  # ref: [UIFontDescriptor.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UIFontDescriptor.rs.html#11)
+  traitItalic: int = 1 << 0
+  traitBold: int = 1 << 1
+  traitExpanded: int = 1 << 5
+  traitCondensed: int = 1 << 6
+  traitMonoSpace: int = 1 << 10
+  traitVertical: int = 1 << 11
+  traitUIOptimized: int = 1 << 12
+  traitTightLeading: int = 1 << 15
+  traitLooseLeading: int = 1 << 16
+  classMask: int = 0xF0000000
+  UIFontDescriptorClassUnknown: int = 0 << 28  # xxx: Swift ?
+  classOldStyleSerifs: int = 1 << 28
+  classTransitionalSerifs: int = 2 << 28
+  classModernSerifs: int = 3 << 28
+  classClarendonSerifs: int = 4 << 28
+  classSlabSerifs: int = 5 << 28
+  classFreeformSerifs: int = 7 << 28
+  classSansSerif: int = 8 << 28
+  classOrnamentals: int = 9 << 28
+  classScripts: int = 10 << 28
+  classSymbolic: int = 12 << 28
+

@@ -14,6 +14,8 @@ from rbedge.enumerations import (
   UILayoutConstraintAxis,
   NSTextAlignment,
   NSLineBreakMode,
+  UIUserInterfaceIdiom,
+  UIFontDescriptorSymbolicTraits,
 )
 
 from rbedge import pdbr
@@ -24,6 +26,7 @@ NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
 UIColor = ObjCClass('UIColor')
 
 UIFontPickerViewController = ObjCClass('UIFontPickerViewController')
+UIFontPickerViewControllerConfiguration = ObjCClass('UIFontPickerViewControllerConfiguration')
 UITextFormattingCoordinator = ObjCClass('UITextFormattingCoordinator')
 
 UIButton = ObjCClass('UIButton')
@@ -102,17 +105,14 @@ class FontPickerViewController(UIViewController):
       fontLabel.topAnchor.constraintEqualToAnchor_constant_(
         textFormatterButton.bottomAnchor, 20.0),
     ])
+    
+    
+    self.configureFontPicker()
+    if self.navigationController.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiom.mac:
+      # UITextFormattingCoordinator's toggleFontPanel is available only for macOS.
+      #textFormatterButton.setHidden_(True)
+      pass
 
-  @objc_method
-  def viewWillAppear_(self, animated: bool):
-    send_super(__class__,
-               self,
-               'viewWillAppear:',
-               animated,
-               argtypes=[
-                 ctypes.c_bool,
-               ])
-    #print('viewWillAppear')
 
   @objc_method
   def viewDidAppear_(self, animated: bool):
@@ -124,6 +124,13 @@ class FontPickerViewController(UIViewController):
                  ctypes.c_bool,
                ])
     #print('viewDidAppear')
+    
+  @objc_method
+  def configureFontPicker(self):
+    configuration = UIFontPickerViewControllerConfiguration.new()
+    configuration.includeFaces = True
+    configuration.displayUsingSystemFont=False
+    pdbr.state(configuration)
 
   @objc_method
   def viewDidDisappear_(self, animated: bool):
