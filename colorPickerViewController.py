@@ -9,6 +9,9 @@ from pyrubicon.objc.runtime import send_super, objc_id, SEL
 from pyrubicon.objc.types import CGRectMake
 
 from rbedge.enumerations import (
+  UIButtonType,
+  UIControlState,
+  UIControlEvents,
   UIUserInterfaceSizeClass,
   UIUserInterfaceIdiom,
   UIModalPresentationStyle,
@@ -55,11 +58,18 @@ class ColorPickerViewController(UIViewController):
     self.navigationItem.rightBarButtonItem = pickerBarButton
 
     # --- pickerButton
-    pickerButton = UIButton
+    pickerButton = UIButton.buttonWithType_(UIButtonType.system)
+    pickerButton.setTitle_forState_('Picker', UIControlState.normal)
+    pickerButton.addTarget_action_forControlEvents_(
+      self, SEL('presentColorPickerByButton:'), UIControlEvents.touchUpInside)
+
+    # --- pickerWellView
+    pickerWellView = UIView.new()
+    pickerWellView.backgroundColor = UIColor.systemBackgroundColor()
 
     # --- colorView
     colorView = UIView.new()
-    #colorView.backgroundColor = UIColor.systemDarkYellowColor()
+    colorView.backgroundColor = UIColor.systemBackgroundColor()
 
     # --- Layout
     safeAreaLayoutGuide = self.view.safeAreaLayoutGuide
@@ -67,24 +77,43 @@ class ColorPickerViewController(UIViewController):
 
     self.view.addSubview_(colorView)
     colorView.translatesAutoresizingMaskIntoConstraints = False
+    self.view.addSubview_(pickerButton)
+    pickerButton.translatesAutoresizingMaskIntoConstraints = False
+    self.view.addSubview_(pickerWellView)
+    pickerWellView.translatesAutoresizingMaskIntoConstraints = False
+
     NSLayoutConstraint.activateConstraints_([
       colorView.heightAnchor.constraintEqualToConstant_(161.0),
       colorView.widthAnchor.constraintEqualToConstant_(183.0),
+      pickerWellView.heightAnchor.constraintEqualToConstant_(32.0),
+      pickerWellView.widthAnchor.constraintEqualToConstant_(32.0),
     ])
+
     NSLayoutConstraint.activateConstraints_([
+      pickerButton.topAnchor.constraintEqualToAnchor_constant_(
+        safeAreaLayoutGuide.topAnchor, 24.0),
       colorView.centerXAnchor.constraintEqualToAnchor_(
         safeAreaLayoutGuide.centerXAnchor),
+      pickerButton.leadingAnchor.constraintEqualToAnchor_constant_(
+        safeAreaLayoutGuide.leadingAnchor, 18.0),
+      pickerWellView.topAnchor.constraintEqualToAnchor_constant_(
+        safeAreaLayoutGuide.bottomAnchor, -8.0),
+      colorView.leadingAnchor.constraintGreaterThanOrEqualToAnchor_constant_(
+        pickerButton.leadingAnchor, 8.0),
+      pickerWellView.leadingAnchor.constraintEqualToAnchor_constant_(
+        safeAreaLayoutGuide.leadingAnchor, 18.0),
       colorView.topAnchor.constraintEqualToAnchor_constant_(
         safeAreaLayoutGuide.topAnchor, 24.0),
     ])
 
+    self.pickerWellView = pickerWellView
     self.colorView = colorView
     self.configureColorPicker()
     self.configureColorWell()
 
     # For iOS, the picker button in the main view is not used, the color picker is presented from the navigation bar.
-    if self.navigationController.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiom.mac:
-      pass
+    if self.navigationController.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiom.mac:
+      pickerButton.setHidden_(True)
 
   # MARK: - UIColorWell
   # Update the color view from the color well chosen action.
@@ -111,8 +140,7 @@ class ColorPickerViewController(UIViewController):
 
     # For Mac Catalyst, the UIColorWell is placed in the main view.
     if self.navigationController.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiom.mac:
-      #self.pickerWellView.addSubview_(colorWell)
-      pass
+      self.pickerWellView.addSubview_(colorWell)
     else:
       # For iOS, the UIColorWell is placed inside the navigation bar as a UIBarButtonItem.
       colorWellBarItem = UIBarButtonItem.alloc().initWithCustomView_(colorWell)
@@ -147,6 +175,17 @@ class ColorPickerViewController(UIViewController):
                                animated=True,
                                completion=None)
 
+  # Present the color picker from the UIButton, Mac Catalyst only.
+  # This will present it as a popover (preferred), or for compact mode as a modal sheet.
+  @objc_method
+  def presentColorPickerByButton_(self, sender):
+    self.colorPicker.modalPresentationStyle = UIModalPresentationStyle.popover
+    if (popover := self.colorPicker.popoverPresentationController()):
+      popover.sourceView = sender
+      self.presentViewController(self.colorPicker,
+                                 animated=True,
+                                 completion=None)
+
   # MARK: - UIColorPickerViewControllerDelegate
   # Color returned from the color picker via UIBarButtonItem - iOS 15.0
   # UIBarButtonItem 経由でカラーピッカーから返される色 - iOS 15.0
@@ -174,17 +213,13 @@ class ColorPickerViewController(UIViewController):
     ポップオーバーの場合、色がロックされているときにポップオーバーを解除したいと考えています。
     モーダルの場合、ピッカーには閉じるボタンがあります。
     """
-    print('colorPickerViewController:didSelectColor:continuously:')
-    print(continuously)
-
     if not continuously:
       if self.traitCollection.horizontalSizeClass != UIUserInterfaceSizeClass.compact:
-        viewController.dismissViewControllerAnimated_completion_(True, Block(lambda: print(f'{chosenColor}'), None))
-        
+        viewController.dismissViewControllerAnimated_completion_(
+          True, Block(lambda: print(f'{chosenColor}'), None))
 
   # Color returned from the color picker - iOS 14.x and earlier.
   # カラー ピッカーから返された色 - iOS 14.x 以前。
-
   @objc_method
   def colorPickerViewControllerDidSelectColor_(self, viewController):
     # xxx: `colorPickerViewController_didSelectColor_continuously_` が実行されたら、呼ばれない（よきこと？）
@@ -199,9 +234,9 @@ class ColorPickerViewController(UIViewController):
     ポップオーバーの場合、色がロックされているときにポップオーバーを解除したいと考えています。
     モーダルの場合、ピッカーには閉じるボタンがあります。
     """
-    print('colorPickerViewControllerDidSelectColor:')
     if self.traitCollection.horizontalSizeClass != UIUserInterfaceSizeClass.compact:
-      viewController.dismissViewControllerAnimated_completion_(True, Block(lambda: print(f'{chosenColor}'), None))
+      viewController.dismissViewControllerAnimated_completion_(
+        True, Block(lambda: print(f'{chosenColor}'), None))
 
   @objc_method
   def colorPickerViewControllerDidFinish_(self, viewController):
@@ -215,7 +250,7 @@ class ColorPickerViewController(UIViewController):
     閉じるボタンがタップされると、ビュー コントローラーが閉じられ、`colorPickerViewControllerDidFinish:` が呼び出されます。
     解雇と同時にアニメーション化するために使用できます。
     """
-    print('colorPickerViewControllerDidFinish:')
+    pass
 
   @objc_method
   def viewWillAppear_(self, animated: bool):
