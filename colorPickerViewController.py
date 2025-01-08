@@ -97,7 +97,7 @@ class ColorPickerViewController(UIViewController):
       pickerButton.leadingAnchor.constraintEqualToAnchor_constant_(
         safeAreaLayoutGuide.leadingAnchor, 18.0),
       pickerWellView.topAnchor.constraintEqualToAnchor_constant_(
-        safeAreaLayoutGuide.bottomAnchor, -8.0),
+        pickerButton.bottomAnchor, 8.0),
       colorView.leadingAnchor.constraintGreaterThanOrEqualToAnchor_constant_(
         pickerButton.leadingAnchor, 8.0),
       pickerWellView.leadingAnchor.constraintEqualToAnchor_constant_(
