@@ -11,11 +11,9 @@ from pyrubicon.objc.types import CGRectMake
 from rbedge.enumerations import (
   UIButtonType,
   UIControlState,
-  UIControlEvents,
-  UIUserInterfaceSizeClass,
-  UIUserInterfaceIdiom,
-  UIModalPresentationStyle,
-  UIBarButtonItemStyle,
+  UILayoutConstraintAxis,
+  NSTextAlignment,
+  NSLineBreakMode,
 )
 
 from rbedge import pdbr
@@ -25,7 +23,12 @@ UIViewController = ObjCClass('UIViewController')
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
 UIColor = ObjCClass('UIColor')
 
+UIFontPickerViewController = ObjCClass('UIFontPickerViewController')
+UITextFormattingCoordinator = ObjCClass('UITextFormattingCoordinator')
 
+UIButton = ObjCClass('UIButton')
+UILabel = ObjCClass('UILabel')
+UIFont = ObjCClass('UIFont')
 
 
 class FontPickerViewController(UIViewController):
@@ -44,7 +47,61 @@ class FontPickerViewController(UIViewController):
       title := self.navigationItem.title) is None else title
     self.view.backgroundColor = UIColor.systemBackgroundColor()
 
+    # --- fontPickerButton
+    fontPickerButton = UIButton.buttonWithType_(UIButtonType.system)
+    fontPickerButton.setTitle('UIFontPickerViewController',
+                              forState=UIControlState.normal)
 
+    # --- textFormatterButton
+    textFormatterButton = UIButton.buttonWithType_(UIButtonType.system)
+    textFormatterButton.setTitle('UITextFormattingCoordinator',
+                                 forState=UIControlState.normal)
+
+    # --- fontLabel
+    fontLabel = UILabel.new()
+    fontLabel.setContentHuggingPriority_forAxis_(
+      251.0, UILayoutConstraintAxis.horizontal)
+    fontLabel.setContentHuggingPriority_forAxis_(
+      251.0, UILayoutConstraintAxis.vertical)
+    fontLabel.textAlignment = NSTextAlignment.center
+    fontLabel.lineBreakMode = NSLineBreakMode.byTruncatingTail
+    fontLabel.font = UIFont.systemFontOfSize_(28.0)
+
+    fontLabel.text = localizedString('SampleFontTitle')
+    # todo: 確認用
+    fontLabel.backgroundColor = UIColor.systemDarkPurpleColor()
+
+    self.view.addSubview_(fontPickerButton)
+    fontPickerButton.translatesAutoresizingMaskIntoConstraints = False
+    self.view.addSubview_(textFormatterButton)
+    textFormatterButton.translatesAutoresizingMaskIntoConstraints = False
+    self.view.addSubview_(fontLabel)
+    fontLabel.translatesAutoresizingMaskIntoConstraints = False
+
+    # --- Layout
+    safeAreaLayoutGuide = self.view.safeAreaLayoutGuide
+    layoutMarginsGuide = self.view.layoutMarginsGuide
+
+    NSLayoutConstraint.activateConstraints_([
+      fontLabel.heightAnchor.constraintEqualToConstant_(62.0),
+    ])
+
+    NSLayoutConstraint.activateConstraints_([
+      textFormatterButton.centerXAnchor.constraintEqualToAnchor_(
+        safeAreaLayoutGuide.centerXAnchor),
+      fontPickerButton.centerXAnchor.constraintEqualToAnchor_(
+        safeAreaLayoutGuide.centerXAnchor),
+      textFormatterButton.topAnchor.constraintEqualToAnchor_constant_(
+        fontPickerButton.bottomAnchor, 8.0),
+      fontLabel.leadingAnchor.constraintEqualToAnchor_constant_(
+        safeAreaLayoutGuide.leadingAnchor, 16.0),
+      fontPickerButton.topAnchor.constraintEqualToAnchor_constant_(
+        safeAreaLayoutGuide.topAnchor, 17.0),
+      fontLabel.trailingAnchor.constraintEqualToAnchor_constant_(
+        safeAreaLayoutGuide.trailingAnchor, -16.0),
+      fontLabel.topAnchor.constraintEqualToAnchor_constant_(
+        textFormatterButton.bottomAnchor, 20.0),
+    ])
 
   @objc_method
   def viewWillAppear_(self, animated: bool):
