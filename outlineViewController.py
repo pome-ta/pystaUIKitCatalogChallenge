@@ -48,6 +48,7 @@ from webViewController import WebViewController
 from datePickerController import DatePickerController
 from colorPickerViewController import ColorPickerViewController
 from fontPickerViewController import FontPickerViewController
+from imagePickerViewController import ImagePickerViewController
 # --- /
 
 UIKit = load_library('UIKit')  # todo: `objc_const` 用
@@ -189,7 +190,7 @@ pickerSubItems = [
               storyboardName=FontPickerViewController),
   OutlineItem(title='ImagePickerTitle',
               imageName=None,
-              storyboardName='ImagePickerViewController'),
+              storyboardName=imagePickerViewController),
 ]
 
 # todo: traitCollection.userInterfaceIdiom != .mac

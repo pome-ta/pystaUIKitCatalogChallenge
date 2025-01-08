@@ -849,3 +849,12 @@ class UIFontDescriptorSymbolicTraits:
   classScripts: int = 10 << 28
   classSymbolic: int = 12 << 28
 
+
+# ref: [UIImagePickerControllerSourceType | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uiimagepickercontroller/sourcetype-swift.enum?language=objc)
+@dataclass
+class UIImagePickerControllerSourceType:
+  # ref: [UIImagePickerController.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UIImagePickerController.rs.html#12)
+  photoLibrary: int = 0  # todo: deprecated
+  camera: int = 1
+  savedPhotosAlbum: int = 2  # todo: deprecated
+

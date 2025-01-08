@@ -1,3 +1,12 @@
+# 📝 2025/01/08
+
+## `UIImagePickerController` の`mediaTypes`
+
+[Uniform Type Identifierの概要](https://potting.syuriken.jp/potting_conv/understanding_utis_J/chapter4.html)
+
+文字列を直でええのか？
+
+
 # 📝 2025/01/01
 
 ## `UIToolbar` をどこで、こねくり回すか？
