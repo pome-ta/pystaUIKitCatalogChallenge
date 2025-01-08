@@ -49,6 +49,7 @@ from datePickerController import DatePickerController
 from colorPickerViewController import ColorPickerViewController
 from fontPickerViewController import FontPickerViewController
 from imagePickerViewController import ImagePickerViewController
+from pickerViewController import PickerViewController
 # --- /
 
 UIKit = load_library('UIKit')  # todo: `objc_const` 用
@@ -197,7 +198,7 @@ pickerSubItems = [
 if True:
   pickerViewItem = OutlineItem(title='PickerViewTitle',
                                imageName=None,
-                               storyboardName='PickerViewController')
+                               storyboardName=PickerViewController)
   pickerSubItems.append(pickerViewItem)
 
 pickersOutlineItem = OutlineItem(title='Pickers',
