@@ -3,35 +3,42 @@
 '''
 import ctypes
 
-from pyrubicon.objc.api import ObjCClass, ObjCInstance, Block
+from pyrubicon.objc.api import ObjCClass, ObjCInstance, NSDictionary
 from pyrubicon.objc.api import objc_method, objc_const
-from pyrubicon.objc.runtime import send_super, objc_id, SEL
+from pyrubicon.objc.runtime import send_super, objc_id, load_library, SEL
 from pyrubicon.objc.types import CGRectMake
 
 from rbedge.enumerations import (
   UIButtonType,
   UIControlState,
+  UIControlEvents,
   UILayoutConstraintAxis,
   NSTextAlignment,
   NSLineBreakMode,
   UIUserInterfaceIdiom,
   UIFontDescriptorSymbolicTraits,
+  UIModalPresentationStyle,
 )
 
 from rbedge import pdbr
 from pyLocalizedString import localizedString
 
+UIKit = load_library('UIKit')  # todo: `objc_const` 用
 UIViewController = ObjCClass('UIViewController')
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
 UIColor = ObjCClass('UIColor')
 
 UIFontPickerViewController = ObjCClass('UIFontPickerViewController')
-UIFontPickerViewControllerConfiguration = ObjCClass('UIFontPickerViewControllerConfiguration')
+UIFontPickerViewControllerConfiguration = ObjCClass(
+  'UIFontPickerViewControllerConfiguration')
 UITextFormattingCoordinator = ObjCClass('UITextFormattingCoordinator')
 
 UIButton = ObjCClass('UIButton')
 UILabel = ObjCClass('UILabel')
 UIFont = ObjCClass('UIFont')
+
+# --- Global Variables
+NSFontAttributeName = objc_const(UIKit, 'NSFontAttributeName')
 
 
 class FontPickerViewController(UIViewController):
@@ -54,11 +61,16 @@ class FontPickerViewController(UIViewController):
     fontPickerButton = UIButton.buttonWithType_(UIButtonType.system)
     fontPickerButton.setTitle('UIFontPickerViewController',
                               forState=UIControlState.normal)
+    fontPickerButton.addTarget_action_forControlEvents_(
+      self, SEL('presentFontPicker:'), UIControlEvents.touchUpInside)
 
     # --- textFormatterButton
     textFormatterButton = UIButton.buttonWithType_(UIButtonType.system)
     textFormatterButton.setTitle('UITextFormattingCoordinator',
                                  forState=UIControlState.normal)
+    textFormatterButton.addTarget_action_forControlEvents_(
+      self, SEL('presentTextFormattingCoordinator:'),
+      UIControlEvents.touchUpInside)
 
     # --- fontLabel
     fontLabel = UILabel.new()
@@ -71,8 +83,6 @@ class FontPickerViewController(UIViewController):
     fontLabel.font = UIFont.systemFontOfSize_(28.0)
 
     fontLabel.text = localizedString('SampleFontTitle')
-    # todo: 確認用
-    fontLabel.backgroundColor = UIColor.systemDarkPurpleColor()
 
     self.view.addSubview_(fontPickerButton)
     fontPickerButton.translatesAutoresizingMaskIntoConstraints = False
@@ -105,14 +115,14 @@ class FontPickerViewController(UIViewController):
       fontLabel.topAnchor.constraintEqualToAnchor_constant_(
         textFormatterButton.bottomAnchor, 20.0),
     ])
-    
-    
+
+    self.textFormatter: UITextFormattingCoordinator = None
+    self.fontLabel = fontLabel
     self.configureFontPicker()
+
     if self.navigationController.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiom.mac:
       # UITextFormattingCoordinator's toggleFontPanel is available only for macOS.
-      #textFormatterButton.setHidden_(True)
-      pass
-
+      textFormatterButton.setHidden_(True)
 
   @objc_method
   def viewDidAppear_(self, animated: bool):
@@ -124,13 +134,81 @@ class FontPickerViewController(UIViewController):
                  ctypes.c_bool,
                ])
     #print('viewDidAppear')
-    
+    self.configureTextFormatter()
+
   @objc_method
   def configureFontPicker(self):
     configuration = UIFontPickerViewControllerConfiguration.new()
     configuration.includeFaces = True
-    configuration.displayUsingSystemFont=False
-    pdbr.state(configuration)
+    configuration.displayUsingSystemFont = False
+    """
+      xxx: 以下がピックアップされてる？
+        - UIFontDescriptorClassOldStyleSerifs
+        - UIFontDescriptorClassTransitionalSerifs
+        - UIFontDescriptorClassModernSerifs
+        - UIFontDescriptorClassSlabSerifs
+        - UIFontDescriptorClassFreeformSerifs
+        - UIFontDescriptorClassOrnamentals
+        - UIFontDescriptorClassScripts
+    """
+    configuration.filteredTraits = UIFontDescriptorSymbolicTraits.classModernSerifs
+
+    fontPicker = UIFontPickerViewController.alloc().initWithConfiguration_(
+      configuration)
+    fontPicker.delegate = self
+    fontPicker.modalPresentationStyle = UIModalPresentationStyle.popover
+
+    self.fontPicker = fontPicker
+
+  @objc_method
+  def configureTextFormatter(self):
+    # xxx: `UITextFormattingCoordinator` 検証不可のため、未確認
+    if self.textFormatter is None:
+      if (scene := self.view.window().windowScene) is None:
+        return
+      attributes = NSDictionary.dictionaryWithObject(
+        self.fontLabel.font, forKey=NSFontAttributeName)
+
+      textFormatter = UITextFormattingCoordinator.alloc().initWithWindowScene_(
+        scene)
+      textFormatter.delegate = self
+      textFormatter.setSelectedAttributes_isMultiple_(attributes, True)
+
+      self.textFormatter = textFormatter
+
+  @objc_method
+  def presentFontPicker_(self, sender):
+    if (button := sender).isKindOfClass_(UIButton):
+      popover = self.fontPicker.popoverPresentationController()
+      popover.sourceView = button
+      self.presentViewController(self.fontPicker,
+                                 animated=True,
+                                 completion=None)
+
+  @objc_method
+  def presentTextFormattingCoordinator_(self, sender):
+    # xxx: `UITextFormattingCoordinator` 検証不可のため、未確認
+    if not UITextFormattingCoordinator.isFontPanelVisible():
+      UITextFormattingCoordinator.toggleFontPanel_(sender)
+
+  # MARK: - UIFontPickerViewControllerDelegate
+  @objc_method
+  def fontPickerViewControllerDidCancel_(self, viewController):
+    pass
+
+  @objc_method
+  def fontPickerViewControllerDidPickFont_(self, viewController):
+    if (fontDescriptor := viewController.selectedFontDescriptor) is None:
+      return
+    else:
+      font = UIFont.fontWithDescriptor_size_(fontDescriptor, 28.0)
+      self.fontLabel.font = font
+
+  # MARK: - UITextFormattingCoordinatorDelegate
+  @objc_method
+  def updateTextAttributesWithConversionHandler_(self, conversionHandler):
+    # xxx: `UITextFormattingCoordinator` 検証不可のため、未確認
+    print(conversionHandler)
 
   @objc_method
   def viewDidDisappear_(self, animated: bool):
