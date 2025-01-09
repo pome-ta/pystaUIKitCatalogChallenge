@@ -47,11 +47,14 @@ class PickerViewController(UIViewController):
     self.navigationItem.title = localizedString('PickerViewTitle') if (
       title := self.navigationItem.title) is None else title
     self.view.backgroundColor = UIColor.systemBackgroundColor()
-    
+
     pickerView = UIPickerView.new()
+    pickerView.backgroundColor = UIColor.systemDarkGreenColor()
+
     colorSwatchView = UIView.new()
-    
-        # --- Layout
+    colorSwatchView.backgroundColor = UIColor.systemDarkBlueColor()
+
+    # --- Layout
     safeAreaLayoutGuide = self.view.safeAreaLayoutGuide
     layoutMarginsGuide = self.view.layoutMarginsGuide
 
@@ -59,29 +62,26 @@ class PickerViewController(UIViewController):
     pickerView.translatesAutoresizingMaskIntoConstraints = False
     self.view.addSubview_(colorSwatchView)
     colorSwatchView.translatesAutoresizingMaskIntoConstraints = False
-    
+
     NSLayoutConstraint.activateConstraints_([
       pickerView.widthAnchor.constraintEqualToConstant_(375.0),
     ])
 
     NSLayoutConstraint.activateConstraints_([
-      pickerButton.topAnchor.constraintEqualToAnchor_constant_(
-        safeAreaLayoutGuide.topAnchor, 24.0),
-      colorView.centerXAnchor.constraintEqualToAnchor_(
+      colorSwatchView.trailingAnchor.constraintEqualToAnchor_constant_(
+        safeAreaLayoutGuide.trailingAnchor, -20.0),
+      colorSwatchView.topAnchor.constraintEqualToAnchor_constant_(
+        pickerView.bottomAnchor, 8.0),
+      colorSwatchView.bottomAnchor.constraintEqualToAnchor_constant_(
+        safeAreaLayoutGuide.bottomAnchor, -20.0),
+      pickerView.centerXAnchor.constraintEqualToAnchor_(
         safeAreaLayoutGuide.centerXAnchor),
-      pickerButton.leadingAnchor.constraintEqualToAnchor_constant_(
-        safeAreaLayoutGuide.leadingAnchor, 18.0),
-      pickerWellView.topAnchor.constraintEqualToAnchor_constant_(
-        pickerButton.bottomAnchor, 8.0),
-      colorView.leadingAnchor.constraintGreaterThanOrEqualToAnchor_constant_(
-        pickerButton.leadingAnchor, 8.0),
-      pickerWellView.leadingAnchor.constraintEqualToAnchor_constant_(
-        safeAreaLayoutGuide.leadingAnchor, 18.0),
-      colorView.topAnchor.constraintEqualToAnchor_constant_(
-        safeAreaLayoutGuide.topAnchor, 24.0),
+      pickerView.topAnchor.constraintEqualToAnchor_constant_(
+        safeAreaLayoutGuide.topAnchor, 13.0),
+      colorSwatchView.leadingAnchor.constraintEqualToAnchor_constant_(
+        safeAreaLayoutGuide.leadingAnchor, 20.0),
     ])
 
-    
   @objc_method
   def viewWillAppear_(self, animated: bool):
     send_super(__class__,
