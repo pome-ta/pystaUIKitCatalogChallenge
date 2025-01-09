@@ -2,15 +2,13 @@
   note: Storyboard 実装なし
 '''
 import ctypes
+from enum import IntEnum, auto
 
 from pyrubicon.objc.api import ObjCClass, ObjCInstance
 from pyrubicon.objc.api import objc_method, objc_const, objc_property
 from pyrubicon.objc.runtime import send_super, objc_id, SEL
 
 from rbedge.enumerations import (
-  UIDatePickerMode,
-  UIControlContentHorizontalAlignment,
-  UIControlContentVerticalAlignment,
   UILayoutConstraintAxis,
   UIUserInterfaceSizeClass,
   UIDatePickerStyle,
@@ -38,8 +36,13 @@ class RGB:
   offset: float = 0.5
 
 
+class ColorComponent(IntEnum):
+  red = 0
+  green = auto()
+  blue = auto()
+
+
 class PickerViewController(UIViewController):
-  redColor = objc_property()
 
   @objc_method
   def dealloc(self):
@@ -56,7 +59,12 @@ class PickerViewController(UIViewController):
     self.view.backgroundColor = UIColor.systemBackgroundColor()
 
     pickerView = UIPickerView.new()
-    pickerView.backgroundColor = UIColor.systemDarkGreenColor()
+
+    pickerView.dataSource = self
+    pickerView.delegate = self
+
+    #pickerView.backgroundColor = UIColor.systemDarkGreenColor()
+    #pdbr.state(pickerView.dataSource)
 
     colorSwatchView = UIView.new()
     colorSwatchView.backgroundColor = UIColor.systemDarkBlueColor()
@@ -89,35 +97,57 @@ class PickerViewController(UIViewController):
         safeAreaLayoutGuide.leadingAnchor, 20.0),
     ])
 
+    self.colorSwatchView = colorSwatchView
+
     self.numberOfColorValuesPerComponent = int(RGB.max / RGB.offset) + 1
 
     self.redColor = RGB.min
-    print(dir(self.__class__))
-    #pdbr.state(self.redColor)
-    #
-    #print(dir(self))
-    #print(super())
+    self.greenColor = RGB.min
+    self.blueColor = RGB.min
 
-  def __setattr__(self, name, value):
-    super().__setattr__(name, value)
-    print('set')
+    self.configurePickerView()
 
-  '''
-  @property
-  def redColor(self):
-    return self._redColor
-    
-  @redColor.setter
-  def redColor(self, component):
-    print('h')
-    self._redColor = component
-  '''
-  '''
   @objc_method
-  def redColor(self):
-    send_super(__class__, self, 'redColor')
-    print('h')
-  '''
+  def updateColorSwatchViewBackgroundColor(self):
+    self.colorSwatchView.backgroundColor = UIColor.colorWithRed_green_blue_alpha_(
+      self.redColor, self.greenColor, self.blueColor, 1.0)
+
+  @objc_method
+  def configurePickerView(self):
+    # Set the default selected rows (the desired rows to initially select will vary from app to app).
+    # デフォルトの選択行を設定します (最初に選択する行はアプリによって異なります)。
+    selectedRows = {
+      ColorComponent.red: 13,
+      ColorComponent.green: 41,
+      ColorComponent.blue: 24,
+    }
+
+    for colorComponent, selectedRow in selectedRows.items():
+      """
+      Note that the delegate method on `UIPickerViewDelegate` is not triggered
+      when manually calling `selectRow(_:inComponent:animated:)`. To do
+      this, we fire off delegate method manually.
+      """
+      """
+      `selectRow(_:inComponent:animated:)` を手動で呼び出した場合、`UIPickerViewDelegate` のデリゲート メソッドはトリガーされないことに注意してください。これを行うには、デリゲート メソッドを手動で起動します。
+      """
+      print(colorComponent, ':', selectedRow)
+
+  # MARK: - UIPickerViewDataSource
+  @objc_method
+  def numberOfComponentsInPickerView_(self, pickerView) -> int:
+    return len(ColorComponent)
+
+  @objc_method
+  def pickerView_numberOfRowsInComponent_(self, component) -> int:
+    return self.numberOfColorValuesPerComponent
+
+  # MARK: - UIPickerViewDelegate
+  @objc_method
+  def pickerView_attributedTitleForRow_forComponent_(
+      self, pickerView, row: int, component: int) -> objc_id:
+    print(component)
+    return 'f'
 
   @objc_method
   def viewWillAppear_(self, animated: bool):
@@ -129,11 +159,6 @@ class PickerViewController(UIViewController):
                  ctypes.c_bool,
                ])
     #print('viewWillAppear')
-    '''
-    print(self.redColor)
-    self.redColor = 10.0
-    print(self.redColor)
-    '''
 
   @objc_method
   def viewDidAppear_(self, animated: bool):
@@ -169,7 +194,7 @@ if __name__ == '__main__':
   from rbedge import present_viewController
 
   main_vc = PickerViewController.new()
-  
+
   _title = NSStringFromClass(PickerViewController)
   main_vc.navigationItem.title = _title
 
