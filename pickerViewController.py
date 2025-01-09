@@ -5,8 +5,8 @@ import ctypes
 from enum import IntEnum, auto
 
 from pyrubicon.objc.api import ObjCClass, ObjCInstance
-from pyrubicon.objc.api import objc_method, objc_const, objc_property
-from pyrubicon.objc.runtime import send_super, objc_id, SEL
+from pyrubicon.objc.api import objc_method, objc_const
+from pyrubicon.objc.runtime import send_super, objc_id, load_library,SEL
 
 from rbedge.enumerations import (
   UILayoutConstraintAxis,
@@ -22,18 +22,27 @@ from rbedge.enumerations import (
 from rbedge import pdbr
 from pyLocalizedString import localizedString
 
+UIKit = load_library('UIKit')  # todo: `objc_const` 用
 UIViewController = ObjCClass('UIViewController')
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
 UIColor = ObjCClass('UIColor')
+NSDictionary = ObjCClass('NSDictionary')
 
 UIPickerView = ObjCClass('UIPickerView')
 UIView = ObjCClass('UIView')
+NSMutableAttributedString = ObjCClass('NSMutableAttributedString')
+
+
+# --- Global Variables
+NSForegroundColorAttributeName = objc_const(UIKit, 'NSForegroundColorAttributeName')
+
+
 
 
 class RGB:
   max: float = 255.0
   min: float = 0.0
-  offset: float = 0.5
+  offset: float = 5.0
 
 
 class ColorComponent(IntEnum):
@@ -63,7 +72,7 @@ class PickerViewController(UIViewController):
     pickerView.dataSource = self
     pickerView.delegate = self
 
-    #pickerView.backgroundColor = UIColor.systemDarkGreenColor()
+    pickerView.backgroundColor = UIColor.systemDarkGreenColor()
     #pdbr.state(pickerView.dataSource)
 
     colorSwatchView = UIView.new()
@@ -131,7 +140,8 @@ class PickerViewController(UIViewController):
       """
       `selectRow(_:inComponent:animated:)` を手動で呼び出した場合、`UIPickerViewDelegate` のデリゲート メソッドはトリガーされないことに注意してください。これを行うには、デリゲート メソッドを手動で起動します。
       """
-      print(colorComponent, ':', selectedRow)
+      #print(colorComponent, ':', selectedRow)
+      pass
 
   # MARK: - UIPickerViewDataSource
   @objc_method
@@ -145,9 +155,20 @@ class PickerViewController(UIViewController):
   # MARK: - UIPickerViewDelegate
   @objc_method
   def pickerView_attributedTitleForRow_forComponent_(
-      self, pickerView, row: int, component: int) -> objc_id:
-    print(component)
-    return 'f'
+      self, pickerView, row: int, component: int):
+    #colorValue = row * RGB.offset
+    colorValue = 128
+    foregroundColor = UIColor.colorWithRed_green_blue_alpha_(
+      0.8, 0.5, 0.2, 1.0)
+      
+    # Set the foreground color for the entire attributed string.
+    attributes = NSDictionary.dictionaryWithObject(
+        foregroundColor, forKey=NSForegroundColorAttributeName)
+        
+    title = NSMutableAttributedString.alloc().initWithString_attributes_(f'{int(colorValue)}', attributes)
+    
+    
+    return title
 
   @objc_method
   def viewWillAppear_(self, animated: bool):
