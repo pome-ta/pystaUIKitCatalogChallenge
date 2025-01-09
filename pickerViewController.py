@@ -4,7 +4,7 @@
 import ctypes
 
 from pyrubicon.objc.api import ObjCClass, ObjCInstance
-from pyrubicon.objc.api import objc_method, objc_const
+from pyrubicon.objc.api import objc_method, objc_const, objc_property
 from pyrubicon.objc.runtime import send_super, objc_id, SEL
 
 from rbedge.enumerations import (
@@ -32,7 +32,14 @@ UIPickerView = ObjCClass('UIPickerView')
 UIView = ObjCClass('UIView')
 
 
+class RGB:
+  max: float = 255.0
+  min: float = 0.0
+  offset: float = 0.5
+
+
 class PickerViewController(UIViewController):
+  redColor = objc_property()
 
   @objc_method
   def dealloc(self):
@@ -82,6 +89,36 @@ class PickerViewController(UIViewController):
         safeAreaLayoutGuide.leadingAnchor, 20.0),
     ])
 
+    self.numberOfColorValuesPerComponent = int(RGB.max / RGB.offset) + 1
+
+    self.redColor = RGB.min
+    print(dir(self.__class__))
+    #pdbr.state(self.redColor)
+    #
+    #print(dir(self))
+    #print(super())
+
+  def __setattr__(self, name, value):
+    super().__setattr__(name, value)
+    print('set')
+
+  '''
+  @property
+  def redColor(self):
+    return self._redColor
+    
+  @redColor.setter
+  def redColor(self, component):
+    print('h')
+    self._redColor = component
+  '''
+  '''
+  @objc_method
+  def redColor(self):
+    send_super(__class__, self, 'redColor')
+    print('h')
+  '''
+
   @objc_method
   def viewWillAppear_(self, animated: bool):
     send_super(__class__,
@@ -92,6 +129,11 @@ class PickerViewController(UIViewController):
                  ctypes.c_bool,
                ])
     #print('viewWillAppear')
+    '''
+    print(self.redColor)
+    self.redColor = 10.0
+    print(self.redColor)
+    '''
 
   @objc_method
   def viewDidAppear_(self, animated: bool):
@@ -127,6 +169,7 @@ if __name__ == '__main__':
   from rbedge import present_viewController
 
   main_vc = PickerViewController.new()
+  
   _title = NSStringFromClass(PickerViewController)
   main_vc.navigationItem.title = _title
 
