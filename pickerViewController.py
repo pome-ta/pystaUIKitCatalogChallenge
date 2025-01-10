@@ -68,12 +68,29 @@ class PickerViewController(UIViewController):
     pickerView = UIPickerView.new()
 
     pickerView.dataSource = self
-    pickerView.delegate = self
+    #pickerView.delegate = self
 
     pickerView.backgroundColor = UIColor.systemDarkGreenColor()
     #pdbr.state(pickerView.dataSource)
 
     colorSwatchView = UIView.new()
+    
+    
+    colorValue = 128
+    foregroundColor = UIColor.colorWithRed_green_blue_alpha_(
+      0.8, 0.5, 0.2, 1.0)
+
+    # Set the foreground color for the entire attributed string.
+    attributes = NSDictionary.dictionaryWithObject(
+      foregroundColor, forKey=NSForegroundColorAttributeName)
+
+    title = NSMutableAttributedString.alloc().initWithString_attributes_(
+      f'{int(colorValue)}', attributes)
+
+    
+    #pdbr.state(title)
+    colorSwatchView.addSubview_(title)
+    
     colorSwatchView.backgroundColor = UIColor.systemDarkBlueColor()
 
     # --- Layout
@@ -153,7 +170,7 @@ class PickerViewController(UIViewController):
   # MARK: - UIPickerViewDelegate
   @objc_method
   def pickerView_attributedTitleForRow_forComponent_(self, pickerView,
-                                                     row: int, component: int):
+                                                     row: int, component: int)->ObjCInstance:
     #colorValue = row * RGB.offset
     colorValue = 128
     foregroundColor = UIColor.colorWithRed_green_blue_alpha_(
