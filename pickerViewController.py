@@ -6,7 +6,7 @@ from enum import IntEnum, auto
 
 from pyrubicon.objc.api import ObjCClass, ObjCInstance
 from pyrubicon.objc.api import objc_method, objc_const
-from pyrubicon.objc.runtime import send_super, objc_id, load_library,SEL
+from pyrubicon.objc.runtime import send_super, objc_id, load_library, SEL
 
 from rbedge.enumerations import (
   UILayoutConstraintAxis,
@@ -32,11 +32,9 @@ UIPickerView = ObjCClass('UIPickerView')
 UIView = ObjCClass('UIView')
 NSMutableAttributedString = ObjCClass('NSMutableAttributedString')
 
-
 # --- Global Variables
-NSForegroundColorAttributeName = objc_const(UIKit, 'NSForegroundColorAttributeName')
-
-
+NSForegroundColorAttributeName = objc_const(UIKit,
+                                            'NSForegroundColorAttributeName')
 
 
 class RGB:
@@ -154,20 +152,20 @@ class PickerViewController(UIViewController):
 
   # MARK: - UIPickerViewDelegate
   @objc_method
-  def pickerView_attributedTitleForRow_forComponent_(
-      self, pickerView, row: int, component: int):
+  def pickerView_attributedTitleForRow_forComponent_(self, pickerView,
+                                                     row: int, component: int):
     #colorValue = row * RGB.offset
     colorValue = 128
     foregroundColor = UIColor.colorWithRed_green_blue_alpha_(
       0.8, 0.5, 0.2, 1.0)
-      
+
     # Set the foreground color for the entire attributed string.
     attributes = NSDictionary.dictionaryWithObject(
-        foregroundColor, forKey=NSForegroundColorAttributeName)
-        
-    title = NSMutableAttributedString.alloc().initWithString_attributes_(f'{int(colorValue)}', attributes)
-    
-    
+      foregroundColor, forKey=NSForegroundColorAttributeName)
+
+    title = NSMutableAttributedString.alloc().initWithString_attributes_(
+      f'{int(colorValue)}', attributes)
+
     return title
 
   @objc_method
