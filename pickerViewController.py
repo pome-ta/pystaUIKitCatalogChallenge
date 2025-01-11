@@ -4,7 +4,7 @@
 import ctypes
 from enum import IntEnum, auto
 
-from pyrubicon.objc.api import ObjCClass, ObjCInstance
+from pyrubicon.objc.api import ObjCClass, ObjCInstance, NSString
 from pyrubicon.objc.api import objc_method, objc_const
 from pyrubicon.objc.runtime import send_super, objc_id, load_library, SEL
 
@@ -70,10 +70,7 @@ class PickerViewController(UIViewController):
     colorSwatchPickerView.dataSource = self
     colorSwatchPickerView.delegate = self
 
-    #colorSwatchPickerView.backgroundColor = UIColor.systemDarkGreenColor()
-
     colorSwatchView = UIView.new()
-    #colorSwatchView.backgroundColor = UIColor.systemDarkBlueColor()
 
     # --- Layout
     safeAreaLayoutGuide = self.view.safeAreaLayoutGuide
@@ -153,30 +150,47 @@ class PickerViewController(UIViewController):
   def pickerView_numberOfRowsInComponent_(self, component) -> int:
     return self.numberOfColorValuesPerComponent
 
-  '''
   # MARK: - UIPickerViewDelegate
+  '''
   @objc_method
-  def pickerView_attributedTitleForRow_forComponent_(
-      self, pickerView, row: int, component: int) -> ObjCInstance:
-    #colorValue = row * RGB.offset
-    colorValue = 128
+  def pickerView_attributedTitleForRow_forComponent_(self, pickerView,
+                                                     row: int, component: int):
+    colorValue = row * RGB.offset
+    # Set the initial colors for each picker segment.
+    value = colorValue / RGB.max
+    redColorComponent = RGB.min
+    greenColorComponent = RGB.min
+    blueColorComponent = RGB.min
+
+    if component == ColorComponent.red:
+      redColorComponent = value
+    if component == ColorComponent.green:
+      greenColorComponent = value
+    if component == ColorComponent.blue:
+      blueColorComponent = value
+
+    if redColorComponent < 0.5:
+      redColorComponent = 0.5
+    if blueColorComponent < 0.5:
+      blueColorComponent = 0.5
+    if greenColorComponent < 0.5:
+      greenColorComponent = 0.5
+
     foregroundColor = UIColor.colorWithRed_green_blue_alpha_(
-      0.8, 0.5, 0.2, 1.0)
-
+      redColorComponent, greenColorComponent, blueColorComponent, 1.0)
     # Set the foreground color for the entire attributed string.
-    attributes = NSDictionary.dictionaryWithObject(
-      foregroundColor, forKey=NSForegroundColorAttributeName)
-
+    attributes = [
+      NSDictionary.dictionaryWithObject(foregroundColor,
+                                        forKey=NSForegroundColorAttributeName),
+    ]
     title = NSMutableAttributedString.alloc().initWithString_attributes_(
       f'{int(colorValue)}', attributes)
-
     return title
   '''
 
   @objc_method
   def pickerView_titleForRow_forComponent_(self, pickerView, row: int,
-                                           component: int):
-
+                                           component: int) -> objc_id:
     colorValue = row * RGB.offset
     # Set the initial colors for each picker segment.
     value = colorValue / RGB.max
@@ -214,7 +228,7 @@ class PickerViewController(UIViewController):
 
   # MARK: - UIPickerViewAccessibilityDelegate
   def pickerView_accessibilityLabelForComponent_(self, pickerView,
-                                                 component: int):
+                                                 component: int) -> objc_id:
     if component == ColorComponent.red:
       return localizedString('Red color component value')
     if component == ColorComponent.green:
