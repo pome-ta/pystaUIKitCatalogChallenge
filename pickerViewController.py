@@ -177,6 +177,7 @@ class PickerViewController(UIViewController):
       """
       #print(colorComponent, ':', selectedRow)
       pass
+      #selectRow_inComponent_animated_
 
   # MARK: - UIPickerViewDataSource
   @objc_method
@@ -204,6 +205,10 @@ class PickerViewController(UIViewController):
       f'{int(colorValue)}', attributes)
 
     return title
+    
+  @objc_method
+  def pickerView_didSelectRow_inComponent_(self, pickerView, row:int,component:int):
+    print(component)
 
   @objc_method
   def viewWillAppear_(self, animated: bool):
