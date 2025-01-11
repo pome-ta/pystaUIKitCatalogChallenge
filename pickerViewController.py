@@ -68,16 +68,13 @@ class PickerViewController(UIViewController):
     # todo: 変数名`pickerView` だと、関数名に干渉する
     colorSwatchPickerView = UIPickerView.new()
     colorSwatchPickerView.dataSource = self
-    #colorSwatchPickerView.delegate = self
+    colorSwatchPickerView.delegate = self
 
-    
-
-    colorSwatchPickerView.backgroundColor = UIColor.systemDarkGreenColor()
+    #colorSwatchPickerView.backgroundColor = UIColor.systemDarkGreenColor()
     #pdbr.state(pickerView.dataSource)
 
     colorSwatchView = UIView.new()
-    
-    
+
     colorValue = 128
     foregroundColor = UIColor.colorWithRed_green_blue_alpha_(
       0.8, 0.5, 0.2, 1.0)
@@ -89,7 +86,6 @@ class PickerViewController(UIViewController):
     title = NSMutableAttributedString.alloc().initWithString_attributes_(
       f'{int(colorValue)}', attributes)
 
-    
     #pdbr.state(title)
     #colorSwatchView.addSubview_(title)
     UILabel = ObjCClass('UILabel')
@@ -97,7 +93,7 @@ class PickerViewController(UIViewController):
     testLabel.attributedText = title
     #pdbr.state(testLabel)
     colorSwatchView.addSubview_(testLabel)
-    
+
     testLabel.translatesAutoresizingMaskIntoConstraints = False
     NSLayoutConstraint.activateConstraints_([
       testLabel.heightAnchor.constraintEqualToConstant_(161.0),
@@ -105,10 +101,8 @@ class PickerViewController(UIViewController):
       testLabel.heightAnchor.constraintEqualToConstant_(32.0),
       testLabel.widthAnchor.constraintEqualToConstant_(32.0),
     ])
-    
-    colorSwatchView.backgroundColor = UIColor.systemDarkBlueColor()
-    
-    
+
+    #colorSwatchView.backgroundColor = UIColor.systemDarkBlueColor()
 
     # --- Layout
     safeAreaLayoutGuide = self.view.safeAreaLayoutGuide
@@ -163,8 +157,6 @@ class PickerViewController(UIViewController):
       ColorComponent.green: 41,
       ColorComponent.blue: 24,
     }
-    
-    pdbr.state(self.colorSwatchPickerView)
 
     for colorComponent, selectedRow in selectedRows.items():
       """
@@ -175,9 +167,11 @@ class PickerViewController(UIViewController):
       """
       `selectRow(_:inComponent:animated:)` を手動で呼び出した場合、`UIPickerViewDelegate` のデリゲート メソッドはトリガーされないことに注意してください。これを行うには、デリゲート メソッドを手動で起動します。
       """
-      #print(colorComponent, ':', selectedRow)
-      pass
-      #selectRow_inComponent_animated_
+      self.colorSwatchPickerView.selectRow_inComponent_animated_(
+        selectedRow, int(colorComponent), True)
+      self.pickerView(self.colorSwatchPickerView,
+                      didSelectRow=selectedRow,
+                      inComponent=int(colorComponent))
 
   # MARK: - UIPickerViewDataSource
   @objc_method
@@ -188,10 +182,11 @@ class PickerViewController(UIViewController):
   def pickerView_numberOfRowsInComponent_(self, component) -> int:
     return self.numberOfColorValuesPerComponent
 
+  '''
   # MARK: - UIPickerViewDelegate
   @objc_method
-  def pickerView_attributedTitleForRow_forComponent_(self, pickerView,
-                                                     row: int, component: int)->ObjCInstance:
+  def pickerView_attributedTitleForRow_forComponent_(
+      self, pickerView, row: int, component: int) -> ObjCInstance:
     #colorValue = row * RGB.offset
     colorValue = 128
     foregroundColor = UIColor.colorWithRed_green_blue_alpha_(
@@ -205,10 +200,19 @@ class PickerViewController(UIViewController):
       f'{int(colorValue)}', attributes)
 
     return title
-    
+  '''
+
   @objc_method
-  def pickerView_didSelectRow_inComponent_(self, pickerView, row:int,component:int):
-    print(component)
+  def pickerView_didSelectRow_inComponent_(self, pickerView, row: int,
+                                           component: int):
+    colorComponentValue = RGB.offset * row / RGB.max
+    if component == ColorComponent.red:
+      self.redColor = colorComponentValue
+    if component == ColorComponent.green:
+      self.greenColor = colorComponentValue
+    if component == ColorComponent.blue:
+      self.blueColor = colorComponentValue
+    self.updateColorSwatchViewBackgroundColor()
 
   @objc_method
   def viewWillAppear_(self, animated: bool):
