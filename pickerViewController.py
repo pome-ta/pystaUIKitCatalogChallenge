@@ -69,7 +69,6 @@ class PickerViewController(UIViewController):
     colorSwatchPickerView = UIPickerView.new()
     colorSwatchPickerView.dataSource = self
     colorSwatchPickerView.delegate = self
-    
 
     #colorSwatchPickerView.backgroundColor = UIColor.systemDarkGreenColor()
 
@@ -175,6 +174,33 @@ class PickerViewController(UIViewController):
   '''
 
   @objc_method
+  def pickerView_titleForRow_forComponent_(self, pickerView, row: int,
+                                           component: int):
+
+    colorValue = row * RGB.offset
+    # Set the initial colors for each picker segment.
+    value = colorValue / RGB.max
+    redColorComponent = RGB.min
+    greenColorComponent = RGB.min
+    blueColorComponent = RGB.min
+
+    if component == ColorComponent.red:
+      redColorComponent = value
+    if component == ColorComponent.green:
+      greenColorComponent = value
+    if component == ColorComponent.blue:
+      blueColorComponent = value
+
+    if redColorComponent < 0.5:
+      redColorComponent = 0.5
+    if blueColorComponent < 0.5:
+      blueColorComponent = 0.5
+    if greenColorComponent < 0.5:
+      greenColorComponent = 0.5
+
+    return f'{int(colorValue)}'
+
+  @objc_method
   def pickerView_didSelectRow_inComponent_(self, pickerView, row: int,
                                            component: int):
     colorComponentValue = RGB.offset * row / RGB.max
@@ -187,16 +213,14 @@ class PickerViewController(UIViewController):
     self.updateColorSwatchViewBackgroundColor()
 
   # MARK: - UIPickerViewAccessibilityDelegate
-  def pickerView_accessibilityLabelForComponent_(self,pickerView,component:int):
-    print('a')
+  def pickerView_accessibilityLabelForComponent_(self, pickerView,
+                                                 component: int):
     if component == ColorComponent.red:
       return localizedString('Red color component value')
     if component == ColorComponent.green:
       return localizedString('Green color component value')
     if component == ColorComponent.blue:
       return localizedString('Blue color component value')
-    
-
 
   @objc_method
   def viewWillAppear_(self, animated: bool):
