@@ -67,8 +67,7 @@ class PickerViewController(UIViewController):
 
     pickerView = UIPickerView.new()
 
-    pickerView.dataSource = self
-    #pickerView.delegate = self
+    
 
     pickerView.backgroundColor = UIColor.systemDarkGreenColor()
     #pdbr.state(pickerView.dataSource)
@@ -89,9 +88,24 @@ class PickerViewController(UIViewController):
 
     
     #pdbr.state(title)
-    colorSwatchView.addSubview_(title)
+    #colorSwatchView.addSubview_(title)
+    UILabel = ObjCClass('UILabel')
+    testLabel = UILabel.new()
+    testLabel.attributedText = title
+    #pdbr.state(testLabel)
+    colorSwatchView.addSubview_(testLabel)
+    
+    testLabel.translatesAutoresizingMaskIntoConstraints = False
+    NSLayoutConstraint.activateConstraints_([
+      testLabel.heightAnchor.constraintEqualToConstant_(161.0),
+      testLabel.widthAnchor.constraintEqualToConstant_(183.0),
+      testLabel.heightAnchor.constraintEqualToConstant_(32.0),
+      testLabel.widthAnchor.constraintEqualToConstant_(32.0),
+    ])
     
     colorSwatchView.backgroundColor = UIColor.systemDarkBlueColor()
+    
+    
 
     # --- Layout
     safeAreaLayoutGuide = self.view.safeAreaLayoutGuide
@@ -121,6 +135,9 @@ class PickerViewController(UIViewController):
         safeAreaLayoutGuide.leadingAnchor, 20.0),
     ])
 
+    self.pickerView = pickerView
+    self.pickerView.dataSource = self
+    #self.pickerView.delegate = self
     self.colorSwatchView = colorSwatchView
 
     self.numberOfColorValuesPerComponent = int(RGB.max / RGB.offset) + 1
@@ -130,6 +147,8 @@ class PickerViewController(UIViewController):
     self.blueColor = RGB.min
 
     self.configurePickerView()
+    #pdbr.state(self.pickerView)
+    print(self.pickerView)
 
   @objc_method
   def updateColorSwatchViewBackgroundColor(self):
@@ -145,6 +164,8 @@ class PickerViewController(UIViewController):
       ColorComponent.green: 41,
       ColorComponent.blue: 24,
     }
+    
+    #pdbr.state(self.pickerView)
 
     for colorComponent, selectedRow in selectedRows.items():
       """
