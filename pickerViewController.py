@@ -65,11 +65,14 @@ class PickerViewController(UIViewController):
       title := self.navigationItem.title) is None else title
     self.view.backgroundColor = UIColor.systemBackgroundColor()
 
-    pickerView = UIPickerView.new()
+    # todo: 変数名`pickerView` だと、関数名に干渉する
+    colorSwatchPickerView = UIPickerView.new()
+    colorSwatchPickerView.dataSource = self
+    #colorSwatchPickerView.delegate = self
 
     
 
-    pickerView.backgroundColor = UIColor.systemDarkGreenColor()
+    colorSwatchPickerView.backgroundColor = UIColor.systemDarkGreenColor()
     #pdbr.state(pickerView.dataSource)
 
     colorSwatchView = UIView.new()
@@ -111,33 +114,31 @@ class PickerViewController(UIViewController):
     safeAreaLayoutGuide = self.view.safeAreaLayoutGuide
     layoutMarginsGuide = self.view.layoutMarginsGuide
 
-    self.view.addSubview_(pickerView)
-    pickerView.translatesAutoresizingMaskIntoConstraints = False
+    self.view.addSubview_(colorSwatchPickerView)
+    colorSwatchPickerView.translatesAutoresizingMaskIntoConstraints = False
     self.view.addSubview_(colorSwatchView)
     colorSwatchView.translatesAutoresizingMaskIntoConstraints = False
 
     NSLayoutConstraint.activateConstraints_([
-      pickerView.widthAnchor.constraintEqualToConstant_(375.0),
+      colorSwatchPickerView.widthAnchor.constraintEqualToConstant_(375.0),
     ])
 
     NSLayoutConstraint.activateConstraints_([
       colorSwatchView.trailingAnchor.constraintEqualToAnchor_constant_(
         safeAreaLayoutGuide.trailingAnchor, -20.0),
       colorSwatchView.topAnchor.constraintEqualToAnchor_constant_(
-        pickerView.bottomAnchor, 8.0),
+        colorSwatchPickerView.bottomAnchor, 8.0),
       colorSwatchView.bottomAnchor.constraintEqualToAnchor_constant_(
         safeAreaLayoutGuide.bottomAnchor, -20.0),
-      pickerView.centerXAnchor.constraintEqualToAnchor_(
+      colorSwatchPickerView.centerXAnchor.constraintEqualToAnchor_(
         safeAreaLayoutGuide.centerXAnchor),
-      pickerView.topAnchor.constraintEqualToAnchor_constant_(
+      colorSwatchPickerView.topAnchor.constraintEqualToAnchor_constant_(
         safeAreaLayoutGuide.topAnchor, 13.0),
       colorSwatchView.leadingAnchor.constraintEqualToAnchor_constant_(
         safeAreaLayoutGuide.leadingAnchor, 20.0),
     ])
 
-    self.pickerView = pickerView
-    self.pickerView.dataSource = self
-    #self.pickerView.delegate = self
+    self.colorSwatchPickerView = colorSwatchPickerView
     self.colorSwatchView = colorSwatchView
 
     self.numberOfColorValuesPerComponent = int(RGB.max / RGB.offset) + 1
@@ -147,8 +148,6 @@ class PickerViewController(UIViewController):
     self.blueColor = RGB.min
 
     self.configurePickerView()
-    #pdbr.state(self.pickerView)
-    print(self.pickerView)
 
   @objc_method
   def updateColorSwatchViewBackgroundColor(self):
@@ -165,7 +164,7 @@ class PickerViewController(UIViewController):
       ColorComponent.blue: 24,
     }
     
-    #pdbr.state(self.pickerView)
+    pdbr.state(self.colorSwatchPickerView)
 
     for colorComponent, selectedRow in selectedRows.items():
       """
