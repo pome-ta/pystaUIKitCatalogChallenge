@@ -4,9 +4,9 @@
 import ctypes
 from enum import IntEnum, auto
 
-from pyrubicon.objc.api import ObjCClass, ObjCInstance, NSString
+from pyrubicon.objc.api import ObjCClass, ObjCInstance
 from pyrubicon.objc.api import objc_method, objc_const
-from pyrubicon.objc.runtime import send_super, objc_id, load_library, SEL
+from pyrubicon.objc.runtime import send_super, objc_id, load_library
 
 from rbedge.enumerations import (
   UILayoutConstraintAxis,
