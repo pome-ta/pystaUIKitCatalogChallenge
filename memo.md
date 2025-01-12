@@ -1,3 +1,16 @@
+# 📝 2025/01/12
+
+## `UIPickerView`
+
+### `pickerView_attributedTitleForRow_forComponent_` が落ちる
+
+`pickerView_titleForRow_forComponent_` だと通る
+
+## Global Variables
+
+enumerations のように、ファイルを作るか
+
+
 # 📝 2025/01/08
 
 ## `UIImagePickerController` の`mediaTypes`

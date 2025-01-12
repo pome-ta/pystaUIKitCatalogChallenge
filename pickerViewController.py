@@ -157,7 +157,6 @@ class PickerViewController(UIViewController):
                       didSelectRow=selectedRow,
                       inComponent=int(colorComponent))
     #pdbr.state(self.colorSwatchPickerView)
-    
 
   # MARK: - UIPickerViewDataSource
   @objc_method
@@ -201,8 +200,9 @@ class PickerViewController(UIViewController):
     attributes = NSDictionary.dictionaryWithObject(
       foregroundColor, forKey=NSForegroundColorAttributeName)
     #title = NSAttributedString.alloc().initWithString_attributes_(f'{int(colorValue)}', None)
-    title = NSMutableAttributedString.alloc().initWithString_attributes_(f'{int(colorValue)}', attributes)
-    
+    title = NSMutableAttributedString.alloc().initWithString_attributes_(
+      f'{int(colorValue)}', attributes)
+
     valueLabel = UILabel.new()
     #valueLabel.attributedText = title
     valueLabel.text = f'{colorValue}'
@@ -320,9 +320,6 @@ class PickerViewController(UIViewController):
                  ctypes.c_bool,
                ])
     #print('viewDidAppear')
-    #pdbr.state(self.colorSwatchPickerView.selectedRowInComponent_(1))
-    #pdbr.state(self.colorSwatchPickerView.numberOfRowsInComponent_(1))
-    pdbr.state(self.colorSwatchPickerView, 1)
 
   @objc_method
   def viewDidDisappear_(self, animated: bool):
