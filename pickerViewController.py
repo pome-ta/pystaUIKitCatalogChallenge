@@ -168,7 +168,7 @@ class PickerViewController(UIViewController):
     return self.numberOfColorValuesPerComponent
 
   # MARK: - UIPickerViewDelegate
-
+  '''
   @objc_method
   def pickerView_viewForRow_forComponent_reusingView_(self, pickerView,
                                                       row: int, component: int,
@@ -211,7 +211,7 @@ class PickerViewController(UIViewController):
     #return valueLabel
     return view
 
-  '''
+  
   @objc_method
   def pickerView_attributedTitleForRow_forComponent_(
       self, pickerView, row: int, component: int) -> objc_id:
@@ -249,6 +249,7 @@ class PickerViewController(UIViewController):
     #return None
     return NSMutableAttributedString.alloc().initWithString_attributes_(
       f'{int(colorValue)}', attributes)
+    '''
 
   @objc_method
   def pickerView_titleForRow_forComponent_(self, pickerView, row: int,
@@ -275,7 +276,6 @@ class PickerViewController(UIViewController):
       greenColorComponent = 0.5
 
     return f'{int(colorValue)}'
-  '''
 
   @objc_method
   def pickerView_didSelectRow_inComponent_(self, pickerView, row: int,
