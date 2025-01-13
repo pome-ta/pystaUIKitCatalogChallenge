@@ -30,92 +30,123 @@ class UIFontTextStyle:
 # ref: [NSAttributedStringKey | Apple Developer Documentation](https://developer.apple.com/documentation/foundation/nsattributedstringkey?language=objc)
 @dataclass
 class NSAttributedStringKey:
-  backgroundColor:str = constUIKit('NSBackgroundColorAttributeName')
-  baselineOffset:str = constUIKit('NSBaselineOffsetAttributeName')
-  font:str = constUIKit('NSFontAttributeName')
-  foregroundColor:str = constUIKit('NSForegroundColorAttributeName')
-  glyphInfo:str = constUIKit('NSGlyphInfoAttributeName')
-  kern:str = constUIKit('NSKernAttributeName')
-  ligature:str = constUIKit('NSLigatureAttributeName')
-  paragraphStyle:str = constUIKit('NSParagraphStyleAttributeName')
-  strikethroughColor:str = constUIKit('NSStrikethroughColorAttributeName')
-  strikethroughStyle:str = constUIKit('NSStrikethroughStyleAttributeName')
-  strokeColor:str = constUIKit('NSStrokeColorAttributeName')
-  strokeWidth:str = constUIKit('NSStrokeWidthAttributeName')
-  superscript:str = constUIKit('NSSuperscriptAttributeName')
-  tracking:str = constUIKit('NSTrackingAttributeName')
-  underlineColor:str = constUIKit('NSUnderlineColorAttributeName')
-  underlineStyle:str = constUIKit('NSUnderlineStyleAttributeName')
-  writingDirection:str = constUIKit('NSWritingDirectionAttributeName')
-  cursor:str = constUIKit('NSCursorAttributeName')
-  link:str = constUIKit('NSLinkAttributeName')
-  markedClauseSegment:str = constUIKit('NSMarkedClauseSegmentAttributeName')
-  replacementIndex:str = constUIKit('NSReplacementIndexAttributeName')
-  shadow:str = constUIKit('NSShadowAttributeName')
-  spellingState:str = constUIKit('NSSpellingStateAttributeName')
-  suggestionHighlight:str = constUIKit('CSSuggestionHighlightAttributeName')
-  textAlternatives:str = constUIKit('NSTextAlternativesAttributeName')
-  textEffect:str = constUIKit('NSTextEffectAttributeName')
-  textHighlightColorScheme:str = constUIKit('NSTextHighlightColorSchemeAttributeName')
-  textHighlightStyle:str = constUIKit('NSTextHighlightStyleAttributeName')
-  textItemTag:str = constUIKit('UITextItemTagAttributeName')
-  toolTip:str = constUIKit('NSToolTipAttributeName')
-  adaptiveImageGlyph:str = constUIKit('NSAdaptiveImageGlyphAttributeName')
-  attachment:str = constUIKit('NSAttachmentAttributeName')
-  accessibilityAlignment:str = constUIKit('NSAccessibilityTextAlignmentAttribute')
-  accessibilityAnnotationTextAttribute:str = constUIKit('NSAccessibilityAnnotationTextAttribute')
-  accessibilityAttachment:str = constUIKit('NSAccessibilityAttachmentTextAttribute')
-  accessibilityAutocorrected:str = constUIKit('NSAccessibilityAutocorrectedTextAttribute')
-  accessibilityBackgroundColor:str = constUIKit('NSAccessibilityBackgroundColorTextAttribute')
-  accessibilityCustomText:str = constUIKit('NSAccessibilityCustomTextAttribute')
-  accessibilityFont:str = constUIKit('NSAccessibilityFontTextAttribute')
-  accessibilityForegroundColor:str = constUIKit('NSAccessibilityForegroundColorTextAttribute')
-  accessibilityLanguage:str = constUIKit('NSAccessibilityLanguageTextAttribute')
-  accessibilityLink:str = constUIKit('NSAccessibilityLinkTextAttribute')
-  accessibilityListItemIndex:str = constUIKit('NSAccessibilityListItemIndexTextAttribute')
-  accessibilityListItemLevel:str = constUIKit('NSAccessibilityListItemLevelTextAttribute')
-  accessibilityListItemPrefix:str = constUIKit('NSAccessibilityListItemPrefixTextAttribute')
-  accessibilityMarkedMisspelled:str = constUIKit('NSAccessibilityMarkedMisspelledTextAttribute')
-  accessibilityMisspelled:str = constUIKit('NSAccessibilityMisspelledTextAttribute')
-  accessibilityShadow:str = constUIKit('NSAccessibilityShadowTextAttribute')
-  accessibilitySpeechAnnouncementPriority:str = constUIKit('UIAccessibilitySpeechAttributeAnnouncementPriority')
-  accessibilitySpeechIPANotation:str = constUIKit('UIAccessibilitySpeechAttributeIPANotation')
-  accessibilitySpeechLanguage:str = constUIKit('UIAccessibilitySpeechAttributeLanguage')
-  accessibilitySpeechPitch:str = constUIKit('UIAccessibilitySpeechAttributePitch')
-  accessibilitySpeechPunctuation:str = constUIKit('UIAccessibilitySpeechAttributePunctuation')
-  accessibilitySpeechQueueAnnouncement:str = constUIKit('UIAccessibilitySpeechAttributeQueueAnnouncement')
-  accessibilitySpeechSpellOut:str = constUIKit('UIAccessibilitySpeechAttributeSpellOut')
-  accessibilityTextCustom:str = constUIKit('UIAccessibilityTextAttributeCustom')
-  accessibilityTextHeadingLevel:str = constUIKit('UIAccessibilityTextAttributeHeadingLevel')
-  accessibilityStrikethrough:str = constUIKit('NSAccessibilityStrikethroughTextAttribute')
-  accessibilityStrikethroughColor:str = constUIKit('NSAccessibilityStrikethroughColorTextAttribute')
-  accessibilitySuperscript:str = constUIKit('NSAccessibilitySuperscriptTextAttribute')
-  accessibilityUnderline:str = constUIKit('NSAccessibilityUnderlineTextAttribute')
-  accessibilityUnderlineColor:str = constUIKit('NSAccessibilityUnderlineColorTextAttribute')
-  UIAccessibilityTextAttributeContext:str = constUIKit('UIAccessibilityTextAttributeContext')
-  inlinePresentationIntent:str = constUIKit('NSInlinePresentationIntentAttributeName')
-  presentationIntentAttributeName:str = constUIKit('NSPresentationIntentAttributeName')
-  markdownSourcePosition:str = constUIKit('NSMarkdownSourcePositionAttributeName')
-  alternateDescription:str = constUIKit('NSAlternateDescriptionAttributeName')
-  imageURL:str = constUIKit('NSImageURLAttributeName')
-  languageIdentifier:str = constUIKit('NSLanguageIdentifierAttributeName')
-  morphology:str = constUIKit('NSMorphologyAttributeName')
-  inflectionRule:str = constUIKit('NSInflectionRuleAttributeName')
-  inflectionAlternative:str = constUIKit('NSInflectionAlternativeAttributeName')
-  agreeWithArgument:str = constUIKit('NSInflectionAgreementArgumentAttributeName')
-  agreeWithConcept:str = constUIKit('NSInflectionAgreementConceptAttributeName')
-  referentConcept:str = constUIKit('NSInflectionReferentConceptAttributeName')
-  localizedNumberFormat:str = constUIKit('NSLocalizedNumberFormatAttributeName')
-  expansion:str = constUIKit('NSExpansionAttributeName')
-  obliqueness:str = constUIKit('NSObliquenessAttributeName')
-  verticalGlyphForm:str = constUIKit('NSVerticalGlyphFormAttributeName')
-  characterShapeAttributeName:str = constUIKit('NSCharacterShapeAttributeName')
-  usesScreenFontsDocumentAttribute:str = constUIKit('NSUsesScreenFontsDocumentAttribute')
-
-
-
-
-
-
-
+  backgroundColor: str = constUIKit('NSBackgroundColorAttributeName')
+  baselineOffset: str = constUIKit('NSBaselineOffsetAttributeName')
+  font: str = constUIKit('NSFontAttributeName')
+  foregroundColor: str = constUIKit('NSForegroundColorAttributeName')
+  glyphInfo: str = constUIKit('NSGlyphInfoAttributeName')
+  kern: str = constUIKit('NSKernAttributeName')
+  ligature: str = constUIKit('NSLigatureAttributeName')
+  paragraphStyle: str = constUIKit('NSParagraphStyleAttributeName')
+  strikethroughColor: str = constUIKit('NSStrikethroughColorAttributeName')
+  strikethroughStyle: str = constUIKit('NSStrikethroughStyleAttributeName')
+  strokeColor: str = constUIKit('NSStrokeColorAttributeName')
+  strokeWidth: str = constUIKit('NSStrokeWidthAttributeName')
+  superscript: str = constUIKit('NSSuperscriptAttributeName')
+  tracking: str = constUIKit('NSTrackingAttributeName')
+  underlineColor: str = constUIKit('NSUnderlineColorAttributeName')
+  underlineStyle: str = constUIKit('NSUnderlineStyleAttributeName')
+  writingDirection: str = constUIKit('NSWritingDirectionAttributeName')
+  cursor: str = constUIKit('NSCursorAttributeName')
+  link: str = constUIKit('NSLinkAttributeName')
+  markedClauseSegment: str = constUIKit('NSMarkedClauseSegmentAttributeName')
+  replacementIndex: str = constUIKit('NSReplacementIndexAttributeName')
+  shadow: str = constUIKit('NSShadowAttributeName')
+  spellingState: str = constUIKit('NSSpellingStateAttributeName')
+  suggestionHighlight: str = constUIKit('CSSuggestionHighlightAttributeName')
+  textAlternatives: str = constUIKit('NSTextAlternativesAttributeName')
+  textEffect: str = constUIKit('NSTextEffectAttributeName')
+  textHighlightColorScheme: str = constUIKit(
+    'NSTextHighlightColorSchemeAttributeName')
+  textHighlightStyle: str = constUIKit('NSTextHighlightStyleAttributeName')
+  textItemTag: str = constUIKit('UITextItemTagAttributeName')
+  toolTip: str = constUIKit('NSToolTipAttributeName')
+  adaptiveImageGlyph: str = constUIKit('NSAdaptiveImageGlyphAttributeName')
+  attachment: str = constUIKit('NSAttachmentAttributeName')
+  accessibilityAlignment: str = constUIKit(
+    'NSAccessibilityTextAlignmentAttribute')
+  accessibilityAnnotationTextAttribute: str = constUIKit(
+    'NSAccessibilityAnnotationTextAttribute')
+  accessibilityAttachment: str = constUIKit(
+    'NSAccessibilityAttachmentTextAttribute')
+  accessibilityAutocorrected: str = constUIKit(
+    'NSAccessibilityAutocorrectedTextAttribute')
+  accessibilityBackgroundColor: str = constUIKit(
+    'NSAccessibilityBackgroundColorTextAttribute')
+  accessibilityCustomText: str = constUIKit(
+    'NSAccessibilityCustomTextAttribute')
+  accessibilityFont: str = constUIKit('NSAccessibilityFontTextAttribute')
+  accessibilityForegroundColor: str = constUIKit(
+    'NSAccessibilityForegroundColorTextAttribute')
+  accessibilityLanguage: str = constUIKit(
+    'NSAccessibilityLanguageTextAttribute')
+  accessibilityLink: str = constUIKit('NSAccessibilityLinkTextAttribute')
+  accessibilityListItemIndex: str = constUIKit(
+    'NSAccessibilityListItemIndexTextAttribute')
+  accessibilityListItemLevel: str = constUIKit(
+    'NSAccessibilityListItemLevelTextAttribute')
+  accessibilityListItemPrefix: str = constUIKit(
+    'NSAccessibilityListItemPrefixTextAttribute')
+  accessibilityMarkedMisspelled: str = constUIKit(
+    'NSAccessibilityMarkedMisspelledTextAttribute')
+  accessibilityMisspelled: str = constUIKit(
+    'NSAccessibilityMisspelledTextAttribute')
+  accessibilityShadow: str = constUIKit('NSAccessibilityShadowTextAttribute')
+  accessibilitySpeechAnnouncementPriority: str = constUIKit(
+    'UIAccessibilitySpeechAttributeAnnouncementPriority')
+  accessibilitySpeechIPANotation: str = constUIKit(
+    'UIAccessibilitySpeechAttributeIPANotation')
+  accessibilitySpeechLanguage: str = constUIKit(
+    'UIAccessibilitySpeechAttributeLanguage')
+  accessibilitySpeechPitch: str = constUIKit(
+    'UIAccessibilitySpeechAttributePitch')
+  accessibilitySpeechPunctuation: str = constUIKit(
+    'UIAccessibilitySpeechAttributePunctuation')
+  accessibilitySpeechQueueAnnouncement: str = constUIKit(
+    'UIAccessibilitySpeechAttributeQueueAnnouncement')
+  accessibilitySpeechSpellOut: str = constUIKit(
+    'UIAccessibilitySpeechAttributeSpellOut')
+  accessibilityTextCustom: str = constUIKit(
+    'UIAccessibilityTextAttributeCustom')
+  accessibilityTextHeadingLevel: str = constUIKit(
+    'UIAccessibilityTextAttributeHeadingLevel')
+  accessibilityStrikethrough: str = constUIKit(
+    'NSAccessibilityStrikethroughTextAttribute')
+  accessibilityStrikethroughColor: str = constUIKit(
+    'NSAccessibilityStrikethroughColorTextAttribute')
+  accessibilitySuperscript: str = constUIKit(
+    'NSAccessibilitySuperscriptTextAttribute')
+  accessibilityUnderline: str = constUIKit(
+    'NSAccessibilityUnderlineTextAttribute')
+  accessibilityUnderlineColor: str = constUIKit(
+    'NSAccessibilityUnderlineColorTextAttribute')
+  UIAccessibilityTextAttributeContext: str = constUIKit(
+    'UIAccessibilityTextAttributeContext')
+  inlinePresentationIntent: str = constUIKit(
+    'NSInlinePresentationIntentAttributeName')
+  presentationIntentAttributeName: str = constUIKit(
+    'NSPresentationIntentAttributeName')
+  markdownSourcePosition: str = constUIKit(
+    'NSMarkdownSourcePositionAttributeName')
+  alternateDescription: str = constUIKit('NSAlternateDescriptionAttributeName')
+  imageURL: str = constUIKit('NSImageURLAttributeName')
+  languageIdentifier: str = constUIKit('NSLanguageIdentifierAttributeName')
+  morphology: str = constUIKit('NSMorphologyAttributeName')
+  inflectionRule: str = constUIKit('NSInflectionRuleAttributeName')
+  inflectionAlternative: str = constUIKit(
+    'NSInflectionAlternativeAttributeName')
+  agreeWithArgument: str = constUIKit(
+    'NSInflectionAgreementArgumentAttributeName')
+  agreeWithConcept: str = constUIKit(
+    'NSInflectionAgreementConceptAttributeName')
+  referentConcept: str = constUIKit('NSInflectionReferentConceptAttributeName')
+  localizedNumberFormat: str = constUIKit(
+    'NSLocalizedNumberFormatAttributeName')
+  expansion: str = constUIKit('NSExpansionAttributeName')
+  obliqueness: str = constUIKit('NSObliquenessAttributeName')
+  verticalGlyphForm: str = constUIKit('NSVerticalGlyphFormAttributeName')
+  characterShapeAttributeName: str = constUIKit(
+    'NSCharacterShapeAttributeName')
+  usesScreenFontsDocumentAttribute: str = constUIKit(
+    'NSUsesScreenFontsDocumentAttribute')
 
