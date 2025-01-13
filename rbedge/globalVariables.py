@@ -26,3 +26,8 @@ class UIFontTextStyle:
   title2: str = constUIKit('UIFontTextStyleTitle2')
   title3: str = constUIKit('UIFontTextStyleTitle3')
 
+# ref: [NSAttributedStringKey | Apple Developer Documentation](https://developer.apple.com/documentation/foundation/nsattributedstringkey?language=objc)
+@dataclass
+class NSAttributedStringKey:
+  pass
+  
