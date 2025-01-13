@@ -33,6 +33,7 @@ UIView = ObjCClass('UIView')
 NSMutableAttributedString = ObjCClass('NSMutableAttributedString')
 NSAttributedString = ObjCClass('NSAttributedString')
 UILabel = ObjCClass('UILabel')
+UIFont = ObjCClass('UIFont')
 
 UIPickerViewDataSource = ObjCProtocol('UIPickerViewDataSource')
 UIPickerViewDelegate = ObjCProtocol('UIPickerViewDelegate')
@@ -210,7 +211,7 @@ class PickerViewController(UIViewController):
     #view = valueLabel
     #return valueLabel
     return view
-
+  '''
   
   @objc_method
   def pickerView_attributedTitleForRow_forComponent_(
@@ -236,6 +237,7 @@ class PickerViewController(UIViewController):
     if greenColorComponent < 0.5:
       greenColorComponent = 0.5
 
+    '''
     foregroundColor = UIColor.colorWithRed_green_blue_alpha_(
       redColorComponent, greenColorComponent, blueColorComponent, 1.0)
     # Set the foreground color for the entire attributed string.
@@ -250,7 +252,11 @@ class PickerViewController(UIViewController):
     return NSMutableAttributedString.alloc().initWithString_attributes_(
       f'{int(colorValue)}', attributes)
     '''
-
+    attributes = {'NSFontAttributeName': UIFont.systemFontOfSize_(14)}
+    return NSAttributedString.alloc().initWithString_attributes_('hoge', attributes)
+    
+    
+  '''
   @objc_method
   def pickerView_titleForRow_forComponent_(self, pickerView, row: int,
                                            component: int) -> objc_id:
@@ -276,6 +282,7 @@ class PickerViewController(UIViewController):
       greenColorComponent = 0.5
 
     return f'{int(colorValue)}'
+  '''
 
   @objc_method
   def pickerView_didSelectRow_inComponent_(self, pickerView, row: int,
