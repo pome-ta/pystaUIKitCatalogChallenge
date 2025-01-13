@@ -8,8 +8,8 @@
 import ctypes
 
 from pyrubicon.objc.api import ObjCClass, ObjCInstance, Block
-from pyrubicon.objc.api import objc_method, objc_const
-from pyrubicon.objc.runtime import send_super, objc_id, load_library, SEL
+from pyrubicon.objc.api import objc_method
+from pyrubicon.objc.runtime import send_super, objc_id, SEL
 from pyrubicon.objc.types import CGRect, CGRectMake, CGSizeMake, NSZeroPoint, UIEdgeInsetsMake, NSTimeInterval
 
 from rbedge.enumerations import (
@@ -23,12 +23,15 @@ from rbedge.enumerations import (
   UIStackViewAlignment,
   UIViewAnimationCurve,
 )
+
+from rbedge.globalVariables import (
+  UIFontTextStyle, )
+
 from rbedge.functions import arc4random_uniform
 from rbedge import pdbr
 
 from pyLocalizedString import localizedString
 
-UIKit = load_library('UIKit')
 UIViewController = ObjCClass('UIViewController')
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
 
@@ -44,11 +47,6 @@ UIColor = ObjCClass('UIColor')
 
 UIViewPropertyAnimator = ObjCClass('UIViewPropertyAnimator')
 UIView = ObjCClass('UIView')
-
-# --- Global Variables
-UIFontTextStyleHeadline = objc_const(UIKit, 'UIFontTextStyleHeadline')
-UIFontTextStyleBody = objc_const(UIKit, 'UIFontTextStyleBody')
-UIFontTextStyleFootnote = objc_const(UIKit, 'UIFontTextStyleFootnote')
 
 
 class StackViewController(UIViewController):
@@ -83,7 +81,7 @@ class StackViewController(UIViewController):
     showingHidingLabel.text = 'Showing/hiding views'
     showingHidingLabel.textAlignment = NSTextAlignment.center
     showingHidingLabel.setFont_(
-      UIFont.preferredFontForTextStyle_(UIFontTextStyleHeadline))
+      UIFont.preferredFontForTextStyle_(UIFontTextStyle.headline))
 
     # --- --- / detailStackView
     detailStackView = UIStackView.alloc()
@@ -96,7 +94,7 @@ class StackViewController(UIViewController):
     detailLabel.text = 'Detail'
     detailLabel.lineBreakMode = NSLineBreakMode.byTruncatingTail
     detailLabel.setFont_(
-      UIFont.preferredFontForTextStyle_(UIFontTextStyleBody))
+      UIFont.preferredFontForTextStyle_(UIFontTextStyle.body))
 
     # --- --- ---- detailTextField
     detailTextField = UITextField.new()
@@ -133,7 +131,7 @@ class StackViewController(UIViewController):
     furtherlLabel.text = 'Further Detail'
     furtherlLabel.lineBreakMode = NSLineBreakMode.byTruncatingTail
     furtherlLabel.setFont_(
-      UIFont.preferredFontForTextStyle_(UIFontTextStyleBody))
+      UIFont.preferredFontForTextStyle_(UIFontTextStyle.body))
 
     # --- --- --- furtherTextField
     furtherTextField = UITextField.new()
@@ -164,7 +162,7 @@ class StackViewController(UIViewController):
     footerLabel.text = 'Footer Label'
     footerLabel.textAlignment = NSTextAlignment.center
     footerLabel.setFont_(
-      UIFont.preferredFontForTextStyle_(UIFontTextStyleFootnote))
+      UIFont.preferredFontForTextStyle_(UIFontTextStyle.footnote))
 
     # --- --- arrangedSubviews
     showingHidingStackView.initWithArrangedSubviews_([
@@ -187,7 +185,7 @@ class StackViewController(UIViewController):
     addRemoveLabel.text = 'Add/remove views'
     addRemoveLabel.textAlignment = NSTextAlignment.center
     addRemoveLabel.setFont_(
-      UIFont.preferredFontForTextStyle_(UIFontTextStyleHeadline))
+      UIFont.preferredFontForTextStyle_(UIFontTextStyle.headline))
 
     # --- --- ---- addbutton
     addbutton = UIButton.buttonWithType_(UIButtonType.system)
