@@ -22,6 +22,12 @@ from rbedge.enumerations import (
   UIBarButtonSystemItem,
 )
 
+from rbedge.globalVariables import (
+  UIFontTextStyle,
+  NSAttributedStringKey,
+  NSNotificationName,
+)
+
 from pyLocalizedString import localizedString
 from rbedge import pdbr
 
@@ -49,18 +55,7 @@ UIImage = ObjCClass('UIImage')
 UIImageSymbolConfiguration = ObjCClass('UIImageSymbolConfiguration')
 
 # --- Global Variables
-UIFontTextStyleBody = objc_const(UIKit, 'UIFontTextStyleBody')
-NSForegroundColorAttributeName = objc_const(UIKit,
-                                            'NSForegroundColorAttributeName')
-NSFontAttributeName = objc_const(UIKit, 'NSFontAttributeName')
-NSBackgroundColorAttributeName = objc_const(UIKit,
-                                            'NSBackgroundColorAttributeName')
-NSUnderlineStyleAttributeName = objc_const(UIKit,
-                                           'NSUnderlineStyleAttributeName')
-UIKeyboardWillShowNotification = objc_const(UIKit,
-                                            'UIKeyboardWillShowNotification')
-UIKeyboardWillHideNotification = objc_const(UIKit,
-                                            'UIKeyboardWillHideNotification')
+
 UIKeyboardAnimationDurationUserInfoKey = objc_const(
   UIKit, 'UIKeyboardAnimationDurationUserInfoKey')
 UIKeyboardFrameBeginUserInfoKey = objc_const(
@@ -170,11 +165,11 @@ class TextViewController(UIViewController):
     notificationCenter = NSNotificationCenter.defaultCenter
 
     notificationCenter.addObserver_selector_name_object_(
-      self, SEL('handleKeyboardNotification:'), UIKeyboardWillShowNotification,
-      None)
+      self, SEL('handleKeyboardNotification:'),
+      NSNotificationName.keyboardWillShowNotification, None)
     notificationCenter.addObserver_selector_name_object_(
-      self, SEL('handleKeyboardNotification:'), UIKeyboardWillHideNotification,
-      None)
+      self, SEL('handleKeyboardNotification:'),
+      NSNotificationName.keyboardWillHideNotification, None)
 
   @objc_method
   def viewDidDisappear_(self, animated: bool):
@@ -187,9 +182,9 @@ class TextViewController(UIViewController):
                ])
     notificationCenter = NSNotificationCenter.defaultCenter
     notificationCenter.removeObserver_name_object_(
-      self, UIKeyboardWillShowNotification, None)
+      self, NSNotificationName.keyboardWillShowNotification, None)
     notificationCenter.removeObserver_name_object_(
-      self, UIKeyboardWillHideNotification, None)
+      self, NSNotificationName.keyboardWillHideNotification, None)
 
   # MARK: - Keyboard Event Notifications
   @objc_method
@@ -250,7 +245,7 @@ class TextViewController(UIViewController):
 
     entireRange = NSRange(0, entireAttributedText.length())
 
-    entireAttributedText.addAttribute(NSForegroundColorAttributeName,
+    entireAttributedText.addAttribute(NSAttributedStringKey.foregroundColor,
                                       value=entireTextColor,
                                       range=entireRange)
     self.textView.attributedText = entireAttributedText
@@ -276,19 +271,19 @@ class TextViewController(UIViewController):
       UIFontDescriptorSymbolicTraits.traitBold)
     boldFont = UIFont.fontWithDescriptor_size_(boldFontDescriptor, 0.0)
 
-    attributedText.addAttribute(NSFontAttributeName,
+    attributedText.addAttribute(NSAttributedStringKey.font,
                                 value=boldFont,
                                 range=boldRange)
     # Add highlight attribute.
-    attributedText.addAttribute(NSBackgroundColorAttributeName,
+    attributedText.addAttribute(NSAttributedStringKey.backgroundColor,
                                 value=UIColor.systemGreenColor(),
                                 range=highlightedRange)
     # Add underline attribute.
-    attributedText.addAttribute(NSUnderlineStyleAttributeName,
+    attributedText.addAttribute(NSAttributedStringKey.underlineStyle,
                                 value=NSUnderlineStyle.single,
                                 range=underlinedRange)
     # Add tint color.
-    attributedText.addAttribute(NSForegroundColorAttributeName,
+    attributedText.addAttribute(NSAttributedStringKey.foregroundColor,
                                 value=UIColor.systemBlueColor(),
                                 range=tintedRange)
 
@@ -322,7 +317,7 @@ class TextViewController(UIViewController):
   @objc_method
   def configureTextView(self):
     bodyFontDescriptor = UIFontDescriptor.preferredFontDescriptorWithTextStyle_(
-      UIFontTextStyleBody)
+      UIFontTextStyle.body)
 
     bodyFont = UIFont.fontWithDescriptor_size_(bodyFontDescriptor, 0.0)
     self.textView.font = bodyFont
