@@ -191,7 +191,7 @@ pickerSubItems = [
               storyboardName=FontPickerViewController),
   OutlineItem(title='ImagePickerTitle',
               imageName=None,
-              storyboardName=imagePickerViewController),
+              storyboardName=ImagePickerViewController),
 ]
 
 # todo: traitCollection.userInterfaceIdiom != .mac
