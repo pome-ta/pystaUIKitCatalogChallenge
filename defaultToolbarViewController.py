@@ -18,6 +18,8 @@ UIViewController = ObjCClass('UIViewController')
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
 UIColor = ObjCClass('UIColor')
 
+UIToolbar = ObjCClass('UIToolbar')
+UIToolbarAppearance = ObjCClass('UIToolbarAppearance')
 UIBarButtonItem = ObjCClass('UIBarButtonItem')
 UIImage = ObjCClass('UIImage')
 UIMenu = ObjCClass('UIMenu')
@@ -40,6 +42,22 @@ class DefaultToolbarViewController(UIViewController):
       title := self.navigationItem.title) is None else title
 
     self.view.backgroundColor = UIColor.systemBackgroundColor()
+
+    _navToolbar = self.navigationController.toolbar
+    toolbar = UIToolbar.alloc().initWithFrame_(_navToolbar.frame)
+    toolbar.setAutoresizingMask_(_navToolbar.autoresizingMask)
+
+    toolbarAppearance = UIToolbarAppearance.new()
+    toolbarAppearance.configureWithDefaultBackground()
+    #toolbarAppearance.configureWithOpaqueBackground()
+    #toolbarAppearance.configureWithTransparentBackground()
+
+    toolbar.standardAppearance = toolbarAppearance
+    toolbar.scrollEdgeAppearance = toolbarAppearance
+    toolbar.compactAppearance = toolbarAppearance
+    toolbar.compactScrollEdgeAppearance = toolbarAppearance
+
+    self.navigationController.setToolbar_(toolbar)
 
     # MARK: - UIBarButtonItem Creation and Configuration
     trashBarButtonItem = UIBarButtonItem.alloc().initWithBarButtonSystemItem(
@@ -66,7 +84,7 @@ class DefaultToolbarViewController(UIViewController):
       customTitleBarButtonItem,
     ]
     self.setToolbarItems_animated_(toolbarButtonItems, True)
-    self.navigationController.setToolbarHidden_(False)
+    self.navigationController.setToolbarHidden_animated_(False, True)
 
   @objc_method
   def viewWillAppear_(self, animated: bool):
