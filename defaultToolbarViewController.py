@@ -109,6 +109,18 @@ class DefaultToolbarViewController(UIViewController):
     #print('viewDidAppear')
 
   @objc_method
+  def viewWillDisappear_(self, animated: bool):
+    send_super(__class__,
+               self,
+               'viewWillDisappear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    #print('viewDidDisappear')
+    self.navigationController.setToolbarHidden_animated_(True, True)
+
+  @objc_method
   def viewDidDisappear_(self, animated: bool):
     send_super(__class__,
                self,
