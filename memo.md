@@ -1,3 +1,17 @@
+# 📝 2025/01/16
+
+## スプレッドシートに情報をまとめてみる
+
+https://docs.google.com/spreadsheets/d/1T89HXVPCAcrjSLCM0LQtge9vifG3Hhu-VwMGDD1P4vw/edit?gid=0#gid=0
+
+良い感じにまとめられればいいけども。。。
+
+
+なお、要素が25以上あったのでアドカレで書くなら、要素数編集の検討必要あり。
+
+
+
+
 # 📝 2025/01/12
 
 ## `UIPickerView`
