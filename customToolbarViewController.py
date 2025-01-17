@@ -14,7 +14,9 @@ from rbedge.enumerations import (
   UIBarPosition,
   UIBarMetrics,
   UIBarButtonItemStyle,
+  UIControlState,
 )
+from rbedge.globalVariables import NSAttributedStringKey
 
 from rbedge import pdbr
 
@@ -30,6 +32,7 @@ UIBarButtonItem = ObjCClass('UIBarButtonItem')
 NSURL = ObjCClass('NSURL')
 UIImage = ObjCClass('UIImage')
 UIScreen = ObjCClass('UIScreen')
+NSDictionary = ObjCClass('NSDictionary')
 
 
 class CustomToolbarViewController(UIViewController):
@@ -82,7 +85,6 @@ class CustomToolbarViewController(UIViewController):
                                barMetrics=UIBarMetrics.default)
 
     # MARK: - `UIBarButtonItem` Creation and Configuration
-
     customBarButtonItemImage = UIImage.systemImageNamed_(
       'exclamationmark.triangle')
     customImageBarButtonItem = UIBarButtonItem.alloc().initWithImage(
@@ -103,6 +105,11 @@ class CustomToolbarViewController(UIViewController):
       style=UIBarButtonItemStyle.plain,
       target=self,
       action=SEL('barButtonItemClicked:'))
+    attributes = NSDictionary.dictionaryWithObject(
+      UIColor.systemPurpleColor(),
+      forKey=NSAttributedStringKey.foregroundColor)
+    customBarButtonItem.setTitleTextAttributes_forState_(
+      attributes, UIControlState.normal)
 
     toolbarButtonItems = [
       customImageBarButtonItem,
@@ -178,29 +185,6 @@ class CustomToolbarViewController(UIViewController):
   def barButtonItemClicked_(self, barButtonItem):
     print(
       f'A bar button item on the tinted toolbar was clicked: {barButtonItem}.')
-
-  @objc_method
-  def actionBarButtonItemClicked_(self, barButtonItem):
-    # xxx: `lambda` の使い方が悪い
-    dataWithContentsOfURL = lambda path_str: NSData.dataWithContentsOfURL_(
-      NSURL.fileURLWithPath_(str(Path(path_str).absolute())))
-
-    image_path = './UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/Flowers_1.imageset/Flowers_1.png'
-    if (image :=
-        UIImage.alloc().initWithData_(dataWithContentsOfURL(image_path))):
-      activityItems = [
-        'Shared piece of text',
-        image,
-      ]
-      activityViewController = UIActivityViewController.alloc(
-      ).initWithActivityItems_applicationActivities_(activityItems, None)
-      if (popoverPresentationController :=
-          activityViewController.popoverPresentationController()) is not None:
-        # xxx: 挙動未確認
-        popoverPresentationController.barButtonItem = barButtonItem
-      self.presentViewController(activityViewController,
-                                 animated=True,
-                                 completion=None)
 
 
 if __name__ == '__main__':
