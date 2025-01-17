@@ -52,13 +52,6 @@ class CustomToolbarViewController(UIViewController):
 
     self.view.backgroundColor = UIColor.systemBackgroundColor()
 
-    _navToolbar = self.navigationController.toolbar
-    toolbar = UIToolbar.alloc().initWithFrame_(_navToolbar.frame)
-    toolbar.setAutoresizingMask_(_navToolbar.autoresizingMask)
-
-    
-    #pdbr.state(toolbarAppearance)
-
     scale = int(UIScreen.mainScreen.scale)
     # xxx: `lambda` の使い方が悪い
     dataWithContentsOfURL = lambda path_str: NSData.dataWithContentsOfURL_(
@@ -68,21 +61,16 @@ class CustomToolbarViewController(UIViewController):
 
     toolbarBackgroundImage = UIImage.alloc().initWithData_scale_(
       dataWithContentsOfURL(image_path), scale)
-    #toolbar.setBackgroundImage(toolbarBackgroundImage, forToolbarPosition=UIBarPosition.bottom, barMetrics=UIBarMetrics.default)
-    #setShadowImage_forToolbarPosition_
-    #setBackgroundImage_forToolbarPosition_barMetrics_
 
-    #toolbar.setShadowImage_forToolbarPosition_(toolbarBackgroundImage, UIBarPosition.any)
-    #toolbar.setBackgroundImage_forToolbarPosition_barMetrics_(toolbarBackgroundImage, UIBarPosition.bottom, UIBarMetrics.default)
-    #toolbar.setBackgroundImage_forToolbarPosition_barMetrics_(toolbarBackgroundImage, UIBarPosition.any, UIBarMetrics.default)
-    
+    _navToolbar = self.navigationController.toolbar
+    toolbar = UIToolbar.alloc().initWithFrame_(_navToolbar.frame)
+    toolbar.setAutoresizingMask_(_navToolbar.autoresizingMask)
+
     toolbarAppearance = UIToolbarAppearance.new()
     toolbarAppearance.configureWithDefaultBackground()
     #toolbarAppearance.configureWithOpaqueBackground()
     #toolbarAppearance.configureWithTransparentBackground()
-    #toolbarAppearance.setBackgroundColor_(UIColor.systemBlueColor())
-    #toolbarAppearance.setBackgroundColor_(UIColor.colorWithRed_green_blue_alpha_(0.0,0.0,0.0,0.0))
-    #toolbarAppearance.setBackgroundImage_(None)
+
     toolbarAppearance.setBackgroundImage_(toolbarBackgroundImage)
 
     toolbar.standardAppearance = toolbarAppearance
@@ -90,9 +78,11 @@ class CustomToolbarViewController(UIViewController):
     toolbar.compactAppearance = toolbarAppearance
     toolbar.compactScrollEdgeAppearance = toolbarAppearance
 
+    # xxx: ?
+    #toolbar.setShadowImage_forToolbarPosition_(toolbarBackgroundImage, UIBarPosition.any)
+    #toolbar.setBackgroundImage_forToolbarPosition_barMetrics_(toolbarBackgroundImage, UIBarPosition.bottom, UIBarMetrics.default)
+
     self.navigationController.setToolbar_(toolbar)
-    #pdbr.state(self.navigationController.toolbar)
-    #print(toolbar.barStyle)
 
     # MARK: - `UIBarButtonItem` Creation and Configuration
     customBarButtonItemImage = UIImage.systemImageNamed_(

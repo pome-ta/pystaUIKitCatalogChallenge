@@ -54,7 +54,7 @@ class TintedToolbarViewController(UIViewController):
     toolbarAppearance.configureWithDefaultBackground()
     #toolbarAppearance.configureWithOpaqueBackground()
     #toolbarAppearance.configureWithTransparentBackground()
-    #toolbarAppearance.setBackgroundColor_(UIColor.systemBlueColor())
+    toolbarAppearance.setBackgroundColor_(UIColor.systemBlueColor())
 
     toolbar.standardAppearance = toolbarAppearance
     toolbar.scrollEdgeAppearance = toolbarAppearance
@@ -64,8 +64,8 @@ class TintedToolbarViewController(UIViewController):
     self.navigationController.setToolbar_(toolbar)
 
     # See the `UIBarStyle` enum for more styles, including `.Default`.
-    #toolbar.setBarStyle_(UIBarStyle.black)
-    #toolbar.setTranslucent_(False)
+    toolbar.setBarStyle_(UIBarStyle.black)
+    toolbar.setTranslucent_(False)
     toolbar.setTintColor_(UIColor.systemGreenColor())
     toolbar.setBackgroundColor_(UIColor.systemBlueColor())
 
