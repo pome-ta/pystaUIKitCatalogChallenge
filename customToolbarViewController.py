@@ -56,20 +56,8 @@ class CustomToolbarViewController(UIViewController):
     toolbar = UIToolbar.alloc().initWithFrame_(_navToolbar.frame)
     toolbar.setAutoresizingMask_(_navToolbar.autoresizingMask)
 
-    toolbarAppearance = UIToolbarAppearance.new()
-    toolbarAppearance.configureWithDefaultBackground()
-    #toolbarAppearance.configureWithOpaqueBackground()
-    #toolbarAppearance.configureWithTransparentBackground()
-    #toolbarAppearance.setBackgroundColor_(UIColor.systemBlueColor())
-    '''
-
-    toolbar.standardAppearance = toolbarAppearance
-    toolbar.scrollEdgeAppearance = toolbarAppearance
-    toolbar.compactAppearance = toolbarAppearance
-    toolbar.compactScrollEdgeAppearance = toolbarAppearance
-    '''
-
-    self.navigationController.setToolbar_(toolbar)
+    
+    #pdbr.state(toolbarAppearance)
 
     scale = int(UIScreen.mainScreen.scale)
     # xxx: `lambda` の使い方が悪い
@@ -80,9 +68,31 @@ class CustomToolbarViewController(UIViewController):
 
     toolbarBackgroundImage = UIImage.alloc().initWithData_scale_(
       dataWithContentsOfURL(image_path), scale)
-    toolbar.setBackgroundImage(toolbarBackgroundImage,
-                               forToolbarPosition=UIBarPosition.bottom,
-                               barMetrics=UIBarMetrics.default)
+    #toolbar.setBackgroundImage(toolbarBackgroundImage, forToolbarPosition=UIBarPosition.bottom, barMetrics=UIBarMetrics.default)
+    #setShadowImage_forToolbarPosition_
+    #setBackgroundImage_forToolbarPosition_barMetrics_
+
+    #toolbar.setShadowImage_forToolbarPosition_(toolbarBackgroundImage, UIBarPosition.any)
+    #toolbar.setBackgroundImage_forToolbarPosition_barMetrics_(toolbarBackgroundImage, UIBarPosition.bottom, UIBarMetrics.default)
+    #toolbar.setBackgroundImage_forToolbarPosition_barMetrics_(toolbarBackgroundImage, UIBarPosition.any, UIBarMetrics.default)
+    
+    toolbarAppearance = UIToolbarAppearance.new()
+    toolbarAppearance.configureWithDefaultBackground()
+    #toolbarAppearance.configureWithOpaqueBackground()
+    #toolbarAppearance.configureWithTransparentBackground()
+    #toolbarAppearance.setBackgroundColor_(UIColor.systemBlueColor())
+    #toolbarAppearance.setBackgroundColor_(UIColor.colorWithRed_green_blue_alpha_(0.0,0.0,0.0,0.0))
+    #toolbarAppearance.setBackgroundImage_(None)
+    toolbarAppearance.setBackgroundImage_(toolbarBackgroundImage)
+
+    toolbar.standardAppearance = toolbarAppearance
+    toolbar.scrollEdgeAppearance = toolbarAppearance
+    toolbar.compactAppearance = toolbarAppearance
+    toolbar.compactScrollEdgeAppearance = toolbarAppearance
+
+    self.navigationController.setToolbar_(toolbar)
+    #pdbr.state(self.navigationController.toolbar)
+    #print(toolbar.barStyle)
 
     # MARK: - `UIBarButtonItem` Creation and Configuration
     customBarButtonItemImage = UIImage.systemImageNamed_(
