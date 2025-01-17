@@ -18,7 +18,7 @@ except (ModuleNotFoundError, LookupError):
     except ModuleNotFoundError:
         from importlib_metadata import version
 
-    __version__ = None #version("rubicon-objc")
+    __version__ = None #version("rubicon-objc") 0.5.0
 
 # `api`, `runtime` and `types` are only included for clarity. They are not
 # strictly necessary, because the from-imports below also import the types and
