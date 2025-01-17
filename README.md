@@ -32,7 +32,7 @@ X (旧：Twitter)にて、ハッシュタグ`#UIKitCatalogChallenge` で進捗�
 
 ## modules
 
-[Release v0.4.9 · beeware/rubicon-objc · GitHub](https://github.com/beeware/rubicon-objc/releases/tag/v0.4.9)
+[Release 0.5.0 · beeware/rubicon-objc](https://github.com/beeware/rubicon-objc/releases/tag/v0.5.0)
 
 
 ## Pythonista3 info
@@ -42,7 +42,7 @@ X (旧：Twitter)にて、ハッシュタグ`#UIKitCatalogChallenge` で進捗�
 **System Information**
 
 * Pythonista 3.4 (340012), Default interpreter 3.10.4
-* iOS 18.2, model iPhone12,1, resolution (portrait) 828.0 x 1792.0 @ 2.0
+* iOS 18.2.1, model iPhone12,1, resolution (portrait) 828.0 x 1792.0 @ 2.0
 ```
 
 
