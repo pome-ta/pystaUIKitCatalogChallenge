@@ -13,6 +13,7 @@ from rbedge.enumerations import (
   UIBarButtonSystemItem,
   UIBarPosition,
   UIBarMetrics,
+  UIBarButtonItemStyle,
 )
 
 from rbedge import pdbr
@@ -47,8 +48,7 @@ class CustomToolbarViewController(UIViewController):
       title := self.navigationItem.title) is None else title
 
     self.view.backgroundColor = UIColor.systemBackgroundColor()
-    
-    
+
     _navToolbar = self.navigationController.toolbar
     toolbar = UIToolbar.alloc().initWithFrame_(_navToolbar.frame)
     toolbar.setAutoresizingMask_(_navToolbar.autoresizingMask)
@@ -58,17 +58,17 @@ class CustomToolbarViewController(UIViewController):
     #toolbarAppearance.configureWithOpaqueBackground()
     #toolbarAppearance.configureWithTransparentBackground()
     #toolbarAppearance.setBackgroundColor_(UIColor.systemBlueColor())
-    pdbr.state(toolbarAppearance)
+    '''
 
     toolbar.standardAppearance = toolbarAppearance
     toolbar.scrollEdgeAppearance = toolbarAppearance
     toolbar.compactAppearance = toolbarAppearance
     toolbar.compactScrollEdgeAppearance = toolbarAppearance
+    '''
 
     self.navigationController.setToolbar_(toolbar)
 
     scale = int(UIScreen.mainScreen.scale)
-    #initWithData_scale_
     # xxx: `lambda` の使い方が悪い
     dataWithContentsOfURL = lambda path_str: NSData.dataWithContentsOfURL_(
       NSURL.fileURLWithPath_(str(Path(path_str).absolute())))
@@ -77,57 +77,40 @@ class CustomToolbarViewController(UIViewController):
 
     toolbarBackgroundImage = UIImage.alloc().initWithData_scale_(
       dataWithContentsOfURL(image_path), scale)
-    
-    #pdbr.state(toolbarBackgroundImage)
-
-    #any
-    #bottom
-
-    toolbar.setBackgroundImage(
-      toolbarBackgroundImage,
-      forToolbarPosition=UIBarPosition.bottom,
-      barMetrics=UIBarMetrics.default)
-
-    #self.navigationController.toolbar.standardAppearance.setBackgroundImage_(toolbarBackgroundImage)
-
-    #pdbr.state(self.navigationController.toolbar.standardAppearance)
-
-    # MARK: - UIBarButtonItem Creation and Configuration
-    '''
-    image_path = './UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/Flowers_1.imageset/Flowers_1.png'
-    self.navigationController.toolbar.setBarStyle_(UIBarStyle.black)
-    self.navigationController.toolbar.setTranslucent_(False)
-    self.navigationController.toolbar.setTintColor_(UIColor.systemGreenColor())
-    self.navigationController.toolbar.setBackgroundColor_(
-      UIColor.systemBlueColor())
+    toolbar.setBackgroundImage(toolbarBackgroundImage,
+                               forToolbarPosition=UIBarPosition.bottom,
+                               barMetrics=UIBarMetrics.default)
 
     # MARK: - `UIBarButtonItem` Creation and Configuration
-    '''
 
-    refreshBarButtonItem = UIBarButtonItem.alloc().initWithBarButtonSystemItem(
-      UIBarButtonSystemItem.refresh,
+    customBarButtonItemImage = UIImage.systemImageNamed_(
+      'exclamationmark.triangle')
+    customImageBarButtonItem = UIBarButtonItem.alloc().initWithImage(
+      customBarButtonItemImage,
+      style=UIBarButtonItemStyle.plain,
       target=self,
       action=SEL('barButtonItemClicked:'))
-    # MARK: - UIBarButtonItem Creation and Configuration
+    customImageBarButtonItem.tintColor = UIColor.systemPurpleColor()
+
     # Note that there's no target/action since this represents empty space.
     flexibleSpaceBarButtonItem = UIBarButtonItem.alloc(
     ).initWithBarButtonSystemItem(UIBarButtonSystemItem.flexibleSpace,
                                   target=None,
                                   action=None)
-    '''
-    actionBarButtonItem = UIBarButtonItem.alloc().initWithBarButtonSystemItem(
-      UIBarButtonSystemItem.action,
-      target=self,
-      action=SEL('actionBarButtonItemClicked:'))
 
-    '''
+    customBarButtonItem = UIBarButtonItem.alloc().initWithTitle(
+      localizedString('Button'),
+      style=UIBarButtonItemStyle.plain,
+      target=self,
+      action=SEL('barButtonItemClicked:'))
+
     toolbarButtonItems = [
-      refreshBarButtonItem,
+      customImageBarButtonItem,
       flexibleSpaceBarButtonItem,
+      customBarButtonItem,
     ]
     self.setToolbarItems_animated_(toolbarButtonItems, True)
-
-    self.navigationController.setToolbarHidden_(False)
+    self.navigationController.setToolbarHidden_animated_(False, False)
 
   @objc_method
   def viewWillAppear_(self, animated: bool):
@@ -161,7 +144,18 @@ class CustomToolbarViewController(UIViewController):
                  ctypes.c_bool,
                ])
     #print('viewDidDisappear')
-    
+
+  @objc_method
+  def viewWillDisappear_(self, animated: bool):
+    send_super(__class__,
+               self,
+               'viewWillDisappear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    #print('viewDidDisappear')
+    self.navigationController.setToolbarHidden_animated_(True, True)
 
   @objc_method
   def viewDidDisappear_(self, animated: bool):
