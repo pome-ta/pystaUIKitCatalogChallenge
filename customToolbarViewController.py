@@ -23,6 +23,8 @@ UIViewController = ObjCClass('UIViewController')
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
 UIColor = ObjCClass('UIColor')
 
+UIToolbar = ObjCClass('UIToolbar')
+UIToolbarAppearance = ObjCClass('UIToolbarAppearance')
 UIBarButtonItem = ObjCClass('UIBarButtonItem')
 NSURL = ObjCClass('NSURL')
 UIImage = ObjCClass('UIImage')
@@ -45,6 +47,25 @@ class CustomToolbarViewController(UIViewController):
       title := self.navigationItem.title) is None else title
 
     self.view.backgroundColor = UIColor.systemBackgroundColor()
+    
+    
+    _navToolbar = self.navigationController.toolbar
+    toolbar = UIToolbar.alloc().initWithFrame_(_navToolbar.frame)
+    toolbar.setAutoresizingMask_(_navToolbar.autoresizingMask)
+
+    toolbarAppearance = UIToolbarAppearance.new()
+    toolbarAppearance.configureWithDefaultBackground()
+    #toolbarAppearance.configureWithOpaqueBackground()
+    #toolbarAppearance.configureWithTransparentBackground()
+    #toolbarAppearance.setBackgroundColor_(UIColor.systemBlueColor())
+    pdbr.state(toolbarAppearance)
+
+    toolbar.standardAppearance = toolbarAppearance
+    toolbar.scrollEdgeAppearance = toolbarAppearance
+    toolbar.compactAppearance = toolbarAppearance
+    toolbar.compactScrollEdgeAppearance = toolbarAppearance
+
+    self.navigationController.setToolbar_(toolbar)
 
     scale = int(UIScreen.mainScreen.scale)
     #initWithData_scale_
@@ -56,18 +77,17 @@ class CustomToolbarViewController(UIViewController):
 
     toolbarBackgroundImage = UIImage.alloc().initWithData_scale_(
       dataWithContentsOfURL(image_path), scale)
-    pdbr.state(self.navigationController)
+    
     #pdbr.state(toolbarBackgroundImage)
 
     #any
     #bottom
-    
 
-    self.navigationController.toolbar.setBackgroundImage(
+    toolbar.setBackgroundImage(
       toolbarBackgroundImage,
-      forToolbarPosition=UIBarPosition.any,
+      forToolbarPosition=UIBarPosition.bottom,
       barMetrics=UIBarMetrics.default)
-    
+
     #self.navigationController.toolbar.standardAppearance.setBackgroundImage_(toolbarBackgroundImage)
 
     #pdbr.state(self.navigationController.toolbar.standardAppearance)
@@ -130,6 +150,18 @@ class CustomToolbarViewController(UIViewController):
                  ctypes.c_bool,
                ])
     #print('viewDidAppear')
+
+  @objc_method
+  def viewWillDisappear_(self, animated: bool):
+    send_super(__class__,
+               self,
+               'viewWillDisappear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    #print('viewDidDisappear')
+    
 
   @objc_method
   def viewDidDisappear_(self, animated: bool):

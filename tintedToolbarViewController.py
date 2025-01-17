@@ -64,10 +64,10 @@ class TintedToolbarViewController(UIViewController):
     self.navigationController.setToolbar_(toolbar)
 
     # See the `UIBarStyle` enum for more styles, including `.Default`.
-    toolbar.setBarStyle_(UIBarStyle.black)
-    toolbar.setTranslucent_(False)
+    #toolbar.setBarStyle_(UIBarStyle.black)
+    #toolbar.setTranslucent_(False)
     toolbar.setTintColor_(UIColor.systemGreenColor())
-    toolbar.setBackgroundColor_(UIColor.systemBlueColor())
+    #toolbar.setBackgroundColor_(UIColor.systemBlueColor())
 
     # MARK: - `UIBarButtonItem` Creation and Configuration
     refreshBarButtonItem = UIBarButtonItem.alloc().initWithBarButtonSystemItem(
