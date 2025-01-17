@@ -1,5 +1,5 @@
 from pyrubicon.objc.api import ObjCClass, ObjCProtocol
-from pyrubicon.objc.api import objc_method, objc_property
+from pyrubicon.objc.api import objc_method
 from pyrubicon.objc.runtime import send_super, objc_id
 
 from rbedge.enumerations import (
