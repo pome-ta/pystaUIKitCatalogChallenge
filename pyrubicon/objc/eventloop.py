@@ -1,10 +1,10 @@
 """PEP 3156 event loop based on CoreFoundation."""
 
 import contextvars
-import sys
 import threading
 from asyncio import (
     DefaultEventLoopPolicy,
+    SafeChildWatcher,
     coroutines,
     events,
     tasks,
@@ -15,9 +15,6 @@ from ctypes import CFUNCTYPE, POINTER, Structure, c_double, c_int, c_ulong, c_vo
 from .api import ObjCClass, objc_const
 from .runtime import load_library, objc_id
 from .types import CFIndex
-
-if sys.version_info < (3, 14):
-    from asyncio import SafeChildWatcher
 
 __all__ = [
     "EventLoopPolicy",
@@ -698,39 +695,30 @@ class EventLoopPolicy(events.AbstractEventLoopPolicy):
         loop._policy = self
         return loop
 
-    if sys.version_info < (3, 14):
+    def _init_watcher(self):
+        with events._lock:
+            if self._watcher is None:  # pragma: no branch
+                self._watcher = SafeChildWatcher()
+                if threading.current_thread() == threading.main_thread():
+                    self._watcher.attach_loop(self._default_loop)
 
-        def _init_watcher(self):
-            with events._lock:
-                if self._watcher is None:  # pragma: no branch
-                    self._watcher = SafeChildWatcher()
-                    if threading.current_thread() == threading.main_thread():
-                        self._watcher.attach_loop(self._default_loop)
+    def get_child_watcher(self):
+        """Get the watcher for child processes.
 
-        def get_child_watcher(self):
-            """Get the watcher for child processes.
+        If not yet set, a :class:`~asyncio.SafeChildWatcher` object is
+        automatically created.
+        """
+        if self._watcher is None:
+            self._init_watcher()
 
-            If not yet set, a :class:`~asyncio.SafeChildWatcher` object is
-            automatically created.
+        return self._watcher
 
-            .. note::
-                Child watcher support was removed in Python 3.14
-            """
-            if self._watcher is None:
-                self._init_watcher()
+    def set_child_watcher(self, watcher):
+        """Set the watcher for child processes."""
+        if self._watcher is not None:
+            self._watcher.close()
 
-            return self._watcher
-
-        def set_child_watcher(self, watcher):
-            """Set the watcher for child processes.
-
-            .. note::
-                Child watcher support was removed in Python 3.14
-            """
-            if self._watcher is not None:
-                self._watcher.close()
-
-            self._watcher = watcher
+        self._watcher = watcher
 
 
 class CFLifecycle:
