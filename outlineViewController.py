@@ -264,7 +264,7 @@ menuItems = [
 
 class OutlineViewController(UIViewController):
 
-  collectionView: UICollectionView = objc_property()
+  #collectionView: UICollectionView = objc_property()
 
   @objc_method
   def viewDidLoad(self):
@@ -422,25 +422,6 @@ class OutlineViewController(UIViewController):
         viewController)
       self.splitViewController.showDetailViewController_sender_(navVC, navVC)
     else:
-
-      # todo: `toolbar` の情報を引き継いでしまうため、初期化
-      # xxx: `RootNavigationController` でやらなくても、ここで一括でいい？
-      if (navigationController :=
-          self.navigationController).isKindOfClass_(RootNavigationController):
-        navigationController.initToolbarAppearance()
-      else:
-        toolbarAppearance = UIToolbarAppearance.new()
-        toolbarAppearance.configureWithDefaultBackground()
-        #toolbarAppearance.configureWithOpaqueBackground()
-        #toolbarAppearance.configureWithTransparentBackground()
-
-        toolbar = navigationController.toolbar
-        toolbar.standardAppearance = toolbarAppearance
-        toolbar.scrollEdgeAppearance = toolbarAppearance
-        toolbar.compactAppearance = toolbarAppearance
-        toolbar.compactScrollEdgeAppearance = toolbarAppearance
-        navigationController.setToolbarHidden_(True)
-
       self.navigationController.pushViewController_animated_(
         viewController, True)
 

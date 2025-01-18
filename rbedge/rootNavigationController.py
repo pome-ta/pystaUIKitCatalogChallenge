@@ -2,7 +2,7 @@ from pyrubicon.objc.api import ObjCClass, ObjCProtocol, objc_method
 from pyrubicon.objc.runtime import SEL
 
 from .enumerations import UIRectEdge, UIBarButtonSystemItem
-
+from . import pdbr
 #ObjCClass.auto_rename = True
 
 # --- UINavigationController
@@ -86,16 +86,23 @@ class RootNavigationController(UINavigationController,
       UIBarButtonSystemItem.close,
       target=navigationController,
       action=SEL('doneButtonTapped:'))
+    # todo: view 遷移でのButton 重複を判別
+    closeButtonItem.setTag_(UIBarButtonSystemItem.close)
 
     visibleViewController = navigationController.visibleViewController
 
     navigationItem = visibleViewController.navigationItem
     if (rightBarButtonItems := navigationItem.rightBarButtonItems):
       # todo: `UIViewController` で、`rightBarButtonItem` が存在していた場合、`closeButtonItem` を右端に
-      navigationItem.setRightBarButtonItems_animated_([
+      setRightBarButtonItems = [
         closeButtonItem,
-        *rightBarButtonItems,
-      ], True)
+        *[
+          item for item in rightBarButtonItems
+          if item.tag != UIBarButtonSystemItem.close
+        ],
+      ]
+      navigationItem.setRightBarButtonItems_animated_(setRightBarButtonItems,
+                                                      True)
     else:
       navigationItem.rightBarButtonItem = closeButtonItem
 
