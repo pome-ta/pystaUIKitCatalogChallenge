@@ -7,6 +7,8 @@ Pythonista3 とRubicon objc で、UIKitCatalog を実装するリポジトリ
 X (旧：Twitter)にて、ハッシュタグ`#UIKitCatalogChallenge` で進捗公開中
 
 
+![image](https://github.com/user-attachments/assets/0e9d7834-1a7a-4506-b14c-ae08966a50ba)
+
 ## 進捗状況
 
 
