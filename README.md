@@ -11,7 +11,9 @@ X (旧：Twitter)にて、ハッシュタグ`#UIKitCatalogChallenge` で進捗�
 
 ## 進捗状況
 
-<iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSKxHMj3HlRkCrgL8_j6Dp3u0xjy-olidak47OjidaASwSoKsR8dFNarxCl910ysdU3szqp3H2UG410/pubhtml?gid=0&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
+
+[スプレッドシート | Web公開用](https://docs.google.com/spreadsheets/d/e/2PACX-1vSKxHMj3HlRkCrgL8_j6Dp3u0xjy-olidak47OjidaASwSoKsR8dFNarxCl910ysdU3szqp3H2UG410/pubhtml?gid=0&single=true)
+
 
 - top
   - [x] main
