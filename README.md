@@ -36,8 +36,7 @@ X (旧：Twitter)にて、ハッシュタグ`#UIKitCatalogChallenge` で進捗�
 
 ## modules
 
-[Release v0.4.9 · beeware/rubicon-objc](https://github.com/beeware/rubicon-objc/releases/tag/v0.4.9)
-
+[Release 0.5.0 · beeware/rubicon-objc](https://github.com/beeware/rubicon-objc/releases/tag/v0.5.0)
 
 ## Pythonista3 info
 
