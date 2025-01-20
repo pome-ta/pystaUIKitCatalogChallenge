@@ -62,7 +62,7 @@ class SwitchViewController(BaseTableViewController):
 
     # todo: `if navigationController!.traitCollection.userInterfaceIdiom` `navigationController` が`None` なため`self` で判断
     if self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiom.mac:
-      self.testCells.extend([
+      self.testCells_extend([
         CaseElement(localizedString('CheckboxSwitchTitle'),
                     SwitchKind.checkBoxSwitch.value,
                     self.configureCheckboxSwitch_),
@@ -71,7 +71,7 @@ class SwitchViewController(BaseTableViewController):
     # Tinted switch is available only when running on iOS.
     # 色付きスイッチは、iOS で実行している場合にのみ使用できます。
     if self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiom.mac:
-      self.testCells.extend([
+      self.testCells_extend([
         CaseElement(localizedString('TintedSwitchTitle'),
                     SwitchKind.tintedSwitch.value,
                     self.configureTintedSwitch_),

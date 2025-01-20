@@ -1,4 +1,4 @@
-from pyrubicon.objc.api import ObjCClass, ObjCProtocol
+from pyrubicon.objc.api import ObjCClass
 from pyrubicon.objc.api import objc_method
 from pyrubicon.objc.runtime import send_super, objc_id
 
@@ -14,12 +14,11 @@ from rbedge import pdbr
 from outlineViewController import OutlineViewController
 
 UIViewController = ObjCClass('UIViewController')
-UINavigationController = ObjCClass('UINavigationController')
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
+UINavigationController = ObjCClass('UINavigationController')  # todo: 型確認
 
 # --- SplitView
 UISplitViewController = ObjCClass('UISplitViewController')
-UISplitViewControllerDelegate = ObjCProtocol('UISplitViewControllerDelegate')
 
 # --- others
 UIColor = ObjCClass('UIColor')
@@ -54,10 +53,7 @@ class TopViewController(UIViewController):
     ])
 
 
-class SplitViewController(UISplitViewController,
-                          protocols=[
-                            UISplitViewControllerDelegate,
-                          ]):
+class SplitViewController(UISplitViewController):
 
   @objc_method
   def viewDidLoad(self):
@@ -65,7 +61,6 @@ class SplitViewController(UISplitViewController,
     self.delegate = self
 
     primary_vc = OutlineViewController.new()
-    #primary_vc.title = primary_vc.className()
     primary_vc.title = UIKitCatalog_title
 
     secondary_vc = TopViewController.new()
@@ -92,7 +87,7 @@ class SplitViewController(UISplitViewController,
     return UISplitViewControllerDisplayMode.automatic
 
 
-class ViewController(UIViewController):
+class MainViewController(UIViewController):
 
   @objc_method
   def viewDidLoad(self):
@@ -113,7 +108,7 @@ if __name__ == '__main__':
   from rbedge import present_viewController
   from rbedge.enumerations import UIModalPresentationStyle
 
-  vc = ViewController.new()
+  vc = MainViewController.new()
 
   style = UIModalPresentationStyle.fullScreen
   #style = UIModalPresentationStyle.pageSheet

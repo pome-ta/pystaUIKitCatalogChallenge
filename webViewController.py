@@ -5,12 +5,11 @@ import ctypes
 from pathlib import Path
 
 from pyrubicon.objc.api import ObjCClass, ObjCInstance
-from pyrubicon.objc.api import objc_method, objc_const
+from pyrubicon.objc.api import objc_method
 from pyrubicon.objc.runtime import send_super, objc_id
 from pyrubicon.objc.types import CGRectMake
 
-from rbedge.enumerations import (
-  NSURLErrorNotConnectedToInternet, )
+from rbedge.enumerations import NSURLErrorNotConnectedToInternet
 
 from rbedge import pdbr
 from pyLocalizedString import localizedString

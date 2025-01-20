@@ -28,7 +28,7 @@ class SliderDefault(CustomTableViewCell):
   @objc_method
   def overrideCell(self):
     slider = UISlider.alloc().initWithFrame_(CGRectMake(
-      18.0, 7.5, 339.0, 31.0)).autorelease()
+      18.0, 7.5, 339.0, 31.0))  #.autorelease()
     slider.value = 0.5
     slider.minimumValue = 0.0
     slider.maximumValue = 1.0
@@ -53,7 +53,7 @@ class SliderTinted(CustomTableViewCell):
   @objc_method
   def overrideCell(self):
     slider = UISlider.alloc().initWithFrame_(CGRectMake(
-      18.0, 7.5, 339.0, 31.0)).autorelease()
+      18.0, 7.5, 339.0, 31.0))  #.autorelease()
     slider.value = 0.5
     slider.minimumValue = 0.0
     slider.maximumValue = 1.0
@@ -78,7 +78,7 @@ class SliderCustom(CustomTableViewCell):
   @objc_method
   def overrideCell(self):
     slider = UISlider.alloc().initWithFrame_(CGRectMake(
-      18.0, 7.5, 339.0, 31.0)).autorelease()
+      18.0, 7.5, 339.0, 31.0))  #.autorelease()
     slider.value = 0.5
     slider.minimumValue = 0.0
     slider.maximumValue = 1.0
@@ -104,7 +104,7 @@ class SliderMaxMinImage(CustomTableViewCell):
   @objc_method
   def overrideCell(self):
     slider = UISlider.alloc().initWithFrame_(CGRectMake(
-      18.0, 7.5, 339.0, 31.0)).autorelease()
+      18.0, 7.5, 339.0, 31.0))  #.autorelease()
     slider.value = 0.5
     slider.minimumValue = 0.0
     slider.maximumValue = 1.0

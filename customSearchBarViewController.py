@@ -1,92 +1,131 @@
 """
-todo:
-  Storyboard 未対応
-  xcode だと再現できず?
-  `searchBar_selectedScopeButtonIndexDidChange_` は`searchBar` とバッティングする(?)ので、`objc_property` で宣言
-    `TypeError: Don't know how to convert a pyrubicon.objc.api.ObjCBoundMethod to a Foundation object`
-    こんなエラーになる
-    `searchBar` という変数を別にすれば、解決するが、`objc_property` 宣言の方が正規ぽいので、そうする
+  note: Storyboard 実装なし
 """
+import ctypes
 
-from pyrubicon.objc.api import ObjCClass, ObjCProtocol
-from pyrubicon.objc.api import objc_method, objc_property
+from pyrubicon.objc.api import ObjCClass, ObjCInstance
+from pyrubicon.objc.api import objc_method
 from pyrubicon.objc.runtime import send_super, objc_id
-from pyrubicon.objc.types import CGRectMake
+
+from rbedge.enumerations import (
+  UIControlState,
+  UISearchBarIcon,
+)
+from rbedge.pythonProcessUtils import (
+  mainScreen_scale,
+  dataWithContentsOfURL,
+)
+
+from rbedge import pdbr
 
 from pyLocalizedString import localizedString
-from rbedge.enumerations import UIControlState, UISearchBarIcon
-
-from rbedge.functions import NSStringFromClass
 
 UIViewController = ObjCClass('UIViewController')
-UISearchBar = ObjCClass('UISearchBar')
-UISearchBarDelegate = ObjCProtocol('UISearchBarDelegate')
-
 UIColor = ObjCClass('UIColor')
-UIScreen = ObjCClass('UIScreen')
-NSURL = ObjCClass('NSURL')
-NSData = ObjCClass('NSData')
-UIImage = ObjCClass('UIImage')
-
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
 
+UISearchBar = ObjCClass('UISearchBar')
+UIScreen = ObjCClass('UIScreen')
+UIImage = ObjCClass('UIImage')
 
-class CustomSearchBarViewController(UIViewController,
-                                    protocols=[UISearchBarDelegate]):
 
-  searchBar = objc_property()
+class CustomSearchBarViewController(UIViewController):
+
+  @objc_method
+  def dealloc(self):
+    # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
+    #print('\tdealloc')
+    pass
 
   @objc_method
   def viewDidLoad(self):
     send_super(__class__, self, 'viewDidLoad')  # xxx: 不要?
     # --- Navigation
-    title = NSStringFromClass(__class__)
-    #self.navigationItem.title = title
-    self.navigationItem.title = localizedString('CustomSearchBarTitle')
+    self.navigationItem.title = localizedString('CustomSearchBarTitle') if (
+      title := self.navigationItem.title) is None else title
+    self.view.backgroundColor = UIColor.systemBackgroundColor()
 
-    self.searchBar = UISearchBar.alloc().init().autorelease()
-    self.setlayout()
+    searchBarView = UISearchBar.new()
+    searchBarView.delegate = self
+
+    # --- Layout
+    searchBarView.translatesAutoresizingMaskIntoConstraints = False
+    self.view.addSubview_(searchBarView)
+
+    safeAreaLayoutGuide = self.view.safeAreaLayoutGuide
+    NSLayoutConstraint.activateConstraints_([
+      searchBarView.trailingAnchor.constraintEqualToAnchor_(
+        safeAreaLayoutGuide.trailingAnchor),
+      searchBarView.topAnchor.constraintEqualToAnchor_(
+        safeAreaLayoutGuide.topAnchor),
+      searchBarView.leadingAnchor.constraintEqualToAnchor_(
+        safeAreaLayoutGuide.leadingAnchor),
+    ])
+
+    self.searchBarView = searchBarView
     self.configureSearchBar()
 
   @objc_method
-  def setlayout(self):
-    safeAreaLayoutGuide = self.view.safeAreaLayoutGuide
-    # xxx: 仮置き
-    self.searchBar.frame = CGRectMake(0.0, 0.0, 375.0, 56.0)
-    self.searchBar.delegate = self
-    self.view.addSubview_(self.searchBar)
+  def viewWillAppear_(self, animated: bool):
+    send_super(__class__,
+               self,
+               'viewWillAppear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    #print('viewWillAppear')
 
-    self.searchBar.translatesAutoresizingMaskIntoConstraints = False
-    NSLayoutConstraint.activateConstraints_([
-      self.searchBar.trailingAnchor.constraintEqualToAnchor_(
-        safeAreaLayoutGuide.trailingAnchor),
-      self.searchBar.topAnchor.constraintEqualToAnchor_(
-        safeAreaLayoutGuide.topAnchor),
-      self.searchBar.leadingAnchor.constraintEqualToAnchor_(
-        safeAreaLayoutGuide.leadingAnchor),
-    ])
+  @objc_method
+  def viewDidAppear_(self, animated: bool):
+    send_super(__class__,
+               self,
+               'viewDidAppear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    #print('viewDidAppear')
+
+  @objc_method
+  def viewWillDisappear_(self, animated: bool):
+    send_super(__class__,
+               self,
+               'viewWillDisappear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    #print('viewDidDisappear')
+
+  @objc_method
+  def viewDidDisappear_(self, animated: bool):
+    send_super(__class__,
+               self,
+               'viewDidDisappear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    #print('viewDidDisappear')
+
+  @objc_method
+  def didReceiveMemoryWarning(self):
+    send_super(__class__, self, 'didReceiveMemoryWarning')
+    print(f'{__class__}: didReceiveMemoryWarning')
 
   # MARK: - Configuration
   @objc_method
   def configureSearchBar(self):
-    self.searchBar.showsCancelButton = True
-    self.searchBar.showsBookmarkButton = True
-    self.searchBar.setTintColor_(UIColor.systemPurpleColor())
+    self.searchBarView.showsCancelButton = True
+    self.searchBarView.showsBookmarkButton = True
+    self.searchBarView.setTintColor_(UIColor.systemPurpleColor())
 
-    # ref: [iphone - Retina display and [UIImage initWithData] - Stack Overflow](https://stackoverflow.com/questions/3289286/retina-display-and-uiimage-initwithdata)
-    # xxx: scale 指定これでいいのかな?
-    scale = int(UIScreen.mainScreen.scale)
+    scale = int(mainScreen_scale)
 
     search_bar_background_str = './UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/search_bar_background.imageset/search_bar_background_3x.png'
 
-    # xxx: あとで取り回し考える
-    from pathlib import Path
-
-    # xxx: `lambda` の使い方が悪い
-    dataWithContentsOfURL = lambda path_str: NSData.dataWithContentsOfURL_(
-      NSURL.fileURLWithPath_(str(Path(path_str).absolute())))
-
-    self.searchBar.backgroundImage = UIImage.alloc().initWithData_scale_(
+    self.searchBarView.backgroundImage = UIImage.alloc().initWithData_scale_(
       dataWithContentsOfURL(search_bar_background_str), scale)
 
     # Set the bookmark image for both normal and highlighted states.
@@ -94,14 +133,12 @@ class CustomSearchBarViewController(UIViewController,
     #setImage_forSearchBarIcon_state_
 
     bookImage = UIImage.systemImageNamed_('bookmark')
-    self.searchBar.setImage_forSearchBarIcon_state_(bookImage,
-                                                    UISearchBarIcon.bookmark,
-                                                    UIControlState.normal)
+    self.searchBarView.setImage_forSearchBarIcon_state_(
+      bookImage, UISearchBarIcon.bookmark, UIControlState.normal)
 
     bookFillImage = UIImage.systemImageNamed_('bookmark.fill')
-    self.searchBar.setImage_forSearchBarIcon_state_(bookFillImage,
-                                                    UISearchBarIcon.bookmark,
-                                                    UIControlState.highlighted)
+    self.searchBarView.setImage_forSearchBarIcon_state_(
+      bookFillImage, UISearchBarIcon.bookmark, UIControlState.highlighted)
 
   # MARK: - UISearchBarDelegate
 
@@ -121,11 +158,14 @@ class CustomSearchBarViewController(UIViewController,
 
 
 if __name__ == '__main__':
+  from rbedge.functions import NSStringFromClass
   from rbedge.enumerations import UIModalPresentationStyle
   from rbedge import present_viewController
-  from rbedge import pdbr
 
-  sb_vc = CustomSearchBarViewController.new()
-  style = UIModalPresentationStyle.fullScreen
-  present_viewController(sb_vc, style)
+  main_vc = CustomSearchBarViewController.new()
+  _title = NSStringFromClass(CustomSearchBarViewController)
+  main_vc.navigationItem.title = _title
+
+  presentation_style = UIModalPresentationStyle.fullScreen
+  present_viewController(main_vc, presentation_style)
 

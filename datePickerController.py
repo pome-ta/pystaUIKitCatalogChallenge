@@ -4,7 +4,7 @@
 import ctypes
 
 from pyrubicon.objc.api import ObjCClass, ObjCInstance
-from pyrubicon.objc.api import objc_method, objc_const
+from pyrubicon.objc.api import objc_method
 from pyrubicon.objc.runtime import send_super, objc_id, SEL
 
 from rbedge.enumerations import (

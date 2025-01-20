@@ -2,8 +2,8 @@ import ctypes
 from enum import Enum
 
 from pyrubicon.objc.api import ObjCClass, ObjCInstance, Block
-from pyrubicon.objc.api import objc_method, objc_property, objc_const
-from pyrubicon.objc.runtime import send_super, objc_id, load_library, SEL
+from pyrubicon.objc.api import objc_method
+from pyrubicon.objc.runtime import send_super, objc_id, SEL
 from pyrubicon.objc.types import NSInteger, CGPoint
 
 from rbedge.enumerations import (
@@ -16,6 +16,15 @@ from rbedge.enumerations import (
   NSDirectionalRectEdge,
   UIButtonConfigurationSize,
 )
+from rbedge.globalVariables import (
+  NSAttributedStringKey,
+  UIFontTextStyle,
+)
+
+from rbedge.pythonProcessUtils import (
+  mainScreen_scale,
+  dataWithContentsOfURL,
+)
 
 from rbedge import pdbr
 
@@ -25,17 +34,14 @@ from pyLocalizedString import localizedString
 from baseTableViewController import BaseTableViewController
 from storyboard.buttonViewController import prototypes
 
-UIKit = load_library('UIKit')  # todo: `objc_const` 用
 UIButtonConfiguration = ObjCClass('UIButtonConfiguration')
 UIColor = ObjCClass('UIColor')
 UIImage = ObjCClass('UIImage')
 NSAttributedString = ObjCClass('NSAttributedString')
 UIImageSymbolConfiguration = ObjCClass('UIImageSymbolConfiguration')
 UIFont = ObjCClass('UIFont')
-UIScreen = ObjCClass('UIScreen')
-NSURL = ObjCClass('NSURL')
-NSData = ObjCClass('NSData')
 UIImage = ObjCClass('UIImage')
+NSDictionary = ObjCClass('NSDictionary')
 UIToolTipConfiguration = ObjCClass('UIToolTipConfiguration')
 UIAction = ObjCClass('UIAction')
 UIButton = ObjCClass('UIButton')  # todo: 型確認用
@@ -67,7 +73,7 @@ class ButtonKind(Enum):
 
 
 class ButtonViewController(BaseTableViewController):
-  cartItemCount = objc_property(int)
+  #cartItemCount = objc_property(int)
 
   @objc_method
   def initWithStyle_(self, style: NSInteger) -> ObjCInstance:
@@ -91,7 +97,7 @@ class ButtonViewController(BaseTableViewController):
     self.navigationItem.title = localizedString('ButtonsTitle') if (
       title := self.navigationItem.title) is None else title
 
-    self.testCells.extend([
+    self.testCells_extend([
       # 00
       CaseElement(localizedString('DefaultTitle'),
                   ButtonKind.buttonSystem.value,
@@ -111,7 +117,7 @@ class ButtonViewController(BaseTableViewController):
 
     if True:  # xxx: `#available(iOS 15, *)`
       # These button styles are available on iOS 15 or later.
-      self.testCells.extend([
+      self.testCells_extend([
         # 04
         CaseElement(localizedString('GrayTitle'),
                     ButtonKind.buttonStyleGray.value,
@@ -135,14 +141,14 @@ class ButtonViewController(BaseTableViewController):
       ])
 
     if True:  # xxx: `traitCollection.userInterfaceIdiom != .mac`
-      self.testCells.extend([
+      self.testCells_extend([
         # 16
         CaseElement(localizedString('ButtonColorTitle'),
                     ButtonKind.buttonTitleColor.value,
                     self.configureTitleTextButton_),
       ])
 
-    self.testCells.extend([
+    self.testCells_extend([
       # 08
       CaseElement(localizedString('ImageTitle'), ButtonKind.buttonImage.value,
                   self.configureImageButton_),
@@ -157,7 +163,7 @@ class ButtonViewController(BaseTableViewController):
 
     if True:  # xxx: `#available(iOS 15, *)`
       if True:  # xxx: `traitCollection.userInterfaceIdiom != .mac`
-        self.testCells.extend([
+        self.testCells_extend([
           # 11
           CaseElement(localizedString('LargeSymbolTitle'),
                       ButtonKind.buttonLargeSymbol.value,
@@ -165,7 +171,7 @@ class ButtonViewController(BaseTableViewController):
         ])
 
     if True:  # xxx: `#available(iOS 15, *)`
-      self.testCells.extend([
+      self.testCells_extend([
         # 12
         CaseElement(localizedString('SymbolStringTitle'),
                     ButtonKind.buttonSymbolText.value,
@@ -332,7 +338,6 @@ class ButtonViewController(BaseTableViewController):
     systemPurple = UIColor.systemPurpleColor()
     renderingMode = UIImageRenderingMode.alwaysOriginal
     # ref: [swift - iOS 13 `withTintColor` not obeying the color I assign - Stack Overflow](https://stackoverflow.com/questions/58867627/ios-13-withtintcolor-not-obeying-the-color-i-assign)
-
     image = _systemImageNamed.imageWithTintColor_(
       systemPurple).imageWithRenderingMode_(renderingMode)
     button.accessibilityLabel = localizedString('X')
@@ -354,10 +359,12 @@ class ButtonViewController(BaseTableViewController):
 
     # Set the button's title for normal state.
     # > 通常状態のボタンのタイトルを設定します。
-    normalTitleAttributes = {
-      str(objc_const(UIKit, 'NSStrikethroughStyleAttributeName')):
+    normalTitleAttributes = NSDictionary.dictionaryWithObjects_forKeys_([
       NSUnderlineStyle.single,
-    }
+    ], [
+      NSAttributedStringKey.strikethroughStyle,
+    ])
+
     normalAttributedTitle = NSAttributedString.alloc(
     ).initWithString_attributes_(buttonTitle, normalTitleAttributes)
 
@@ -366,12 +373,14 @@ class ButtonViewController(BaseTableViewController):
 
     # Set the button's title for highlighted state (note this is not supported in Mac Catalyst).
     # > ボタンのタイトルを強調表示状態に設定します (これは Mac Catalyst ではサポートされていないことに注意してください)。
-    highlightedTitleAttributes = {
-      str(objc_const(UIKit, 'NSForegroundColorAttributeName')):
+    highlightedTitleAttributes = NSDictionary.dictionaryWithObjects_forKeys_([
       UIColor.systemGreenColor(),
-      str(objc_const(UIKit, 'NSStrikethroughStyleAttributeName')):
       NSUnderlineStyle.thick,
-    }
+    ], [
+      NSAttributedStringKey.foregroundColor,
+      NSAttributedStringKey.strikethroughStyle
+    ])
+
     highlightedAttributedTitle = NSAttributedString.alloc(
     ).initWithString_attributes_(buttonTitle, highlightedTitleAttributes)
 
@@ -397,7 +406,7 @@ class ButtonViewController(BaseTableViewController):
       button.setImage_forState_(buttonImage, UIControlState.normal)
 
     config = UIImageSymbolConfiguration.configurationWithTextStyle_scale_(
-      str(objc_const(UIKit, 'UIFontTextStyleBody')), UIImageSymbolScale.large)
+      UIFontTextStyle.body, UIImageSymbolScale.large)
 
     button.setPreferredSymbolConfiguration_forImageInState_(
       config, UIControlState.normal)
@@ -418,7 +427,7 @@ class ButtonViewController(BaseTableViewController):
       buttonConfig = UIButtonConfiguration.plainButtonConfiguration()
 
       buttonConfig.preferredSymbolConfigurationForImage = UIImageSymbolConfiguration.configurationWithTextStyle_(
-        str(objc_const(UIKit, 'UIFontTextStyleLargeTitle')))
+        UIFontTextStyle.largeTitle)
 
       buttonConfig.image = buttonImage
       button.configuration = buttonConfig
@@ -444,7 +453,7 @@ class ButtonViewController(BaseTableViewController):
       buttonConfig = UIButtonConfiguration.plainButtonConfiguration()
 
       buttonConfig.preferredSymbolConfigurationForImage = UIImageSymbolConfiguration.configurationWithTextStyle_(
-        str(objc_const(UIKit, 'UIFontTextStyleBody')))
+        UIFontTextStyle.body)
 
       buttonConfig.image = buttonImage
       button.configuration = buttonConfig
@@ -452,15 +461,14 @@ class ButtonViewController(BaseTableViewController):
     else:
       button.setImage_forState_(buttonImage, UIControlState.normal)
       config = UIImageSymbolConfiguration.configurationWithTextStyle_scale_(
-        str(objc_const(UIKit, 'UIFontTextStyleBody')),
-        UIImageSymbolScale.small)
+        UIFontTextStyle.body, UIImageSymbolScale.small)
       button.setPreferredSymbolConfiguration_forImageInState_(
         config, UIControlState.normal)
 
     button.setTitle_forState_(localizedString('Person'), UIControlState.normal)
 
     button.titleLabel.font = UIFont.preferredFontForTextStyle_(
-      str(objc_const(UIKit, 'UIFontTextStyleBody')))
+      UIFontTextStyle.body)
 
     button.addTarget_action_forControlEvents_(self, SEL('buttonClicked:'),
                                               UIControlEvents.touchUpInside)
@@ -476,7 +484,7 @@ class ButtonViewController(BaseTableViewController):
       buttonConfig = UIButtonConfiguration.plainButtonConfiguration()
 
       buttonConfig.preferredSymbolConfigurationForImage = UIImageSymbolConfiguration.configurationWithTextStyle_(
-        str(objc_const(UIKit, 'UIFontTextStyleBody')))
+        UIFontTextStyle.body)
 
       buttonConfig.image = buttonImage
 
@@ -488,7 +496,7 @@ class ButtonViewController(BaseTableViewController):
     button.setTitle_forState_(localizedString('Person'), UIControlState.normal)
 
     button.titleLabel.font = UIFont.preferredFontForTextStyle_(
-      str(objc_const(UIKit, 'UIFontTextStyleBody')))
+      UIFontTextStyle.body)
 
     button.addTarget_action_forControlEvents_(self, SEL('buttonClicked:'),
                                               UIControlEvents.touchUpInside)
@@ -530,19 +538,11 @@ class ButtonViewController(BaseTableViewController):
       #if traitCollection.userInterfaceIdiom == .mac
       #  button.preferredBehavioralStyle = .pad
       pass
-    # ref: [iphone - Retina display and [UIImage initWithData] - Stack Overflow](https://stackoverflow.com/questions/3289286/retina-display-and-uiimage-initwithdata)
-    # xxx: scale 指定これでいいのかな?
-    scale = int(UIScreen.mainScreen.scale)
+    scale = int(mainScreen_scale)
+
     normal_str = f'./UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/background.imageset/stepper_and_segment_background_{scale}x.png'
     highlighted_str = f'./UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/background_highlighted.imageset/stepper_and_segment_background_highlighted_{scale}x.png'
     disabled_str = f'./UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/background_disabled.imageset/stepper_and_segment_background_disabled_{scale}x.png'
-
-    # xxx: あとで取り回し考える
-    from pathlib import Path
-
-    # xxx: `lambda` の使い方が悪い
-    dataWithContentsOfURL = lambda path_str: NSData.dataWithContentsOfURL_(
-      NSURL.fileURLWithPath_(str(Path(path_str).absolute())))
 
     background = UIImage.alloc().initWithData_scale_(
       dataWithContentsOfURL(normal_str), scale)
@@ -579,15 +579,16 @@ class ButtonViewController(BaseTableViewController):
 
     buttonConfig = UIButtonConfiguration.plainButtonConfiguration()
     buttonConfig.image = UIImage.systemImageNamed('tray')
+
     buttonConfig.preferredSymbolConfigurationForImage = UIImageSymbolConfiguration.configurationWithTextStyle_(
-      str(objc_const(UIKit, 'UIFontTextStyleBody')))
+      UIFontTextStyle.body)
 
     button.configuration = buttonConfig
 
     button.setTitle_forState_(localizedString('Button'), UIControlState.normal)
 
     button.titleLabel.font = UIFont.preferredFontForTextStyle_(
-      str(objc_const(UIKit, 'UIFontTextStyleBody')))
+      UIFontTextStyle.body)
 
     button.changesSelectionAsPrimaryAction = True
     button.configurationUpdateHandler = activityUpdateHandler
@@ -650,7 +651,7 @@ class ButtonViewController(BaseTableViewController):
       buttonConfig = UIButtonConfiguration.plainButtonConfiguration()
       buttonConfig.image = image
       buttonConfig.preferredSymbolConfigurationForImage = UIImageSymbolConfiguration.configurationWithTextStyle_(
-        str(objc_const(UIKit, 'UIFontTextStyleLargeTitle')))
+        UIFontTextStyle.largeTitle)
       _button.configuration = buttonConfig
 
       # xxx: `toolTip` 挙動未確認
@@ -661,7 +662,7 @@ class ButtonViewController(BaseTableViewController):
     buttonConfig = UIButtonConfiguration.plainButtonConfiguration()
     buttonConfig.image = UIImage.systemImageNamed('cart')
     buttonConfig.preferredSymbolConfigurationForImage = UIImageSymbolConfiguration.configurationWithTextStyle_(
-      str(objc_const(UIKit, 'UIFontTextStyleLargeTitle')))
+      UIFontTextStyle.largeTitle)
 
     button.configuration = buttonConfig
 

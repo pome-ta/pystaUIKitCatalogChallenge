@@ -32,7 +32,7 @@ class TintedSymbol(CustomTableViewCell):
     _width = 40.0
     _height = 40.0
     imageView = UIImageView.alloc().initWithFrame_(
-      CGRectMake(167.5, 2.0, _width, _height)).autorelease()
+      CGRectMake(167.5, 2.0, _width, _height))#.autorelease()
     imageView.contentMode = UIViewContentMode.scaleAspectFit
 
     imageView.translatesAutoresizingMaskIntoConstraints = False
@@ -56,7 +56,7 @@ class PreferringMultiColorSymbol(CustomTableViewCell):
     _width = 40.0
     _height = 40.0
     imageView = UIImageView.alloc().initWithFrame_(
-      CGRectMake(167.5, 2.0, _width, _height)).autorelease()
+      CGRectMake(167.5, 2.0, _width, _height))#.autorelease()
     imageView.contentMode = UIViewContentMode.scaleAspectFit
 
     imageView.translatesAutoresizingMaskIntoConstraints = False
@@ -80,7 +80,7 @@ class LargeSizeSymbol(CustomTableViewCell):
     _width = 82.0
     _height = 87.0
     imageView = UIImageView.alloc().initWithFrame_(
-      CGRectMake(146.5, 0.0, _width, _height)).autorelease()
+      CGRectMake(146.5, 0.0, _width, _height))#.autorelease()
     imageView.contentMode = UIViewContentMode.scaleAspectFit
 
     imageView.translatesAutoresizingMaskIntoConstraints = False
@@ -108,7 +108,7 @@ class PaletteColorsSymbol(CustomTableViewCell):
     _width = 40.0
     _height = 40.0
     imageView = UIImageView.alloc().initWithFrame_(
-      CGRectMake(167.5, 2.0, _width, _height)).autorelease()
+      CGRectMake(167.5, 2.0, _width, _height))#.autorelease()
     imageView.contentMode = UIViewContentMode.scaleAspectFit
 
     imageView.translatesAutoresizingMaskIntoConstraints = False
@@ -132,7 +132,7 @@ class PlainSymbol(CustomTableViewCell):
     _width = 40.0
     _height = 40.0
     imageView = UIImageView.alloc().initWithFrame_(
-      CGRectMake(167.5, 2.0, _width, _height)).autorelease()
+      CGRectMake(167.5, 2.0, _width, _height))#.autorelease()
     imageView.contentMode = UIViewContentMode.scaleAspectFit
 
     imageView.translatesAutoresizingMaskIntoConstraints = False
@@ -156,7 +156,7 @@ class HierarchicalColorSymbol(CustomTableViewCell):
     _width = 40.0
     _height = 40.0
     imageView = UIImageView.alloc().initWithFrame_(
-      CGRectMake(167.5, 2.0, _width, _height)).autorelease()
+      CGRectMake(167.5, 2.0, _width, _height))#.autorelease()
     imageView.contentMode = UIViewContentMode.scaleAspectFit
 
     imageView.translatesAutoresizingMaskIntoConstraints = False

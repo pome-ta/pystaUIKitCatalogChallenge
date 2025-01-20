@@ -4,13 +4,15 @@ todo:
   各 frame が仮
   `centerXAnchor` の挙動
 """
-
 from pyrubicon.objc.api import ObjCClass
 from pyrubicon.objc.api import objc_method
 from pyrubicon.objc.runtime import send_super, SEL
 from pyrubicon.objc.types import CGRectMake
 
-from rbedge.enumerations import UIControlEvents, UIPageControlBackgroundStyle
+from rbedge.enumerations import (
+  UIControlEvents,
+  UIPageControlBackgroundStyle,
+)
 from rbedge.functions import NSStringFromClass
 from pyLocalizedString import localizedString
 
@@ -73,7 +75,8 @@ class CustomPageControlViewController(UIViewController):
     self.view.backgroundColor = UIColor.systemBackgroundColor()
 
     # xxx: あとで切り出す
-    self.pageControl = UIPageControl.alloc().init().autorelease()
+    #self.pageControl = UIPageControl.alloc().init().autorelease()
+    self.pageControl = UIPageControl.new()
     self.colorView: UIView = UIView.new()
 
     self.setlayout()

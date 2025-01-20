@@ -61,7 +61,7 @@ class MenuButtonViewController(BaseTableViewController):
     self.navigationItem.title = localizedString('MenuButtonsTitle') if (
       title := self.navigationItem.title) is None else title
 
-    self.testCells.extend([
+    self.testCells_extend([
       CaseElement(localizedString('DropDownProgTitle'),
                   MenuButtonKind.buttonMenuProgrammatic.value,
                   self.configureDropDownProgrammaticButton_),

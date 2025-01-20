@@ -1,6 +1,4 @@
 from enum import Enum
-from pathlib import Path
-import json
 
 from pyrubicon.objc.api import ObjCClass, ObjCInstance
 from pyrubicon.objc.api import objc_method
@@ -12,6 +10,11 @@ from rbedge.enumerations import (
   UIUserInterfaceStyle,
   UIControlState,
 )
+from rbedge.pythonProcessUtils import (
+  mainScreen_scale,
+  dataWithContentsOfURL,
+  get_srgb_named_style,
+)
 
 from rbedge import pdbr
 
@@ -22,47 +25,7 @@ from baseTableViewController import BaseTableViewController
 from storyboard.stepperViewController import prototypes
 
 UIColor = ObjCClass('UIColor')
-UIScreen = ObjCClass('UIScreen')
-NSURL = ObjCClass('NSURL')
-NSData = ObjCClass('NSData')
 UIImage = ObjCClass('UIImage')
-
-
-def get_srgb_named_style(named: str,
-                         userInterfaceStyle: UIUserInterfaceStyle) -> list:
-  # todo: 本来`UIColor.colorNamed:` で呼び出す。asset(bundle) の取り込みが難しそうなので、独自に直で呼び出し
-  _path = Path(
-    f'./UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/{named}.colorset/Contents.json'
-  )
-  _str = _path.read_text()
-  _dict = json.loads(_str)
-
-  def _pick_color(colors: list[dict], style: str | None = None) -> list:
-    components: dict
-    for color in colors:
-      if color.get('idiom') != 'universal':
-        continue
-      appearance, *_ = appearances if (
-        appearances := color.get('appearances')) is not None else [None]
-      if style is None and appearance is None:
-        components = color.get('color').get('components')
-        break
-      if appearance is not None and style == appearance.get('value'):
-        components = color.get('color').get('components')
-        break
-
-    red, green, blue, alpha = (float(components.get(clr))
-                               for clr in ('red', 'green', 'blue', 'alpha'))
-    # wip: エラーハンドリング
-    return [red, green, blue, alpha]
-
-  color_dicts = _dict.get('colors')
-  if userInterfaceStyle == UIUserInterfaceStyle.light:
-    return _pick_color(color_dicts, 'light')
-  elif userInterfaceStyle == UIUserInterfaceStyle.dark:
-    return _pick_color(color_dicts, 'dark')
-  else:
-    return _pick_color(color_dicts)
 
 
 # Cell identifier for each stepper table view cell.
@@ -95,7 +58,7 @@ class StepperViewController(BaseTableViewController):
     self.navigationItem.title = localizedString('SteppersTitle') if (
       title := self.navigationItem.title) is None else title
 
-    self.testCells.extend([
+    self.testCells_extend([
       CaseElement(localizedString('DefaultStepperTitle'),
                   StepperKind.defaultStepper.value,
                   self.configureDefaultStepper_),
@@ -149,14 +112,10 @@ class StepperViewController(BaseTableViewController):
 
   @objc_method
   def configureCustomStepper_(self, stepper):
-    scale = int(UIScreen.mainScreen.scale)
+    scale = int(mainScreen_scale)
 
     background_str = f'./UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/background.imageset/stepper_and_segment_background_{scale}x.png'
     disabled_str = f'./UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/background_disabled.imageset/stepper_and_segment_background_disabled_{scale}x.png'
-
-    # xxx: `lambda` の使い方が悪い
-    dataWithContentsOfURL = lambda path_str: NSData.dataWithContentsOfURL_(
-      NSURL.fileURLWithPath_(str(Path(path_str).absolute())))
 
     stepperBackgroundImage = UIImage.alloc().initWithData_scale_(
       dataWithContentsOfURL(background_str), scale)

@@ -3,9 +3,9 @@
 '''
 import ctypes
 
-from pyrubicon.objc.api import ObjCClass, ObjCInstance, NSDictionary
-from pyrubicon.objc.api import objc_method, objc_const
-from pyrubicon.objc.runtime import send_super, objc_id, load_library, SEL
+from pyrubicon.objc.api import ObjCClass, ObjCInstance
+from pyrubicon.objc.api import objc_method
+from pyrubicon.objc.runtime import send_super, objc_id, SEL
 from pyrubicon.objc.types import CGRectMake
 
 from rbedge.enumerations import (
@@ -20,10 +20,11 @@ from rbedge.enumerations import (
   UIModalPresentationStyle,
 )
 
+from rbedge.globalVariables import NSAttributedStringKey
+
 from rbedge import pdbr
 from pyLocalizedString import localizedString
 
-UIKit = load_library('UIKit')  # todo: `objc_const` 用
 UIViewController = ObjCClass('UIViewController')
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
 UIColor = ObjCClass('UIColor')
@@ -35,10 +36,8 @@ UITextFormattingCoordinator = ObjCClass('UITextFormattingCoordinator')
 
 UIButton = ObjCClass('UIButton')
 UILabel = ObjCClass('UILabel')
+NSDictionary = ObjCClass('NSDictionary')
 UIFont = ObjCClass('UIFont')
-
-# --- Global Variables
-NSFontAttributeName = objc_const(UIKit, 'NSFontAttributeName')
 
 
 class FontPickerViewController(UIViewController):
@@ -167,7 +166,7 @@ class FontPickerViewController(UIViewController):
       if (scene := self.view.window().windowScene) is None:
         return
       attributes = NSDictionary.dictionaryWithObject(
-        self.fontLabel.font, forKey=NSFontAttributeName)
+        self.fontLabel.font, forKey=NSAttributedStringKey.font)
 
       textFormatter = UITextFormattingCoordinator.alloc().initWithWindowScene_(
         scene)

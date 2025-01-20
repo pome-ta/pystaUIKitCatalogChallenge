@@ -1,19 +1,32 @@
 import ctypes
 from enum import Enum
-from pathlib import Path
-import json
 
 from pyrubicon.objc.api import ObjCClass, ObjCInstance, Block
-from pyrubicon.objc.api import objc_method, objc_const
-from pyrubicon.objc.runtime import SEL, send_super, objc_id, load_library
+from pyrubicon.objc.api import objc_method
+from pyrubicon.objc.runtime import SEL, send_super, objc_id
 from pyrubicon.objc.types import NSInteger, CGSize, CGFloat, CGRectMake, CGSizeMake
 
+from rbedge.functions import (
+  UIGraphicsBeginImageContextWithOptions,
+  UIGraphicsGetImageFromCurrentImageContext,
+  UIGraphicsEndImageContext,
+)
 from rbedge.enumerations import (
   UIControlEvents,
   UIUserInterfaceIdiom,
   UIUserInterfaceStyle,
   UIControlState,
   UIBarMetrics,
+)
+from rbedge.globalVariables import (
+  UIFontTextStyle,
+  NSAttributedStringKey,
+)
+
+from rbedge.pythonProcessUtils import (
+  mainScreen_scale,
+  dataWithContentsOfURL,
+  get_srgb_named_style,
 )
 
 from rbedge import pdbr
@@ -24,80 +37,14 @@ from pyLocalizedString import localizedString
 from baseTableViewController import BaseTableViewController
 from storyboard.segmentedControlViewController import prototypes
 
-UIKit = load_library('UIKit')
 UIImage = ObjCClass('UIImage')
 UIAction = ObjCClass('UIAction')
-UIScreen = ObjCClass('UIScreen')
-NSURL = ObjCClass('NSURL')
-NSData = ObjCClass('NSData')
 UIColor = ObjCClass('UIColor')
 UISegmentedControl = ObjCClass('UISegmentedControl')  # todo: 型呼び出し
 UIFont = ObjCClass('UIFont')
 UIFontDescriptor = ObjCClass('UIFontDescriptor')
 NSAttributedString = ObjCClass('NSAttributedString')
-
-
-def UIGraphicsBeginImageContextWithOptions(size: CGSize, opaque: bool,
-                                           scale: CGFloat) -> ObjCInstance:
-  _fnc = UIKit.UIGraphicsBeginImageContextWithOptions
-  _fnc.restype = ctypes.c_void_p
-  _fnc.argtypes = [
-    CGSize,
-    ctypes.c_bool,
-    CGFloat,
-  ]
-  return ObjCInstance(_fnc(size, opaque, scale))
-
-
-def UIGraphicsGetImageFromCurrentImageContext() -> ObjCInstance:
-  _fnc = UIKit.UIGraphicsGetImageFromCurrentImageContext
-  _fnc.restype = objc_id
-  _fnc.argtypes = []
-  return ObjCInstance(_fnc())
-
-
-def UIGraphicsEndImageContext():
-  _fnc = UIKit.UIGraphicsEndImageContext
-  _fnc.restype = ctypes.c_void_p
-  _fnc.argtypes = []
-  _fnc()
-
-
-def get_srgb_named_style(named: str,
-                         userInterfaceStyle: UIUserInterfaceStyle) -> list:
-  # todo: 本来`UIColor.colorNamed:` で呼び出す。asset(bundle) の取り込みが難しそうなので、独自に直で呼び出し
-  _path = Path(
-    f'./UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/{named}.colorset/Contents.json'
-  )
-  _str = _path.read_text()
-  _dict = json.loads(_str)
-
-  def _pick_color(colors: list[dict], style: str | None = None) -> list:
-    components: dict
-    for color in colors:
-      if color.get('idiom') != 'universal':
-        continue
-      appearance, *_ = appearances if (
-        appearances := color.get('appearances')) is not None else [None]
-      if style is None and appearance is None:
-        components = color.get('color').get('components')
-        break
-      if appearance is not None and style == appearance.get('value'):
-        components = color.get('color').get('components')
-        break
-
-    red, green, blue, alpha = (float(components.get(clr))
-                               for clr in ('red', 'green', 'blue', 'alpha'))
-    # wip: エラーハンドリング
-    return [red, green, blue, alpha]
-
-  color_dicts = _dict.get('colors')
-  if userInterfaceStyle == UIUserInterfaceStyle.light:
-    return _pick_color(color_dicts, 'light')
-  elif userInterfaceStyle == UIUserInterfaceStyle.dark:
-    return _pick_color(color_dicts, 'dark')
-  else:
-    return _pick_color(color_dicts)
+NSDictionary = ObjCClass('NSDictionary')
 
 
 # Cell identifier for each segmented control table view cell.
@@ -133,7 +80,7 @@ class SegmentedControlViewController(BaseTableViewController):
     self.navigationItem.title = localizedString('SegmentedControlsTitle') if (
       title := self.navigationItem.title) is None else title
 
-    self.testCells.extend([
+    self.testCells_extend([
       CaseElement(localizedString('DefaultTitle'),
                   SegmentKind.segmentDefault.value,
                   self.configureDefaultSegmentedControl_),
@@ -150,7 +97,7 @@ class SegmentedControlViewController(BaseTableViewController):
     if self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiom.mac:
       # Tinted segmented control is only available on iOS.
       # ティント・セグメンテッド・コントロールはiOSでのみ利用可能。
-      self.testCells.extend([
+      self.testCells_extend([
         CaseElement(localizedString('Tinted'), SegmentKind.segmentTinted.value,
                     self.configureTintedSegmentedControl_),
       ])
@@ -220,7 +167,7 @@ class SegmentedControlViewController(BaseTableViewController):
       localizedString('CheckTitle'),
       localizedString('SearchTitle'),
       localizedString('ToolsTitle'),
-    ]).autorelease()
+    ])  #.autorelease()
 
     customBackgroundSegmentedControl.selectedSegmentIndex = 2
 
@@ -239,17 +186,10 @@ class SegmentedControlViewController(BaseTableViewController):
 
     placeHolderView.addSubview_(customBackgroundSegmentedControl)
 
-    scale = int(UIScreen.mainScreen.scale)
+    scale = int(mainScreen_scale)
     normal_str = f'./UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/background.imageset/stepper_and_segment_background_{scale}x.png'
     highlighted_str = f'./UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/background_highlighted.imageset/stepper_and_segment_background_highlighted_{scale}x.png'
     disabled_str = f'./UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/background_disabled.imageset/stepper_and_segment_background_disabled_{scale}x.png'
-
-    # xxx: あとで取り回し考える
-    from pathlib import Path
-
-    # xxx: `lambda` の使い方が悪い
-    dataWithContentsOfURL = lambda path_str: NSData.dataWithContentsOfURL_(
-      NSURL.fileURLWithPath_(str(Path(path_str).absolute())))
 
     # Set the background images for each control state.
     # 制御状態ごとに背景画像を設定します。
@@ -292,23 +232,27 @@ class SegmentedControlViewController(BaseTableViewController):
     # 通常状態と強調表示状態の両方で、属性付きタイトルに使用するフォントを作成します。
     font = UIFont.fontWithDescriptor_size_(
       UIFontDescriptor.preferredFontDescriptorWithTextStyle_(
-        objc_const(UIKit, 'UIFontTextStyleBody')), 0.0)
+        UIFontTextStyle.body), 0.0)
 
-    normalTextAttributes = {
-      str(objc_const(UIKit, 'NSForegroundColorAttributeName')):
+    normalTextAttributes = NSDictionary.dictionaryWithObjects_forKeys_([
       UIColor.systemPurpleColor(),
-      str(objc_const(UIKit, 'NSFontAttributeName')):
       font,
-    }
+    ], [
+      NSAttributedStringKey.foregroundColor,
+      NSAttributedStringKey.font,
+    ])
+
     customBackgroundSegmentedControl.setTitleTextAttributes_forState_(
       normalTextAttributes, UIControlState.normal)
 
-    highlightedTextAttributes = {
-      str(objc_const(UIKit, 'NSForegroundColorAttributeName')):
+    highlightedTextAttributes = NSDictionary.dictionaryWithObjects_forKeys_([
       UIColor.systemGreenColor(),
-      str(objc_const(UIKit, 'NSFontAttributeName')):
       font,
-    }
+    ], [
+      NSAttributedStringKey.foregroundColor,
+      NSAttributedStringKey.font,
+    ])
+
     customBackgroundSegmentedControl.setTitleTextAttributes_forState_(
       highlightedTextAttributes, UIControlState.highlighted)
 

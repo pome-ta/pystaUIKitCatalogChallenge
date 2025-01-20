@@ -4,12 +4,11 @@ note: wip 項目
   - `CustomTextField` class の`init` って機能してる？
   - 標準キーボードのみ機能するものあり
 '''
-
 from enum import Enum
-from pathlib import Path
+import ctypes
 
-from pyrubicon.objc.api import ObjCClass, ObjCInstance, ObjCProtocol
-from pyrubicon.objc.api import objc_method, objc_property
+from pyrubicon.objc.api import ObjCClass, ObjCInstance
+from pyrubicon.objc.api import objc_method
 from pyrubicon.objc.runtime import send_super, objc_id, SEL
 from pyrubicon.objc.types import NSInteger, CGRect, CGFloat, CGRectMake, UIEdgeInsetsMake
 
@@ -24,6 +23,10 @@ from rbedge.enumerations import (
   UIControlState,
   UIControlEvents,
 )
+from rbedge.pythonProcessUtils import (
+  mainScreen_scale,
+  dataWithContentsOfURL,
+)
 
 from rbedge import pdbr
 
@@ -35,14 +38,10 @@ from storyboard.textFieldViewController import prototypes
 
 UISearchTextField = ObjCClass('UISearchTextField')  # todo: 型確認用
 UIColor = ObjCClass('UIColor')
-UITextFieldDelegate = ObjCProtocol('UITextFieldDelegate')
 
 UIImageView = ObjCClass('UIImageView')
 UIImage = ObjCClass('UIImage')
 UISearchToken = ObjCClass('UISearchToken')
-UIScreen = ObjCClass('UIScreen')
-NSURL = ObjCClass('NSURL')
-NSData = ObjCClass('NSData')
 UIButton = ObjCClass('UIButton')
 
 
@@ -57,10 +56,13 @@ class TextFieldKind(Enum):
   searchTextField = 'searchTextField'
 
 
-class TextFieldViewController(BaseTableViewController,
-                              protocols=[
-                                UITextFieldDelegate,
-                              ]):
+class TextFieldViewController(BaseTableViewController):
+
+  @objc_method
+  def dealloc(self):
+    # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
+    #print('\tdealloc')
+    pass
 
   @objc_method
   def initWithStyle_(self, style: NSInteger) -> ObjCInstance:
@@ -82,7 +84,7 @@ class TextFieldViewController(BaseTableViewController,
     self.navigationItem.title = localizedString('TextFieldsTitle') if (
       title := self.navigationItem.title) is None else title
 
-    self.testCells.extend([
+    self.testCells_extend([
       CaseElement(localizedString('DefaultTextFieldTitle'),
                   TextFieldKind.textField.value, self.configureTextField_),
       CaseElement(localizedString('TintedTextFieldTitle'),
@@ -97,7 +99,7 @@ class TextFieldViewController(BaseTableViewController,
     ])
 
     if self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiom.mac:
-      self.testCells.extend([
+      self.testCells_extend([
         # Show text field with specific kind of keyboard for iOS only.
         # iOS の場合のみ、特定の種類のキーボードを使用してテキスト フィールドを表示します。
         CaseElement(localizedString('SpecificKeyboardTextFieldTitle'),
@@ -109,6 +111,55 @@ class TextFieldViewController(BaseTableViewController,
                     TextFieldKind.customTextField.value,
                     self.configureCustomTextField_),
       ])
+
+  @objc_method
+  def viewWillAppear_(self, animated: bool):
+    send_super(__class__,
+               self,
+               'viewWillAppear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    #print('viewWillAppear')
+
+  @objc_method
+  def viewDidAppear_(self, animated: bool):
+    send_super(__class__,
+               self,
+               'viewDidAppear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    #print('viewDidAppear')
+
+  @objc_method
+  def viewWillDisappear_(self, animated: bool):
+    send_super(__class__,
+               self,
+               'viewWillDisappear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    #print('viewDidDisappear')
+
+  @objc_method
+  def viewDidDisappear_(self, animated: bool):
+    send_super(__class__,
+               self,
+               'viewDidDisappear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    #print('viewDidDisappear')
+
+  @objc_method
+  def didReceiveMemoryWarning(self):
+    send_super(__class__, self, 'didReceiveMemoryWarning')
+    print(f'{__class__}: didReceiveMemoryWarning')
 
   # MARK: - Configuration
   @objc_method
@@ -199,15 +250,10 @@ class TextFieldViewController(BaseTableViewController,
     # カスタム画像の背景を持つテキストフィールドには枠線を付ける必要はありません。
     textField.borderStyle = UITextBorderStyle.none
 
-    scale = int(UIScreen.mainScreen.scale)
-
+    scale = int(mainScreen_scale)
     background_str = f'./UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/text_field_background.imageset/text_field_background_{scale}x.png'
 
     purpleImage_str = f'./UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/text_field_purple_right_view.imageset/text_field_purple_right_view_{scale}x.png'
-
-    # xxx: `lambda` の使い方が悪い
-    dataWithContentsOfURL = lambda path_str: NSData.dataWithContentsOfURL_(
-      NSURL.fileURLWithPath_(str(Path(path_str).absolute())))
 
     background_img = UIImage.alloc().initWithData_scale_(
       dataWithContentsOfURL(background_str), scale)
@@ -270,8 +316,8 @@ class TextFieldViewController(BaseTableViewController,
 # Custom text field for controlling input text placement.
 # 入力テキストの配置を制御するためのカスタム テキスト フィールド。
 class CustomTextField(ObjCClass('UITextField')):
-  leftMarginPadding: CGFloat = objc_property(float)
-  rightMarginPadding: CGFloat = objc_property(float)
+  #leftMarginPadding: CGFloat = objc_property(float)
+  #rightMarginPadding: CGFloat = objc_property(float)
 
   @objc_method
   def init(self) -> ObjCInstance:

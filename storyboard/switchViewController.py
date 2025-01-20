@@ -28,8 +28,8 @@ class DefaultSwitch(CustomTableViewCell):
   @objc_method
   def overrideCell(self):
     switch = UISwitch.alloc().initWithFrame_(CGRectMake(
-      163.5, 6.5, 51.0, 31.0)).autorelease()
-    
+      163.5, 6.5, 51.0, 31.0))  #.autorelease()
+
     switch.translatesAutoresizingMaskIntoConstraints = False
     self.contentView.addSubview_(switch)
 
@@ -47,8 +47,8 @@ class CheckBoxSwitch(CustomTableViewCell):
   @objc_method
   def overrideCell(self):
     switch = UISwitch.alloc().initWithFrame_(CGRectMake(
-      163.5, 6.5, 51.0, 31.0)).autorelease()
-    
+      163.5, 6.5, 51.0, 31.0))  #.autorelease()
+
     switch.translatesAutoresizingMaskIntoConstraints = False
     self.contentView.addSubview_(switch)
 
@@ -58,6 +58,7 @@ class CheckBoxSwitch(CustomTableViewCell):
       switch.centerYAnchor.constraintEqualToAnchor_(
         self.contentView.centerYAnchor),
     ])
+
 
 @add_prototype('tintedSwitch')
 class TintedSwitch(CustomTableViewCell):
@@ -65,8 +66,8 @@ class TintedSwitch(CustomTableViewCell):
   @objc_method
   def overrideCell(self):
     switch = UISwitch.alloc().initWithFrame_(CGRectMake(
-      163.5, 6.5, 51.0, 31.0)).autorelease()
-    
+      163.5, 6.5, 51.0, 31.0))  #.autorelease()
+
     switch.translatesAutoresizingMaskIntoConstraints = False
     self.contentView.addSubview_(switch)
 
@@ -76,5 +77,4 @@ class TintedSwitch(CustomTableViewCell):
       switch.centerYAnchor.constraintEqualToAnchor_(
         self.contentView.centerYAnchor),
     ])
-
 

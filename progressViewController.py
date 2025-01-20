@@ -83,7 +83,7 @@ class ProgressViewController(BaseTableViewController):
     self.navigationItem.title = localizedString('ProgressViewsTitle') if (
       title := self.navigationItem.title) is None else title
 
-    self.testCells.extend([
+    self.testCells_extend([
       CaseElement(localizedString('ProgressDefaultTitle'),
                   ProgressViewKind.defaultProgress.value,
                   self.configureDefaultStyleProgressView_),
@@ -93,7 +93,7 @@ class ProgressViewController(BaseTableViewController):
     ])
     if True:  # wip: `traitCollection.userInterfaceIdiom != .mac`
       # Tinted progress views available only on iOS.
-      self.testCells.extend([
+      self.testCells_extend([
         CaseElement(localizedString('ProgressTintedTitle'),
                     ProgressViewKind.tintedProgress.value,
                     self.configureTintedProgressView_),
