@@ -65,6 +65,7 @@ class SymbolViewController(BaseTableViewController):
                   SymbolKind.largeSizeSymbol.value,
                   self.configureLargeSizeSymbol_),
     ])
+
     if True:  # wip: `available(iOS 15, *)`
       # These type SF Sybols, and variants are available on iOS 15, Mac Catalyst 15 or later.
       self.testCells_extend([

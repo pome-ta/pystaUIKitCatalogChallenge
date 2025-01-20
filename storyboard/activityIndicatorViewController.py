@@ -35,7 +35,7 @@ class MediumIndicator(CustomTableViewCell):
   @objc_method
   def overrideCell(self):
     activityIndicatorView = UIActivityIndicatorView.alloc().initWithFrame_(
-      CGRectMake(177.5, 12.0, 20.0, 20.0)).autorelease()
+      CGRectMake(177.5, 12.0, 20.0, 20.0))#.autorelease()
     _style = UIActivityIndicatorViewStyle.medium
     activityIndicatorView.setActivityIndicatorViewStyle_(_style)
     #activityIndicatorView.startAnimating()
@@ -57,7 +57,7 @@ class LargeTintedIndicator(CustomTableViewCell):
   @objc_method
   def overrideCell(self):
     activityIndicatorView = UIActivityIndicatorView.alloc().initWithFrame_(
-      CGRectMake(168.0, -41.0, 39.0, 126.0)).autorelease()
+      CGRectMake(168.0, -41.0, 39.0, 126.0))#.autorelease()
     _style = UIActivityIndicatorViewStyle.large
     activityIndicatorView.setActivityIndicatorViewStyle_(_style)
     #activityIndicatorView.startAnimating()
@@ -81,7 +81,7 @@ class MediumTintedIndicator(CustomTableViewCell):
   @objc_method
   def overrideCell(self):
     activityIndicatorView = UIActivityIndicatorView.alloc().initWithFrame_(
-      CGRectMake(177.5, 12.0, 20.0, 20.0)).autorelease()
+      CGRectMake(177.5, 12.0, 20.0, 20.0))#.autorelease()
     _style = UIActivityIndicatorViewStyle.medium
     activityIndicatorView.setActivityIndicatorViewStyle_(_style)
     #activityIndicatorView.startAnimating()
@@ -103,7 +103,7 @@ class LargeIndicator(CustomTableViewCell):
   @objc_method
   def overrideCell(self):
     activityIndicatorView = UIActivityIndicatorView.alloc().initWithFrame_(
-      CGRectMake(168.0, -41.0, 39.0, 126.0)).autorelease()
+      CGRectMake(168.0, -41.0, 39.0, 126.0))#.autorelease()
     _style = UIActivityIndicatorViewStyle.large
     activityIndicatorView.setActivityIndicatorViewStyle_(_style)
     #activityIndicatorView.startAnimating()

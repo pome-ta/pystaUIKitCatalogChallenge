@@ -31,7 +31,7 @@ class DefaultProgress(CustomTableViewCell):
   def overrideCell(self):
     # todo: 一旦全部style は`default`
     progressView = UIProgressView.alloc().initWithProgressViewStyle_(
-      UIProgressViewStyle.default).autorelease()
+      UIProgressViewStyle.default)#.autorelease()
 
     progressView.translatesAutoresizingMaskIntoConstraints = False
     self.contentView.addSubview_(progressView)
@@ -56,7 +56,7 @@ class TintedProgress(CustomTableViewCell):
   def overrideCell(self):
     # todo: 一旦全部style は`default`
     progressView = UIProgressView.alloc().initWithProgressViewStyle_(
-      UIProgressViewStyle.default).autorelease()
+      UIProgressViewStyle.default)#.autorelease()
 
     progressView.translatesAutoresizingMaskIntoConstraints = False
     self.contentView.addSubview_(progressView)
@@ -81,7 +81,7 @@ class BarProgress(CustomTableViewCell):
   def overrideCell(self):
     # todo: 一旦全部style は`default`
     progressView = UIProgressView.alloc().initWithProgressViewStyle_(
-      UIProgressViewStyle.default).autorelease()
+      UIProgressViewStyle.default)#.autorelease()
 
     progressView.translatesAutoresizingMaskIntoConstraints = False
     self.contentView.addSubview_(progressView)

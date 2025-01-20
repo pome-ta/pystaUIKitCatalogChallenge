@@ -35,7 +35,7 @@ class SegmentDefault(CustomTableViewCell):
   @objc_method
   def overrideCell(self):
     segmentedControl = UISegmentedControl.alloc().initWithItems_(
-      segments).autorelease()
+      segments)#.autorelease()
     # xxx: ベタ打ち
     segmentedControl.frame = CGRectMake(47.5, 6.5, 280.0, 32.0)
     segmentedControl.translatesAutoresizingMaskIntoConstraints = False
@@ -57,7 +57,7 @@ class SegmentTinted(CustomTableViewCell):
   @objc_method
   def overrideCell(self):
     segmentedControl = UISegmentedControl.alloc().initWithItems_(
-      segments).autorelease()
+      segments)#.autorelease()
     # xxx: ベタ打ち
     segmentedControl.frame = CGRectMake(47.5, 6.5, 280.0, 32.0)
     segmentedControl.translatesAutoresizingMaskIntoConstraints = False
@@ -79,7 +79,7 @@ class SegmentCustom(CustomTableViewCell):
   @objc_method
   def overrideCell(self):
     segmentedControl = UISegmentedControl.alloc().initWithItems_(
-      segments).autorelease()
+      segments)#.autorelease()
     # xxx: ベタ打ち
     segmentedControl.frame = CGRectMake(47.5, 6.5, 280.0, 32.0)
     segmentedControl.translatesAutoresizingMaskIntoConstraints = False
@@ -100,7 +100,8 @@ class SegmentCustomBackground(CustomTableViewCell):
 
   @objc_method
   def overrideCell(self):
-    view = UIView.alloc().init().autorelease()
+    #view = UIView.alloc().init().autorelease()
+    view = UIView.new()
     # xxx: ベタ打ち
     view.frame = CGRectMake(47.5, 6.0, 280.0, 32.0)
     view.translatesAutoresizingMaskIntoConstraints = False
@@ -122,7 +123,7 @@ class SegmentAction(CustomTableViewCell):
   @objc_method
   def overrideCell(self):
     segmentedControl = UISegmentedControl.alloc().initWithItems_(
-      segments).autorelease()
+      segments)#.autorelease()
     # xxx: ベタ打ち
     segmentedControl.frame = CGRectMake(47.5, 6.5, 280.0, 32.0)
     segmentedControl.translatesAutoresizingMaskIntoConstraints = False

@@ -32,7 +32,7 @@ class SearchTextField(CustomTableViewCell):
   def overrideCell(self):
     #textField = UITextField.alloc().initWithFrame_(CGRectMake(16.0, 5.0, 343.0, 34.0)).autorelease()
     textField = UISearchTextField.alloc().initWithFrame_(
-      CGRectMake(16.0, 5.0, 343.0, 34.0)).autorelease()
+      CGRectMake(16.0, 5.0, 343.0, 34.0))#.autorelease()
 
     textField.minimumFontSize = 17.0
     textField.borderStyle = UITextBorderStyle.roundedRect
@@ -60,7 +60,7 @@ class TintedTextField(CustomTableViewCell):
   @objc_method
   def overrideCell(self):
     textField = UITextField.alloc().initWithFrame_(
-      CGRectMake(77.5, 5.0, 220.0, 34.0)).autorelease()
+      CGRectMake(77.5, 5.0, 220.0, 34.0))#.autorelease()
 
     textField.minimumFontSize = 17.0
     textField.font = UIFont.systemFontOfSize_(14.0)
@@ -122,7 +122,7 @@ class TextField(CustomTableViewCell):
   @objc_method
   def overrideCell(self):
     textField = UITextField.alloc().initWithFrame_(
-      CGRectMake(77.5, 5.0, 220.0, 34.0)).autorelease()
+      CGRectMake(77.5, 5.0, 220.0, 34.0))#.autorelease()
 
     textField.minimumFontSize = 17.0
     textField.font = UIFont.systemFontOfSize_(14.0)
@@ -148,7 +148,7 @@ class SecureTextField(CustomTableViewCell):
   @objc_method
   def overrideCell(self):
     textField = UITextField.alloc().initWithFrame_(
-      CGRectMake(77.5, 5.0, 220.0, 34.0)).autorelease()
+      CGRectMake(77.5, 5.0, 220.0, 34.0))#.autorelease()
 
     textField.minimumFontSize = 17.0
     textField.font = UIFont.systemFontOfSize_(14.0)
@@ -174,7 +174,7 @@ class SpecificKeyboardTextField(CustomTableViewCell):
   @objc_method
   def overrideCell(self):
     textField = UITextField.alloc().initWithFrame_(
-      CGRectMake(77.5, 5.0, 220.0, 34.0)).autorelease()
+      CGRectMake(77.5, 5.0, 220.0, 34.0))#.autorelease()
 
     textField.minimumFontSize = 17.0
     textField.font = UIFont.systemFontOfSize_(14.0)
