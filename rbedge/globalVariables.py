@@ -8,6 +8,15 @@ UIKit = load_library('UIKit')
 # xxx: PEP8では非推奨
 constUIKit = lambda const_name: objc_const(UIKit, const_name)
 
+UITextFieldTextDidChangeNotification = constUIKit(
+  'UITextFieldTextDidChangeNotification')
+
+UIKeyboardAnimationDurationUserInfoKey = constUIKit(
+  'UIKeyboardAnimationDurationUserInfoKey')
+UIKeyboardFrameBeginUserInfoKey = constUIKit('UIKeyboardFrameBeginUserInfoKey')
+UIKeyboardFrameEndUserInfoKey = constUIKit('UIKeyboardFrameEndUserInfoKey')
+
+UICollectionElementKindSectionHeader = constUIKit('UICollectionElementKindSectionHeader')
 
 # ref: [UIFontTextStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uifont/textstyle?language=objc)
 @dataclass
@@ -139,4 +148,10 @@ class NSNotificationName:
     'UIKeyboardWillShowNotification')
   keyboardWillHideNotification: str = constUIKit(
     'UIKeyboardWillHideNotification')
+
+
+# ref: [UIImagePickerControllerInfoKey | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uiimagepickercontroller/infokey?language=objc)
+@dataclass
+class UIImagePickerControllerInfoKey:
+  originalImage: str = constUIKit('UIImagePickerControllerOriginalImage')
 
