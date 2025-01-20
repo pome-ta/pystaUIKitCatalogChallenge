@@ -56,7 +56,7 @@ class SymbolViewController(BaseTableViewController):
     self.navigationItem.title = localizedString('SymbolsTitle') if (
       title := self.navigationItem.title) is None else title
 
-    self.testCells.extend([
+    self.testCells_extend([
       CaseElement(localizedString('PlainSymbolTitle'),
                   SymbolKind.plainSymbol.value, self.configurePlainSymbol_),
       CaseElement(localizedString('TintedSymbolTitle'),
@@ -67,7 +67,7 @@ class SymbolViewController(BaseTableViewController):
     ])
     if True:  # wip: `available(iOS 15, *)`
       # These type SF Sybols, and variants are available on iOS 15, Mac Catalyst 15 or later.
-      self.testCells.extend([
+      self.testCells_extend([
         CaseElement(localizedString('HierarchicalSymbolTitle'),
                     SymbolKind.hierarchicalColorSymbol.value,
                     self.configureHierarchicalSymbol_),

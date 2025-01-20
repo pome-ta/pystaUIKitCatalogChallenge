@@ -2,9 +2,8 @@
   note: Storyboard 実装なし
 '''
 import ctypes
-from pathlib import Path
 
-from pyrubicon.objc.api import ObjCClass, ObjCInstance, Block, NSData
+from pyrubicon.objc.api import ObjCClass, ObjCInstance, Block
 from pyrubicon.objc.api import objc_method
 from pyrubicon.objc.runtime import send_super, objc_id, SEL
 
@@ -12,6 +11,7 @@ from rbedge.enumerations import (
   UIBarStyle,
   UIBarButtonSystemItem,
 )
+from rbedge.pythonProcessUtils import dataWithContentsOfURL
 
 from rbedge import pdbr
 
@@ -24,7 +24,6 @@ UIColor = ObjCClass('UIColor')
 UIToolbar = ObjCClass('UIToolbar')
 UIToolbarAppearance = ObjCClass('UIToolbarAppearance')
 UIBarButtonItem = ObjCClass('UIBarButtonItem')
-NSURL = ObjCClass('NSURL')
 UIImage = ObjCClass('UIImage')
 UIActivityViewController = ObjCClass('UIActivityViewController')
 
@@ -152,10 +151,6 @@ class TintedToolbarViewController(UIViewController):
 
   @objc_method
   def actionBarButtonItemClicked_(self, barButtonItem):
-    # xxx: `lambda` の使い方が悪い
-    dataWithContentsOfURL = lambda path_str: NSData.dataWithContentsOfURL_(
-      NSURL.fileURLWithPath_(str(Path(path_str).absolute())))
-
     image_path = './UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/Flowers_1.imageset/Flowers_1.png'
     if (image :=
         UIImage.alloc().initWithData_(dataWithContentsOfURL(image_path))):

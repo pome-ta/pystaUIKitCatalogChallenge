@@ -2,12 +2,10 @@
   note: Storyboard 未定義
 '''
 import ctypes
-from pathlib import Path
-import json
 
-from pyrubicon.objc.api import ObjCClass, NSString, Block, NSData
-from pyrubicon.objc.api import objc_method, objc_property, objc_const
-from pyrubicon.objc.runtime import send_super, objc_id, load_library, SEL
+from pyrubicon.objc.api import ObjCClass, NSString, Block
+from pyrubicon.objc.api import objc_method
+from pyrubicon.objc.runtime import send_super, objc_id, SEL
 from pyrubicon.objc.types import NSRange, CGPointMake, CGRect
 
 from rbedge.enumerations import (
@@ -26,17 +24,22 @@ from rbedge.globalVariables import (
   UIFontTextStyle,
   NSAttributedStringKey,
   NSNotificationName,
+  UIKeyboardAnimationDurationUserInfoKey,
+  UIKeyboardFrameBeginUserInfoKey,
+  UIKeyboardFrameEndUserInfoKey,
+)
+from rbedge.pythonProcessUtils import (
+  mainScreen_scale,
+  dataWithContentsOfURL,
+  get_srgb_named_style,
 )
 
 from pyLocalizedString import localizedString
 from rbedge import pdbr
 
-UIKit = load_library('UIKit')  # todo: `objc_const` 用
+
 UIViewController = ObjCClass('UIViewController')
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
-
-UIScreen = ObjCClass('UIScreen')
-NSURL = ObjCClass('NSURL')
 
 UITextView = ObjCClass('UITextView')
 UIFont = ObjCClass('UIFont')
@@ -54,51 +57,6 @@ UIColor = ObjCClass('UIColor')
 UIImage = ObjCClass('UIImage')
 UIImageSymbolConfiguration = ObjCClass('UIImageSymbolConfiguration')
 
-# --- Global Variables
-
-UIKeyboardAnimationDurationUserInfoKey = objc_const(
-  UIKit, 'UIKeyboardAnimationDurationUserInfoKey')
-UIKeyboardFrameBeginUserInfoKey = objc_const(
-  UIKit, 'UIKeyboardFrameBeginUserInfoKey')
-UIKeyboardFrameEndUserInfoKey = objc_const(UIKit,
-                                           'UIKeyboardFrameEndUserInfoKey')
-
-
-def get_srgb_named_style(named: str,
-                         userInterfaceStyle: UIUserInterfaceStyle) -> list:
-  # todo: 本来`UIColor.colorNamed:` で呼び出す。asset(bundle) の取り込みが難しそうなので、独自に直で呼び出し
-  _path = Path(
-    f'./UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/{named}.colorset/Contents.json'
-  )
-  _str = _path.read_text()
-  _dict = json.loads(_str)
-
-  def _pick_color(colors: list[dict], style: str | None = None) -> list:
-    components: dict
-    for color in colors:
-      if color.get('idiom') != 'universal':
-        continue
-      appearance, *_ = appearances if (
-        appearances := color.get('appearances')) is not None else [None]
-      if style is None and appearance is None:
-        components = color.get('color').get('components')
-        break
-      if appearance is not None and style == appearance.get('value'):
-        components = color.get('color').get('components')
-        break
-
-    red, green, blue, alpha = (float(components.get(clr))
-                               for clr in ('red', 'green', 'blue', 'alpha'))
-    # wip: エラーハンドリング
-    return [red, green, blue, alpha]
-
-  color_dicts = _dict.get('colors')
-  if userInterfaceStyle == UIUserInterfaceStyle.light:
-    return _pick_color(color_dicts, 'light')
-  elif userInterfaceStyle == UIUserInterfaceStyle.dark:
-    return _pick_color(color_dicts, 'dark')
-  else:
-    return _pick_color(color_dicts)
 
 
 class TextViewController(UIViewController):
@@ -363,10 +321,6 @@ class TextViewController(UIViewController):
         atIndex=insertPoint)
 
     # Add the image as an attachment.
-    # xxx: `lambda` の使い方が悪い
-    dataWithContentsOfURL = lambda path_str: NSData.dataWithContentsOfURL_(
-      NSURL.fileURLWithPath_(str(Path(path_str).absolute())))
-
     text_view_attachment = './UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/text_view_attachment.imageset/Sunset_5.png'
 
     if (image := UIImage.alloc().initWithData_scale_(

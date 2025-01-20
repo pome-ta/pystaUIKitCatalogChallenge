@@ -4,8 +4,8 @@
 from enum import IntEnum, auto
 
 from pyrubicon.objc.api import ObjCClass, ObjCInstance, Block
-from pyrubicon.objc.api import objc_method, objc_property, objc_const
-from pyrubicon.objc.runtime import send_super, objc_id, load_library
+from pyrubicon.objc.api import objc_method, objc_property
+from pyrubicon.objc.runtime import send_super, objc_id
 
 from rbedge.enumerations import (
   UITableViewStyle,
@@ -13,11 +13,11 @@ from rbedge.enumerations import (
   UIAlertActionStyle,
 )
 
+from rbedge.globalVariables import UITextFieldTextDidChangeNotification
+
 from rbedge import pdbr
 
 from pyLocalizedString import localizedString
-
-UIKit = load_library('UIKit')  # todo: `objc_const` 用
 
 UIViewController = ObjCClass('UIViewController')
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
@@ -31,9 +31,6 @@ NSNotificationCenter = ObjCClass('NSNotificationCenter')
 NSOperationQueue = ObjCClass('NSOperationQueue')
 
 UITextField = ObjCClass('UITextField')  # todo: 型確認
-
-UITextFieldTextDidChangeNotification = objc_const(
-  UIKit, 'UITextFieldTextDidChangeNotification')
 
 
 class AlertStyleTest(IntEnum):

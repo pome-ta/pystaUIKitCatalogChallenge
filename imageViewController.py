@@ -1,9 +1,7 @@
 '''
   note: Storyboard 未定義
 '''
-from pathlib import Path
-
-from pyrubicon.objc.api import ObjCClass, NSData
+from pyrubicon.objc.api import ObjCClass
 from pyrubicon.objc.api import objc_method
 from pyrubicon.objc.runtime import send_super
 from pyrubicon.objc.types import CGRect
@@ -15,6 +13,7 @@ from rbedge.enumerations import (
   UIViewAutoresizing,
   UIViewContentMode,
 )
+from rbedge.pythonProcessUtils import dataWithContentsOfURL
 
 UIViewController = ObjCClass('UIViewController')
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
@@ -70,8 +69,6 @@ class ImageViewController(UIViewController):
     if (imageView := self.imageView).isKindOfClass_(UIImageView):
       # xxx: `lambda` の使い方が悪い
       flowers_str = lambda index: f'./UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/Flowers_{index}.imageset/Flowers_{index}.png'
-      dataWithContentsOfURL = lambda path_str: NSData.dataWithContentsOfURL_(
-        NSURL.fileURLWithPath_(str(Path(path_str).absolute())))
 
       # Fetch the images (each image is of the format Flowers_number).
       self.imageView.animationImages = [

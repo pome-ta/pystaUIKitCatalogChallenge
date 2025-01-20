@@ -2,29 +2,29 @@
   note: Storyboard 実装なし
 '''
 import ctypes
-from pathlib import Path
 
-from pyrubicon.objc.api import ObjCClass, ObjCInstance, NSData
-from pyrubicon.objc.api import objc_method, objc_const
-from pyrubicon.objc.runtime import send_super, objc_id, load_library
+from pyrubicon.objc.api import ObjCClass, ObjCInstance
+from pyrubicon.objc.api import objc_method
+from pyrubicon.objc.runtime import send_super, objc_id
 
 from rbedge.enumerations import (
   UIBlurEffectStyle,
   UIFontDescriptorSymbolicTraits,
   UILayoutConstraintAxis,
 )
+from rbedge.globalVariables import UIFontTextStyle
+
+from rbedge.pythonProcessUtils import dataWithContentsOfURL
 
 from rbedge import pdbr
 from pyLocalizedString import localizedString
 
-UIKit = load_library('UIKit')  # todo: `objc_const` 用
 UIViewController = ObjCClass('UIViewController')
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
 UIColor = ObjCClass('UIColor')
 
 UIImageView = ObjCClass('UIImageView')
 UIImage = ObjCClass('UIImage')
-NSURL = ObjCClass('NSURL')
 UIToolTipInteraction = ObjCClass('UIToolTipInteraction')
 
 UIVisualEffectView = ObjCClass('UIVisualEffectView')
@@ -32,9 +32,6 @@ UIBlurEffect = ObjCClass('UIBlurEffect')
 UITextView = ObjCClass('UITextView')
 UIFont = ObjCClass('UIFont')
 UIFontDescriptor = ObjCClass('UIFontDescriptor')
-
-# --- Global Variables
-UIFontTextStyleBody = objc_const(UIKit, 'UIFontTextStyleBody')
 
 
 class VisualEffectViewController(UIViewController):
@@ -54,9 +51,6 @@ class VisualEffectViewController(UIViewController):
     self.view.backgroundColor = UIColor.systemBackgroundColor()
 
     image_path = './UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/Flowers_2.imageset/Flowers_2.png'
-    # xxx: `lambda` の使い方が悪い
-    dataWithContentsOfURL = lambda path_str: NSData.dataWithContentsOfURL_(
-      NSURL.fileURLWithPath_(str(Path(path_str).absolute())))
 
     imageReference = UIImage.alloc().initWithData_(
       dataWithContentsOfURL(image_path))
@@ -79,7 +73,7 @@ class VisualEffectViewController(UIViewController):
     textView.backgroundColor = UIColor.clearColor
     if (fontDescriptor :=
         UIFontDescriptor.preferredFontDescriptorWithTextStyle_(
-          UIFontTextStyleBody).fontDescriptorWithSymbolicTraits_(
+          UIFontTextStyle.body).fontDescriptorWithSymbolicTraits_(
             UIFontDescriptorSymbolicTraits.traitLooseLeading)):
 
       looseLeadingFont = UIFont.fontWithDescriptor_size_(fontDescriptor, 0.0)

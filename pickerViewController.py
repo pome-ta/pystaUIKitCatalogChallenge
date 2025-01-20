@@ -170,8 +170,11 @@ class PickerViewController(UIViewController):
     foregroundColor = UIColor.colorWithRed_green_blue_alpha_(
       redColorComponent, greenColorComponent, blueColorComponent, 1.0)
     # Set the foreground color for the entire attributed string.
-    attributes = NSDictionary.dictionaryWithObject(
-      foregroundColor, forKey=NSAttributedStringKey.foregroundColor)
+    attributes = NSDictionary.dictionaryWithObjects_forKeys_([
+      foregroundColor,
+    ], [
+      NSAttributedStringKey.foregroundColor,
+    ])
 
     title = self.mutableAttributedString.initWithString_attributes_(
       f'{int(colorValue)}', attributes)

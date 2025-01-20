@@ -1,8 +1,8 @@
 import ctypes
 
 from pyrubicon.objc.api import ObjCClass, ObjCInstance
-from pyrubicon.objc.api import objc_method, objc_property, objc_const
-from pyrubicon.objc.runtime import send_super, objc_id, load_library
+from pyrubicon.objc.api import objc_method
+from pyrubicon.objc.runtime import send_super, objc_id
 
 from rbedge.enumerations import (
   UITableViewStyle,
@@ -10,6 +10,10 @@ from rbedge.enumerations import (
   UICollectionLayoutListHeaderMode,
   UICellAccessoryOutlineDisclosureStyle,
   UIUserInterfaceSizeClass,
+)
+from rbedge.globalVariables import (
+  UIFontTextStyle,
+  UICollectionElementKindSectionHeader,
 )
 
 from pyLocalizedString import localizedString
@@ -41,7 +45,7 @@ from progressViewController import ProgressViewController
 from stackViewController import StackViewController
 from defaultToolbarViewController import DefaultToolbarViewController
 from tintedToolbarViewController import TintedToolbarViewController
-from customToolbarViewController import CustomToolbarViewController  # xxx: ペンディング
+from customToolbarViewController import CustomToolbarViewController
 from visualEffectViewController import VisualEffectViewController
 from webViewController import WebViewController
 # --- --- pickersOutlineItem
@@ -52,7 +56,6 @@ from imagePickerViewController import ImagePickerViewController
 from pickerViewController import PickerViewController
 # --- /
 
-UIKit = load_library('UIKit')  # todo: `objc_const` 用
 UIViewController = ObjCClass('UIViewController')
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
 UINavigationController = ObjCClass('UINavigationController')
@@ -75,13 +78,6 @@ UICellAccessoryOutlineDisclosure = ObjCClass(
 UIColor = ObjCClass('UIColor')
 UIFont = ObjCClass('UIFont')
 UIImage = ObjCClass('UIImage')
-#UITapGestureRecognizer = ObjCClass('UITapGestureRecognizer')
-#NSIndexSet = ObjCClass('NSIndexSet')
-
-# --- Global Variable
-UICollectionElementKindSectionHeader = objc_const(
-  UIKit, 'UICollectionElementKindSectionHeader')
-UIFontTextStyleHeadline = objc_const(UIKit, 'UIFontTextStyleHeadline')
 
 
 class OutlineItem:
@@ -264,8 +260,6 @@ menuItems = [
 
 class OutlineViewController(UIViewController):
 
-  #collectionView: UICollectionView = objc_property()
-
   @objc_method
   def viewDidLoad(self):
     # --- Navigation
@@ -345,7 +339,7 @@ class OutlineViewController(UIViewController):
 
     if target_item.subitems:  # containerCellRegistration
       contentConfiguration.textProperties.font = UIFont.preferredFontForTextStyle_(
-        UIFontTextStyleHeadline)
+        UIFontTextStyle.headline)
       disclosureOptions = UICellAccessoryOutlineDisclosureStyle.header
 
       outlineDisclosure = UICellAccessoryOutlineDisclosure.new()

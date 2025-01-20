@@ -4,8 +4,8 @@
 import ctypes
 
 from pyrubicon.objc.api import ObjCClass, ObjCInstance, Block
-from pyrubicon.objc.api import objc_method, objc_const
-from pyrubicon.objc.runtime import send_super, objc_id, load_library, SEL
+from pyrubicon.objc.api import objc_method
+from pyrubicon.objc.runtime import send_super, objc_id, SEL
 
 from rbedge.enumerations import (
   UIButtonType,
@@ -16,10 +16,11 @@ from rbedge.enumerations import (
   UIImagePickerControllerSourceType,
 )
 
+from rbedge.globalVariables import UIImagePickerControllerInfoKey
+
 from rbedge import pdbr
 from pyLocalizedString import localizedString
 
-UIKit = load_library('UIKit')  # todo: `objc_const` 用
 UIViewController = ObjCClass('UIViewController')
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
 UIColor = ObjCClass('UIColor')
@@ -28,10 +29,6 @@ UIButton = ObjCClass('UIButton')
 UIImageView = ObjCClass('UIImageView')
 UIImage = ObjCClass('UIImage')  # todo: 型確認用
 UIImagePickerController = ObjCClass('UIImagePickerController')
-
-# --- Global Variables
-UIImagePickerControllerOriginalImage = objc_const(
-  UIKit, 'UIImagePickerControllerOriginalImage')
 
 
 class ImagePickerViewController(UIViewController):
@@ -114,8 +111,8 @@ class ImagePickerViewController(UIViewController):
   # MARK: - UIImagePickerControllerDelegate
   @objc_method
   def imagePickerController_didFinishPickingMediaWithInfo_(self, picker, info):
-    if (image :=
-        info[UIImagePickerControllerOriginalImage]).isKindOfClass_(UIImage):
+    if (image := info[UIImagePickerControllerInfoKey.originalImage]
+        ).isKindOfClass_(UIImage):
       self.imageView.image = image
     picker.dismissViewControllerAnimated_completion_(True, None)
 

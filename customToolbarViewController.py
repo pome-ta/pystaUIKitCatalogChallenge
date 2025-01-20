@@ -2,9 +2,8 @@
   note: Storyboard 実装なし
 '''
 import ctypes
-from pathlib import Path
 
-from pyrubicon.objc.api import ObjCClass, ObjCInstance, Block, NSData
+from pyrubicon.objc.api import ObjCClass, ObjCInstance, Block
 from pyrubicon.objc.api import objc_method
 from pyrubicon.objc.runtime import send_super, objc_id, SEL
 
@@ -17,6 +16,10 @@ from rbedge.enumerations import (
   UIControlState,
 )
 from rbedge.globalVariables import NSAttributedStringKey
+from rbedge.pythonProcessUtils import (
+  mainScreen_scale,
+  dataWithContentsOfURL,
+)
 
 from rbedge import pdbr
 
@@ -29,9 +32,7 @@ UIColor = ObjCClass('UIColor')
 UIToolbar = ObjCClass('UIToolbar')
 UIToolbarAppearance = ObjCClass('UIToolbarAppearance')
 UIBarButtonItem = ObjCClass('UIBarButtonItem')
-NSURL = ObjCClass('NSURL')
 UIImage = ObjCClass('UIImage')
-UIScreen = ObjCClass('UIScreen')
 NSDictionary = ObjCClass('NSDictionary')
 
 
@@ -52,10 +53,7 @@ class CustomToolbarViewController(UIViewController):
 
     self.view.backgroundColor = UIColor.systemBackgroundColor()
 
-    scale = int(UIScreen.mainScreen.scale)
-    # xxx: `lambda` の使い方が悪い
-    dataWithContentsOfURL = lambda path_str: NSData.dataWithContentsOfURL_(
-      NSURL.fileURLWithPath_(str(Path(path_str).absolute())))
+    scale = int(mainScreen_scale)
 
     image_path = f'./UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/toolbar_background.imageset/toolbar_background_{scale}x.png'
 
@@ -78,7 +76,7 @@ class CustomToolbarViewController(UIViewController):
     toolbar.compactAppearance = toolbarAppearance
     toolbar.compactScrollEdgeAppearance = toolbarAppearance
 
-    # xxx: ?
+    # xxx: ? `toolbar` からは変化が確認できない
     #toolbar.setShadowImage_forToolbarPosition_(toolbarBackgroundImage, UIBarPosition.any)
     #toolbar.setBackgroundImage_forToolbarPosition_barMetrics_(toolbarBackgroundImage, UIBarPosition.bottom, UIBarMetrics.default)
 

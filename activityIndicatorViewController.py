@@ -5,8 +5,7 @@ from pyrubicon.objc.api import objc_method
 from pyrubicon.objc.runtime import send_super, objc_id
 from pyrubicon.objc.types import NSInteger
 
-from rbedge.enumerations import (
-  UIActivityIndicatorViewStyle, )
+from rbedge.enumerations import UIActivityIndicatorViewStyle
 
 from rbedge import pdbr
 
@@ -49,7 +48,7 @@ class ActivityIndicatorViewController(BaseTableViewController):
     self.navigationItem.title = localizedString('ActivityIndicatorsTitle') if (
       title := self.navigationItem.title) is None else title
 
-    self.testCells.extend([
+    self.testCells_extend([
       CaseElement(localizedString('MediumIndicatorTitle'),
                   ActivityIndicatorKind.mediumIndicator.value,
                   self.configureMediumActivityIndicatorView_),
@@ -59,7 +58,7 @@ class ActivityIndicatorViewController(BaseTableViewController):
     ])
     # if traitCollection.userInterfaceIdiom != .mac
     # Tinted activity indicators available only on iOS.
-    self.testCells.extend([
+    self.testCells_extend([
       CaseElement(localizedString('MediumTintedIndicatorTitle'),
                   ActivityIndicatorKind.mediumTintedIndicator.value,
                   self.configureMediumTintedActivityIndicatorView_),

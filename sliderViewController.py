@@ -1,5 +1,4 @@
 from enum import Enum
-from pathlib import Path
 
 from pyrubicon.objc.api import ObjCClass, ObjCInstance
 from pyrubicon.objc.api import objc_method
@@ -14,6 +13,11 @@ from rbedge.enumerations import (
   UIImageSymbolWeight,
   UIBehavioralStyle,
 )
+from rbedge.pythonProcessUtils import (
+  mainScreen_scale,
+  dataWithContentsOfURL,
+)
+
 from rbedge import pdbr
 
 from caseElement import CaseElement
@@ -22,12 +26,12 @@ from pyLocalizedString import localizedString
 from baseTableViewController import BaseTableViewController
 from storyboard.sliderViewController import prototypes
 
-UIScreen = ObjCClass('UIScreen')
-NSURL = ObjCClass('NSURL')
-NSData = ObjCClass('NSData')
 UIImage = ObjCClass('UIImage')
 UIImageSymbolConfiguration = ObjCClass('UIImageSymbolConfiguration')
 UIColor = ObjCClass('UIColor')
+
+
+
 
 
 # Cell identifier for each slider table view cell.
@@ -62,13 +66,14 @@ class SliderViewController(BaseTableViewController):
     self.navigationItem.title = localizedString('SlidersTitle') if (
       title := self.navigationItem.title) is None else title
 
-    self.testCells.extend([
+    self.testCells_extend([
       CaseElement(localizedString('DefaultTitle'),
                   SliderKind.sliderDefault.value,
                   self.configureDefaultSlider_),
     ])
+
     # todo: `@available(iOS 15.0, *)`
-    self.testCells.extend([
+    self.testCells_extend([
       CaseElement(localizedString('CustomTitle'),
                   SliderKind.sliderCustom.value, self.configureCustomSlider_),
       CaseElement(localizedString('MinMaxImagesTitle'),
@@ -135,13 +140,9 @@ class SliderViewController(BaseTableViewController):
     if slider.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiom.mac:
       slider.preferredBehavioralStyle = UIBehavioralStyle.pad
 
-    scale = int(UIScreen.mainScreen.scale)
+    scale = int(mainScreen_scale)
     leftTrack_str = f'./UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/slider_blue_track.imageset/slider_blue_track_{scale}x.png'
     rightTrack_str = f'./UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/slider_green_track.imageset/slider_green_track_{scale}x.png'
-
-    # xxx: `lambda` の使い方が悪い
-    dataWithContentsOfURL = lambda path_str: NSData.dataWithContentsOfURL_(
-      NSURL.fileURLWithPath_(str(Path(path_str).absolute())))
 
     leftTrackImage = UIImage.alloc().initWithData_scale_(
       dataWithContentsOfURL(leftTrack_str), scale)
@@ -231,3 +232,4 @@ if __name__ == '__main__':
 
   presentation_style = UIModalPresentationStyle.fullScreen
   present_viewController(main_vc, presentation_style)
+
