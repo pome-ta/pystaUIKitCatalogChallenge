@@ -80,7 +80,8 @@ class RootNavigationController(UINavigationController,
   def navigationController_willShowViewController_animated_(
       self, navigationController, viewController, animated: bool):
     extendedLayout = UIRectEdge.none
-    viewController.setEdgesForExtendedLayout_(extendedLayout)
+    # xxx: layout 範囲の制限
+    #viewController.setEdgesForExtendedLayout_(extendedLayout)
 
     closeButtonItem = UIBarButtonItem.alloc().initWithBarButtonSystemItem(
       UIBarButtonSystemItem.close,
