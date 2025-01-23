@@ -96,7 +96,7 @@ class CustomSearchBarViewController(UIViewController):
                argtypes=[
                  ctypes.c_bool,
                ])
-    #print('viewDidDisappear')
+    #print('viewWillDisappear')
 
   @objc_method
   def viewDidDisappear_(self, animated: bool):

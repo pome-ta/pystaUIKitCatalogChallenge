@@ -191,6 +191,17 @@ class DatePickerController(UIViewController):
     #print('viewDidAppear')
 
   @objc_method
+  def viewWillDisappear_(self, animated: bool):
+    send_super(__class__,
+               self,
+               'viewWillDisappear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    #print('viewWillDisappear')
+
+  @objc_method
   def viewDidDisappear_(self, animated: bool):
     send_super(__class__,
                self,
