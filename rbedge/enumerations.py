@@ -113,7 +113,7 @@ class UIControlEvents:
 # ref: [UIListContentTextAlignment | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uilistcontenttextalignment)
 @dataclass
 class UIListContentTextAlignment:
-  # todo: `Enumeration Case` に値表記が無いので独自に調査
+  # todo: `Enumeration Case` に値表記が無いので独自に調査
   natural: int = 0
   center: int = 1
   justified: int = 2
@@ -130,7 +130,7 @@ class UITableViewStyle:
 # ref: [UIButtonConfigurationCornerStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uibuttonconfigurationcornerstyle?language=objc)
 @dataclass
 class UIButtonConfigurationCornerStyle:
-  # todo: `Enumeration Case` に値表記が無いので独自に調査
+  # todo: `Enumeration Case` に値表記が無いので独自に調査
   dynamic: int = 0
   fixed: int = -1
   capsule: int = 4
@@ -202,7 +202,7 @@ class NSDirectionalRectEdge:
 # ref: [UIButtonConfigurationSize | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uibuttonconfigurationsize)
 @dataclass
 class UIButtonConfigurationSize:
-  # todo: `Enumeration Case` に値表記が無いので独自に調査
+  # todo: `Enumeration Case` に値表記が無いので独自に調査
   medium: int = 0
   small: int = 1
   mini: int = 2
@@ -254,7 +254,7 @@ class UISplitViewControllerColumn:
 # ref: [UICollectionLayoutListAppearance | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uicollectionlayoutlistappearance?language=objc)
 @dataclass
 class UICollectionLayoutListAppearance:
-  # xxx: 独自調査 a.k.a: 勘
+  # ref: [UICollectionLayoutList.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UICollectionLayoutList.rs.html#16)
   plain: int = 0
   grouped: int = 1
   insetGrouped: int = 2
@@ -362,7 +362,7 @@ class UIUserInterfaceStyle:
 # ref: [UIBarMetrics | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uibarmetrics?language=objc)
 @dataclass
 class UIBarMetrics:
-  default: int = 0  # xxx: '`' で囲まれてる
+  default: int = 0  # xxx: '`' で囲まれてる
   compact: int = 1
   defaultPrompt: int = 101
   compactPrompt: int = 102
@@ -857,3 +857,4 @@ class UIImagePickerControllerSourceType:
   photoLibrary: int = 0  # todo: deprecated
   camera: int = 1
   savedPhotosAlbum: int = 2  # todo: deprecated
+  
