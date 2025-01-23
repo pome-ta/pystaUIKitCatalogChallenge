@@ -17,8 +17,7 @@ def present_viewController(viewController: UIViewController,
                            | int = UIModalPresentationStyle.fullScreen,
                            navigationController_enabled: bool = True):
   sharedApplication = ObjCClass('UIApplication').sharedApplication
-  keyWindow = sharedApplication.keyWindow if sharedApplication.keyWindow else sharedApplication.windows[
-    0]
+  keyWindow = sharedApplication.windows.firstObject()
   rootViewController = keyWindow.rootViewController
 
   while _presentedViewController := rootViewController.presentedViewController:
