@@ -59,7 +59,6 @@ from pickerViewController import PickerViewController
 UIViewController = ObjCClass('UIViewController')
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
 UINavigationController = ObjCClass('UINavigationController')
-UIToolbarAppearance = ObjCClass('UIToolbarAppearance')
 
 # --- UICollectionView
 UICollectionView = ObjCClass('UICollectionView')
@@ -261,15 +260,15 @@ menuItems = [
 class OutlineViewController(UIViewController):
 
   @objc_method
+  def dealloc(self):
+    # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
+    #print('\tdealloc')
+    pass
+
+  @objc_method
   def viewDidLoad(self):
     # --- Navigation
     send_super(__class__, self, 'viewDidLoad')
-    #title = NSStringFromClass(__class__)
-    #self.navigationItem.title = title
-    #self.navigationItem.title = 'UIKitCatalog'
-
-    # --- View
-    #self.view.backgroundColor = UIColor.systemBrownColor()  # todo: 確認用
 
     # --- collection set
     self.listCell_identifier = 'customListCell'
@@ -303,17 +302,6 @@ class OutlineViewController(UIViewController):
         safeAreaLayoutGuide.heightAnchor, 1.0),
     ])
     self.collectionView = collectionView
-
-  @objc_method
-  def viewDidAppear_(self, animated: bool):
-    send_super(__class__,
-               self,
-               'viewDidAppear:',
-               animated,
-               argtypes=[
-                 ctypes.c_bool,
-               ])
-    #pdbr.state(self.collectionView)
 
   # --- UICollectionViewDataSource
   @objc_method
@@ -433,6 +421,66 @@ class OutlineViewController(UIViewController):
     layout = UICollectionViewCompositionalLayout.layoutWithListConfiguration_(
       listConfiguration)
     return layout
+
+  @objc_method
+  def viewWillAppear_(self, animated: bool):
+    send_super(__class__,
+               self,
+               'viewWillAppear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    #print('viewWillAppear')
+
+  @objc_method
+  def viewDidAppear_(self, animated: bool):
+    send_super(__class__,
+               self,
+               'viewDidAppear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    #print('viewDidAppear')
+
+  @objc_method
+  def viewWillDisappear_(self, animated: bool):
+    send_super(__class__,
+               self,
+               'viewWillDisappear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    #print('viewDidDisappear')
+
+  @objc_method
+  def viewWillDisappear_(self, animated: bool):
+    send_super(__class__,
+               self,
+               'viewWillDisappear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    #print('viewDidDisappear')
+
+  @objc_method
+  def viewDidDisappear_(self, animated: bool):
+    send_super(__class__,
+               self,
+               'viewDidDisappear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    #print('viewDidDisappear')
+
+  @objc_method
+  def didReceiveMemoryWarning(self):
+    send_super(__class__, self, 'didReceiveMemoryWarning')
+    print(f'{__class__}: didReceiveMemoryWarning')
 
 
 if __name__ == '__main__':
