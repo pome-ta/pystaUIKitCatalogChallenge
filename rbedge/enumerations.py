@@ -857,4 +857,3 @@ class UIImagePickerControllerSourceType:
   photoLibrary: int = 0  # todo: deprecated
   camera: int = 1
   savedPhotosAlbum: int = 2  # todo: deprecated
-

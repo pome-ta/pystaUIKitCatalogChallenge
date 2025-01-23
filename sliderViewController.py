@@ -31,9 +31,6 @@ UIImageSymbolConfiguration = ObjCClass('UIImageSymbolConfiguration')
 UIColor = ObjCClass('UIColor')
 
 
-
-
-
 # Cell identifier for each slider table view cell.
 # スライダー テーブル ビューの各セルのセル識別子。
 class SliderKind(Enum):
@@ -44,7 +41,7 @@ class SliderKind(Enum):
 
 
 class SliderViewController(BaseTableViewController):
-
+  
   @objc_method
   def initWithStyle_(self, style: NSInteger) -> ObjCInstance:
     send_super(__class__,
@@ -57,21 +54,21 @@ class SliderViewController(BaseTableViewController):
                ])
     self.setupPrototypes_(prototypes)
     return self
-
+  
   # MARK: - View Life Cycle
   @objc_method
   def viewDidLoad(self):
     send_super(__class__, self, 'viewDidLoad')  # xxx: 不要?
-
+    
     self.navigationItem.title = localizedString('SlidersTitle') if (
-      title := self.navigationItem.title) is None else title
-
+                                                                     title := self.navigationItem.title) is None else title
+    
     self.testCells_extend([
       CaseElement(localizedString('DefaultTitle'),
                   SliderKind.sliderDefault.value,
                   self.configureDefaultSlider_),
     ])
-
+    
     # todo: `@available(iOS 15.0, *)`
     self.testCells_extend([
       CaseElement(localizedString('CustomTitle'),
@@ -82,7 +79,7 @@ class SliderViewController(BaseTableViewController):
       CaseElement(localizedString('TintedTitle'),
                   SliderKind.sliderTinted.value, self.configureTintedSlider_),
     ])
-
+  
   # MARK: - Configuration
   @objc_method
   def configureDefaultSlider_(self, slider):
@@ -90,11 +87,11 @@ class SliderViewController(BaseTableViewController):
     slider.maximumValue = 100
     slider.value = 42
     slider.isContinuous = True
-
+    
     slider.addTarget_action_forControlEvents_(self,
                                               SEL('sliderValueDidChange:'),
                                               UIControlEvents.valueChanged)
-
+  
   # todo: `@available(iOS 15.0, *)`
   @objc_method
   def configureTintedSlider_(self, slider):
@@ -110,17 +107,17 @@ class SliderViewController(BaseTableViewController):
     macOS 12以降(Mac Catalyst 15.0以降)で利用可能です。
     iOS と macOS の間で同じように見える必要があるコントロールにこれを使用します。
     '''
-
+    
     if slider.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiom.mac:
       slider.preferredBehavioralStyle = UIBehavioralStyle.pad
-
+    
     slider.minimumTrackTintColor = UIColor.systemBlueColor()
     slider.maximumTrackTintColor = UIColor.systemPurpleColor()
-
+    
     slider.addTarget_action_forControlEvents_(self,
                                               SEL('sliderValueDidChange:'),
                                               UIControlEvents.valueChanged)
-
+  
   # todo: `@available(iOS 15.0, *)`
   @objc_method
   def configureCustomSlider_(self, slider):
@@ -136,24 +133,24 @@ class SliderViewController(BaseTableViewController):
     macOS 12以降(Mac Catalyst 15.0以降)で利用可能です。
     iOS と macOS の間で同じように見える必要があるコントロールにこれを使用します。
     '''
-
+    
     if slider.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiom.mac:
       slider.preferredBehavioralStyle = UIBehavioralStyle.pad
-
+    
     scale = int(mainScreen_scale)
     leftTrack_str = f'./UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/slider_blue_track.imageset/slider_blue_track_{scale}x.png'
     rightTrack_str = f'./UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/slider_green_track.imageset/slider_green_track_{scale}x.png'
-
+    
     leftTrackImage = UIImage.alloc().initWithData_scale_(
       dataWithContentsOfURL(leftTrack_str), scale)
     rightTrackImage = UIImage.alloc().initWithData_scale_(
       dataWithContentsOfURL(rightTrack_str), scale)
-
+    
     slider.setMinimumTrackImage_forState_(leftTrackImage,
                                           UIControlState.normal)
     slider.setMaximumTrackImage_forState_(rightTrackImage,
                                           UIControlState.normal)
-
+    
     # Set the sliding thumb image (normal and highlighted).
     # スライドサム画像(通常およびハイライト)を設定します。
     # For fun, choose a different image symbol configuraton for the thumb's image between macOS and iOS.
@@ -169,21 +166,21 @@ class SliderViewController(BaseTableViewController):
       'circle.fill', thumbImageConfig)
     thumbImageHighlighted = UIImage.systemImageNamed_withConfiguration_(
       'circle', thumbImageConfig)
-
+    
     slider.setThumbImage_forState_(thumbImage, UIControlState.normal)
-
+    
     slider.setThumbImage_forState_(thumbImageHighlighted,
                                    UIControlState.highlighted)
-
+    
     slider.minimumValue = 0
     slider.maximumValue = 100
     slider.isContinuous = False
     slider.value = 84
-
+    
     slider.addTarget_action_forControlEvents_(self,
                                               SEL('sliderValueDidChange:'),
                                               UIControlEvents.valueChanged)
-
+  
   @objc_method
   def configureMinMaxImageSlider_(self, slider):
     '''
@@ -202,14 +199,14 @@ class SliderViewController(BaseTableViewController):
     if True:  # xxx: `#available(iOS 15, *)`
       if slider.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiom.mac:
         slider.preferredBehavioralStyle = UIBehavioralStyle.pad
-
+    
     slider.minimumValueImage = UIImage.systemImageNamed_('tortoise')
     slider.maximumValueImage = UIImage.systemImageNamed_('hare')
-
+    
     slider.addTarget_action_forControlEvents_(self,
                                               SEL('sliderValueDidChange:'),
                                               UIControlEvents.valueChanged)
-
+  
   # MARK: - Actions
   @objc_method
   def sliderValueDidChange_(self, slider):
@@ -224,12 +221,11 @@ if __name__ == '__main__':
     UIModalPresentationStyle,
   )
   from rbedge import present_viewController
-
+  
   table_style = UITableViewStyle.grouped
   main_vc = SliderViewController.alloc().initWithStyle_(table_style)
   _title = NSStringFromClass(SliderViewController)
   main_vc.navigationItem.title = _title
-
+  
   presentation_style = UIModalPresentationStyle.fullScreen
   present_viewController(main_vc, presentation_style)
-

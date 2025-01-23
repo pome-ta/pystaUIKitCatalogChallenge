@@ -1,9 +1,9 @@
-'''
+"""
 note: wip 項目
   - `ObjCProtocol` 不要？
   - `CustomTextField` class の`init` って機能してる？
   - 標準キーボードのみ機能するものあり
-'''
+"""
 from enum import Enum
 import ctypes
 
@@ -143,7 +143,7 @@ class TextFieldViewController(BaseTableViewController):
                argtypes=[
                  ctypes.c_bool,
                ])
-    #print('viewDidDisappear')
+    #print('viewWillDisappear')
 
   @objc_method
   def viewDidDisappear_(self, animated: bool):

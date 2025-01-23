@@ -11,12 +11,12 @@ __all__ = [
 
 
 def _get_className_methods(rubicon_object):
-  if rubicon_object == None:
+  if rubicon_object is None:
     return None
   objct_class = libobjc.object_getClass(rubicon_object)
   py_className_methods = {}
   is_flag = False
-
+  
   while objct_class is not None:
     py_methods = []
     num_methods = ctypes.c_uint(0)
@@ -26,21 +26,21 @@ def _get_className_methods(rubicon_object):
       selector = libobjc.method_getName(method_list_ptr[i])
       sel_name = libobjc.sel_getName(selector).decode('ascii')
       py_method_name = sel_name.replace(':', '_')
-
+      
       if '.' not in py_method_name:
         py_methods.append(py_method_name)
     libobjc.free(method_list_ptr)
-
+    
     py_className_methods[str(ObjCInstance(objct_class.value))] = sorted(
       set(py_methods))
-
+    
     objct_class = libobjc.class_getSuperclass(objct_class)
-
+    
     if is_flag:
       break
     if objct_class.value == NSObject.ptr.value:
       is_flag = True
-
+  
   return dict(reversed(list(py_className_methods.items())))
 
 
@@ -49,9 +49,8 @@ def state(rubicon_obj, is_merge_methods: bool = False):
   if _dic:
     pprint(sorted(set().union(
       *list(_dic.values())))) if is_merge_methods else print(
-        json.dumps(_dic, indent=2))
+      json.dumps(_dic, indent=2))
     pprint(list(_dic.keys()))
     pprint(rubicon_obj)
   else:
     print(rubicon_obj)
-

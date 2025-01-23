@@ -1,6 +1,6 @@
-'''
+"""
   note: Storyboard 未定義
-'''
+"""
 from pyrubicon.objc.api import ObjCClass
 from pyrubicon.objc.api import objc_method
 from pyrubicon.objc.runtime import send_super

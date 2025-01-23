@@ -54,6 +54,7 @@ from colorPickerViewController import ColorPickerViewController
 from fontPickerViewController import FontPickerViewController
 from imagePickerViewController import ImagePickerViewController
 from pickerViewController import PickerViewController
+
 # --- /
 
 UIViewController = ObjCClass('UIViewController')
@@ -80,7 +81,7 @@ UIImage = ObjCClass('UIImage')
 
 
 class OutlineItem:
-
+  
   def __init__(self,
                title: str,
                imageName: str | None = None,
@@ -93,26 +94,26 @@ class OutlineItem:
 
 
 class SupplementaryItem:
-
+  
   def __init__(self, outlineItems: OutlineItem):
     self.outlineItems = outlineItems
     self.title = outlineItems.title
     self.imageName = outlineItems.imageName
     self.storyboardName = outlineItems.storyboardName
     self.subitems = outlineItems.subitems
-
+    
     self.children = []
     self._create_children()
-
+  
   def _create_children(self):
-
+    
     def append_loop(parent, n=1):
       for child in parent.subitems:
         child.indentationLevel = n
         self.children.append(child)
         if child.subitems:
           append_loop(child, n + 1)
-
+    
     append_loop(self, 1)
 
 
@@ -258,35 +259,35 @@ menuItems = [
 
 
 class OutlineViewController(UIViewController):
-
+  
   @objc_method
   def dealloc(self):
     # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
-    #print('\tdealloc')
+    # print('\tdealloc')
     pass
-
+  
   @objc_method
   def viewDidLoad(self):
     # --- Navigation
     send_super(__class__, self, 'viewDidLoad')
-
+    
     # --- collection set
     self.listCell_identifier = 'customListCell'
     self.header_identifier = 'customHeader'
-
+    
     collectionView = UICollectionView.alloc(
     ).initWithFrame_collectionViewLayout_(self.view.bounds,
                                           self.generateLayout())
     collectionView.registerClass_forCellWithReuseIdentifier_(
       UICollectionViewListCell, self.listCell_identifier)
-
+    
     collectionView.registerClass_forSupplementaryViewOfKind_withReuseIdentifier_(
       UICollectionViewListCell, UICollectionElementKindSectionHeader,
       self.header_identifier)
-
+    
     collectionView.delegate = self
     collectionView.dataSource = self
-
+    
     # --- Layout
     self.view.addSubview_(collectionView)
     collectionView.translatesAutoresizingMaskIntoConstraints = False
@@ -302,75 +303,124 @@ class OutlineViewController(UIViewController):
         safeAreaLayoutGuide.heightAnchor, 1.0),
     ])
     self.collectionView = collectionView
-
+  
+  @objc_method
+  def viewWillAppear_(self, animated: bool):
+    send_super(__class__,
+               self,
+               'viewWillAppear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    # print('viewWillAppear')
+  
+  @objc_method
+  def viewDidAppear_(self, animated: bool):
+    send_super(__class__,
+               self,
+               'viewDidAppear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    # print('viewDidAppear')
+  
+  @objc_method
+  def viewWillDisappear_(self, animated: bool):
+    send_super(__class__,
+               self,
+               'viewWillDisappear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    # print('viewWillDisappear')
+  
+  @objc_method
+  def viewDidDisappear_(self, animated: bool):
+    send_super(__class__,
+               self,
+               'viewDidDisappear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    # print('viewDidDisappear')
+  
+  @objc_method
+  def didReceiveMemoryWarning(self):
+    send_super(__class__, self, 'didReceiveMemoryWarning')
+    print(f'{__class__}: didReceiveMemoryWarning')
+  
   # --- UICollectionViewDataSource
   @objc_method
   def numberOfSectionsInCollectionView_(self, collectionView) -> int:
     return len(menuItems)
-
+  
   @objc_method
   def collectionView_numberOfItemsInSection_(self, collectionView,
                                              section: int) -> int:
     return len(menuItems[section].children)
-
+  
   @objc_method
   def collectionView_cellForItemAtIndexPath_(self, collectionView,
                                              indexPath) -> objc_id:
     cell = collectionView.dequeueReusableCellWithReuseIdentifier_forIndexPath_(
       self.listCell_identifier, indexPath)
     target_item = menuItems[indexPath.section].children[indexPath.row]
-
+    
     contentConfiguration = cell.defaultContentConfiguration()
     contentConfiguration.text = target_item.title
     if (image := target_item.imageName) is not None:
       contentConfiguration.image = UIImage.systemImageNamed_(image)
-
+    
     if target_item.subitems:  # containerCellRegistration
       contentConfiguration.textProperties.font = UIFont.preferredFontForTextStyle_(
         UIFontTextStyle.headline)
       disclosureOptions = UICellAccessoryOutlineDisclosureStyle.header
-
+      
       outlineDisclosure = UICellAccessoryOutlineDisclosure.new()
       outlineDisclosure.setStyle_(disclosureOptions)
       cell.accessories = [
         outlineDisclosure,
       ]
-
+    
     else:  # cellRegistration
       disclosureIndicator = UICellAccessoryDisclosureIndicator.alloc().init()
       cell.accessories = [
         disclosureIndicator,
       ]
-
+    
     cell.indentationLevel = target_item.indentationLevel
     cell.contentConfiguration = contentConfiguration
     return cell
-
+  
   @objc_method
   def collectionView_viewForSupplementaryElementOfKind_atIndexPath_(
       self, collectionView, kind, indexPath) -> ObjCInstance:
     headerView = collectionView.dequeueReusableSupplementaryViewOfKind_withReuseIdentifier_forIndexPath_(
       UICollectionElementKindSectionHeader, self.header_identifier, indexPath)
-
+    
     target_item = menuItems[indexPath.section]
-
+    
     contentConfiguration = headerView.defaultContentConfiguration()
     contentConfiguration.text = target_item.title
-
+    
     if (image := target_item.imageName) is not None:
       contentConfiguration.image = UIImage.systemImageNamed_(image)
-
+    
     disclosureOptions = UICellAccessoryOutlineDisclosureStyle.header
     outlineDisclosure = UICellAccessoryOutlineDisclosure.new()
     outlineDisclosure.setStyle_(disclosureOptions)
-
+    
     headerView.accessories = [
       outlineDisclosure,
     ]
-
+    
     headerView.contentConfiguration = contentConfiguration
     return headerView
-
+  
   # --- UICollectionViewDelegate
   @objc_method
   def collectionView_didSelectItemAtIndexPath_(self, collectionView,
@@ -379,7 +429,7 @@ class OutlineViewController(UIViewController):
     menuItem = menuItems[indexPath.section].children[indexPath.row]
     try:
       if (storyboardName :=
-          menuItem.storyboardName).isSubclassOfClass_(BaseTableViewController):
+      menuItem.storyboardName).isSubclassOfClass_(BaseTableViewController):
         viewController = storyboardName.alloc().initWithStyle_(
           UITableViewStyle.grouped)
       else:
@@ -387,7 +437,7 @@ class OutlineViewController(UIViewController):
       self.pushOrPresentViewController_(viewController)
     except Exception as e:
       print(f'{e}')
-
+  
   # --- private
   @objc_method
   def splitViewWantsToShowDetail(self) -> bool:
@@ -395,7 +445,7 @@ class OutlineViewController(UIViewController):
       return splitViewController.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClass.regular
     else:
       return False
-
+  
   # --- private
   @objc_method
   def pushOrPresentViewController_(self, viewController):
@@ -406,93 +456,32 @@ class OutlineViewController(UIViewController):
     else:
       self.navigationController.pushViewController_animated_(
         viewController, True)
-
+  
   # --- private
   @objc_method
   def generateLayout(self) -> ObjCInstance:
-    #_appearance = UICollectionLayoutListAppearance.plain
+    # _appearance = UICollectionLayoutListAppearance.plain
     _appearance = UICollectionLayoutListAppearance.sidebar
     listConfiguration = UICollectionLayoutListConfiguration.alloc(
     ).initWithAppearance_(_appearance)
-    #_headerMode = UICollectionLayoutListHeaderMode.firstItemInSection
+    # _headerMode = UICollectionLayoutListHeaderMode.firstItemInSection
     _headerMode = UICollectionLayoutListHeaderMode.supplementary
     listConfiguration.headerMode = _headerMode
-
+    
     layout = UICollectionViewCompositionalLayout.layoutWithListConfiguration_(
       listConfiguration)
     return layout
-
-  @objc_method
-  def viewWillAppear_(self, animated: bool):
-    send_super(__class__,
-               self,
-               'viewWillAppear:',
-               animated,
-               argtypes=[
-                 ctypes.c_bool,
-               ])
-    #print('viewWillAppear')
-
-  @objc_method
-  def viewDidAppear_(self, animated: bool):
-    send_super(__class__,
-               self,
-               'viewDidAppear:',
-               animated,
-               argtypes=[
-                 ctypes.c_bool,
-               ])
-    #print('viewDidAppear')
-
-  @objc_method
-  def viewWillDisappear_(self, animated: bool):
-    send_super(__class__,
-               self,
-               'viewWillDisappear:',
-               animated,
-               argtypes=[
-                 ctypes.c_bool,
-               ])
-    #print('viewDidDisappear')
-
-  @objc_method
-  def viewWillDisappear_(self, animated: bool):
-    send_super(__class__,
-               self,
-               'viewWillDisappear:',
-               animated,
-               argtypes=[
-                 ctypes.c_bool,
-               ])
-    #print('viewDidDisappear')
-
-  @objc_method
-  def viewDidDisappear_(self, animated: bool):
-    send_super(__class__,
-               self,
-               'viewDidDisappear:',
-               animated,
-               argtypes=[
-                 ctypes.c_bool,
-               ])
-    #print('viewDidDisappear')
-
-  @objc_method
-  def didReceiveMemoryWarning(self):
-    send_super(__class__, self, 'didReceiveMemoryWarning')
-    print(f'{__class__}: didReceiveMemoryWarning')
 
 
 if __name__ == '__main__':
   from rbedge.functions import NSStringFromClass
   from rbedge import present_viewController
   from rbedge.enumerations import UIModalPresentationStyle
-
+  
   vc = OutlineViewController.new()
   _title = NSStringFromClass(OutlineViewController)
   vc.navigationItem.title = _title
-
+  
   style = UIModalPresentationStyle.fullScreen
-  #style = UIModalPresentationStyle.pageSheet
+  # style = UIModalPresentationStyle.pageSheet
   present_viewController(vc, style)
-

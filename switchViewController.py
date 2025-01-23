@@ -30,7 +30,7 @@ class SwitchKind(Enum):
 
 
 class SwitchViewController(BaseTableViewController):
-
+  
   @objc_method
   def initWithStyle_(self, style: NSInteger) -> ObjCInstance:
     send_super(__class__,
@@ -43,15 +43,15 @@ class SwitchViewController(BaseTableViewController):
                ])
     self.setupPrototypes_(prototypes)
     return self
-
+  
   # MARK: - View Life Cycle
   @objc_method
   def viewDidLoad(self):
     send_super(__class__, self, 'viewDidLoad')  # xxx: 不要?
-
+    
     self.navigationItem.title = localizedString('SwitchesTitle') if (
-      title := self.navigationItem.title) is None else title
-
+                                                                      title := self.navigationItem.title) is None else title
+    
     self.testCells.extend([
       CaseElement(localizedString('DefaultSwitchTitle'),
                   SwitchKind.defaultSwitch.value,
@@ -59,7 +59,7 @@ class SwitchViewController(BaseTableViewController):
     ])
     # Checkbox switch is available only when running on macOS.
     # チェックボックス スイッチは、macOS で実行している場合にのみ使用できます。
-
+    
     # todo: `if navigationController!.traitCollection.userInterfaceIdiom` `navigationController` が`None` なため`self` で判断
     if self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiom.mac:
       self.testCells_extend([
@@ -67,7 +67,7 @@ class SwitchViewController(BaseTableViewController):
                     SwitchKind.checkBoxSwitch.value,
                     self.configureCheckboxSwitch_),
       ])
-
+    
     # Tinted switch is available only when running on iOS.
     # 色付きスイッチは、iOS で実行している場合にのみ使用できます。
     if self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiom.mac:
@@ -76,40 +76,40 @@ class SwitchViewController(BaseTableViewController):
                     SwitchKind.tintedSwitch.value,
                     self.configureTintedSwitch_),
       ])
-
+  
   # MARK: - Configuration
   @objc_method
   def configureDefaultSwitch_(self, switchControl):
     switchControl.setOn_animated_(True, False)
     switchControl.preferredStyle = UISwitchStyle.sliding
-
+    
     switchControl.addTarget_action_forControlEvents_(
       self, SEL('switchValueDidChange:'), UIControlEvents.valueChanged)
-
+  
   @objc_method
   def configureCheckboxSwitch_(self, switchControl):
     switchControl.setOn_animated_(True, False)
-
+    
     switchControl.addTarget_action_forControlEvents_(
       self, SEL('switchValueDidChange:'), UIControlEvents.valueChanged)
-
+    
     # On the Mac, make sure this control take on the apperance of a checkbox with a title.
     # Mac では、このコントロールがタイトル付きのチェックボックスの外観になるようにしてください。
-
+    
     if self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiom.mac:
       switchControl.preferredStyle = UISwitchStyle.checkbox
       switchControl.title = localizedString('SwitchTitle')
-
+  
   @objc_method
   def configureTintedSwitch_(self, switchControl):
     switchControl.tintColor = UIColor.systemBlueColor()
-    #switchControl.setTintColor_(UIColor.systemPinkColor())
+    # switchControl.setTintColor_(UIColor.systemPinkColor())
     switchControl.onTintColor = UIColor.systemGreenColor()
     switchControl.thumbTintColor = UIColor.systemPurpleColor()
-
+    
     switchControl.addTarget_action_forControlEvents_(
       self, SEL('switchValueDidChange:'), UIControlEvents.valueChanged)
-
+  
   # MARK: - Actions
   @objc_method
   def switchValueDidChange_(self, aSwitch):
@@ -123,12 +123,11 @@ if __name__ == '__main__':
     UIModalPresentationStyle,
   )
   from rbedge import present_viewController
-
+  
   table_style = UITableViewStyle.grouped
   main_vc = SwitchViewController.alloc().initWithStyle_(table_style)
   _title = NSStringFromClass(SwitchViewController)
   main_vc.navigationItem.title = _title
-
+  
   presentation_style = UIModalPresentationStyle.fullScreen
   present_viewController(main_vc, presentation_style)
-
