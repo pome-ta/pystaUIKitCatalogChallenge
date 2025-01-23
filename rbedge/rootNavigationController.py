@@ -1,48 +1,34 @@
-from pyrubicon.objc.api import ObjCClass, ObjCProtocol, objc_method
-from pyrubicon.objc.runtime import SEL
+import ctypes
 
-from .enumerations import UIRectEdge, UIBarButtonSystemItem
+from pyrubicon.objc.api import ObjCClass
+from pyrubicon.objc.api import objc_method
+from pyrubicon.objc.runtime import send_super, SEL
+
+from .enumerations import (
+  UIRectEdge,
+  UIBarButtonSystemItem,
+)
 from . import pdbr
-#ObjCClass.auto_rename = True
 
 # --- UINavigationController
 UINavigationController = ObjCClass('UINavigationController')
-UINavigationControllerDelegate = ObjCProtocol('UINavigationControllerDelegate')
 UINavigationBarAppearance = ObjCClass('UINavigationBarAppearance')
 UIToolbarAppearance = ObjCClass('UIToolbarAppearance')
 UIBarButtonItem = ObjCClass('UIBarButtonItem')
 
 
-class RootNavigationController(UINavigationController,
-                               protocols=[UINavigationControllerDelegate]):
+class RootNavigationController(UINavigationController):
+
+  @objc_method
+  def dealloc(self):
+    # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
+    #print('\tdealloc')
+    pass
 
   @objc_method
   def viewDidLoad(self):
-    # wip: toolbar 周りの調査のため一旦様子見
+    send_super(__class__, self, 'viewDidLoad')
     #self.initNavigationBarAppearance()
-    #self.initToolbarAppearance()
-    '''
-    navigationBarAppearance = UINavigationBarAppearance.new()
-    navigationBarAppearance.configureWithDefaultBackground()
-
-    navigationBar = self.navigationBar
-    navigationBar.standardAppearance = navigationBarAppearance
-    navigationBar.scrollEdgeAppearance = navigationBarAppearance
-    navigationBar.compactAppearance = navigationBarAppearance
-    navigationBar.compactScrollEdgeAppearance = navigationBarAppearance
-
-    toolbarAppearance = UIToolbarAppearance.new()
-    toolbarAppearance.configureWithDefaultBackground()
-    #toolbarAppearance.configureWithOpaqueBackground()
-    #toolbarAppearance.configureWithTransparentBackground()
-    
-    toolbar = self.toolbar
-    toolbar.standardAppearance = toolbarAppearance
-    toolbar.scrollEdgeAppearance = toolbarAppearance
-    toolbar.compactAppearance = toolbarAppearance
-    toolbar.compactScrollEdgeAppearance = toolbarAppearance
-    '''
-
     self.delegate = self
 
   @objc_method
@@ -69,8 +55,6 @@ class RootNavigationController(UINavigationController,
     toolbar.compactAppearance = toolbarAppearance
     toolbar.compactScrollEdgeAppearance = toolbarAppearance
 
-    self.setToolbarHidden_(True)
-
   @objc_method
   def doneButtonTapped_(self, sender):
     visibleViewController = self.visibleViewController
@@ -79,8 +63,8 @@ class RootNavigationController(UINavigationController,
   @objc_method
   def navigationController_willShowViewController_animated_(
       self, navigationController, viewController, animated: bool):
-    extendedLayout = UIRectEdge.none
     # xxx: layout 範囲の制限
+    #extendedLayout = UIRectEdge.none
     #viewController.setEdgesForExtendedLayout_(extendedLayout)
 
     closeButtonItem = UIBarButtonItem.alloc().initWithBarButtonSystemItem(
@@ -106,4 +90,64 @@ class RootNavigationController(UINavigationController,
                                                       True)
     else:
       navigationItem.rightBarButtonItem = closeButtonItem
+
+  @objc_method
+  def viewWillAppear_(self, animated: bool):
+    send_super(__class__,
+               self,
+               'viewWillAppear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    #print('viewWillAppear')
+
+  @objc_method
+  def viewDidAppear_(self, animated: bool):
+    send_super(__class__,
+               self,
+               'viewDidAppear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    #print('viewDidAppear')
+
+  @objc_method
+  def viewWillDisappear_(self, animated: bool):
+    send_super(__class__,
+               self,
+               'viewWillDisappear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    #print('viewDidDisappear')
+
+  @objc_method
+  def viewWillDisappear_(self, animated: bool):
+    send_super(__class__,
+               self,
+               'viewWillDisappear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    #print('viewDidDisappear')
+
+  @objc_method
+  def viewDidDisappear_(self, animated: bool):
+    send_super(__class__,
+               self,
+               'viewDidDisappear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    #print('viewDidDisappear')
+
+  @objc_method
+  def didReceiveMemoryWarning(self):
+    send_super(__class__, self, 'didReceiveMemoryWarning')
+    print(f'{__class__}: didReceiveMemoryWarning')
 
