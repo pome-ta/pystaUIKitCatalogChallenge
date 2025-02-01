@@ -113,7 +113,7 @@ class UIControlEvents:
 # ref: [UIListContentTextAlignment | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uilistcontenttextalignment)
 @dataclass
 class UIListContentTextAlignment:
-  # todo: `Enumeration Case` に値表記が無いので独自に調査
+  # todo: `Enumeration Case` に値表記が無いので独自に調査
   natural: int = 0
   center: int = 1
   justified: int = 2
@@ -130,7 +130,7 @@ class UITableViewStyle:
 # ref: [UIButtonConfigurationCornerStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uibuttonconfigurationcornerstyle?language=objc)
 @dataclass
 class UIButtonConfigurationCornerStyle:
-  # todo: `Enumeration Case` に値表記が無いので独自に調査
+  # todo: `Enumeration Case` に値表記が無いので独自に調査
   dynamic: int = 0
   fixed: int = -1
   capsule: int = 4
@@ -202,7 +202,7 @@ class NSDirectionalRectEdge:
 # ref: [UIButtonConfigurationSize | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uibuttonconfigurationsize)
 @dataclass
 class UIButtonConfigurationSize:
-  # todo: `Enumeration Case` に値表記が無いので独自に調査
+  # todo: `Enumeration Case` に値表記が無いので独自に調査
   medium: int = 0
   small: int = 1
   mini: int = 2
@@ -362,7 +362,7 @@ class UIUserInterfaceStyle:
 # ref: [UIBarMetrics | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uibarmetrics?language=objc)
 @dataclass
 class UIBarMetrics:
-  default: int = 0  # xxx: '`' で囲まれてる
+  default: int = 0  # xxx: '`' で囲まれてる
   compact: int = 1
   defaultPrompt: int = 101
   compactPrompt: int = 102
@@ -857,7 +857,7 @@ class UIImagePickerControllerSourceType:
   photoLibrary: int = 0  # todo: deprecated
   camera: int = 1
   savedPhotosAlbum: int = 2  # todo: deprecated
-  
+
 
 # ref: [NSURLRequestCachePolicy | Apple Developer Documentation](https://developer.apple.com/documentation/foundation/nsurlrequestcachepolicy)
 @dataclass
@@ -877,4 +877,4 @@ class WKNavigationActionPolicy:
   cancel: int = 0
   allow: int = 1
   download: int = 2
-  
+
