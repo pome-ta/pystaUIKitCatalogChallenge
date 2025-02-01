@@ -858,3 +858,23 @@ class UIImagePickerControllerSourceType:
   camera: int = 1
   savedPhotosAlbum: int = 2  # todo: deprecated
   
+
+# ref: [NSURLRequestCachePolicy | Apple Developer Documentation](https://developer.apple.com/documentation/foundation/nsurlrequestcachepolicy)
+@dataclass
+class NSURLRequestCachePolicy:
+  useProtocolCachePolicy: int = 0
+  reloadIgnoringLocalCacheData: int = 1
+  reloadIgnoringLocalAndRemoteCacheData: int = 4
+  reloadIgnoringCacheData: int = reloadIgnoringLocalCacheData
+  returnCacheDataElseLoad: int = 2
+  returnCacheDataDontLoad: int = 3
+  reloadRevalidatingCacheData: int = 5
+
+
+# ref: [WKNavigationActionPolicy | Apple Developer Documentation](https://developer.apple.com/documentation/webkit/wknavigationactionpolicy?language=objc)
+@dataclass
+class WKNavigationActionPolicy:
+  cancel: int = 0
+  allow: int = 1
+  download: int = 2
+  
