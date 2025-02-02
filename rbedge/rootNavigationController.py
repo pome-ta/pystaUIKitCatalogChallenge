@@ -9,6 +9,7 @@ from .enumerations import (
   UIRectEdge,
   UIBarButtonSystemItem,
 )
+
 #from .functions import NSStringFromClass
 from . import pdbr
 
@@ -88,19 +89,7 @@ class RootNavigationController(UINavigationController):
 
   @objc_method
   def doneButtonTapped_(self, sender):
-    #print('doneButtonTapped: start')
-    '''
-    @Block
-    def completion() -> None:
-      print('block: doneButtonTapped')
-    '''
-
-    #visibleViewController = self.visibleViewController
-    #visibleViewController.dismissViewControllerAnimated_completion_(True, completion)
-    #pdbr.state(self)
-    #self.dismissViewControllerAnimated_completion_(True, completion)
     self.dismissViewControllerAnimated_completion_(True, None)
-    #print('doneButtonTapped: end')
 
   @objc_method
   def navigationController_willShowViewController_animated_(

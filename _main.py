@@ -90,6 +90,12 @@ class SplitViewController(UISplitViewController):
 class MainViewController(UIViewController):
 
   @objc_method
+  def dealloc(self):
+    # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
+    #print(f'- {NSStringFromClass(__class__)}: dealloc')
+    print('- MainViewController: dealloc')
+
+  @objc_method
   def viewDidLoad(self):
     # --- Navigation
     send_super(__class__, self, 'viewDidLoad')
