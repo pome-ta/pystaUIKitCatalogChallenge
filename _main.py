@@ -105,12 +105,14 @@ class MainViewController(UIViewController):
 
 
 if __name__ == '__main__':
-  from rbedge import present_viewController
+  from rbedge.app import App
   from rbedge.enumerations import UIModalPresentationStyle
 
   vc = MainViewController.new()
 
   style = UIModalPresentationStyle.fullScreen
   #style = UIModalPresentationStyle.pageSheet
-  present_viewController(vc, style)
+
+  app = App(vc)
+  app.main_loop(style)
 
