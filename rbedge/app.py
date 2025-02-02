@@ -46,6 +46,5 @@ class App:
 
     present_viewController(self.viewController, modalPresentationStyle)
     loop.run_forever()
-    #print('--- run_forever: close')
     loop.close()
 
