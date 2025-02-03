@@ -3,6 +3,7 @@ from pyrubicon.objc.api import ObjCClass
 from .lifeCycle import loop
 from .enumerations import UIModalPresentationStyle
 from .objcMainThread import onMainThread
+from .rootNavigationController import RootNavigationController
 
 UIApplication = ObjCClass('UIApplication')
 UIViewController = ObjCClass('UIViewController')  # todo: アノテーション用
@@ -25,7 +26,7 @@ class App:
       while _presentedViewController := rootViewController.presentedViewController:
         rootViewController = _presentedViewController
 
-      from .rootNavigationController import RootNavigationController
+      #from .rootNavigationController import RootNavigationController
 
       presentViewController = RootNavigationController.alloc(
       ).initWithRootViewController_(viewController)

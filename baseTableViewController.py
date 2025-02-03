@@ -8,6 +8,7 @@ from pyrubicon.objc.types import NSInteger
 from rbedge.enumerations import UIListContentTextAlignment
 
 from caseElement import CaseElement  # todo: 型呼び出し
+from rbedge.functions import NSStringFromClass
 
 UITableViewController = ObjCClass('UITableViewController')
 UITableViewHeaderFooterView = ObjCClass('UITableViewHeaderFooterView')
@@ -15,6 +16,17 @@ UIListContentConfiguration = ObjCClass('UIListContentConfiguration')
 
 
 class BaseTableViewController(UITableViewController):
+
+  @objc_method
+  def dealloc(self):
+    # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
+
+    print(f'\t\t- {NSStringFromClass(__class__)}: dealloc')
+
+  @objc_method
+  def loadView(self):
+    send_super(__class__, self, 'loadView')
+    print(f'\t\t{NSStringFromClass(__class__)}: loadView')
 
   @objc_method
   def initWithStyle_(self, style: NSInteger) -> ObjCInstance:
@@ -27,6 +39,7 @@ class BaseTableViewController(UITableViewController):
                  NSInteger,
                ])
 
+    print(f'\t\t{NSStringFromClass(__class__)}: initWithStyle_')
     self.testCells: list[CaseElement] = []
     self.headerFooterView_identifier = 'customHeaderFooterView'
     return self
@@ -42,6 +55,7 @@ class BaseTableViewController(UITableViewController):
   @objc_method
   def viewDidLoad(self):
     send_super(__class__, self, 'viewDidLoad')  # xxx: 不要?
+    print(f'\t\t{NSStringFromClass(__class__)}: viewDidLoad')
     self.tableView.registerClass_forHeaderFooterViewReuseIdentifier_(
       UITableViewHeaderFooterView, self.headerFooterView_identifier)
 
@@ -55,8 +69,8 @@ class BaseTableViewController(UITableViewController):
                  ctypes.c_bool,
                ])
     # todo: `dealloc` 呼び出す為、インスタンス変数を初期化
-    self.testCells = None
-    self.headerFooterView_identifier = None
+    #self.testCells = None
+    #self.headerFooterView_identifier = None
 
   @objc_method
   def testCells_extend(self, testCells: ctypes.py_object):
