@@ -22,7 +22,7 @@ class RootNavigationController(UINavigationController):
   @objc_method
   def dealloc(self):
     # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
-    print(f'- {NSStringFromClass(__class__)}: dealloc')
+    #print(f'- {NSStringFromClass(__class__)}: dealloc')
     loop.stop()
 
   @objc_method

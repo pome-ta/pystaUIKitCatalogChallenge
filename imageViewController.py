@@ -9,15 +9,15 @@ from pyrubicon.objc.runtime import send_super
 from pyrubicon.objc.types import CGRect
 
 from pyLocalizedString import localizedString
-from rbedge import pdbr
 
 from rbedge.enumerations import (
   UIViewAutoresizing,
   UIViewContentMode,
 )
 from rbedge.pythonProcessUtils import dataWithContentsOfURL
-
 from rbedge.functions import NSStringFromClass
+
+from rbedge import pdbr
 
 UIViewController = ObjCClass('UIViewController')
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
@@ -31,30 +31,31 @@ UIColor = ObjCClass('UIColor')
 
 
 class ImageViewController(UIViewController):
+
   imageView: UIImage = objc_property()
 
   @objc_method
   def dealloc(self):
     # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
-    print(f'\t - {NSStringFromClass(__class__)}: dealloc')
+    #print(f'\t - {NSStringFromClass(__class__)}: dealloc')
+    pass
 
   @objc_method
   def loadView(self):
     send_super(__class__, self, 'loadView')
-    print(f'\t{NSStringFromClass(__class__)}: loadView')
+    #print(f'\t{NSStringFromClass(__class__)}: loadView')
 
   # MARK: - View Life Cycle
   @objc_method
   def viewDidLoad(self):
     send_super(__class__, self, 'viewDidLoad')
-    print(f'\t{NSStringFromClass(__class__)}: viewDidLoad')
+    #print(f'\t{NSStringFromClass(__class__)}: viewDidLoad')
     self.navigationItem.title = localizedString('ImageViewTitle') if (
       title := self.navigationItem.title) is None else title
 
-    #self.view.backgroundColor = UIColor.systemBackgroundColor()
+    self.view.backgroundColor = UIColor.systemBackgroundColor()
 
     imageView = UIImageView.alloc().init()
-    #imageView.backgroundColor = UIColor.systemOrangeColor()
 
     # --- Layout
     self.view.addSubview_(imageView)
@@ -84,7 +85,7 @@ class ImageViewController(UIViewController):
                argtypes=[
                  ctypes.c_bool,
                ])
-    print(f'\t{NSStringFromClass(__class__)}: viewWillAppear_')
+    #print(f'\t{NSStringFromClass(__class__)}: viewWillAppear_')
 
   @objc_method
   def viewDidAppear_(self, animated: bool):
@@ -95,12 +96,12 @@ class ImageViewController(UIViewController):
                argtypes=[
                  ctypes.c_bool,
                ])
-    print(f'\t{NSStringFromClass(__class__)}: viewDidAppear_')
-    print('\t↓ ---')
+    #print(f'\t{NSStringFromClass(__class__)}: viewDidAppear_')
+    #print('\t↓ ---')
 
   @objc_method
   def viewWillDisappear_(self, animated: bool):
-    print('\t↑ ---')
+    #print('\t↑ ---')
     send_super(__class__,
                self,
                'viewWillDisappear:',
@@ -108,7 +109,7 @@ class ImageViewController(UIViewController):
                argtypes=[
                  ctypes.c_bool,
                ])
-    print(f'\t{NSStringFromClass(__class__)}: viewWillDisappear_')
+    #print(f'\t{NSStringFromClass(__class__)}: viewWillDisappear_')
 
   @objc_method
   def viewDidDisappear_(self, animated: bool):
@@ -119,7 +120,7 @@ class ImageViewController(UIViewController):
                argtypes=[
                  ctypes.c_bool,
                ])
-    print(f'\t{NSStringFromClass(__class__)}: viewDidDisappear_')
+    #print(f'\t{NSStringFromClass(__class__)}: viewDidDisappear_')
 
   @objc_method
   def didReceiveMemoryWarning(self):
@@ -164,8 +165,8 @@ if __name__ == '__main__':
   _title = NSStringFromClass(ImageViewController)
   main_vc.navigationItem.title = _title
 
-  #presentation_style = UIModalPresentationStyle.fullScreen
-  presentation_style = UIModalPresentationStyle.pageSheet
+  presentation_style = UIModalPresentationStyle.fullScreen
+  #presentation_style = UIModalPresentationStyle.pageSheet
   #presentation_style = UIModalPresentationStyle.popover
 
   app = App(main_vc)
