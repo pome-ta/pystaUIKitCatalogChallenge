@@ -1,7 +1,8 @@
 import ctypes
 
-from pyrubicon.objc.api import ObjCClass, ObjCInstance, NSString
+from pyrubicon.objc.api import ObjCClass, ObjCInstance
 from pyrubicon.objc.api import objc_method, objc_property
+from pyrubicon.objc.api import NSString,NSMutableArray
 from pyrubicon.objc.runtime import send_super, objc_id
 from pyrubicon.objc.types import NSInteger
 
@@ -17,7 +18,7 @@ UIListContentConfiguration = ObjCClass('UIListContentConfiguration')
 
 class BaseTableViewController(UITableViewController):
 
-  #testCells: list[CaseElement] = objc_property()
+  testCells: NSMutableArray = objc_property()
   headerFooterViewIdentifier: NSString = objc_property()
 
   @objc_method
@@ -42,7 +43,7 @@ class BaseTableViewController(UITableViewController):
                ])
 
     print(f'\t\t{NSStringFromClass(__class__)}: initWithStyle_')
-    self.testCells = []
+    self.testCells = NSMutableArray.array()
     self.headerFooterViewIdentifier = NSString.stringWithString_(
       'customHeaderFooterView')
     return self
@@ -114,7 +115,7 @@ class BaseTableViewController(UITableViewController):
     print(f'\t{NSStringFromClass(__class__)}: didReceiveMemoryWarning')
 
   @objc_method
-  def testCells_extend(self, testCells: ctypes.py_object):
+  def testCellsExtend_(self, testCells)->None:
     """`@available(iOS 15.0, *)` で弾く用
     """
     for testCell in testCells:
@@ -122,7 +123,7 @@ class BaseTableViewController(UITableViewController):
         continue
       if (cell := testCell).configHandler is None:
         continue
-      self.testCells.append(cell)
+      self.testCells.addObject_(cell)
 
   @objc_method
   def centeredHeaderView_(self, title):

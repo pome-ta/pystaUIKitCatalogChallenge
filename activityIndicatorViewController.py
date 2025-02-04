@@ -19,6 +19,7 @@ from rbedge import pdbr
 UIColor = ObjCClass('UIColor')
 
 
+
 class ActivityIndicatorKind(Enum):
   mediumIndicator = 'mediumIndicator'
   largeIndicator = 'largeIndicator'
@@ -61,7 +62,15 @@ class ActivityIndicatorViewController(BaseTableViewController):
     self.navigationItem.title = localizedString('ActivityIndicatorsTitle') if (
       title := self.navigationItem.title) is None else title
 
-    self.testCells_extend([
+    print(self.testCells)
+    self.testCellsExtend_([
+      CaseElement(localizedString('MediumIndicatorTitle'),
+                  ActivityIndicatorKind.mediumIndicator.value,
+                  self.configureMediumActivityIndicatorView_),
+    ])
+    
+    '''
+    self.testCellsExtend_([
       CaseElement(localizedString('MediumIndicatorTitle'),
                   ActivityIndicatorKind.mediumIndicator.value,
                   self.configureMediumActivityIndicatorView_),
@@ -79,6 +88,7 @@ class ActivityIndicatorViewController(BaseTableViewController):
                   ActivityIndicatorKind.largeTintedIndicator.value,
                   self.configureLargeTintedActivityIndicatorView_),
     ])
+    '''
 
   # MARK: - Configuration
   @objc_method
@@ -122,13 +132,14 @@ if __name__ == '__main__':
     UITableViewStyle,
     UIModalPresentationStyle,
   )
-
+  
+  
   table_style = UITableViewStyle.grouped
   main_vc = ActivityIndicatorViewController.alloc().initWithStyle_(table_style)
   _title = NSStringFromClass(ActivityIndicatorViewController)
   main_vc.navigationItem.title = _title
 
   presentation_style = UIModalPresentationStyle.fullScreen
-  #app = App(main_vc)
-  #app.main_loop(presentation_style)
+  app = App(main_vc)
+  app.main_loop(presentation_style)
 
