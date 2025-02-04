@@ -26,12 +26,8 @@ def onMainThread(func):
 
   @functools.wraps(func)
   def wrapper(*args, **kwargs):
-    print(NSThread.isMainThread)
     if NSThread.isMainThread:
       func(*args, **kwargs)
-    
-    #func(*args, **kwargs)
-    
     block = Block(functools.partial(func, *args, **kwargs), None)
     libobjc.dispatch_async(dispatch_get_main_queue(), block)
 
