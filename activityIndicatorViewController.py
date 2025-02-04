@@ -6,14 +6,15 @@ from pyrubicon.objc.runtime import send_super, objc_id
 from pyrubicon.objc.types import NSInteger
 
 from rbedge.enumerations import UIActivityIndicatorViewStyle
-from rbedge.functions import NSStringFromClass
-from rbedge import pdbr
 
 from caseElement import CaseElement
 from pyLocalizedString import localizedString
 
 from baseTableViewController import BaseTableViewController
 from storyboard.activityIndicatorViewController import prototypes
+
+from rbedge.functions import NSStringFromClass
+from rbedge import pdbr
 
 UIColor = ObjCClass('UIColor')
 
@@ -116,7 +117,7 @@ class ActivityIndicatorViewController(BaseTableViewController):
 
 if __name__ == '__main__':
   from rbedge.app import App
-  from rbedge.functions import NSStringFromClass
+
   from rbedge.enumerations import (
     UITableViewStyle,
     UIModalPresentationStyle,
@@ -128,6 +129,6 @@ if __name__ == '__main__':
   main_vc.navigationItem.title = _title
 
   presentation_style = UIModalPresentationStyle.fullScreen
-  app = App(main_vc)
-  app.main_loop(presentation_style)
+  #app = App(main_vc)
+  #app.main_loop(presentation_style)
 
