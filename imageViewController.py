@@ -37,8 +37,8 @@ class ImageViewController(UIViewController):
   @objc_method
   def dealloc(self):
     # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
-    #print(f'\t - {NSStringFromClass(__class__)}: dealloc')
-    pass
+    print(f'\t - {NSStringFromClass(__class__)}: dealloc')
+    #pass
 
   @objc_method
   def loadView(self):

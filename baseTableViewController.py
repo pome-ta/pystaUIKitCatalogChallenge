@@ -10,6 +10,7 @@ from rbedge.enumerations import UIListContentTextAlignment
 
 from caseElement import CaseElement  # todo: 型呼び出し
 from rbedge.functions import NSStringFromClass
+from rbedge import pdbr
 
 UITableViewController = ObjCClass('UITableViewController')
 UITableViewHeaderFooterView = ObjCClass('UITableViewHeaderFooterView')
@@ -18,12 +19,15 @@ UIListContentConfiguration = ObjCClass('UIListContentConfiguration')
 
 class BaseTableViewController(UITableViewController):
 
+  #tableView = objc_property()
+  #testCells: NSMutableArray = objc_property(weak=True)
   testCells: NSMutableArray = objc_property()
   headerFooterViewIdentifier: NSString = objc_property()
 
   @objc_method
   def dealloc(self):
     # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
+    #pdbr.state(self)
     print(f'\t\t- {NSStringFromClass(__class__)}: dealloc')
 
   @objc_method
@@ -43,9 +47,12 @@ class BaseTableViewController(UITableViewController):
                ])
 
     print(f'\t\t{NSStringFromClass(__class__)}: initWithStyle_')
-    self.testCells = NSMutableArray.array()
-    self.headerFooterViewIdentifier = NSString.stringWithString_(
-      'customHeaderFooterView')
+    #self.testCells = NSMutableArray.new()
+    #self.testCells = NSMutableArray.array()
+    self.setTestCells_(NSMutableArray.array())
+    #self.testCells = []
+    #self.headerFooterViewIdentifier = NSString.stringWithString_('customHeaderFooterView')
+    self.setHeaderFooterViewIdentifier_(NSString.stringWithString_('customHeaderFooterView'))
     return self
 
   @objc_method
@@ -108,22 +115,27 @@ class BaseTableViewController(UITableViewController):
                  ctypes.c_bool,
                ])
     #print(f'\t{NSStringFromClass(__class__)}: viewDidDisappear_')
+    self.testCells = None
+    
 
   @objc_method
   def didReceiveMemoryWarning(self):
     send_super(__class__, self, 'didReceiveMemoryWarning')
     print(f'\t{NSStringFromClass(__class__)}: didReceiveMemoryWarning')
 
+  '''
   @objc_method
-  def testCellsExtend_(self, testCells) -> None:
+  def testCellsExtend_(self, addCells) -> None:
     """`@available(iOS 15.0, *)` で弾く用
     """
-    for testCell in testCells:
-      if not isinstance(testCell, CaseElement):
+    for addCell in addCells:
+      if not isinstance(addCell, CaseElement):
         continue
-      if (cell := testCell).configHandler is None:
+      if (cell := addCell).configHandlerName is None:
         continue
       self.testCells.addObject_(cell)
+      #self.testCells.append(cell)
+  '''
 
   @objc_method
   def centeredHeaderView_(self, title):

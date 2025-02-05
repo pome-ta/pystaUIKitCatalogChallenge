@@ -1,10 +1,10 @@
-import ctypes
-from pyrubicon.objc.api import ObjCInstance, ObjCBoundMethod
-from pyrubicon.objc.api import objc_method, objc_property
+#from pyrubicon.objc.api import ObjCInstance, ObjCBoundMethod
+from pyrubicon.objc.api import objc_method ,objc_property
 from pyrubicon.objc.api import NSObject, NSString
 from pyrubicon.objc.runtime import send_super, objc_id, objc_block
 
 from rbedge.functions import NSStringFromClass
+from rbedge import pdbr
 
 
 class CaseElement(NSObject):
@@ -15,7 +15,10 @@ class CaseElement(NSObject):
   cellID: NSString = objc_property()
   # セルのサブビューを設定するための構成ハンドラー。
   # xxx: ガバガバ
-  configHandler = objc_property()
+  #configHandler = objc_property()
+  #targetSelf = objc_property(weak=True)
+  targetSelf = objc_property()
+  configHandlerName: NSString = objc_property()
 
   @objc_method
   def dealloc(self):
@@ -31,15 +34,54 @@ class CaseElement(NSObject):
     #self.configHandler = configHandler
     return self
   '''
+  '''
   @objc_method
   def initWithTitle_cellID_(self, title, cellID):
     #print(configHandler)
     self.title = NSString.stringWithString_(title)
     self.cellID = NSString.stringWithString_(cellID)
     #self.configHandler = configHandler
+    pdbr.state(self)
+    return self
+  '''
+
+  @objc_method
+  def initWithTitle_cellID_targetSelf_configHandlerName_(
+      self, title, cellID, targetSelf, configHandlerName):
+    #print('---')
+    #print(str(configHandlerName))
+    #print(type(configHandlerName))
+    #print('___')
+    self.title = NSString.stringWithString_(title)
+    self.cellID = NSString.stringWithString_(cellID)
+    self.targetSelf = targetSelf
+    self.configHandlerName = NSString.stringWithString_(configHandlerName)
     return self
 
   @objc_method
+  def configHandler(self, view):
+    getattr(self.targetSelf, str(self.configHandlerName))(view)
+
+  @objc_method
+  def targetView(self,cell):
+    return cell.contentView.subviews()[0] if cell != None else None
+
+
+'''
+
+class CaseElement:
+
+  def __init__(self, title: str, cellID: str, configHandler):
+    # セルの視覚的なタイトル (テーブル セクションのヘッダー タイトル)
+    self.title = title
+    # nib ファイル内でセルを検索するためのテーブルビューのセルの識別子。
+    self.cellID = cellID
+    # セルのサブビューを設定するための構成ハンドラー。
+    # xxx: ガバガバ
+    self.configHandler = configHandler
+
+  #@staticmethod
   def targetView(self, cell):
     return cell.contentView.subviews()[0] if cell != None else None
+'''
 

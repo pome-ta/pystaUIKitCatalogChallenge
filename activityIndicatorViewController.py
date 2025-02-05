@@ -2,8 +2,8 @@ import ctypes
 from enum import Enum
 
 from pyrubicon.objc.api import ObjCClass, ObjCInstance
-from pyrubicon.objc.api import objc_method
-from pyrubicon.objc.runtime import send_super, objc_id, objc_block,SEL
+from pyrubicon.objc.api import objc_method, at
+from pyrubicon.objc.runtime import send_super, objc_id, objc_block, SEL
 from pyrubicon.objc.types import NSInteger
 
 from rbedge.enumerations import UIActivityIndicatorViewStyle
@@ -67,25 +67,55 @@ class ActivityIndicatorViewController(BaseTableViewController):
     #print(self.configureMediumActivityIndicatorView_)
 
     #c = CaseElement.alloc().initWithTitle_cellID_configHandler_(localizedString('MediumIndicatorTitle'),ActivityIndicatorKind.mediumIndicator.value, self.configureMediumActivityIndicatorView_)
-    
+
     #c = CaseElement.alloc().initWithTitle_cellID_configHandler_(localizedString('MediumIndicatorTitle'),ActivityIndicatorKind.mediumIndicator.value, ctypes.c_void_p(self.configureMediumActivityIndicatorView_))
-    
-    
+
     #c = CaseElement.alloc().initWithTitle_cellID_configHandler_(localizedString('MediumIndicatorTitle'),ActivityIndicatorKind.mediumIndicator.value)
-    
-    c = CaseElement.alloc().initWithTitle_cellID_(localizedString('MediumIndicatorTitle'),ActivityIndicatorKind.mediumIndicator.value)
-    c.setConfigHandler_(self.configureMediumActivityIndicatorView_)
-    pdbr.state(c)
-    
+
+    #c = CaseElement.alloc().initWithTitle_cellID_(localizedString('MediumIndicatorTitle'),ActivityIndicatorKind.mediumIndicator.value)
+
+    #c = CaseElement.alloc().initWithTitle_cellID_targetSelf_configHandlerName_(localizedString('MediumIndicatorTitle'),ActivityIndicatorKind.mediumIndicator.value, self, 'configureMediumActivityIndicatorView:')
+    #print(__class__)
+    #pdbr.state(__class__)
+    #pdbr.state(self)
+    #print(ctypes.cast(self, objc_id))
+    #print('---')
+    #g = getattr(self, 'configureMediumActivityIndicatorView:')
+    #print(g)
+    #c.setConfigHandler_(self.configureMediumActivityIndicatorView_)
+    #pdbr.state(c)
+    #print(self.configureMediumActivityIndicatorView_)
+    #print('---')
+    #print(self.configureMediumActivityIndicatorView_.receiver)
+    #print(dir(self))
+
+    c1 = CaseElement.alloc(
+    ).initWithTitle_cellID_targetSelf_configHandlerName_(
+      localizedString('MediumIndicatorTitle'),
+      ActivityIndicatorKind.mediumIndicator.value, self,
+      'configureMediumActivityIndicatorView:')
+
+    c2 = CaseElement.alloc(
+    ).initWithTitle_cellID_targetSelf_configHandlerName_(
+      localizedString('LargeIndicatorTitle'),
+      ActivityIndicatorKind.largeIndicator.value, self,
+      'configureLargeActivityIndicatorView:')
+
+    #self.testCells.addObject_(c1)
+    #self.testCells.addObject_(c2)
+    #pdbr.state(self, 1)
+    print('___')
+    print(self.retain())
+    print('---')
+    print(self.retainCount())
     '''
+    
     self.testCellsExtend_([
-      CaseElement.alloc().initWithTitle_cellID_configHandler_(
-        localizedString('MediumIndicatorTitle'),
-        ActivityIndicatorKind.mediumIndicator.value,
-        self.configureMediumActivityIndicatorView_)
+      CaseElement.alloc().initWithTitle_cellID_targetSelf_configHandlerName_(localizedString('MediumIndicatorTitle'),ActivityIndicatorKind.mediumIndicator.value, self, 'configureMediumActivityIndicatorView:')
     ])
     '''
     '''
+    
     self.testCellsExtend_([
       CaseElement(localizedString('MediumIndicatorTitle'),
                   ActivityIndicatorKind.mediumIndicator.value,
@@ -94,6 +124,8 @@ class ActivityIndicatorViewController(BaseTableViewController):
                   ActivityIndicatorKind.largeIndicator.value,
                   self.configureLargeActivityIndicatorView_),
     ])
+    '''
+    '''
     # if traitCollection.userInterfaceIdiom != .mac
     # Tinted activity indicators available only on iOS.
     self.testCells_extend([
@@ -105,10 +137,67 @@ class ActivityIndicatorViewController(BaseTableViewController):
                   self.configureLargeTintedActivityIndicatorView_),
     ])
     '''
+  @objc_method
+  def viewWillAppear_(self, animated: bool):
+    send_super(__class__,
+               self,
+               'viewWillAppear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    print(f'\t{NSStringFromClass(__class__)}: viewWillAppear_')
+    print(self.retainCount())
+
+  @objc_method
+  def viewDidAppear_(self, animated: bool):
+    send_super(__class__,
+               self,
+               'viewDidAppear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    #print(f'\t{NSStringFromClass(__class__)}: viewDidAppear_')
+    #print('\t↓ ---')
+
+  @objc_method
+  def viewWillDisappear_(self, animated: bool):
+    #print('\t↑ ---')
+    send_super(__class__,
+               self,
+               'viewWillDisappear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    #print(f'\t{NSStringFromClass(__class__)}: viewWillDisappear_')
+
+  @objc_method
+  def viewDidDisappear_(self, animated: bool):
+    send_super(__class__,
+               self,
+               'viewDidDisappear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    print(f'\t{NSStringFromClass(__class__)}: viewDidDisappear_')
+    print(self.retainCount())
+    self.testCells = None
+    print(self.retainCount())
+    
+
+  @objc_method
+  def didReceiveMemoryWarning(self):
+    send_super(__class__, self, 'didReceiveMemoryWarning')
+    print(f'\t{NSStringFromClass(__class__)}: didReceiveMemoryWarning')
 
   # MARK: - Configuration
   @objc_method
-  def configureMediumActivityIndicatorView_(self, activityIndicator:objc_id)->None:
+  def configureMediumActivityIndicatorView_(
+      self, activityIndicator:ObjCInstance) -> None:
+    #pdbr.state(activityIndicator)
     activityIndicator.style = UIActivityIndicatorViewStyle.medium
     activityIndicator.hidesWhenStopped = True
 
