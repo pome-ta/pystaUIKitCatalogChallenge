@@ -1,14 +1,45 @@
-class CaseElement:
-  
-  def __init__(self, title: str, cellID: str, configHandler):
-    # セルの視覚的なタイトル (テーブル セクションのヘッダー タイトル)
-    self.title = title
-    # nib ファイル内でセルを検索するためのテーブルビューのセルの識別子。
-    self.cellID = cellID
-    # セルのサブビューを設定するための構成ハンドラー。
-    # xxx: ガバガバ
-    self.configHandler = configHandler
-  
-  @staticmethod
-  def targetView(cell):
+import ctypes
+from pyrubicon.objc.api import ObjCInstance, ObjCBoundMethod
+from pyrubicon.objc.api import objc_method, objc_property
+from pyrubicon.objc.api import NSObject, NSString
+from pyrubicon.objc.runtime import send_super, objc_id, objc_block
+
+from rbedge.functions import NSStringFromClass
+
+
+class CaseElement(NSObject):
+
+  # セルの視覚的なタイトル (テーブル セクションのヘッダー タイトル)
+  title: NSString = objc_property()
+  # nib ファイル内でセルを検索するためのテーブルビューのセルの識別子
+  cellID: NSString = objc_property()
+  # セルのサブビューを設定するための構成ハンドラー。
+  # xxx: ガバガバ
+  configHandler = objc_property()
+
+  @objc_method
+  def dealloc(self):
+    # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
+    print(f'\t\t- {NSStringFromClass(__class__)}: dealloc')
+
+  '''
+  @objc_method
+  def initWithTitle_cellID_configHandler_(self, title, cellID, configHandler):
+    #print(configHandler)
+    self.title = NSString.stringWithString_(title)
+    self.cellID = NSString.stringWithString_(cellID)
+    #self.configHandler = configHandler
+    return self
+  '''
+  @objc_method
+  def initWithTitle_cellID_(self, title, cellID):
+    #print(configHandler)
+    self.title = NSString.stringWithString_(title)
+    self.cellID = NSString.stringWithString_(cellID)
+    #self.configHandler = configHandler
+    return self
+
+  @objc_method
+  def targetView(self, cell):
     return cell.contentView.subviews()[0] if cell != None else None
+

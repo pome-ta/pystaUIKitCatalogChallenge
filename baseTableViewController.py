@@ -2,7 +2,7 @@ import ctypes
 
 from pyrubicon.objc.api import ObjCClass, ObjCInstance
 from pyrubicon.objc.api import objc_method, objc_property
-from pyrubicon.objc.api import NSString,NSMutableArray
+from pyrubicon.objc.api import NSString, NSMutableArray
 from pyrubicon.objc.runtime import send_super, objc_id
 from pyrubicon.objc.types import NSInteger
 
@@ -115,7 +115,7 @@ class BaseTableViewController(UITableViewController):
     print(f'\t{NSStringFromClass(__class__)}: didReceiveMemoryWarning')
 
   @objc_method
-  def testCellsExtend_(self, testCells)->None:
+  def testCellsExtend_(self, testCells) -> None:
     """`@available(iOS 15.0, *)` で弾く用
     """
     for testCell in testCells:

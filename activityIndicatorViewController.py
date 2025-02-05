@@ -1,8 +1,9 @@
+import ctypes
 from enum import Enum
 
 from pyrubicon.objc.api import ObjCClass, ObjCInstance
 from pyrubicon.objc.api import objc_method
-from pyrubicon.objc.runtime import send_super, objc_id
+from pyrubicon.objc.runtime import send_super, objc_id, objc_block,SEL
 from pyrubicon.objc.types import NSInteger
 
 from rbedge.enumerations import UIActivityIndicatorViewStyle
@@ -17,7 +18,6 @@ from rbedge.functions import NSStringFromClass
 from rbedge import pdbr
 
 UIColor = ObjCClass('UIColor')
-
 
 
 class ActivityIndicatorKind(Enum):
@@ -62,13 +62,29 @@ class ActivityIndicatorViewController(BaseTableViewController):
     self.navigationItem.title = localizedString('ActivityIndicatorsTitle') if (
       title := self.navigationItem.title) is None else title
 
-    print(self.testCells)
-    self.testCellsExtend_([
-      CaseElement(localizedString('MediumIndicatorTitle'),
-                  ActivityIndicatorKind.mediumIndicator.value,
-                  self.configureMediumActivityIndicatorView_),
-    ])
+    #pdbr.state(self.configureMediumActivityIndicatorView_)
+    #print(dir(self.configureMediumActivityIndicatorView_))
+    #print(self.configureMediumActivityIndicatorView_)
+
+    #c = CaseElement.alloc().initWithTitle_cellID_configHandler_(localizedString('MediumIndicatorTitle'),ActivityIndicatorKind.mediumIndicator.value, self.configureMediumActivityIndicatorView_)
     
+    #c = CaseElement.alloc().initWithTitle_cellID_configHandler_(localizedString('MediumIndicatorTitle'),ActivityIndicatorKind.mediumIndicator.value, ctypes.c_void_p(self.configureMediumActivityIndicatorView_))
+    
+    
+    #c = CaseElement.alloc().initWithTitle_cellID_configHandler_(localizedString('MediumIndicatorTitle'),ActivityIndicatorKind.mediumIndicator.value)
+    
+    c = CaseElement.alloc().initWithTitle_cellID_(localizedString('MediumIndicatorTitle'),ActivityIndicatorKind.mediumIndicator.value)
+    c.setConfigHandler_(self.configureMediumActivityIndicatorView_)
+    pdbr.state(c)
+    
+    '''
+    self.testCellsExtend_([
+      CaseElement.alloc().initWithTitle_cellID_configHandler_(
+        localizedString('MediumIndicatorTitle'),
+        ActivityIndicatorKind.mediumIndicator.value,
+        self.configureMediumActivityIndicatorView_)
+    ])
+    '''
     '''
     self.testCellsExtend_([
       CaseElement(localizedString('MediumIndicatorTitle'),
@@ -92,7 +108,7 @@ class ActivityIndicatorViewController(BaseTableViewController):
 
   # MARK: - Configuration
   @objc_method
-  def configureMediumActivityIndicatorView_(self, activityIndicator):
+  def configureMediumActivityIndicatorView_(self, activityIndicator:objc_id)->None:
     activityIndicator.style = UIActivityIndicatorViewStyle.medium
     activityIndicator.hidesWhenStopped = True
 
@@ -132,8 +148,7 @@ if __name__ == '__main__':
     UITableViewStyle,
     UIModalPresentationStyle,
   )
-  
-  
+
   table_style = UITableViewStyle.grouped
   main_vc = ActivityIndicatorViewController.alloc().initWithStyle_(table_style)
   _title = NSStringFromClass(ActivityIndicatorViewController)
