@@ -53,6 +53,9 @@ class BaseTableViewController(UITableViewController):
     #self.testCells = []
     #self.headerFooterViewIdentifier = NSString.stringWithString_('customHeaderFooterView')
     self.setHeaderFooterViewIdentifier_(NSString.stringWithString_('customHeaderFooterView'))
+    self.tableView.delegate = self
+    self.tableView.dataSource = self
+    #pdbr.state(self.tableView)
     return self
 
   @objc_method
@@ -115,7 +118,7 @@ class BaseTableViewController(UITableViewController):
                  ctypes.c_bool,
                ])
     #print(f'\t{NSStringFromClass(__class__)}: viewDidDisappear_')
-    self.testCells = None
+    #self.testCells = None
     
 
   @objc_method
@@ -175,7 +178,9 @@ class BaseTableViewController(UITableViewController):
       cellTest.cellID, indexPath)
 
     if (view := cellTest.targetView(cell)):
-      cellTest.configHandler(view)
+      #cellTest.configHandler(view)
+      getattr(self, str(cellTest.configHandlerName))(view)
+      
 
     return cell
 

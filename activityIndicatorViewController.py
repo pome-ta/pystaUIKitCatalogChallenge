@@ -90,24 +90,22 @@ class ActivityIndicatorViewController(BaseTableViewController):
     #print(dir(self))
 
     c1 = CaseElement.alloc(
-    ).initWithTitle_cellID_targetSelf_configHandlerName_(
+    ).initWithTitle_cellID_configHandlerName_(
       localizedString('MediumIndicatorTitle'),
-      ActivityIndicatorKind.mediumIndicator.value, self,
+      ActivityIndicatorKind.mediumIndicator.value,
       'configureMediumActivityIndicatorView:')
 
     c2 = CaseElement.alloc(
-    ).initWithTitle_cellID_targetSelf_configHandlerName_(
+    ).initWithTitle_cellID_configHandlerName_(
       localizedString('LargeIndicatorTitle'),
-      ActivityIndicatorKind.largeIndicator.value, self,
+      ActivityIndicatorKind.largeIndicator.value,
       'configureLargeActivityIndicatorView:')
 
-    #self.testCells.addObject_(c1)
+    self.testCells.addObject_(c1)
     #self.testCells.addObject_(c2)
     #pdbr.state(self, 1)
-    print('___')
-    print(self.retain())
-    print('---')
-    print(self.retainCount())
+    #print(self.retain())
+    #print(self.retainCount())
     '''
     
     self.testCellsExtend_([
@@ -147,7 +145,6 @@ class ActivityIndicatorViewController(BaseTableViewController):
                  ctypes.c_bool,
                ])
     print(f'\t{NSStringFromClass(__class__)}: viewWillAppear_')
-    print(self.retainCount())
 
   @objc_method
   def viewDidAppear_(self, animated: bool):
@@ -183,9 +180,9 @@ class ActivityIndicatorViewController(BaseTableViewController):
                  ctypes.c_bool,
                ])
     print(f'\t{NSStringFromClass(__class__)}: viewDidDisappear_')
-    print(self.retainCount())
+    
     self.testCells = None
-    print(self.retainCount())
+    
     
 
   @objc_method
@@ -201,7 +198,7 @@ class ActivityIndicatorViewController(BaseTableViewController):
     activityIndicator.style = UIActivityIndicatorViewStyle.medium
     activityIndicator.hidesWhenStopped = True
 
-    activityIndicator.startAnimating()
+    #activityIndicator.startAnimating()
     # When the activity is done, be sure to use UIActivityIndicatorView.stopAnimating().
 
   @objc_method

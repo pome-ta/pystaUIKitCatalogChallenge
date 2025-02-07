@@ -17,7 +17,7 @@ class CaseElement(NSObject):
   # xxx: ガバガバ
   #configHandler = objc_property()
   #targetSelf = objc_property(weak=True)
-  targetSelf = objc_property()
+  #targetSelf = objc_property()
   configHandlerName: NSString = objc_property()
 
   @objc_method
@@ -45,6 +45,16 @@ class CaseElement(NSObject):
     return self
   '''
 
+
+  @objc_method
+  def initWithTitle_cellID_configHandlerName_(
+      self, title, cellID, configHandlerName):
+    self.title = NSString.stringWithString_(title)
+    self.cellID = NSString.stringWithString_(cellID)
+    self.configHandlerName = NSString.stringWithString_(configHandlerName)
+    return self
+
+  '''
   @objc_method
   def initWithTitle_cellID_targetSelf_configHandlerName_(
       self, title, cellID, targetSelf, configHandlerName):
@@ -58,9 +68,11 @@ class CaseElement(NSObject):
     self.configHandlerName = NSString.stringWithString_(configHandlerName)
     return self
 
+
   @objc_method
   def configHandler(self, view):
     getattr(self.targetSelf, str(self.configHandlerName))(view)
+  '''
 
   @objc_method
   def targetView(self,cell):
