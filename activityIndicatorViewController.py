@@ -33,6 +33,7 @@ class ActivityIndicatorViewController(BaseTableViewController):
   def dealloc(self):
     # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
     print(f'\t- {NSStringFromClass(__class__)}: dealloc')
+    self = None
 
   @objc_method
   def loadView(self):
@@ -238,7 +239,9 @@ if __name__ == '__main__':
   _title = NSStringFromClass(ActivityIndicatorViewController)
   main_vc.navigationItem.title = _title
 
-  presentation_style = UIModalPresentationStyle.fullScreen
+  #presentation_style = UIModalPresentationStyle.fullScreen
+  presentation_style = UIModalPresentationStyle.pageSheet
+  
   app = App(main_vc)
   print(app)
   #pdbr.state(main_vc, 1)

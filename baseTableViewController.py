@@ -29,6 +29,8 @@ class BaseTableViewController(UITableViewController):
     # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
     #pdbr.state(self)
     print(f'\t\t- {NSStringFromClass(__class__)}: dealloc')
+    self.testCells = None
+    self.headerFooterViewIdentifier = None
 
   @objc_method
   def loadView(self):

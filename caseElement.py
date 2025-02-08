@@ -24,6 +24,9 @@ class CaseElement(NSObject):
   def dealloc(self):
     # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
     print(f'\t\t- {NSStringFromClass(__class__)}: dealloc')
+    self.title = None
+    self.cellID = None
+    self.configHandlerName = None
 
   '''
   @objc_method
