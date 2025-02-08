@@ -19,12 +19,6 @@ class CustomTableViewCell(UITableViewCell):
     print(f'\t\t\t- {NSStringFromClass(__class__)}: dealloc')
 
   @objc_method
-  def loadView(self):
-    send_super(__class__, self, 'loadView')
-    print(f'\t\t\t{NSStringFromClass(__class__)}: loadView')
-
-
-  @objc_method
   def initWithStyle_reuseIdentifier_(self, style: NSInteger, reuseIdentifier):
     print(f'\t\t\t{NSStringFromClass(__class__)}: initWithStyle_')
     super_args = [
@@ -44,30 +38,6 @@ class CustomTableViewCell(UITableViewCell):
     self.overrideCell()
     #pdbr.state(self)
     return self
-
-  '''
-  @objc_method
-  def initWithStyle_reuseIdentifier_(self, style: NSInteger, reuseIdentifier):
-
-    super_args = [
-      style,
-      reuseIdentifier,
-    ]
-    super_argtypes = [
-      NSInteger,
-      ctypes.c_void_p,
-    ]
-
-    self_ptr = send_super(__class__,
-                          self,
-                          'initWithStyle:reuseIdentifier:',
-                          *super_args,
-                          argtypes=super_argtypes)
-    # todo: `self` に再定義しない
-    #self = ObjCInstance(self_ptr)
-    self.overrideCell()
-    return ObjCInstance(self_ptr)
-  '''
 
   @objc_method
   def overrideCell(self):

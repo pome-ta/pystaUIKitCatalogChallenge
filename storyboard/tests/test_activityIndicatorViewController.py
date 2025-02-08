@@ -32,18 +32,20 @@ UITableViewCell = ObjCClass('UITableViewCell')
 
 class TableViewControllerTest(UITableViewController):
 
-
   @objc_method
   def dealloc(self):
     # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
     print(f'\t- {NSStringFromClass(__class__)}: dealloc')
-    
 
   @objc_method
   def loadView(self):
     send_super(__class__, self, 'loadView')
     print(f'\t{NSStringFromClass(__class__)}: loadView')
-    
+    [
+      self.tableView.registerClass_forCellReuseIdentifier_(
+        prototype['cellClass'], prototype['identifier'])
+      for prototype in test_prototypes
+    ]
 
   @objc_method
   def initWithStyle_(self, style: NSInteger) -> ObjCInstance:
@@ -58,17 +60,20 @@ class TableViewControllerTest(UITableViewController):
     print(f'\t{NSStringFromClass(__class__)}: initWithStyle_')
     return self
 
-
   @objc_method
   def viewDidLoad(self):
+    send_super(__class__, self, 'viewDidLoad')  # xxx: 不要?
+    print(f'\t{NSStringFromClass(__class__)}: viewDidLoad')
+
     # --- Navigation
     self.navigationItem.title = NSStringFromClass(__class__) if (
       title := self.navigationItem.title) is None else title
 
     # --- View
     self.view.backgroundColor = UIColor.systemGreenColor()
-    self.initPrototype()
+    #self.initPrototype()
 
+  '''
   @objc_method
   def initPrototype(self):
     [
@@ -76,6 +81,7 @@ class TableViewControllerTest(UITableViewController):
         prototype['cellClass'], prototype['identifier'])
       for prototype in test_prototypes
     ]
+  '''
 
   # --- UITableViewDataSource
   @objc_method
@@ -111,9 +117,10 @@ if __name__ == '__main__':
 
   #presentation_style = UIModalPresentationStyle.fullScreen
   presentation_style = UIModalPresentationStyle.pageSheet
-  
+
   app = App(main_vc)
   print(app)
   #pdbr.state(main_vc, 1)
   app.main_loop(presentation_style)
-  print('# end')
+  print('--- end ---\n')
+

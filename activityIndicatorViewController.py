@@ -246,4 +246,4 @@ if __name__ == '__main__':
   print(app)
   #pdbr.state(main_vc, 1)
   app.main_loop(presentation_style)
-  print('# end')
+  print('--- end ---\n')
