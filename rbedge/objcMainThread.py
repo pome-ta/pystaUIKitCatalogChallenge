@@ -30,6 +30,7 @@ def onMainThread(func):
     if NSThread.isMainThread:
       func(*args, **kwargs)
     '''
+    print(f'# NSThread.isMainThread: {NSThread.isMainThread}')
     block = Block(functools.partial(func, *args, **kwargs), None)
     libobjc.dispatch_async(dispatch_get_main_queue(), block)
 

@@ -1,7 +1,7 @@
 #from pyrubicon.objc.api import ObjCInstance, ObjCBoundMethod
 from pyrubicon.objc.api import objc_method ,objc_property
 from pyrubicon.objc.api import NSObject, NSString
-from pyrubicon.objc.runtime import send_super, objc_id, objc_block
+from pyrubicon.objc.runtime import send_super, objc_id, send_message, SEL
 
 from rbedge.functions import NSStringFromClass
 from rbedge import pdbr
@@ -45,23 +45,19 @@ class CaseElement(NSObject):
     return self
   '''
 
-
+  '''
   @objc_method
   def initWithTitle_cellID_configHandlerName_(
       self, title, cellID, configHandlerName):
-    self.title = NSString.stringWithString_(title)
-    self.cellID = NSString.stringWithString_(cellID)
-    self.configHandlerName = NSString.stringWithString_(configHandlerName)
+    self.title = title#NSString.stringWithString_(title)
+    self.cellID = cellID#NSString.stringWithString_(cellID)
+    self.configHandlerName = configHandlerName#NSString.stringWithString_(configHandlerName)
     return self
 
   '''
   @objc_method
   def initWithTitle_cellID_targetSelf_configHandlerName_(
       self, title, cellID, targetSelf, configHandlerName):
-    #print('---')
-    #print(str(configHandlerName))
-    #print(type(configHandlerName))
-    #print('___')
     self.title = NSString.stringWithString_(title)
     self.cellID = NSString.stringWithString_(cellID)
     self.targetSelf = targetSelf
@@ -71,8 +67,10 @@ class CaseElement(NSObject):
 
   @objc_method
   def configHandler(self, view):
-    getattr(self.targetSelf, str(self.configHandlerName))(view)
-  '''
+    #getattr(self.targetSelf, str(self.configHandlerName))(view)
+    send_message(self.targetSelf, SEL(str(self.configHandlerName)), view, restype=None,argtypes=[objc_id])
+  
+  
 
   @objc_method
   def targetView(self,cell):

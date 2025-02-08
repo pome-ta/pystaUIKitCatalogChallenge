@@ -89,18 +89,16 @@ class ActivityIndicatorViewController(BaseTableViewController):
     #print(self.configureMediumActivityIndicatorView_.receiver)
     #print(dir(self))
 
-    c1 = CaseElement.alloc(
-    ).initWithTitle_cellID_configHandlerName_(
+    c1 = CaseElement.alloc().initWithTitle_cellID_targetSelf_configHandlerName_(
       localizedString('MediumIndicatorTitle'),
-      ActivityIndicatorKind.mediumIndicator.value,
+      ActivityIndicatorKind.mediumIndicator.value,self,
       'configureMediumActivityIndicatorView:')
-
-    c2 = CaseElement.alloc(
-    ).initWithTitle_cellID_configHandlerName_(
+    '''
+    c2 = CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
       localizedString('LargeIndicatorTitle'),
       ActivityIndicatorKind.largeIndicator.value,
       'configureLargeActivityIndicatorView:')
-
+    '''
     self.testCells.addObject_(c1)
     #self.testCells.addObject_(c2)
     #pdbr.state(self, 1)
@@ -135,6 +133,7 @@ class ActivityIndicatorViewController(BaseTableViewController):
                   self.configureLargeTintedActivityIndicatorView_),
     ])
     '''
+
   @objc_method
   def viewWillAppear_(self, animated: bool):
     send_super(__class__,
@@ -180,10 +179,8 @@ class ActivityIndicatorViewController(BaseTableViewController):
                  ctypes.c_bool,
                ])
     print(f'\t{NSStringFromClass(__class__)}: viewDidDisappear_')
-    
+
     self.testCells = None
-    
-    
 
   @objc_method
   def didReceiveMemoryWarning(self):
@@ -193,12 +190,12 @@ class ActivityIndicatorViewController(BaseTableViewController):
   # MARK: - Configuration
   @objc_method
   def configureMediumActivityIndicatorView_(
-      self, activityIndicator:ObjCInstance) -> None:
+      self, activityIndicator: ObjCInstance) -> None:
     #pdbr.state(activityIndicator)
     activityIndicator.style = UIActivityIndicatorViewStyle.medium
     activityIndicator.hidesWhenStopped = True
 
-    #activityIndicator.startAnimating()
+    activityIndicator.startAnimating()
     # When the activity is done, be sure to use UIActivityIndicatorView.stopAnimating().
 
   @objc_method
@@ -234,6 +231,7 @@ if __name__ == '__main__':
     UITableViewStyle,
     UIModalPresentationStyle,
   )
+  print('__name__')
 
   table_style = UITableViewStyle.grouped
   main_vc = ActivityIndicatorViewController.alloc().initWithStyle_(table_style)
@@ -242,5 +240,10 @@ if __name__ == '__main__':
 
   presentation_style = UIModalPresentationStyle.fullScreen
   app = App(main_vc)
+  print(app)
+  #pdbr.state(main_vc, 1)
   app.main_loop(presentation_style)
+  print('# end')
+  #main_vc.release()
+  #del app
 

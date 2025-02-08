@@ -178,8 +178,8 @@ class BaseTableViewController(UITableViewController):
       cellTest.cellID, indexPath)
 
     if (view := cellTest.targetView(cell)):
-      #cellTest.configHandler(view)
-      getattr(self, str(cellTest.configHandlerName))(view)
+      cellTest.configHandler(view)
+      #getattr(self, cellTest.configHandlerName)(view)
       
 
     return cell
