@@ -33,12 +33,13 @@ class ActivityIndicatorViewController(BaseTableViewController):
   def dealloc(self):
     # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
     print(f'\t- {NSStringFromClass(__class__)}: dealloc')
-    self = None
+    
 
   @objc_method
   def loadView(self):
     send_super(__class__, self, 'loadView')
     print(f'\t{NSStringFromClass(__class__)}: loadView')
+    self.setupPrototypes_(prototypes)
 
   @objc_method
   def initWithStyle_(self, style: NSInteger) -> ObjCInstance:
@@ -51,7 +52,7 @@ class ActivityIndicatorViewController(BaseTableViewController):
                  NSInteger,
                ])
     print(f'\t{NSStringFromClass(__class__)}: initWithStyle_')
-    self.setupPrototypes_(prototypes)
+    #self.setupPrototypes_(prototypes)
     return self
 
   # MARK: - View Life Cycle
@@ -181,7 +182,6 @@ class ActivityIndicatorViewController(BaseTableViewController):
                ])
     print(f'\t{NSStringFromClass(__class__)}: viewDidDisappear_')
 
-    self.testCells = None
 
   @objc_method
   def didReceiveMemoryWarning(self):
@@ -247,6 +247,3 @@ if __name__ == '__main__':
   #pdbr.state(main_vc, 1)
   app.main_loop(presentation_style)
   print('# end')
-  #main_vc.release()
-  #del app
-

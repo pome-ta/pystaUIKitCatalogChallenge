@@ -1,5 +1,5 @@
 #from pyrubicon.objc.api import ObjCInstance, ObjCBoundMethod
-from pyrubicon.objc.api import objc_method ,objc_property
+from pyrubicon.objc.api import objc_method, objc_property
 from pyrubicon.objc.api import NSObject, NSString
 from pyrubicon.objc.runtime import send_super, objc_id, send_message, SEL
 
@@ -24,9 +24,6 @@ class CaseElement(NSObject):
   def dealloc(self):
     # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
     print(f'\t\t- {NSStringFromClass(__class__)}: dealloc')
-    self.title = None
-    self.cellID = None
-    self.configHandlerName = None
 
   '''
   @objc_method
@@ -47,7 +44,6 @@ class CaseElement(NSObject):
     pdbr.state(self)
     return self
   '''
-
   '''
   @objc_method
   def initWithTitle_cellID_configHandlerName_(
@@ -58,6 +54,7 @@ class CaseElement(NSObject):
     return self
 
   '''
+
   @objc_method
   def initWithTitle_cellID_targetSelf_configHandlerName_(
       self, title, cellID, targetSelf, configHandlerName):
@@ -67,16 +64,17 @@ class CaseElement(NSObject):
     self.configHandlerName = NSString.stringWithString_(configHandlerName)
     return self
 
-
   @objc_method
   def configHandler(self, view):
     #getattr(self.targetSelf, str(self.configHandlerName))(view)
-    send_message(self.targetSelf, SEL(str(self.configHandlerName)), view, restype=None,argtypes=[objc_id])
-  
-  
+    send_message(self.targetSelf,
+                 SEL(str(self.configHandlerName)),
+                 view,
+                 restype=None,
+                 argtypes=[objc_id])
 
   @objc_method
-  def targetView(self,cell):
+  def targetView(self, cell):
     return cell.contentView.subviews()[0] if cell != None else None
 
 

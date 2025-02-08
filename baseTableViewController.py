@@ -19,7 +19,6 @@ UIListContentConfiguration = ObjCClass('UIListContentConfiguration')
 
 class BaseTableViewController(UITableViewController):
 
-  #tableView = objc_property()
   #testCells: NSMutableArray = objc_property(weak=True)
   testCells: NSMutableArray = objc_property()
   headerFooterViewIdentifier: NSString = objc_property()
@@ -27,10 +26,8 @@ class BaseTableViewController(UITableViewController):
   @objc_method
   def dealloc(self):
     # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
-    #pdbr.state(self)
     print(f'\t\t- {NSStringFromClass(__class__)}: dealloc')
-    self.testCells = None
-    self.headerFooterViewIdentifier = None
+    
 
   @objc_method
   def loadView(self):
@@ -55,9 +52,8 @@ class BaseTableViewController(UITableViewController):
     #self.testCells = []
     #self.headerFooterViewIdentifier = NSString.stringWithString_('customHeaderFooterView')
     self.setHeaderFooterViewIdentifier_(NSString.stringWithString_('customHeaderFooterView'))
-    self.tableView.delegate = self
-    self.tableView.dataSource = self
-    #pdbr.state(self.tableView)
+    #self.tableView.delegate = self
+    #self.tableView.dataSource = self
     return self
 
   @objc_method
