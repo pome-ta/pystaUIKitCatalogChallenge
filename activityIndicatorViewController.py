@@ -33,13 +33,16 @@ class ActivityIndicatorViewController(BaseTableViewController):
   def dealloc(self):
     # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
     print(f'\t- {NSStringFromClass(__class__)}: dealloc')
-    
 
   @objc_method
   def loadView(self):
     send_super(__class__, self, 'loadView')
     print(f'\t{NSStringFromClass(__class__)}: loadView')
-    self.setupPrototypes_(prototypes)
+    [
+      self.tableView.registerClass_forCellReuseIdentifier_(
+        prototype['cellClass'], prototype['identifier'])
+      for prototype in prototypes
+    ]
 
   @objc_method
   def initWithStyle_(self, style: NSInteger) -> ObjCInstance:
@@ -91,17 +94,18 @@ class ActivityIndicatorViewController(BaseTableViewController):
     #print(self.configureMediumActivityIndicatorView_.receiver)
     #print(dir(self))
 
-    c1 = CaseElement.alloc().initWithTitle_cellID_targetSelf_configHandlerName_(
-      localizedString('MediumIndicatorTitle'),
-      ActivityIndicatorKind.mediumIndicator.value,self,
-      'configureMediumActivityIndicatorView:')
+    #c1 = CaseElement.alloc().initWithTitle_cellID_targetSelf_configHandlerName_(localizedString('MediumIndicatorTitle'), ActivityIndicatorKind.mediumIndicator.value, self, 'configureMediumActivityIndicatorView:')
     '''
     c2 = CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
       localizedString('LargeIndicatorTitle'),
       ActivityIndicatorKind.largeIndicator.value,
       'configureLargeActivityIndicatorView:')
     '''
-    self.testCells.addObject_(c1)
+    #self.testCells.addObject_(c1)
+    #self.testCells.addObject_(CaseElement.alloc().initWithTitle_cellID_targetSelf_configHandlerName_(localizedString('MediumIndicatorTitle'), ActivityIndicatorKind.mediumIndicator.value, self, 'configureMediumActivityIndicatorView:'))
+    
+    #c1 = CaseElement.alloc().initWithTitle_cellID_configHandlerName_(localizedString('MediumIndicatorTitle'), ActivityIndicatorKind.mediumIndicator.value, 'configureMediumActivityIndicatorView:')
+    self.testCells.addObject_(CaseElement.alloc().initWithTitle_cellID_configHandlerName_(localizedString('MediumIndicatorTitle'), ActivityIndicatorKind.mediumIndicator.value, 'configureMediumActivityIndicatorView:'))
     #self.testCells.addObject_(c2)
     #pdbr.state(self, 1)
     #print(self.retain())
@@ -156,8 +160,7 @@ class ActivityIndicatorViewController(BaseTableViewController):
                argtypes=[
                  ctypes.c_bool,
                ])
-    #print(f'\t{NSStringFromClass(__class__)}: viewDidAppear_')
-    #print('\t↓ ---')
+    print(f'\t{NSStringFromClass(__class__)}: viewDidAppear_')
 
   @objc_method
   def viewWillDisappear_(self, animated: bool):
@@ -182,7 +185,6 @@ class ActivityIndicatorViewController(BaseTableViewController):
                ])
     print(f'\t{NSStringFromClass(__class__)}: viewDidDisappear_')
 
-
   @objc_method
   def didReceiveMemoryWarning(self):
     send_super(__class__, self, 'didReceiveMemoryWarning')
@@ -191,7 +193,7 @@ class ActivityIndicatorViewController(BaseTableViewController):
   # MARK: - Configuration
   @objc_method
   def configureMediumActivityIndicatorView_(
-      self, activityIndicator: ObjCInstance) -> None:
+      self, activityIndicator):
     #pdbr.state(activityIndicator)
     activityIndicator.style = UIActivityIndicatorViewStyle.medium
     activityIndicator.hidesWhenStopped = True
@@ -241,9 +243,10 @@ if __name__ == '__main__':
 
   #presentation_style = UIModalPresentationStyle.fullScreen
   presentation_style = UIModalPresentationStyle.pageSheet
-  
+
   app = App(main_vc)
   print(app)
   #pdbr.state(main_vc, 1)
   app.main_loop(presentation_style)
   print('--- end ---\n')
+

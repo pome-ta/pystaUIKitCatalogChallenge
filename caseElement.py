@@ -44,17 +44,17 @@ class CaseElement(NSObject):
     pdbr.state(self)
     return self
   '''
-  '''
+  
   @objc_method
   def initWithTitle_cellID_configHandlerName_(
       self, title, cellID, configHandlerName):
-    self.title = title#NSString.stringWithString_(title)
-    self.cellID = cellID#NSString.stringWithString_(cellID)
-    self.configHandlerName = configHandlerName#NSString.stringWithString_(configHandlerName)
+    self.title = NSString.stringWithString_(title)
+    self.cellID = NSString.stringWithString_(cellID)
+    self.configHandlerName = NSString.stringWithString_(configHandlerName)
     return self
 
+  
   '''
-
   @objc_method
   def initWithTitle_cellID_targetSelf_configHandlerName_(
       self, title, cellID, targetSelf, configHandlerName):
@@ -63,6 +63,7 @@ class CaseElement(NSObject):
     self.targetSelf = targetSelf
     self.configHandlerName = NSString.stringWithString_(configHandlerName)
     return self
+  
 
   @objc_method
   def configHandler(self, view):
@@ -72,7 +73,7 @@ class CaseElement(NSObject):
                  view,
                  restype=None,
                  argtypes=[objc_id])
-
+  '''
   @objc_method
   def targetView(self, cell):
     return cell.contentView.subviews()[0] if cell != None else None

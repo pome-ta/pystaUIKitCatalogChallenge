@@ -3,7 +3,7 @@ import ctypes
 from pyrubicon.objc.api import ObjCClass, ObjCInstance
 from pyrubicon.objc.api import objc_method, objc_property
 from pyrubicon.objc.api import NSString, NSMutableArray
-from pyrubicon.objc.runtime import send_super, objc_id
+from pyrubicon.objc.runtime import send_super, objc_id, send_message, SEL
 from pyrubicon.objc.types import NSInteger
 
 from rbedge.enumerations import UIListContentTextAlignment
@@ -27,7 +27,6 @@ class BaseTableViewController(UITableViewController):
   def dealloc(self):
     # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
     print(f'\t\t- {NSStringFromClass(__class__)}: dealloc')
-    
 
   @objc_method
   def loadView(self):
@@ -46,23 +45,16 @@ class BaseTableViewController(UITableViewController):
                ])
 
     print(f'\t\t{NSStringFromClass(__class__)}: initWithStyle_')
-    #self.testCells = NSMutableArray.new()
+    self.testCells = NSMutableArray.new()
     #self.testCells = NSMutableArray.array()
-    self.setTestCells_(NSMutableArray.array())
+    #self.setTestCells_(NSMutableArray.array())
     #self.testCells = []
     #self.headerFooterViewIdentifier = NSString.stringWithString_('customHeaderFooterView')
-    self.setHeaderFooterViewIdentifier_(NSString.stringWithString_('customHeaderFooterView'))
+    self.setHeaderFooterViewIdentifier_(
+      NSString.stringWithString_('customHeaderFooterView'))
     #self.tableView.delegate = self
     #self.tableView.dataSource = self
     return self
-
-  @objc_method
-  def setupPrototypes_(self, prototypes) -> None:
-    [
-      self.tableView.registerClass_forCellReuseIdentifier_(
-        prototype['cellClass'], prototype['identifier'])
-      for prototype in prototypes
-    ]
 
   @objc_method
   def viewDidLoad(self):
@@ -80,7 +72,7 @@ class BaseTableViewController(UITableViewController):
                argtypes=[
                  ctypes.c_bool,
                ])
-    #print(f'\t{NSStringFromClass(__class__)}: viewWillAppear_')
+    print(f'\t{NSStringFromClass(__class__)}: viewWillAppear_')
 
   @objc_method
   def viewDidAppear_(self, animated: bool):
@@ -91,8 +83,8 @@ class BaseTableViewController(UITableViewController):
                argtypes=[
                  ctypes.c_bool,
                ])
-    #print(f'\t{NSStringFromClass(__class__)}: viewDidAppear_')
-    #print('\t↓ ---')
+    print(f'\t{NSStringFromClass(__class__)}: viewDidAppear_')
+    
 
   @objc_method
   def viewWillDisappear_(self, animated: bool):
@@ -117,7 +109,6 @@ class BaseTableViewController(UITableViewController):
                ])
     #print(f'\t{NSStringFromClass(__class__)}: viewDidDisappear_')
     #self.testCells = None
-    
 
   @objc_method
   def didReceiveMemoryWarning(self):
@@ -137,9 +128,9 @@ class BaseTableViewController(UITableViewController):
       self.testCells.addObject_(cell)
       #self.testCells.append(cell)
   '''
-
+  '''
   @objc_method
-  def centeredHeaderView_(self, title):
+  def centeredHeaderView_(self, title)->objc_id:
     headerView = self.tableView.dequeueReusableHeaderFooterViewWithIdentifier_(
       self.headerFooterViewIdentifier)
 
@@ -149,12 +140,23 @@ class BaseTableViewController(UITableViewController):
     headerView.contentConfiguration = content
 
     return headerView
+  '''
 
   # MARK: - UITableViewDataSource
   @objc_method
   def tableView_viewForHeaderInSection_(self, tableView,
                                         section: NSInteger) -> objc_id:
-    return self.centeredHeaderView_(self.testCells[section].title)
+
+    #return self.centeredHeaderView_(self.testCells[section].title)
+    headerView = self.tableView.dequeueReusableHeaderFooterViewWithIdentifier_(
+      self.headerFooterViewIdentifier)
+
+    content = UIListContentConfiguration.groupedHeaderConfiguration()
+    content.text = self.testCells[section].title
+    content.textProperties.alignment = UIListContentTextAlignment.center
+    headerView.contentConfiguration = content
+
+    return headerView
 
   @objc_method
   def tableView_titleForHeaderInSection_(self, tableView, section: NSInteger):
@@ -176,9 +178,9 @@ class BaseTableViewController(UITableViewController):
       cellTest.cellID, indexPath)
 
     if (view := cellTest.targetView(cell)):
-      cellTest.configHandler(view)
-      #getattr(self, cellTest.configHandlerName)(view)
-      
+      #cellTest.configHandler(view)
+      getattr(self, str(cellTest.configHandlerName))(view)
+      #send_message(self, SEL(str(cellTest.configHandlerName)), view, restype=None, argtypes=[objc_id])
 
     return cell
 
