@@ -1,5 +1,5 @@
 from pyrubicon.objc.api import ObjCClass
-from pyrubicon.objc.api import objc_method, objc_property
+from pyrubicon.objc.api import objc_method
 from pyrubicon.objc.runtime import objc_id, send_super
 from pyrubicon.objc.types import CGRectMake
 
@@ -11,11 +11,8 @@ from rbedge import pdbr
 
 from ._prototype import CustomTableViewCell
 
-UISearchTextField = ObjCClass('UISearchTextField')
-UITextField = ObjCClass('UITextField')
 
 UIActivityIndicatorView = ObjCClass('UIActivityIndicatorView')
-UIFont = ObjCClass('UIFont')
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
 
 
@@ -35,8 +32,6 @@ prototypes: list[dict[CustomTableViewCell, str]] = []
 
 @add_prototype('mediumIndicator')
 class MediumIndicator(CustomTableViewCell):
-
-  activityIndicatorView: UIActivityIndicatorView = objc_property()
 
   @objc_method
   def dealloc(self):
@@ -62,13 +57,11 @@ class MediumIndicator(CustomTableViewCell):
       activityIndicatorView.centerYAnchor.constraintEqualToAnchor_(
         self.contentView.centerYAnchor),
     ])
-    self.activityIndicatorView = activityIndicatorView
+    
 
 
 @add_prototype('largeTintedIndicator')
 class LargeTintedIndicator(CustomTableViewCell):
-
-  activityIndicatorView: UIActivityIndicatorView = objc_property()
 
   @objc_method
   def dealloc(self):
@@ -96,13 +89,10 @@ class LargeTintedIndicator(CustomTableViewCell):
         self.contentView.centerYAnchor),
       #activityIndicatorView.topAnchor.constraintEqualToConstant_(-52.0),
     ])
-    self.activityIndicatorView = activityIndicatorView
 
 
 @add_prototype('mediumTintedIndicator')
 class MediumTintedIndicator(CustomTableViewCell):
-
-  activityIndicatorView: UIActivityIndicatorView = objc_property()
 
   @objc_method
   def dealloc(self):
@@ -128,13 +118,10 @@ class MediumTintedIndicator(CustomTableViewCell):
       activityIndicatorView.centerYAnchor.constraintEqualToAnchor_(
         self.contentView.centerYAnchor),
     ])
-    self.activityIndicatorView = activityIndicatorView
 
 
 @add_prototype('largeIndicator')
 class LargeIndicator(CustomTableViewCell):
-
-  activityIndicatorView: UIActivityIndicatorView = objc_property()
 
   @objc_method
   def dealloc(self):
@@ -161,5 +148,4 @@ class LargeIndicator(CustomTableViewCell):
       activityIndicatorView.centerYAnchor.constraintEqualToAnchor_(
         self.contentView.centerYAnchor),
     ])
-    self.activityIndicatorView = activityIndicatorView
 

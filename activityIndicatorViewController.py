@@ -1,9 +1,9 @@
 import ctypes
 from enum import Enum
 
-from pyrubicon.objc.api import ObjCClass, ObjCInstance
+from pyrubicon.objc.api import ObjCClass, ObjCInstance, Block
 from pyrubicon.objc.api import objc_method, at
-from pyrubicon.objc.runtime import send_super, objc_id, objc_block, SEL
+from pyrubicon.objc.runtime import send_super, objc_id, SEL
 from pyrubicon.objc.types import NSInteger
 
 from rbedge.enumerations import UIActivityIndicatorViewStyle
@@ -197,6 +197,8 @@ class ActivityIndicatorViewController(BaseTableViewController):
     #pdbr.state(activityIndicator)
     activityIndicator.style = UIActivityIndicatorViewStyle.medium
     activityIndicator.hidesWhenStopped = True
+    
+    activityIndicator.color = UIColor.systemBlueColor()
 
     activityIndicator.startAnimating()
     # When the activity is done, be sure to use UIActivityIndicatorView.stopAnimating().
@@ -225,6 +227,25 @@ class ActivityIndicatorViewController(BaseTableViewController):
 
     activityIndicator.startAnimating()
     # When the activity is done, be sure to use UIActivityIndicatorView.stopAnimating().
+
+
+
+  @objc_method
+  def tableView_cellForRowAtIndexPath_(self, tableView, indexPath) -> objc_id:
+    print('▪︎ actv')
+    cellTest = self.testCells[indexPath.section]
+    cell = tableView.dequeueReusableCellWithIdentifier_forIndexPath_(
+      cellTest.cellID, indexPath)
+
+    if (view := cellTest.targetView(cell)):
+      pdbr.state(view)
+      #cellTest.configHandler(view)
+      #getattr(self, str(cellTest.configHandlerName))(view)
+      #send_message(self, SEL(str(cellTest.configHandlerName)), view, restype=None, argtypes=[objc_id])
+      #handler(view)
+      
+
+    return cell
 
 
 if __name__ == '__main__':

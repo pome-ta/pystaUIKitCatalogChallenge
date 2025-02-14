@@ -173,6 +173,8 @@ class BaseTableViewController(UITableViewController):
 
   @objc_method
   def tableView_cellForRowAtIndexPath_(self, tableView, indexPath) -> objc_id:
+    
+    print('▪︎ base')
     cellTest = self.testCells[indexPath.section]
     cell = tableView.dequeueReusableCellWithIdentifier_forIndexPath_(
       cellTest.cellID, indexPath)
