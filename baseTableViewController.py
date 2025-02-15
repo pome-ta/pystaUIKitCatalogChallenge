@@ -47,11 +47,8 @@ class BaseTableViewController(UITableViewController):
     print(f'\t\t{NSStringFromClass(__class__)}: initWithStyle_')
     self.testCells = NSMutableArray.new()
     #self.testCells = NSMutableArray.array()
-    #self.setTestCells_(NSMutableArray.array())
-    #self.testCells = []
-    #self.headerFooterViewIdentifier = NSString.stringWithString_('customHeaderFooterView')
-    self.setHeaderFooterViewIdentifier_(
-      NSString.stringWithString_('customHeaderFooterView'))
+    
+    self.headerFooterViewIdentifier = NSString.stringWithString_('customHeaderFooterView')
     #self.tableView.delegate = self
     #self.tableView.dataSource = self
     return self
@@ -88,7 +85,6 @@ class BaseTableViewController(UITableViewController):
 
   @objc_method
   def viewWillDisappear_(self, animated: bool):
-    #print('\t↑ ---')
     send_super(__class__,
                self,
                'viewWillDisappear:',
