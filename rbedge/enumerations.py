@@ -878,11 +878,12 @@ class WKNavigationActionPolicy:
   allow: int = 1
   download: int = 2
 
+
 # ref: [UISceneActivationState | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uiscene/activationstate-swift.enum?language=objc)
 class UISceneActivationState:
   # ref: [UISceneDefinitions.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UISceneDefinitions.rs.html#12)
   unattached: int = -1
   foregroundActive: int = 0
-  foregroundInactive:int = 1
-  background:int = 2
-  
+  foregroundInactive: int = 1
+  background: int = 2
+

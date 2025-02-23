@@ -35,7 +35,6 @@ class RootNavigationController(UINavigationController):
   def viewDidLoad(self):
     send_super(__class__, self, 'viewDidLoad')
     #print(f'{NSStringFromClass(__class__)}: viewDidLoad')
-    # xxx: いるかな？
     self.delegate = self
 
   @objc_method

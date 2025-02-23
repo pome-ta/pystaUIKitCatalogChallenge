@@ -1,9 +1,9 @@
 import ctypes
 from enum import Enum
 
-from pyrubicon.objc.api import ObjCClass, ObjCInstance, Block
+from pyrubicon.objc.api import ObjCClass, ObjCInstance
 from pyrubicon.objc.api import objc_method, at
-from pyrubicon.objc.runtime import send_super, objc_id, SEL
+from pyrubicon.objc.runtime import send_super, objc_id, objc_block, SEL, Class, objc_super
 from pyrubicon.objc.types import NSInteger
 
 from rbedge.enumerations import UIActivityIndicatorViewStyle
@@ -35,16 +35,6 @@ class ActivityIndicatorViewController(BaseTableViewController):
     print(f'\t- {NSStringFromClass(__class__)}: dealloc')
 
   @objc_method
-  def loadView(self):
-    send_super(__class__, self, 'loadView')
-    print(f'\t{NSStringFromClass(__class__)}: loadView')
-    [
-      self.tableView.registerClass_forCellReuseIdentifier_(
-        prototype['cellClass'], prototype['identifier'])
-      for prototype in prototypes
-    ]
-
-  @objc_method
   def initWithStyle_(self, style: NSInteger) -> ObjCInstance:
     send_super(__class__,
                self,
@@ -54,70 +44,48 @@ class ActivityIndicatorViewController(BaseTableViewController):
                argtypes=[
                  NSInteger,
                ])
-    print(f'\t{NSStringFromClass(__class__)}: initWithStyle_')
-    #self.setupPrototypes_(prototypes)
+    #print(f'\t{NSStringFromClass(__class__)}: initWithStyle_')
     return self
+
+  @objc_method
+  def loadView(self):
+    send_super(__class__, self, 'loadView')
+    #print(f'\t{NSStringFromClass(__class__)}: loadView')
+    [
+      self.tableView.registerClass_forCellReuseIdentifier_(
+        prototype['cellClass'], prototype['identifier'])
+      for prototype in prototypes
+    ]
+    
+    
 
   # MARK: - View Life Cycle
   @objc_method
   def viewDidLoad(self):
     send_super(__class__, self, 'viewDidLoad')  # xxx: 不要?
-    print(f'\t{NSStringFromClass(__class__)}: viewDidLoad')
+    #print(f'\t{NSStringFromClass(__class__)}: viewDidLoad')
 
     self.navigationItem.title = localizedString('ActivityIndicatorsTitle') if (
       title := self.navigationItem.title) is None else title
 
-    #pdbr.state(self.configureMediumActivityIndicatorView_)
-    #print(dir(self.configureMediumActivityIndicatorView_))
-    #print(self.configureMediumActivityIndicatorView_)
+    #c1 = CaseElement.alloc().initWithTitle_cellID_configHandlerName_(localizedString('MediumIndicatorTitle'),ActivityIndicatorKind.mediumIndicator.value,'configureMediumActivityIndicatorView:')
 
-    #c = CaseElement.alloc().initWithTitle_cellID_configHandler_(localizedString('MediumIndicatorTitle'),ActivityIndicatorKind.mediumIndicator.value, self.configureMediumActivityIndicatorView_)
+    #c2 = CaseElement.alloc().initWithTitle_cellID_configHandlerName_(localizedString('LargeIndicatorTitle'), ActivityIndicatorKind.largeIndicator.value, 'configureLargeActivityIndicatorView:')
+    #c1 = CaseElement(localizedString('MediumIndicatorTitle'), ActivityIndicatorKind.mediumIndicator.value, 'configureMediumActivityIndicatorView:')
+    
+    self.testCellsAppendContentsOf_([CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
+      localizedString('MediumIndicatorTitle'),
+      ActivityIndicatorKind.mediumIndicator.value,
+      'configureMediumActivityIndicatorView:'),])
 
-    #c = CaseElement.alloc().initWithTitle_cellID_configHandler_(localizedString('MediumIndicatorTitle'),ActivityIndicatorKind.mediumIndicator.value, ctypes.c_void_p(self.configureMediumActivityIndicatorView_))
-
-    #c = CaseElement.alloc().initWithTitle_cellID_configHandler_(localizedString('MediumIndicatorTitle'),ActivityIndicatorKind.mediumIndicator.value)
-
-    #c = CaseElement.alloc().initWithTitle_cellID_(localizedString('MediumIndicatorTitle'),ActivityIndicatorKind.mediumIndicator.value)
-
-    #c = CaseElement.alloc().initWithTitle_cellID_targetSelf_configHandlerName_(localizedString('MediumIndicatorTitle'),ActivityIndicatorKind.mediumIndicator.value, self, 'configureMediumActivityIndicatorView:')
-    #print(__class__)
-    #pdbr.state(__class__)
-    #pdbr.state(self)
-    #print(ctypes.cast(self, objc_id))
-    #print('---')
-    #g = getattr(self, 'configureMediumActivityIndicatorView:')
-    #print(g)
-    #c.setConfigHandler_(self.configureMediumActivityIndicatorView_)
-    #pdbr.state(c)
-    #print(self.configureMediumActivityIndicatorView_)
-    #print('---')
-    #print(self.configureMediumActivityIndicatorView_.receiver)
-    #print(dir(self))
-
-    #c1 = CaseElement.alloc().initWithTitle_cellID_targetSelf_configHandlerName_(localizedString('MediumIndicatorTitle'), ActivityIndicatorKind.mediumIndicator.value, self, 'configureMediumActivityIndicatorView:')
-    '''
-    c2 = CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
-      localizedString('LargeIndicatorTitle'),
-      ActivityIndicatorKind.largeIndicator.value,
-      'configureLargeActivityIndicatorView:')
-    '''
     #self.testCells.addObject_(c1)
-    #self.testCells.addObject_(CaseElement.alloc().initWithTitle_cellID_targetSelf_configHandlerName_(localizedString('MediumIndicatorTitle'), ActivityIndicatorKind.mediumIndicator.value, self, 'configureMediumActivityIndicatorView:'))
-    
-    #c1 = CaseElement.alloc().initWithTitle_cellID_configHandlerName_(localizedString('MediumIndicatorTitle'), ActivityIndicatorKind.mediumIndicator.value, 'configureMediumActivityIndicatorView:')
-    self.testCells.addObject_(CaseElement.alloc().initWithTitle_cellID_configHandlerName_(localizedString('MediumIndicatorTitle'), ActivityIndicatorKind.mediumIndicator.value, 'configureMediumActivityIndicatorView:'))
-    #self.testCells.addObject_(c2)
-    #pdbr.state(self, 1)
-    #print(self.retain())
-    #print(self.retainCount())
     '''
-    
     self.testCellsExtend_([
       CaseElement.alloc().initWithTitle_cellID_targetSelf_configHandlerName_(localizedString('MediumIndicatorTitle'),ActivityIndicatorKind.mediumIndicator.value, self, 'configureMediumActivityIndicatorView:')
     ])
     '''
     '''
-    
+
     self.testCellsExtend_([
       CaseElement(localizedString('MediumIndicatorTitle'),
                   ActivityIndicatorKind.mediumIndicator.value,
@@ -149,7 +117,8 @@ class ActivityIndicatorViewController(BaseTableViewController):
                argtypes=[
                  ctypes.c_bool,
                ])
-    print(f'\t{NSStringFromClass(__class__)}: viewWillAppear_')
+    #print(f'\t{NSStringFromClass(__class__)}: viewWillAppear_')
+    #self.tableView.reloadData()
 
   @objc_method
   def viewDidAppear_(self, animated: bool):
@@ -160,11 +129,11 @@ class ActivityIndicatorViewController(BaseTableViewController):
                argtypes=[
                  ctypes.c_bool,
                ])
-    print(f'\t{NSStringFromClass(__class__)}: viewDidAppear_')
+    #print(f'\t{NSStringFromClass(__class__)}: viewDidAppear_')
 
   @objc_method
   def viewWillDisappear_(self, animated: bool):
-    #print('\t↑ ---')
+    # print('\t↑ ---')
     send_super(__class__,
                self,
                'viewWillDisappear:',
@@ -172,7 +141,7 @@ class ActivityIndicatorViewController(BaseTableViewController):
                argtypes=[
                  ctypes.c_bool,
                ])
-    #print(f'\t{NSStringFromClass(__class__)}: viewWillDisappear_')
+    # print(f'\t{NSStringFromClass(__class__)}: viewWillDisappear_')
 
   @objc_method
   def viewDidDisappear_(self, animated: bool):
@@ -184,6 +153,10 @@ class ActivityIndicatorViewController(BaseTableViewController):
                  ctypes.c_bool,
                ])
     print(f'\t{NSStringFromClass(__class__)}: viewDidDisappear_')
+    # xxx: a-shell で動くけど、Pythonista3 の2回目の`dealloc` が呼ばれない
+    #self.testCells = None
+    #prototypes = None
+    #pdbr.state(self.tableView)
 
   @objc_method
   def didReceiveMemoryWarning(self):
@@ -192,15 +165,21 @@ class ActivityIndicatorViewController(BaseTableViewController):
 
   # MARK: - Configuration
   @objc_method
-  def configureMediumActivityIndicatorView_(
-      self, activityIndicator):
+  def configureMediumActivityIndicatorView_(self, activityIndicator):
     #pdbr.state(activityIndicator)
-    activityIndicator.style = UIActivityIndicatorViewStyle.medium
+    
+    #activityIndicator.style = UIActivityIndicatorViewStyle.medium
+    activityIndicator.setStyle_(UIActivityIndicatorViewStyle.large)
+    #initWithActivityIndicatorStyle_
+    
     activityIndicator.hidesWhenStopped = True
     
-    activityIndicator.color = UIColor.systemBlueColor()
+    activityIndicator.color = UIColor.systemRedColor()
+    #pdbr.state(activityIndicator)
 
     activityIndicator.startAnimating()
+    
+    
     # When the activity is done, be sure to use UIActivityIndicatorView.stopAnimating().
 
   @objc_method
@@ -208,15 +187,16 @@ class ActivityIndicatorViewController(BaseTableViewController):
     activityIndicator.style = UIActivityIndicatorViewStyle.large
     activityIndicator.hidesWhenStopped = True
 
-    activityIndicator.startAnimating()
+    #activityIndicator.startAnimating()
     # When the activity is done, be sure to use UIActivityIndicatorView.stopAnimating().
+
   @objc_method
   def configureMediumTintedActivityIndicatorView_(self, activityIndicator):
     activityIndicator.style = UIActivityIndicatorViewStyle.medium
     activityIndicator.hidesWhenStopped = True
     activityIndicator.color = UIColor.systemPurpleColor()
 
-    activityIndicator.startAnimating()
+    #activityIndicator.startAnimating()
     # When the activity is done, be sure to use UIActivityIndicatorView.stopAnimating().
 
   @objc_method
@@ -225,27 +205,27 @@ class ActivityIndicatorViewController(BaseTableViewController):
     activityIndicator.hidesWhenStopped = True
     activityIndicator.color = UIColor.systemPurpleColor()
 
-    activityIndicator.startAnimating()
+    #activityIndicator.startAnimating()
     # When the activity is done, be sure to use UIActivityIndicatorView.stopAnimating().
-
-
-
+  '''
   @objc_method
-  def tableView_cellForRowAtIndexPath_(self, tableView, indexPath) -> objc_id:
-    print('▪︎ actv')
+  def tableView_cellForRowAtIndexPath_(self, tableView,
+                                       indexPath) -> ObjCInstance:
+
     cellTest = self.testCells[indexPath.section]
     cell = tableView.dequeueReusableCellWithIdentifier_forIndexPath_(
       cellTest.cellID, indexPath)
 
     if (view := cellTest.targetView(cell)):
-      pdbr.state(view)
-      #cellTest.configHandler(view)
-      #getattr(self, str(cellTest.configHandlerName))(view)
-      #send_message(self, SEL(str(cellTest.configHandlerName)), view, restype=None, argtypes=[objc_id])
-      #handler(view)
-      
+      #getattr(self, SEL('configureMediumActivityIndicatorView_'))(view)
+
+      self.performSelector_withObject_(SEL(str(cellTest.configHandlerName)), view)
+      #self.configureMediumActivityIndicatorView_(view)
+      #pdbr.state(self, 1)
+      #pass
 
     return cell
+  '''
 
 
 if __name__ == '__main__':
@@ -255,6 +235,7 @@ if __name__ == '__main__':
     UITableViewStyle,
     UIModalPresentationStyle,
   )
+
   print('__name__')
 
   table_style = UITableViewStyle.grouped
@@ -262,12 +243,14 @@ if __name__ == '__main__':
   _title = NSStringFromClass(ActivityIndicatorViewController)
   main_vc.navigationItem.title = _title
 
-  #presentation_style = UIModalPresentationStyle.fullScreen
+  # presentation_style = UIModalPresentationStyle.fullScreen
   presentation_style = UIModalPresentationStyle.pageSheet
 
   app = App(main_vc)
-  print(app)
-  #pdbr.state(main_vc, 1)
+  print('---')
+  #print(app)
+  # pdbr.state(main_vc, 1)
   app.main_loop(presentation_style)
   print('--- end ---\n')
+
 

@@ -45,13 +45,14 @@ class App:
       self.rootViewController.presentViewController_animated_completion_(
         presentViewController, True, None)
 
-
     # xxx: style 指定を力技で確認
     _automatic = UIModalPresentationStyle.automatic  # -2
     _blurOverFullScreen = UIModalPresentationStyle.blurOverFullScreen  # 8
     _pageSheet = UIModalPresentationStyle.pageSheet  # 1
 
-    style = modalPresentationStyle if isinstance(modalPresentationStyle, int) and _automatic <= modalPresentationStyle <= _blurOverFullScreen else _pageSheet
+    style = modalPresentationStyle if isinstance(
+      modalPresentationStyle, int
+    ) and _automatic <= modalPresentationStyle <= _blurOverFullScreen else _pageSheet
 
     present_viewController(self.viewController, style)
     loop.run_forever()
