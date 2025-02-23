@@ -16,6 +16,8 @@ from rbedge.enumerations import (
 
 from rbedge.globalVariables import UITextFieldTextDidChangeNotification
 
+from rbedge.functions import NSStringFromClass
+
 from rbedge import pdbr
 
 from pyLocalizedString import localizedString
@@ -97,7 +99,14 @@ class AlertControllerViewController(UIViewController):
   textDidChangeObserver = objc_property()
   # secureTextAlertAction: UIAlertAction = objc_property(weak=True)
   secureTextAlertAction: UIAlertAction = objc_property()
-  
+
+  @objc_method
+  def dealloc(self):
+    # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
+    print(f'- {NSStringFromClass(__class__)}: dealloc')
+
+
+
   @objc_method
   def viewDidLoad(self):
     send_super(__class__, self, 'viewDidLoad')
@@ -497,7 +506,7 @@ class AlertControllerViewController(UIViewController):
     cell.contentConfiguration = contentConfiguration
     return cell
 
-
+'''
 if __name__ == '__main__':
   from rbedge.functions import NSStringFromClass
   from rbedge.enumerations import UIModalPresentationStyle
@@ -512,3 +521,29 @@ if __name__ == '__main__':
   # style = UIModalPresentationStyle.popover
   
   present_viewController(main_vc, style)
+'''
+  
+if __name__ == '__main__':
+  from rbedge.app import App
+
+  from rbedge.enumerations import (
+    UITableViewStyle,
+    UIModalPresentationStyle,
+  )
+  print('__name__')
+
+  table_style = UITableViewStyle.grouped
+  #main_vc = ActivityIndicatorViewController.alloc().initWithStyle_(table_style)
+  main_vc = AlertControllerViewController.new()
+  _title = NSStringFromClass(AlertControllerViewController)
+  main_vc.navigationItem.title = _title
+
+  #presentation_style = UIModalPresentationStyle.fullScreen
+  presentation_style = UIModalPresentationStyle.pageSheet
+
+  app = App(main_vc)
+  print(app)
+  #pdbr.state(main_vc, 1)
+  app.main_loop(presentation_style)
+  print('--- end ---\n')
+
