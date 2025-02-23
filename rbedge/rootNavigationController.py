@@ -24,16 +24,18 @@ class RootNavigationController(UINavigationController):
     # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
     print(f'- {NSStringFromClass(__class__)}: dealloc')
     loop.stop()
+    print('--- stop')
 
   @objc_method
   def loadView(self):
     send_super(__class__, self, 'loadView')
-    print(f'{NSStringFromClass(__class__)}: loadView')
+    #print(f'{NSStringFromClass(__class__)}: loadView')
 
   @objc_method
   def viewDidLoad(self):
     send_super(__class__, self, 'viewDidLoad')
-    print(f'{NSStringFromClass(__class__)}: viewDidLoad')
+    #print(f'{NSStringFromClass(__class__)}: viewDidLoad')
+    # xxx: いるかな？
     self.delegate = self
 
   @objc_method
@@ -57,11 +59,9 @@ class RootNavigationController(UINavigationController):
                  ctypes.c_bool,
                ])
     #print(f'{NSStringFromClass(__class__)}: viewDidAppear_')
-    #print('↓ ---')
 
   @objc_method
   def viewWillDisappear_(self, animated: bool):
-    #print('↑ ---')
     send_super(__class__,
                self,
                'viewWillDisappear:',

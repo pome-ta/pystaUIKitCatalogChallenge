@@ -40,7 +40,7 @@ class TableViewControllerTest(UITableViewController):
   @objc_method
   def loadView(self):
     send_super(__class__, self, 'loadView')
-    print(f'\t{NSStringFromClass(__class__)}: loadView')
+    #print(f'\t{NSStringFromClass(__class__)}: loadView')
     [
       self.tableView.registerClass_forCellReuseIdentifier_(
         prototype['cellClass'], prototype['identifier'])
@@ -57,13 +57,13 @@ class TableViewControllerTest(UITableViewController):
                argtypes=[
                  NSInteger,
                ])
-    print(f'\t{NSStringFromClass(__class__)}: initWithStyle_')
+    #print(f'\t{NSStringFromClass(__class__)}: initWithStyle_')
     return self
 
   @objc_method
   def viewDidLoad(self):
     send_super(__class__, self, 'viewDidLoad')  # xxx: 不要?
-    print(f'\t{NSStringFromClass(__class__)}: viewDidLoad')
+    #print(f'\t{NSStringFromClass(__class__)}: viewDidLoad')
 
     # --- Navigation
     self.navigationItem.title = NSStringFromClass(__class__) if (
@@ -71,17 +71,6 @@ class TableViewControllerTest(UITableViewController):
 
     # --- View
     self.view.backgroundColor = UIColor.systemGreenColor()
-    #self.initPrototype()
-
-  '''
-  @objc_method
-  def initPrototype(self):
-    [
-      self.tableView.registerClass_forCellReuseIdentifier_(
-        prototype['cellClass'], prototype['identifier'])
-      for prototype in test_prototypes
-    ]
-  '''
 
   # --- UITableViewDataSource
   @objc_method

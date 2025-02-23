@@ -1,6 +1,4 @@
-import ctypes
-
-from pyrubicon.objc.api import ObjCClass, ObjCInstance
+from pyrubicon.objc.api import ObjCClass
 from pyrubicon.objc.api import objc_method
 from pyrubicon.objc.runtime import send_super, objc_id
 from pyrubicon.objc.types import NSInteger
@@ -20,7 +18,7 @@ class CustomTableViewCell(UITableViewCell):
 
   @objc_method
   def initWithStyle_reuseIdentifier_(self, style: NSInteger, reuseIdentifier):
-    print(f'\t\t\t{NSStringFromClass(__class__)}: initWithStyle_')
+    #print(f'\t\t\t{NSStringFromClass(__class__)}: initWithStyle:reuseIdentifier:')
     super_args = [
       style,
       reuseIdentifier,
@@ -35,12 +33,12 @@ class CustomTableViewCell(UITableViewCell):
                'initWithStyle:reuseIdentifier:',
                *super_args,
                argtypes=super_argtypes)
+
     self.overrideCell()
-    #pdbr.state(self)
     return self
 
   @objc_method
   def overrideCell(self):
-    print(f'\t\t\t{NSStringFromClass(__class__)}: prototype.overrideCell')
+    #print(f'\t\t\t{NSStringFromClass(__class__)}: prototype.overrideCell')
     pass
 

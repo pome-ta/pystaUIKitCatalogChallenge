@@ -5,7 +5,7 @@ NSURLErrorNotConnectedToInternet = -1009
 
 
 # ref: [UIModalPresentationStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uimodalpresentationstyle)
-@dataclass
+#@dataclass
 class UIModalPresentationStyle:
   automatic: int = -2
   none: int = -1
@@ -32,7 +32,7 @@ class UIRectEdge:
 
 
 # ref: [UIBarButtonSystemItem | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uibarbuttonsystemitem?language=objc)
-@dataclass
+#@dataclass
 class UIBarButtonSystemItem:
   done: int = 0
   cancel: int = 1
@@ -60,7 +60,7 @@ class UIBarButtonSystemItem:
 
 
 # ref: [UIButtonType | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uibuttontype?language=objc)
-@dataclass
+#@dataclass
 class UIButtonType:
   custom: int = 0
   system: int = 1
@@ -111,7 +111,7 @@ class UIControlEvents:
 
 
 # ref: [UIListContentTextAlignment | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uilistcontenttextalignment)
-@dataclass
+#@dataclass
 class UIListContentTextAlignment:
   # todo: `Enumeration Case` に値表記が無いので独自に調査
   natural: int = 0
@@ -120,7 +120,7 @@ class UIListContentTextAlignment:
 
 
 # ref: [UITableViewStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uitableviewstyle?language=objc)
-@dataclass
+#@dataclass
 class UITableViewStyle:
   plain: int = 0
   grouped: int = 1
@@ -128,7 +128,7 @@ class UITableViewStyle:
 
 
 # ref: [UIButtonConfigurationCornerStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uibuttonconfigurationcornerstyle?language=objc)
-@dataclass
+#@dataclass
 class UIButtonConfigurationCornerStyle:
   # todo: `Enumeration Case` に値表記が無いので独自に調査
   dynamic: int = 0
@@ -140,7 +140,7 @@ class UIButtonConfigurationCornerStyle:
 
 
 # ref: [UIImageRenderingMode | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uiimagerenderingmode?language=objc)
-@dataclass
+#@dataclass
 class UIImageRenderingMode:
   automatic: int = 0
   alwaysOriginal: int = 1
@@ -164,7 +164,7 @@ class NSUnderlineStyle:
 
 
 # ref: [UIImageSymbolScale | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uiimagesymbolscale?language=objc)
-@dataclass
+#@dataclass
 class UIImageSymbolScale:
   default: int = -1
   unspecified: int = 0
@@ -174,7 +174,7 @@ class UIImageSymbolScale:
 
 
 # ref: [UIImageSymbolWeight | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uiimagesymbolweight?language=objc)
-@dataclass
+#@dataclass
 class UIImageSymbolWeight:
   unspecified: int = 0
   ultraLight: int = 1
@@ -200,7 +200,7 @@ class NSDirectionalRectEdge:
 
 
 # ref: [UIButtonConfigurationSize | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uibuttonconfigurationsize)
-@dataclass
+#@dataclass
 class UIButtonConfigurationSize:
   # todo: `Enumeration Case` に値表記が無いので独自に調査
   medium: int = 0
@@ -210,7 +210,7 @@ class UIButtonConfigurationSize:
 
 
 # ref: [UIMenuElementState | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uimenuelementstate?language=objc)
-@dataclass
+#@dataclass
 class UIMenuElementState:
   off: int = 0
   on: int = 1
@@ -236,14 +236,14 @@ class UIMenuOptions:
 
 
 # ref: [UISplitViewControllerStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uisplitviewcontrollerstyle?language=objc)
-@dataclass
+#@dataclass
 class UISplitViewControllerStyle:
   doubleColumn: int = 1
   tripleColumn: int = 2
 
 
 # ref: [UISplitViewControllerColumn | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uisplitviewcontrollercolumn?language=objc)
-@dataclass
+#@dataclass
 class UISplitViewControllerColumn:
   primary: int = 0
   supplementary: int = 1
@@ -252,7 +252,7 @@ class UISplitViewControllerColumn:
 
 
 # ref: [UICollectionLayoutListAppearance | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uicollectionlayoutlistappearance?language=objc)
-@dataclass
+#@dataclass
 class UICollectionLayoutListAppearance:
   # ref: [UICollectionLayoutList.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UICollectionLayoutList.rs.html#16)
   plain: int = 0
@@ -263,7 +263,7 @@ class UICollectionLayoutListAppearance:
 
 
 # ref: [UICollectionLayoutListHeaderMode | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uicollectionlayoutlistheadermode)
-@dataclass
+#@dataclass
 class UICollectionLayoutListHeaderMode:
   # xxx: 独自調査 a.k.a: 勘
   # ref: [UICollectionLayoutList.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UICollectionLayoutList.rs.html)
@@ -285,7 +285,7 @@ class UIViewAutoresizing:
 
 
 # ref: [UIViewContentMode | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uiviewcontentmode?language=objc)
-@dataclass
+#@dataclass
 class UIViewContentMode:
   scaleToFill: int = 0
   scaleAspectFit: int = 1
@@ -303,7 +303,7 @@ class UIViewContentMode:
 
 
 # ref: [UIControlContentHorizontalAlignment | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uicontrolcontenthorizontalalignment?language=objc)
-@dataclass
+#@dataclass
 class UIControlContentHorizontalAlignment:
   center: int = 0
   left: int = 1
@@ -314,7 +314,7 @@ class UIControlContentHorizontalAlignment:
 
 
 # ref: [UIControlContentVerticalAlignment | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uicontrolcontentverticalalignment?language=objc)
-@dataclass
+#@dataclass
 class UIControlContentVerticalAlignment:
   center: int = 0
   top: int = 1
@@ -323,7 +323,7 @@ class UIControlContentVerticalAlignment:
 
 
 # ref: [UIPageControlBackgroundStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uipagecontrolbackgroundstyle?language=objc)
-@dataclass
+#@dataclass
 class UIPageControlBackgroundStyle:
   automatic: int = 0
   prominent: int = 1
@@ -331,7 +331,7 @@ class UIPageControlBackgroundStyle:
 
 
 # ref: [UISearchBarIcon | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uisearchbaricon?language=objc)
-@dataclass
+#@dataclass
 class UISearchBarIcon:
   search: int = 0
   clear: int = 1
@@ -340,7 +340,7 @@ class UISearchBarIcon:
 
 
 # ref: [UIUserInterfaceIdiom | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uiuserinterfaceidiom?language=objc)
-@dataclass
+#@dataclass
 class UIUserInterfaceIdiom:
   unspecified: int = -1
   phone: int = 0
@@ -352,7 +352,7 @@ class UIUserInterfaceIdiom:
 
 
 # ref: [UIUserInterfaceStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uiuserinterfacestyle?language=objc)
-@dataclass
+#@dataclass
 class UIUserInterfaceStyle:
   unspecified: int = 0
   light: int = 1
@@ -371,7 +371,7 @@ class UIBarMetrics:
 
 
 # ref: [UIBehavioralStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uibehavioralstyle?language=objc)
-@dataclass
+#@dataclass
 class UIBehavioralStyle:
   automatic: int = 0
   pad: int = 1
@@ -379,7 +379,7 @@ class UIBehavioralStyle:
 
 
 # ref: [UISwitchStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uiswitchstyle?language=objc&language=objc)
-@dataclass
+#@dataclass
 class UISwitchStyle:
   automatic: int = 0
   checkbox: int = 1
@@ -387,7 +387,7 @@ class UISwitchStyle:
 
 
 # ref: [UITextBorderStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uitextborderstyle?language=objc)
-@dataclass
+#@dataclass
 class UITextBorderStyle:
   none: int = 0
   line: int = 1
@@ -396,7 +396,7 @@ class UITextBorderStyle:
 
 
 # ref: [UITextAutocorrectionType | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uitextautocorrectiontype?language=objc)
-@dataclass
+#@dataclass
 class UITextAutocorrectionType:
   default: int = 0
   no: int = 1
@@ -404,7 +404,7 @@ class UITextAutocorrectionType:
 
 
 # ref: [UIReturnKeyType | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uireturnkeytype?language=objc)
-@dataclass
+#@dataclass
 class UIReturnKeyType:
   default: int = 0
   go: int = 1
@@ -421,7 +421,7 @@ class UIReturnKeyType:
 
 
 # ref: [UITextFieldViewMode | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uitextfieldviewmode?language=objc)
-@dataclass
+#@dataclass
 class UITextFieldViewMode:
   never: int = 0
   whileEditing: int = 1
@@ -430,7 +430,7 @@ class UITextFieldViewMode:
 
 
 # ref: [UIKeyboardType | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uikeyboardtype?language=objc)
-@dataclass
+#@dataclass
 class UIKeyboardType:
   default: int = 0
   asciiCapable: int = 1
@@ -447,7 +447,7 @@ class UIKeyboardType:
 
 
 # ref: [UISplitViewControllerDisplayMode | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uisplitviewcontrollerdisplaymode?language=objc)
-@dataclass
+#@dataclass
 class UISplitViewControllerDisplayMode:
   automatic: int = 0
   secondaryOnly: int = 1
@@ -459,7 +459,7 @@ class UISplitViewControllerDisplayMode:
 
 
 # ref: [UIUserInterfaceSizeClass | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uiuserinterfacesizeclass?language=objc)
-@dataclass
+#@dataclass
 class UIUserInterfaceSizeClass:
   unspecified: int = 0
   compact: int = 1
@@ -467,7 +467,7 @@ class UIUserInterfaceSizeClass:
 
 
 # ref: [UICellAccessoryOutlineDisclosureStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uicellaccessoryoutlinedisclosurestyle?language=objc)
-@dataclass
+#@dataclass
 class UICellAccessoryOutlineDisclosureStyle:
   # ref: [UICellAccessory.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UICellAccessory.rs.html#467)
   automatic: int = 0
@@ -476,7 +476,7 @@ class UICellAccessoryOutlineDisclosureStyle:
 
 
 # ref: [UITableViewRowAnimation | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uitableview/rowanimation?language=objc)
-@dataclass
+#@dataclass
 class UITableViewRowAnimation:
   # ref: [UITableView.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UITableView.rs.html#59)
   fade: int = 0
@@ -490,7 +490,7 @@ class UITableViewRowAnimation:
 
 
 # ref: [UIActivityIndicatorViewStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uiactivityindicatorview/style-swift.enum?language=objc)
-@dataclass
+#@dataclass
 class UIActivityIndicatorViewStyle:
   # ref: [UIActivityIndicatorView.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UIActivityIndicatorView.rs.html#14)
   large: int = 101
@@ -501,7 +501,7 @@ class UIActivityIndicatorViewStyle:
 
 
 # ref: [UIAlertControllerStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uialertcontroller/style?language=objc)
-@dataclass
+#@dataclass
 class UIAlertControllerStyle:
   # ref: [UIAlertController.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UIAlertController.rs.html#31)
   actionSheet: int = 0
@@ -509,7 +509,7 @@ class UIAlertControllerStyle:
 
 
 # ref: [UIAlertActionStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uialertaction/style-swift.enum?language=objc)
-@dataclass
+#@dataclass
 class UIAlertActionStyle:
   # ref: [UIAlertController.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UIAlertController.rs.html#11)
   default: int = 0
@@ -518,7 +518,7 @@ class UIAlertActionStyle:
 
 
 # ref: [NSLineBreakMode | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/nslinebreakmode?language=objc)
-@dataclass
+#@dataclass
 class NSLineBreakMode:
   # ref: [NSParagraphStyle.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/NSParagraphStyle.rs.html#11)
   byWordWrapping: int = 0
@@ -557,7 +557,7 @@ class UIFontDescriptorSymbolicTraits:
 
 
 # ref: [NSLayoutAttribute | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/nslayoutconstraint/attribute?language=objc)
-@dataclass
+#@dataclass
 class NSLayoutAttribute:
   # ref [NSLayoutConstraint.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/NSLayoutConstraint.rs.html#49)
   left: int = 1
@@ -584,7 +584,7 @@ class NSLayoutAttribute:
 
 
 # ref: [NSLayoutRelation | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/nslayoutconstraint/relation-swift.enum?language=objc)
-@dataclass
+#@dataclass
 class NSLayoutRelation:
   # ref: [NSLayoutConstraint.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/NSLayoutConstraint.rs.html#28)
   lessThanOrEqual: int = -1
@@ -593,7 +593,7 @@ class NSLayoutRelation:
 
 
 # ref: [UIViewAnimationCurve | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uiview/animationcurve?language=objc)
-@dataclass
+#@dataclass
 class UIViewAnimationCurve:
   # ref: [UIView.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UIView.rs.html#14)
   easeInOut: int = 0
@@ -603,7 +603,7 @@ class UIViewAnimationCurve:
 
 
 # ref: [UIProgressViewStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uiprogressview/style?language=objc)
-@dataclass
+#@dataclass
 class UIProgressViewStyle:
   default: int = 0
   bar: int = 1
@@ -619,7 +619,7 @@ class NSKeyValueObservingOptions:
 
 
 # ref: [UILayoutConstraintAxis | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/nslayoutconstraint/axis?language=objc)
-@dataclass
+#@dataclass
 class UILayoutConstraintAxis:
   # ref: [UIView.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UIView.rs.html#1002)
   horizontal: int = 0
@@ -637,7 +637,7 @@ const TARGET_ABI_USES_IOS_VALUES: bool =
 
 
 # ref: [NSTextAlignment | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/nstextalignment?language=objc)
-@dataclass
+#@dataclass
 class NSTextAlignment:
   # ref: [text.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/text.rs.html#26)
   left: int = 0
@@ -648,7 +648,7 @@ class NSTextAlignment:
 
 
 # ref: [UIControlContentVerticalAlignment | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uicontrol/contentverticalalignment-swift.enum?language=objc)
-@dataclass
+#@dataclass
 class UIControlContentVerticalAlignment:
   # ref: [UIControl.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UIControl.rs.html#52)
   center: int = 0
@@ -658,7 +658,7 @@ class UIControlContentVerticalAlignment:
 
 
 # ref: [UIControlContentHorizontalAlignment | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uicontrol/contenthorizontalalignment-swift.enum?language=objc)
-@dataclass
+#@dataclass
 class UIControlContentHorizontalAlignment:
   # ref: [UIControl.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UIControl.rs.html#75)
   center: int = 0
@@ -670,7 +670,7 @@ class UIControlContentHorizontalAlignment:
 
 
 # ref: [UIStackViewAlignment | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uistackview/alignment-swift.enum?language=objc)
-@dataclass
+#@dataclass
 class UIStackViewAlignment:
   # ref: [UIStackView.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UIStackView.rs.html#39)
   fill: int = 0
@@ -684,7 +684,7 @@ class UIStackViewAlignment:
 
 
 # ref: [UIBarStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uibarstyle?language=objc)
-@dataclass
+#@dataclass
 class UIBarStyle:
   # ref: [UIInterface.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UIInterface.rs.html#12)
   default: int = 0
@@ -694,7 +694,7 @@ class UIBarStyle:
 
 
 # ref: [UIBarPosition | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uibarposition?language=objc)
-@dataclass
+#@dataclass
 class UIBarPosition:
   # ref: [UIBarCommon.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UIBarCommon.rs.html#40)
   any: int = 0
@@ -716,7 +716,7 @@ class UIBarMetrics:
 
 
 # ref: [UIBlurEffectStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uiblureffect/style?language=objc)
-@dataclass
+#@dataclass
 class UIBlurEffectStyle:
   # ref: [UIBlurEffect.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UIBlurEffect.rs.html#12)
   extraLight: int = 0
@@ -743,7 +743,7 @@ class UIBlurEffectStyle:
 
 
 # ref: [UIDatePickerMode | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uidatepicker/mode?language=objc)
-@dataclass
+#@dataclass
 class UIDatePickerMode:
   # ref: [UIDatePicker.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UIDatePicker.rs.html#15)
   time: int = 0
@@ -754,7 +754,7 @@ class UIDatePickerMode:
 
 
 # ref: [UIDatePickerStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uidatepickerstyle?language=objc)
-@dataclass
+#@dataclass
 class UIDatePickerStyle:
   # ref: [UIDatePicker.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UIDatePicker.rs.html#40)
   automatic: int = 0
@@ -764,7 +764,7 @@ class UIDatePickerStyle:
 
 
 # ref: [NSDateFormatterStyle | Apple Developer Documentation](https://developer.apple.com/documentation/foundation/nsdateformatterstyle?language=objc)
-@dataclass
+#@dataclass
 class NSDateFormatterStyle:
   none: int = 0
   short: int = 1
@@ -774,7 +774,7 @@ class NSDateFormatterStyle:
 
 
 # ref: [NSCalendarUnit | Apple Developer Documentation](https://developer.apple.com/documentation/foundation/nscalendarunit)
-@dataclass
+#@dataclass
 class NSCalendarUnit:
   # ref: [NSCalendar.rs - source](https://docs.rs/objc2-foundation/0.2.2/aarch64-apple-ios/src/objc2_foundation/generated/NSCalendar.rs.html#94)
   era: int = 2
@@ -815,7 +815,7 @@ class NSCalendarUnit:
 
 
 # ref: [UIBarButtonItemStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uibarbuttonitem/style-swift.enum?language=objc)
-@dataclass
+#@dataclass
 class UIBarButtonItemStyle:
   # ref: [UIBarButtonItem.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UIBarButtonItem.rs.html#14)
   plain: int = 0
@@ -851,7 +851,7 @@ class UIFontDescriptorSymbolicTraits:
 
 
 # ref: [UIImagePickerControllerSourceType | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uiimagepickercontroller/sourcetype-swift.enum?language=objc)
-@dataclass
+#@dataclass
 class UIImagePickerControllerSourceType:
   # ref: [UIImagePickerController.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UIImagePickerController.rs.html#12)
   photoLibrary: int = 0  # todo: deprecated
@@ -872,7 +872,7 @@ class NSURLRequestCachePolicy:
 
 
 # ref: [WKNavigationActionPolicy | Apple Developer Documentation](https://developer.apple.com/documentation/webkit/wknavigationactionpolicy?language=objc)
-@dataclass
+#@dataclass
 class WKNavigationActionPolicy:
   cancel: int = 0
   allow: int = 1
@@ -881,8 +881,8 @@ class WKNavigationActionPolicy:
 # ref: [UISceneActivationState | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uiscene/activationstate-swift.enum?language=objc)
 class UISceneActivationState:
   # ref: [UISceneDefinitions.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UISceneDefinitions.rs.html#12)
-  unattached = -1
-  foregroundActive = 0
-  foregroundInactive = 1
-  background = 2
+  unattached: int = -1
+  foregroundActive: int = 0
+  foregroundInactive:int = 1
+  background:int = 2
   
