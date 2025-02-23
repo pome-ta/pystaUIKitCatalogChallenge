@@ -1,13 +1,16 @@
 import ctypes
 
 from pyrubicon.objc.api import ObjCClass, ObjCInstance
-from pyrubicon.objc.api import objc_method
-from pyrubicon.objc.runtime import send_super, objc_id
+from pyrubicon.objc.api import objc_method, objc_property
+from pyrubicon.objc.api import NSString, NSMutableArray
+from pyrubicon.objc.runtime import send_super, objc_id, send_message, SEL
 from pyrubicon.objc.types import NSInteger
 
 from rbedge.enumerations import UIListContentTextAlignment
 
 from caseElement import CaseElement  # todo: 型呼び出し
+from rbedge.functions import NSStringFromClass
+from rbedge import pdbr
 
 UITableViewController = ObjCClass('UITableViewController')
 UITableViewHeaderFooterView = ObjCClass('UITableViewHeaderFooterView')
@@ -15,6 +18,16 @@ UIListContentConfiguration = ObjCClass('UIListContentConfiguration')
 
 
 class BaseTableViewController(UITableViewController):
+  
+  testCells: NSMutableArray = objc_property()
+  headerFooterViewIdentifier: NSString = objc_property()
+
+  @objc_method
+  def dealloc(self):
+    # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
+    print(f'\t\t- {NSStringFromClass(__class__)}: dealloc')
+
+
 
   @objc_method
   def initWithStyle_(self, style: NSInteger) -> ObjCInstance:
@@ -27,23 +40,57 @@ class BaseTableViewController(UITableViewController):
                  NSInteger,
                ])
 
-    self.testCells: list[CaseElement] = []
-    self.headerFooterView_identifier = 'customHeaderFooterView'
+    #print(f'\t\t{NSStringFromClass(__class__)}: initWithStyle_')
     return self
 
   @objc_method
-  def setupPrototypes_(self, prototypes) -> None:
-    [
-      self.tableView.registerClass_forCellReuseIdentifier_(
-        prototype['cellClass'], prototype['identifier'])
-      for prototype in prototypes
-    ]
+  def loadView(self):
+    send_super(__class__, self, 'loadView')
+    #print(f'\t\t{NSStringFromClass(__class__)}: loadView')
+    self.testCells = NSMutableArray.new()
+    self.headerFooterViewIdentifier = 'customHeaderFooterView'
+
 
   @objc_method
   def viewDidLoad(self):
     send_super(__class__, self, 'viewDidLoad')  # xxx: 不要?
+    #print(f'\t\t{NSStringFromClass(__class__)}: viewDidLoad')
     self.tableView.registerClass_forHeaderFooterViewReuseIdentifier_(
-      UITableViewHeaderFooterView, self.headerFooterView_identifier)
+      UITableViewHeaderFooterView, self.headerFooterViewIdentifier)
+
+  @objc_method
+  def viewWillAppear_(self, animated: bool):
+    send_super(__class__,
+               self,
+               'viewWillAppear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    #print(f'\t{NSStringFromClass(__class__)}: viewWillAppear_')
+
+  @objc_method
+  def viewDidAppear_(self, animated: bool):
+    send_super(__class__,
+               self,
+               'viewDidAppear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    #print(f'\t{NSStringFromClass(__class__)}: viewDidAppear_')
+
+  @objc_method
+  def viewWillDisappear_(self, animated: bool):
+    # print('\t↑ ---')
+    send_super(__class__,
+               self,
+               'viewWillDisappear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    #print(f'\t{NSStringFromClass(__class__)}: viewWillDisappear_')
 
   @objc_method
   def viewDidDisappear_(self, animated: bool):
@@ -54,25 +101,32 @@ class BaseTableViewController(UITableViewController):
                argtypes=[
                  ctypes.c_bool,
                ])
-    # todo: `dealloc` 呼び出す為、インスタンス変数を初期化
-    self.testCells = None
-    self.headerFooterView_identifier = None
+    print(f'\t{NSStringFromClass(__class__)}: viewDidDisappear_')
 
   @objc_method
-  def testCells_extend(self, testCells: ctypes.py_object):
-    """`@available(iOS 15.0, *)` で弾く用
+  def didReceiveMemoryWarning(self):
+    send_super(__class__, self, 'didReceiveMemoryWarning')
+    print(f'\t{NSStringFromClass(__class__)}: didReceiveMemoryWarning')
+
+  
+  @objc_method
+  def testCellsAppendContentsOf_(self, addingCells) -> None:
+    """`@available(iOS 15.0, *)` で弾く用
     """
-    for testCell in testCells:
-      if not isinstance(testCell, CaseElement):
+    for cell in addingCells:
+      '''
+      if not isinstance(addCell, CaseElement):
         continue
-      if (cell := testCell).configHandler is None:
+      if (cell := addCell).configHandlerName is None:
         continue
-      self.testCells.append(cell)
+      '''
+      self.testCells.addObject_(cell)
+  
 
   @objc_method
-  def centeredHeaderView_(self, title):
+  def centeredHeaderView_(self, title) -> objc_id:
     headerView = self.tableView.dequeueReusableHeaderFooterViewWithIdentifier_(
-      self.headerFooterView_identifier)
+      self.headerFooterViewIdentifier)
 
     content = UIListContentConfiguration.groupedHeaderConfiguration()
     content.text = title
@@ -101,13 +155,17 @@ class BaseTableViewController(UITableViewController):
     return len(self.testCells)
 
   @objc_method
-  def tableView_cellForRowAtIndexPath_(self, tableView, indexPath) -> objc_id:
+  def tableView_cellForRowAtIndexPath_(self, tableView,
+                                       indexPath) -> ObjCInstance:
+
     cellTest = self.testCells[indexPath.section]
     cell = tableView.dequeueReusableCellWithIdentifier_forIndexPath_(
       cellTest.cellID, indexPath)
 
     if (view := cellTest.targetView(cell)):
-      cellTest.configHandler(view)
+      configHandlerName = str(cellTest.configHandlerName)
+
+      self.performSelector_withObject_(SEL(configHandlerName), view)
 
     return cell
 

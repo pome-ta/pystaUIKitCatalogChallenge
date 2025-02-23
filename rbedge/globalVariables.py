@@ -6,7 +6,7 @@ from pyrubicon.objc.runtime import load_library
 UIKit = load_library('UIKit')
 
 # xxx: PEP8では非推奨
-constUIKit = lambda const_name: objc_const(UIKit, const_name)
+constUIKit = lambda const_name: str(objc_const(UIKit, const_name))
 
 UITextFieldTextDidChangeNotification = constUIKit(
   'UITextFieldTextDidChangeNotification')
@@ -17,6 +17,8 @@ UIKeyboardFrameBeginUserInfoKey = constUIKit('UIKeyboardFrameBeginUserInfoKey')
 UIKeyboardFrameEndUserInfoKey = constUIKit('UIKeyboardFrameEndUserInfoKey')
 
 UICollectionElementKindSectionHeader = constUIKit('UICollectionElementKindSectionHeader')
+
+#print()
 
 # ref: [UIFontTextStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uifont/textstyle?language=objc)
 @dataclass

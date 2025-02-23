@@ -2,7 +2,7 @@
   note: Storyboard 実装なし
   todo:
     - 時々落ちる、稀に無限クラッシュ
-    - 不要な呼び出しを整理
+    - 不要な呼び出しを整理
     - `viewDidLoad` 肥大化問題
 """
 import ctypes
@@ -66,7 +66,7 @@ class StackViewController(UIViewController):
     
     self.view.backgroundColor = UIColor.systemBackgroundColor()
     
-    # xxx: あとで、`setup` 的なのを作る？
+    # xxx: あとで、`setup` 的なのを作る?
     # --- Symbols
     plusSymbol = UIImage.systemImageNamed('plus')
     minusSymbol = UIImage.systemImageNamed('minus')

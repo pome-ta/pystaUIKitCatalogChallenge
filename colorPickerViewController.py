@@ -17,6 +17,7 @@ from rbedge.enumerations import (
   UIModalPresentationStyle,
   UIBarButtonItemStyle,
 )
+from rbedge.functions import NSStringFromClass
 
 from rbedge import pdbr
 from pyLocalizedString import localizedString
@@ -301,7 +302,7 @@ class ColorPickerViewController(UIViewController):
     """
     pass
 
-
+'''
 if __name__ == '__main__':
   from rbedge.functions import NSStringFromClass
   from rbedge.enumerations import UIModalPresentationStyle
@@ -314,3 +315,28 @@ if __name__ == '__main__':
   presentation_style = UIModalPresentationStyle.fullScreen
   # presentation_style = UIModalPresentationStyle.pageSheet
   present_viewController(main_vc, presentation_style)
+'''
+if __name__ == '__main__':
+  from rbedge.app import App
+
+  from rbedge.enumerations import (
+    UITableViewStyle,
+    UIModalPresentationStyle,
+  )
+  print('__name__')
+
+  table_style = UITableViewStyle.grouped
+  #main_vc = ActivityIndicatorViewController.alloc().initWithStyle_(table_style)
+  main_vc = ColorPickerViewController.new()
+  _title = NSStringFromClass(ColorPickerViewController)
+  main_vc.navigationItem.title = _title
+
+  #presentation_style = UIModalPresentationStyle.fullScreen
+  presentation_style = UIModalPresentationStyle.pageSheet
+
+  app = App(main_vc)
+  print(app)
+  #pdbr.state(main_vc, 1)
+  app.main_loop(presentation_style)
+  print('--- end ---\n')
+

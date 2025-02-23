@@ -90,6 +90,12 @@ class SplitViewController(UISplitViewController):
 class MainViewController(UIViewController):
 
   @objc_method
+  def dealloc(self):
+    # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
+    print(f'- {NSStringFromClass(__class__)}: dealloc')
+    #print('- MainViewController: dealloc')
+
+  @objc_method
   def viewDidLoad(self):
     # --- Navigation
     send_super(__class__, self, 'viewDidLoad')
@@ -105,12 +111,14 @@ class MainViewController(UIViewController):
 
 
 if __name__ == '__main__':
-  from rbedge import present_viewController
+  from rbedge.app import App
   from rbedge.enumerations import UIModalPresentationStyle
 
   vc = MainViewController.new()
 
   style = UIModalPresentationStyle.fullScreen
   #style = UIModalPresentationStyle.pageSheet
-  present_viewController(vc, style)
+
+  app = App(vc)
+  app.main_loop(style)
 

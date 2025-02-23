@@ -1,47 +1,41 @@
-__version__ = '0.0.0'
-from pathlib import Path
+__version__ = '0.0.1'
 
-from pyrubicon.objc.api import ObjCClass
+import sys
+import os
+import ctypes
 
-from .enumerations import UIModalPresentationStyle
-from .objcMainThread import onMainThread
+from pyrubicon.objc.api import ObjCClass, ObjCInstance
+from pyrubicon.objc.runtime import Foundation
 
 ObjCClass.auto_rename = True
 
-UIViewController = ObjCClass('UIViewController')  # todo: アノテーション用
+#############################################################
+# --- exception
+#######################################################
+# todo: from objc_util.py of Pythonista3
+ExceptionHandlerFuncType = ctypes.CFUNCTYPE(None, ctypes.c_void_p)
 
 
-@onMainThread
-def present_viewController(viewController: UIViewController,
-                           modalPresentationStyle: UIModalPresentationStyle
-                           | int = UIModalPresentationStyle.fullScreen,
-                           navigationController_enabled: bool = True):
-  sharedApplication = ObjCClass('UIApplication').sharedApplication
-  keyWindow = sharedApplication.windows.firstObject()
-  rootViewController = keyWindow.rootViewController
+def NSSetUncaughtExceptionHandler(_exc: ExceptionHandlerFuncType) -> None:
+  _NSSetUncaughtExceptionHandler = Foundation.NSSetUncaughtExceptionHandler
+  _NSSetUncaughtExceptionHandler.restype = None
+  _NSSetUncaughtExceptionHandler.argtypes = [
+    ExceptionHandlerFuncType,
+  ]
+  _NSSetUncaughtExceptionHandler(_exc)
 
-  while _presentedViewController := rootViewController.presentedViewController:
-    rootViewController = _presentedViewController
 
-  if navigationController_enabled:
-    from .rootNavigationController import RootNavigationController
+def _objc_exception_handler(_exc):
+  exc = ObjCInstance(_exc)
+  with open(os.path.expanduser('~/Documents/_rubicon_objc_exception.txt'),
+            'w') as f:
+    import datetime
+    f.write(
+      'The app was terminated due to an Objective-C exception. Details below:\n\n%s\n%s\n'
+      % (datetime.datetime.now(), exc))
 
-    presentViewController = RootNavigationController.alloc(
-    ).initWithRootViewController_(viewController)
-  else:
-    presentViewController = viewController
 
-  # xxx: style 指定を力技で確認
-  automatic = UIModalPresentationStyle.automatic  # -2
-  blurOverFullScreen = UIModalPresentationStyle.blurOverFullScreen  # 8
-  pageSheet = UIModalPresentationStyle.pageSheet  # 1
-
-  style = modalPresentationStyle if isinstance(
-    modalPresentationStyle, int
-  ) and automatic <= modalPresentationStyle <= blurOverFullScreen else pageSheet
-
-  presentViewController.setModalPresentationStyle_(style)
-
-  rootViewController.presentViewController_animated_completion_(
-    presentViewController, True, None)
+_handler = ExceptionHandlerFuncType(_objc_exception_handler)
+NSSetUncaughtExceptionHandler(_handler)
+#######################################################
 

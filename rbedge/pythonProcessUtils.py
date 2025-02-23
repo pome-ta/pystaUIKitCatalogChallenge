@@ -62,7 +62,7 @@ def get_srgb_named_style(named: str,
       if appearance is not None and style == appearance.get('value'):
         components = color.get('color').get('components')
         break
-    # xxx: `components` 代入前に参照される可能性あり
+
     red, green, blue, alpha = (float(components.get(clr))
                                for clr in ('red', 'green', 'blue', 'alpha'))
     # wip: エラーハンドリング

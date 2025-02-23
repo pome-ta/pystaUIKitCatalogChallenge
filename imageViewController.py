@@ -1,19 +1,23 @@
 """
   note: Storyboard 未定義
 """
+import ctypes
+
 from pyrubicon.objc.api import ObjCClass
-from pyrubicon.objc.api import objc_method
+from pyrubicon.objc.api import objc_method, objc_property
 from pyrubicon.objc.runtime import send_super
 from pyrubicon.objc.types import CGRect
 
 from pyLocalizedString import localizedString
-from rbedge import pdbr
 
 from rbedge.enumerations import (
   UIViewAutoresizing,
   UIViewContentMode,
 )
 from rbedge.pythonProcessUtils import dataWithContentsOfURL
+from rbedge.functions import NSStringFromClass
+
+from rbedge import pdbr
 
 UIViewController = ObjCClass('UIViewController')
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
@@ -28,18 +32,30 @@ UIColor = ObjCClass('UIColor')
 
 class ImageViewController(UIViewController):
 
+  imageView: UIImage = objc_property()
+
+  @objc_method
+  def dealloc(self):
+    # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
+    print(f'\t - {NSStringFromClass(__class__)}: dealloc')
+    #pass
+
+  @objc_method
+  def loadView(self):
+    send_super(__class__, self, 'loadView')
+    #print(f'\t{NSStringFromClass(__class__)}: loadView')
+
   # MARK: - View Life Cycle
   @objc_method
   def viewDidLoad(self):
     send_super(__class__, self, 'viewDidLoad')
+    #print(f'\t{NSStringFromClass(__class__)}: viewDidLoad')
     self.navigationItem.title = localizedString('ImageViewTitle') if (
       title := self.navigationItem.title) is None else title
 
     self.view.backgroundColor = UIColor.systemBackgroundColor()
-    #self.view.backgroundColor = UIColor.systemIndigoColor()
 
     imageView = UIImageView.alloc().init()
-    #imageView.backgroundColor = UIColor.systemOrangeColor()
 
     # --- Layout
     self.view.addSubview_(imageView)
@@ -59,6 +75,57 @@ class ImageViewController(UIViewController):
 
     self.imageView = imageView
     self.configureImageView()
+
+  @objc_method
+  def viewWillAppear_(self, animated: bool):
+    send_super(__class__,
+               self,
+               'viewWillAppear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    #print(f'\t{NSStringFromClass(__class__)}: viewWillAppear_')
+
+  @objc_method
+  def viewDidAppear_(self, animated: bool):
+    send_super(__class__,
+               self,
+               'viewDidAppear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    #print(f'\t{NSStringFromClass(__class__)}: viewDidAppear_')
+    #print('\t↓ ---')
+
+  @objc_method
+  def viewWillDisappear_(self, animated: bool):
+    #print('\t↑ ---')
+    send_super(__class__,
+               self,
+               'viewWillDisappear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    #print(f'\t{NSStringFromClass(__class__)}: viewWillDisappear_')
+
+  @objc_method
+  def viewDidDisappear_(self, animated: bool):
+    send_super(__class__,
+               self,
+               'viewDidDisappear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    #print(f'\t{NSStringFromClass(__class__)}: viewDidDisappear_')
+
+  @objc_method
+  def didReceiveMemoryWarning(self):
+    send_super(__class__, self, 'didReceiveMemoryWarning')
+    print(f'\t{NSStringFromClass(__class__)}: didReceiveMemoryWarning')
 
   # MARK: - Configuration
   @objc_method
@@ -91,17 +158,17 @@ class ImageViewController(UIViewController):
 
 
 if __name__ == '__main__':
-  from rbedge.functions import NSStringFromClass
+  from rbedge.app import App
   from rbedge.enumerations import UIModalPresentationStyle
-  from rbedge import present_viewController
 
   main_vc = ImageViewController.new()
   _title = NSStringFromClass(ImageViewController)
   main_vc.navigationItem.title = _title
 
-  style = UIModalPresentationStyle.fullScreen
-  #style = UIModalPresentationStyle.pageSheet
-  #style = UIModalPresentationStyle.popover
+  presentation_style = UIModalPresentationStyle.fullScreen
+  #presentation_style = UIModalPresentationStyle.pageSheet
+  #presentation_style = UIModalPresentationStyle.popover
 
-  present_viewController(main_vc, style)
+  app = App(main_vc)
+  app.main_loop(presentation_style)
 
