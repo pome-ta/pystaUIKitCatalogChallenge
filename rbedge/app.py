@@ -16,7 +16,6 @@ UIViewController = ObjCClass('UIViewController')  # todo: アノテーション�
 class App:
 
   def __init__(self, viewController):
-    print('App: __init__')
     self.viewController = viewController
     self.rootViewController = None
 
