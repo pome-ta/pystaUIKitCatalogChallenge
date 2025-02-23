@@ -56,8 +56,6 @@ class ActivityIndicatorViewController(BaseTableViewController):
         prototype['cellClass'], prototype['identifier'])
       for prototype in prototypes
     ]
-    
-    
 
   # MARK: - View Life Cycle
   @objc_method
@@ -72,11 +70,13 @@ class ActivityIndicatorViewController(BaseTableViewController):
 
     #c2 = CaseElement.alloc().initWithTitle_cellID_configHandlerName_(localizedString('LargeIndicatorTitle'), ActivityIndicatorKind.largeIndicator.value, 'configureLargeActivityIndicatorView:')
     #c1 = CaseElement(localizedString('MediumIndicatorTitle'), ActivityIndicatorKind.mediumIndicator.value, 'configureMediumActivityIndicatorView:')
-    
-    self.testCellsAppendContentsOf_([CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
-      localizedString('MediumIndicatorTitle'),
-      ActivityIndicatorKind.mediumIndicator.value,
-      'configureMediumActivityIndicatorView:'),])
+
+    self.testCellsAppendContentsOf_([
+      CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
+        localizedString('MediumIndicatorTitle'),
+        ActivityIndicatorKind.mediumIndicator.value,
+        'configureMediumActivityIndicatorView:'),
+    ])
 
     #self.testCells.addObject_(c1)
     '''
@@ -167,19 +167,18 @@ class ActivityIndicatorViewController(BaseTableViewController):
   @objc_method
   def configureMediumActivityIndicatorView_(self, activityIndicator):
     #pdbr.state(activityIndicator)
-    
+
     #activityIndicator.style = UIActivityIndicatorViewStyle.medium
     activityIndicator.setStyle_(UIActivityIndicatorViewStyle.large)
     #initWithActivityIndicatorStyle_
-    
+
     activityIndicator.hidesWhenStopped = True
-    
+
     activityIndicator.color = UIColor.systemRedColor()
     #pdbr.state(activityIndicator)
 
     activityIndicator.startAnimating()
-    
-    
+
     # When the activity is done, be sure to use UIActivityIndicatorView.stopAnimating().
 
   @objc_method
@@ -207,6 +206,7 @@ class ActivityIndicatorViewController(BaseTableViewController):
 
     #activityIndicator.startAnimating()
     # When the activity is done, be sure to use UIActivityIndicatorView.stopAnimating().
+
   '''
   @objc_method
   def tableView_cellForRowAtIndexPath_(self, tableView,
@@ -252,5 +252,4 @@ if __name__ == '__main__':
   # pdbr.state(main_vc, 1)
   app.main_loop(presentation_style)
   print('--- end ---\n')
-
 
