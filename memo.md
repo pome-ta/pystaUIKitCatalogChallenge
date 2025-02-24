@@ -1,3 +1,9 @@
+# 📝 2025/02/24
+
+## `AlertControllerViewController` の`wip`
+
+- `alertController.popoverPresentationController` のif
+
 # 📝 2025/02/23
 
 ## 一ヶ月もモヤモヤ調査していたのか？
