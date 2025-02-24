@@ -67,6 +67,7 @@ class ActivityIndicatorViewController(BaseTableViewController):
     send_super(__class__, self, 'viewDidLoad')
     #print(f'\t{NSStringFromClass(__class__)}: viewDidLoad')
 
+    # --- Navigation
     self.navigationItem.title = localizedString('ActivityIndicatorsTitle') if (
       title := self.navigationItem.title) is None else title
 
