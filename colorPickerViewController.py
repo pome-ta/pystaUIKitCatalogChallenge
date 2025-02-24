@@ -45,7 +45,6 @@ class ColorPickerViewController(UIViewController):
     # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
     print(f'\t- {NSStringFromClass(__class__)}: dealloc')
 
-  
   # MARK: - View Life Cycle
   @objc_method
   def viewDidLoad(self):
@@ -307,16 +306,11 @@ class ColorPickerViewController(UIViewController):
     pass
 
 
-
 if __name__ == '__main__':
   from rbedge.app import App
 
-  from rbedge.enumerations import (
-    UITableViewStyle,
-    UIModalPresentationStyle,
-  )
+  from rbedge.enumerations import UIModalPresentationStyle
 
-  table_style = UITableViewStyle.grouped
   main_vc = ColorPickerViewController.new()
   _title = NSStringFromClass(ColorPickerViewController)
   main_vc.navigationItem.title = _title
