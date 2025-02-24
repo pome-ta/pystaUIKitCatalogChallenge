@@ -513,7 +513,6 @@ if __name__ == '__main__':
     UITableViewStyle,
     UIModalPresentationStyle,
   )
-  print('__name__')
 
   table_style = UITableViewStyle.grouped
   main_vc = AlertControllerViewController.new()
