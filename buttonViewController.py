@@ -107,8 +107,9 @@ class ButtonViewController(BaseTableViewController):
 
   @objc_method
   def viewDidLoad(self):
-    send_super(__class__, self, 'viewDidLoad')  # xxx: 不要？
+    send_super(__class__, self, 'viewDidLoad')
 
+    # --- Navigation
     self.navigationItem.title = localizedString('ButtonsTitle') if (
       title := self.navigationItem.title) is None else title
 
