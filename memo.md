@@ -1,8 +1,15 @@
 # 📝 2025/02/24
 
-## `AlertControllerViewController` の`wip`
+## `AlertControllerViewController` のwip
 
 - `alertController.popoverPresentationController` のif
+
+
+## `ButtonViewController` 検証
+
+- 全ボタン(a-shell で)検証しきれてない
+- `toolTip` はwip
+- `#available(iOS 15, *)` 分岐未実装
 
 # 📝 2025/02/23
 

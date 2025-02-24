@@ -2,11 +2,12 @@ import ctypes
 from enum import Enum
 
 from pyrubicon.objc.api import ObjCClass, ObjCInstance, Block
-from pyrubicon.objc.api import objc_method
+from pyrubicon.objc.api import objc_method, objc_property
 from pyrubicon.objc.runtime import send_super, objc_id, SEL
 from pyrubicon.objc.types import NSInteger, CGPoint
 
 from rbedge.enumerations import (
+  UIUserInterfaceIdiom,
   UIControlState,
   UIControlEvents,
   UIButtonConfigurationCornerStyle,
@@ -25,7 +26,7 @@ from rbedge.pythonProcessUtils import (
   mainScreen_scale,
   dataWithContentsOfURL,
 )
-
+from rbedge.functions import NSStringFromClass
 from rbedge import pdbr
 
 from caseElement import CaseElement
@@ -72,7 +73,13 @@ class ButtonKind(Enum):
 
 
 class ButtonViewController(BaseTableViewController):
-  # cartItemCount = objc_property(int)
+
+  cartItemCount: NSInteger = objc_property()
+
+  @objc_method
+  def dealloc(self):
+    # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
+    print(f'\t- {NSStringFromClass(__class__)}: dealloc')
 
   @objc_method
   def initWithStyle_(self, style: NSInteger) -> ObjCInstance:
@@ -84,10 +91,19 @@ class ButtonViewController(BaseTableViewController):
                argtypes=[
                  NSInteger,
                ])
-    self.setupPrototypes_(prototypes)
-
-    self.cartItemCount = 0
+    #print(f'\t{NSStringFromClass(__class__)}: initWithStyle_')
     return self
+
+  @objc_method
+  def loadView(self):
+    send_super(__class__, self, 'loadView')
+    #print(f'\t{NSStringFromClass(__class__)}: loadView')
+    [
+      self.tableView.registerClass_forCellReuseIdentifier_(
+        prototype['cellClass'], prototype['identifier'])
+      for prototype in prototypes
+    ]
+    self.cartItemCount = 0
 
   @objc_method
   def viewDidLoad(self):
@@ -96,114 +112,123 @@ class ButtonViewController(BaseTableViewController):
     self.navigationItem.title = localizedString('ButtonsTitle') if (
       title := self.navigationItem.title) is None else title
 
-    self.testCells_extend([
+    self.testCellsAppendContentsOf_([
       # 00
-      CaseElement(localizedString('DefaultTitle'),
-                  ButtonKind.buttonSystem.value,
-                  self.configureSystemTextButton_),
+      CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
+        localizedString('DefaultTitle'), ButtonKind.buttonSystem.value,
+        'configureSystemTextButton:'),
       # 01
-      CaseElement(localizedString('DetailDisclosureTitle'),
-                  ButtonKind.buttonDetailDisclosure.value,
-                  self.configureSystemDetailDisclosureButton_),
+      CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
+        localizedString('DetailDisclosureTitle'),
+        ButtonKind.buttonDetailDisclosure.value,
+        'configureSystemDetailDisclosureButton:'),
       # 02
-      CaseElement(localizedString('AddContactTitle'),
-                  ButtonKind.buttonSystemAddContact.value,
-                  self.configureSystemContactAddButton_),
+      CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
+        localizedString('AddContactTitle'),
+        ButtonKind.buttonSystemAddContact.value,
+        'configureSystemContactAddButton:'),
       # 03
-      CaseElement(localizedString('CloseTitle'), ButtonKind.buttonClose.value,
-                  self.configureCloseButton_),
+      CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
+        localizedString('CloseTitle'), ButtonKind.buttonClose.value,
+        'configureCloseButton:'),
     ])
 
     if True:  # xxx: `#available(iOS 15, *)`
       # These button styles are available on iOS 15 or later.
-      self.testCells_extend([
+      self.testCellsAppendContentsOf_([
         # 04
-        CaseElement(localizedString('GrayTitle'),
-                    ButtonKind.buttonStyleGray.value,
-                    self.configureStyleGrayButton_),
+        CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
+          localizedString('GrayTitle'), ButtonKind.buttonStyleGray.value,
+          'configureStyleGrayButton:'),
         # 05
-        CaseElement(localizedString('TintedTitle'),
-                    ButtonKind.buttonStyleTinted.value,
-                    self.configureStyleTintedButton_),
+        CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
+          localizedString('TintedTitle'), ButtonKind.buttonStyleTinted.value,
+          'configureStyleTintedButton:'),
         # 06
-        CaseElement(localizedString('FilledTitle'),
-                    ButtonKind.buttonStyleFilled.value,
-                    self.configureStyleFilledButton_),
+        CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
+          localizedString('FilledTitle'), ButtonKind.buttonStyleFilled.value,
+          'configureStyleFilledButton:'),
         # 07
-        CaseElement(localizedString('CornerStyleTitle'),
-                    ButtonKind.buttonCornerStyle.value,
-                    self.configureCornerStyleButton_),
+        CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
+          localizedString('CornerStyleTitle'),
+          ButtonKind.buttonCornerStyle.value, 'configureCornerStyleButton:'),
         # 15
-        CaseElement(localizedString('ToggleTitle'),
-                    ButtonKind.buttonToggle.value,
-                    self.configureToggleButton_),
+        CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
+          localizedString('ToggleTitle'), ButtonKind.buttonToggle.value,
+          'configureToggleButton:'),
       ])
 
     if True:  # xxx: `traitCollection.userInterfaceIdiom != .mac`
-      self.testCells_extend([
+      self.testCellsAppendContentsOf_([
         # 16
-        CaseElement(localizedString('ButtonColorTitle'),
-                    ButtonKind.buttonTitleColor.value,
-                    self.configureTitleTextButton_),
+        CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
+          localizedString('ButtonColorTitle'),
+          ButtonKind.buttonTitleColor.value, 'configureTitleTextButton:'),
       ])
 
-    self.testCells_extend([
+    self.testCellsAppendContentsOf_([
       # 08
-      CaseElement(localizedString('ImageTitle'), ButtonKind.buttonImage.value,
-                  self.configureImageButton_),
+      CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
+        localizedString('ImageTitle'), ButtonKind.buttonImage.value,
+        'configureImageButton:'),
       # 09
-      CaseElement(localizedString('AttributedStringTitle'),
-                  ButtonKind.buttonAttrText.value,
-                  self.configureAttributedTextSystemButton_),
+      CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
+        localizedString('AttributedStringTitle'),
+        ButtonKind.buttonAttrText.value,
+        'configureAttributedTextSystemButton:'),
       # 10
-      CaseElement(localizedString('SymbolTitle'),
-                  ButtonKind.buttonSymbol.value, self.configureSymbolButton_),
+      CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
+        localizedString('SymbolTitle'), ButtonKind.buttonSymbol.value,
+        'configureSymbolButton:'),
     ])
 
     if True:  # xxx: `#available(iOS 15, *)`
-      if True:  # xxx: `traitCollection.userInterfaceIdiom != .mac`
-        self.testCells_extend([
+      if self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiom.mac:
+        self.testCellsAppendContentsOf_([
           # 11
-          CaseElement(localizedString('LargeSymbolTitle'),
-                      ButtonKind.buttonLargeSymbol.value,
-                      self.configureLargeSymbolButton_),
+          CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
+            localizedString('LargeSymbolTitle'),
+            ButtonKind.buttonLargeSymbol.value, 'configureLargeSymbolButton:'),
         ])
 
     if True:  # xxx: `#available(iOS 15, *)`
-      self.testCells_extend([
+      self.testCellsAppendContentsOf_([
         # 12
-        CaseElement(localizedString('SymbolStringTitle'),
-                    ButtonKind.buttonSymbolText.value,
-                    self.configureSymbolTextButton_),
+        CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
+          localizedString('SymbolStringTitle'),
+          ButtonKind.buttonSymbolText.value, 'configureSymbolTextButton:'),
         # 13
-        CaseElement(localizedString('StringSymbolTitle'),
-                    ButtonKind.buttonTextSymbol.value,
-                    self.configureTextSymbolButton_),
+        CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
+          localizedString('StringSymbolTitle'),
+          ButtonKind.buttonTextSymbol.value, 'configureTextSymbolButton:'),
         # 17
-        CaseElement(localizedString('BackgroundTitle'),
-                    ButtonKind.buttonBackground.value,
-                    self.configureBackgroundButton_),
+        CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
+          localizedString('BackgroundTitle'),
+          ButtonKind.buttonBackground.value, 'configureBackgroundButton:'),
         # 14
-        CaseElement(localizedString('MultiTitleTitle'),
-                    ButtonKind.buttonMultiTitle.value,
-                    self.configureMultiTitleButton_),
+        CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
+          localizedString('MultiTitleTitle'),
+          ButtonKind.buttonMultiTitle.value, 'configureMultiTitleButton:'),
         # 21
-        CaseElement(localizedString('AddToCartTitle'),
-                    ButtonKind.addToCartButton.value,
-                    self.configureAddToCartButton_),
+        CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
+          localizedString('AddToCartTitle'), ButtonKind.addToCartButton.value,
+          'configureAddToCartButton:'),
 
         # 18
-        CaseElement(localizedString('UpdateActivityHandlerTitle'),
-                    ButtonKind.buttonUpdateActivityHandler.value,
-                    self.configureUpdateActivityHandlerButton_),
+        CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
+          localizedString('UpdateActivityHandlerTitle'),
+          ButtonKind.buttonUpdateActivityHandler.value,
+          'configureUpdateActivityHandlerButton:'),
         # 19
-        CaseElement(localizedString('UpdateHandlerTitle'),
-                    ButtonKind.buttonUpdateHandler.value,
-                    self.configureUpdateHandlerButton_),
+        CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
+          localizedString('UpdateHandlerTitle'),
+          ButtonKind.buttonUpdateHandler.value,
+          'configureUpdateHandlerButton:'),
         # 20
-        CaseElement(localizedString('UpdateImageHandlerTitle'),
-                    ButtonKind.buttonImageUpdateHandler.value,
-                    self.configureUpdateImageHandlerButton_),
+        CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
+          localizedString('UpdateImageHandlerTitle'),
+          ButtonKind.buttonImageUpdateHandler.value,
+          'configureUpdateImageHandlerButton:'),
       ])
 
   @objc_method
@@ -698,7 +723,7 @@ class ButtonViewController(BaseTableViewController):
   def addToCart_(self, _action: ctypes.c_void_p) -> None:
     action = ObjCInstance(_action)
 
-    self.cartItemCount = 0 if self.cartItemCount > 0 else 12
+    self.cartItemCount = 0 if self.cartItemCount.intValue > 0 else 12
 
     if action.sender.isKindOfClass_(UIButton):
       button = action.sender
@@ -742,10 +767,10 @@ class ButtonViewController(BaseTableViewController):
         # xxx: これだと`0` の時、取れない？
         newConfig.image = UIImage.systemImageNamed(
           'cart.fill.badge.plus'
-        ) if self.cartItemCount > 0 else UIImage.systemImageNamed(
+        ) if self.cartItemCount.intValue > 0 else UIImage.systemImageNamed(
           'cart.badge.plus')
         # xxx: 力技
-        newConfig.subtitle = f'{self.cartItemCount}items'
+        newConfig.subtitle = f'{self.cartItemCount.intValue}items'
       else:
         # As the button is highlighted (pressed), apply a temporary image and subtitle.
         # > ボタンがハイライト表示される(押される)と、一時的な画像と字幕が適用されます。
@@ -770,19 +795,21 @@ class ButtonViewController(BaseTableViewController):
 
 
 if __name__ == '__main__':
-  from rbedge.functions import NSStringFromClass
+  from rbedge.app import App
+
   from rbedge.enumerations import (
     UITableViewStyle,
     UIModalPresentationStyle,
   )
-  from rbedge import present_viewController
 
   table_style = UITableViewStyle.grouped
-
   main_vc = ButtonViewController.alloc().initWithStyle_(table_style)
   _title = NSStringFromClass(ButtonViewController)
   main_vc.navigationItem.title = _title
 
-  presentation_style = UIModalPresentationStyle.fullScreen
-  present_viewController(main_vc, presentation_style)
+  # presentation_style = UIModalPresentationStyle.fullScreen
+  presentation_style = UIModalPresentationStyle.pageSheet
+
+  app = App(main_vc)
+  app.main_loop(presentation_style)
 
