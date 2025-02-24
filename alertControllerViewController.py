@@ -109,6 +109,8 @@ class AlertControllerViewController(UIViewController):
   @objc_method
   def viewDidLoad(self):
     send_super(__class__, self, 'viewDidLoad')
+
+    # --- Navigation
     self.navigationItem.title = localizedString('AlertControllersTitle')
     # --- Table set
     self.cell_identifier = 'customCell'
