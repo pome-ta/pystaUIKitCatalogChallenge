@@ -2,7 +2,12 @@
 
 [UIKit Catalog: Creating and Customizing Views and Controls | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/mac_catalyst/uikit_catalog_creating_and_customizing_views_and_controls?language=objc)
 
-Pythonista3 とRubicon objc で、UIKitCatalog を実装するリポジトリ
+Pythonista3 とRubicon objc で、UIKitCatalog を実装するリポジトリ（[a-Shell](https://holzschu.github.io/a-Shell_iOS/) 対応実装中）
+
+
+Pythonista3 のみ実行であれば、こちらの[GitHub - pome-ta/pystaUIKitCatalogChallenge at keep/present_viewController](https://github.com/pome-ta/pystaUIKitCatalogChallenge/tree/keep/present_viewController?tab=readme-ov-file) リポジトリ
+
+
 
 X (旧：Twitter)にて、ハッシュタグ`#UIKitCatalogChallenge` で進捗公開中
 
@@ -13,15 +18,6 @@ X (旧：Twitter)にて、ハッシュタグ`#UIKitCatalogChallenge` で進捗�
 
 
 [スプレッドシート | Web公開用](https://docs.google.com/spreadsheets/d/e/2PACX-1vSKxHMj3HlRkCrgL8_j6Dp3u0xjy-olidak47OjidaASwSoKsR8dFNarxCl910ysdU3szqp3H2UG410/pubhtml?gid=0&single=true)
-
-
-- top
-  - [x] main
-    - ほげ
-  - [x] OutlineViewController
-    - 開閉ができていない
-- Controls
-  - [x] ButtonViewController
 
 ### todo
 

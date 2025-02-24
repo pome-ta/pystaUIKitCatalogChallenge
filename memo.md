@@ -1,8 +1,12 @@
 # 📝 2025/02/24
 
+[pystaUIKitCatalogChallenge - Google スプレッドシート](https://docs.google.com/spreadsheets/d/1T89HXVPCAcrjSLCM0LQtge9vifG3Hhu-VwMGDD1P4vw/edit?pli=1&gid=0#gid=0)
+
 ## `AlertControllerViewController` のwip
 
 - `alertController.popoverPresentationController` のif
+- `loadView` の扱い方
+  - property 関係を定義する？
 
 
 ## `ButtonViewController` 検証
@@ -10,6 +14,15 @@
 - 全ボタン(a-shell で)検証しきれてない
 - `toolTip` はwip
 - `#available(iOS 15, *)` 分岐未実装
+
+## `ColorPickerViewController`
+
+- `loadView` の扱い方
+  - property をここで定義？
+  - `addSubview:` をここでしちゃう？
+    - レイアウトまでするとだめよね
+  - `viewDidLoad` 内が少しスッキリする？
+    - `self` の前後関係が面倒になるけど。。。
 
 # 📝 2025/02/23
 
