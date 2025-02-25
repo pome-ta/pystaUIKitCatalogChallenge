@@ -524,6 +524,6 @@ if __name__ == '__main__':
   #presentation_style = UIModalPresentationStyle.fullScreen
   presentation_style = UIModalPresentationStyle.pageSheet
 
-  app = App(main_vc)
-  app.main_loop(presentation_style)
+  app = App(main_vc, presentation_style)
+  app.present()
 

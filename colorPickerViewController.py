@@ -49,7 +49,7 @@ class ColorPickerViewController(UIViewController):
   @objc_method
   def viewDidLoad(self):
     send_super(__class__, self, 'viewDidLoad')
-    
+
     # --- Navigation
     self.navigationItem.title = localizedString('ColorPickerTitle') if (
       title := self.navigationItem.title) is None else title
@@ -320,6 +320,6 @@ if __name__ == '__main__':
   #presentation_style = UIModalPresentationStyle.fullScreen
   presentation_style = UIModalPresentationStyle.pageSheet
 
-  app = App(main_vc)
-  app.main_loop(presentation_style)
+  app = App(main_vc, presentation_style)
+  app.present()
 

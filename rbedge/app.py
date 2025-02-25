@@ -15,45 +15,45 @@ UIViewController = ObjCClass('UIViewController')  # todo: アノテーション�
 
 class App:
 
-  def __init__(self, viewController):
+  sharedApplication = UIApplication.sharedApplication
+  __objectEnumerator = sharedApplication.connectedScenes.objectEnumerator()
+  while (__windowScene := __objectEnumerator.nextObject()):
+    if __windowScene.activationState == 0:
+      break
+  rootViewController = __windowScene.keyWindow.rootViewController
+
+  def __init__(self,
+               viewController: UIViewController,
+               modalPresentationStyle: UIModalPresentationStyle
+               | int = UIModalPresentationStyle.pageSheet):
     self.viewController = viewController
-    self.rootViewController = None
-
-  def main_loop(self, modalPresentationStyle: int = 0):
-    #print('App: main_loop')
-
-    sharedApplication = UIApplication.sharedApplication
-    connectedScenes = sharedApplication.connectedScenes
-    objectEnumerator = connectedScenes.objectEnumerator()
-    while (windowScene := objectEnumerator.nextObject()):
-      if windowScene.activationState == UISceneActivationState.foregroundActive:
-        break
-    keyWindow = windowScene.keyWindow
-    self.rootViewController = keyWindow.rootViewController
-
-    @onMainThread
-    def present_viewController(viewController: UIViewController,
-                               _style: int) -> None:
-      #from .rootNavigationController import RootNavigationController
-
-      presentViewController = RootNavigationController.alloc(
-      ).initWithRootViewController_(viewController)
-
-      presentViewController.setModalPresentationStyle_(_style)
-
-      self.rootViewController.presentViewController_animated_completion_(
-        presentViewController, True, None)
-
     # xxx: style 指定を力技で確認
     _automatic = UIModalPresentationStyle.automatic  # -2
     _blurOverFullScreen = UIModalPresentationStyle.blurOverFullScreen  # 8
     _pageSheet = UIModalPresentationStyle.pageSheet  # 1
 
-    style = modalPresentationStyle if isinstance(
+    self.modalPresentationStyle = modalPresentationStyle if isinstance(
       modalPresentationStyle, int
     ) and _automatic <= modalPresentationStyle <= _blurOverFullScreen else _pageSheet
 
-    present_viewController(self.viewController, style)
+  def present(self) -> None:
+
+    @onMainThread
+    def present_viewController(viewController: UIViewController,
+                               style: int) -> None:
+
+      presentViewController = RootNavigationController.alloc(
+      ).initWithRootViewController_(viewController)
+
+      presentViewController.setModalPresentationStyle_(style)
+
+      self.rootViewController.presentViewController_animated_completion_(
+        presentViewController, True, None)
+
+    present_viewController(self.viewController, self.modalPresentationStyle)
+    self.main_loop()
+
+  def main_loop(self) -> None:
     loop.run_forever()
     loop.close()
 
