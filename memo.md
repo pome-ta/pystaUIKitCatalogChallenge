@@ -24,6 +24,13 @@
   - `viewDidLoad` 内が少しスッキリする？
     - `self` の前後関係が面倒になるけど。。。
 
+## `CustomToolbarViewController`
+
+- `self.navigationController.setToolbarHidden_animated_` 非表示設定反映が未確認
+  - まとめて表示させる時に確認
+  - a-Shell では、`viewWillDisappear:` 時だと落ちる
+
+
 # 📝 2025/02/23
 
 ## 一ヶ月もモヤモヤ調査していたのか？
