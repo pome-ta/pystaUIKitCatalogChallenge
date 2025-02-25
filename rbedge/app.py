@@ -1,5 +1,4 @@
 from pyrubicon.objc.api import ObjCClass
-from pyrubicon.objc.runtime import objc_id, send_message
 
 from .lifeCycle import loop
 from .enumerations import (

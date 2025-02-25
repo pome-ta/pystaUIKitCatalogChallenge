@@ -215,7 +215,6 @@ class CustomPageControlViewController(UIViewController):
 
 if __name__ == '__main__':
   from rbedge.app import App
-
   from rbedge.enumerations import UIModalPresentationStyle
 
   main_vc = CustomPageControlViewController.new()

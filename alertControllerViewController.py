@@ -510,13 +510,8 @@ class AlertControllerViewController(UIViewController):
 
 if __name__ == '__main__':
   from rbedge.app import App
+  from rbedge.enumerations import UIModalPresentationStyle
 
-  from rbedge.enumerations import (
-    UITableViewStyle,
-    UIModalPresentationStyle,
-  )
-
-  table_style = UITableViewStyle.grouped
   main_vc = AlertControllerViewController.new()
   _title = NSStringFromClass(AlertControllerViewController)
   main_vc.navigationItem.title = _title
