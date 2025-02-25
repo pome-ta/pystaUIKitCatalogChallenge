@@ -39,7 +39,7 @@ class App:
       presentViewController = RootNavigationController.alloc(
       ).initWithRootViewController_(viewController)
 
-      presentViewController.setModalPresentationStyle_(style)
+      presentViewController.setModalPresentationStyle_(_style)
 
       self.rootViewController.presentViewController_animated_completion_(
         presentViewController, True, None)
