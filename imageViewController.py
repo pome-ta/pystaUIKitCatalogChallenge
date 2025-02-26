@@ -8,16 +8,15 @@ from pyrubicon.objc.api import objc_method, objc_property
 from pyrubicon.objc.runtime import send_super
 from pyrubicon.objc.types import CGRect
 
-from pyLocalizedString import localizedString
-
 from rbedge.enumerations import (
   UIViewAutoresizing,
   UIViewContentMode,
 )
 from rbedge.pythonProcessUtils import dataWithContentsOfURL
 from rbedge.functions import NSStringFromClass
-
 from rbedge import pdbr
+
+from pyLocalizedString import localizedString
 
 UIViewController = ObjCClass('UIViewController')
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
@@ -49,7 +48,6 @@ class ImageViewController(UIViewController):
   @objc_method
   def viewDidLoad(self):
     send_super(__class__, self, 'viewDidLoad')
-    #print(f'\t{NSStringFromClass(__class__)}: viewDidLoad')
     self.navigationItem.title = localizedString('ImageViewTitle') if (
       title := self.navigationItem.title) is None else title
 
@@ -97,11 +95,9 @@ class ImageViewController(UIViewController):
                  ctypes.c_bool,
                ])
     #print(f'\t{NSStringFromClass(__class__)}: viewDidAppear_')
-    #print('\t↓ ---')
 
   @objc_method
   def viewWillDisappear_(self, animated: bool):
-    #print('\t↑ ---')
     send_super(__class__,
                self,
                'viewWillDisappear:',
@@ -109,7 +105,7 @@ class ImageViewController(UIViewController):
                argtypes=[
                  ctypes.c_bool,
                ])
-    #print(f'\t{NSStringFromClass(__class__)}: viewWillDisappear_')
+    # print(f'\t{NSStringFromClass(__class__)}: viewWillDisappear_')
 
   @objc_method
   def viewDidDisappear_(self, animated: bool):
@@ -120,12 +116,12 @@ class ImageViewController(UIViewController):
                argtypes=[
                  ctypes.c_bool,
                ])
-    #print(f'\t{NSStringFromClass(__class__)}: viewDidDisappear_')
+    print(f'\t{NSStringFromClass(__class__)}: viewDidDisappear_')
 
   @objc_method
   def didReceiveMemoryWarning(self):
     send_super(__class__, self, 'didReceiveMemoryWarning')
-    print(f'\t{NSStringFromClass(__class__)}: didReceiveMemoryWarning')
+    print(f'{__class__}: didReceiveMemoryWarning')
 
   # MARK: - Configuration
   @objc_method
@@ -165,10 +161,9 @@ if __name__ == '__main__':
   _title = NSStringFromClass(ImageViewController)
   main_vc.navigationItem.title = _title
 
-  presentation_style = UIModalPresentationStyle.fullScreen
-  #presentation_style = UIModalPresentationStyle.pageSheet
-  #presentation_style = UIModalPresentationStyle.popover
+  #presentation_style = UIModalPresentationStyle.fullScreen
+  presentation_style = UIModalPresentationStyle.pageSheet
 
-  app = App(main_vc)
-  app.main_loop(presentation_style)
+  app = App(main_vc, presentation_style)
+  app.present()
 
