@@ -31,6 +31,12 @@
   - a-Shell では、`viewWillDisappear:` 時だと落ちる
 
 
+## `PageControlViewController`
+
+- 書き方ガバガバなので、あとで直す
+- Dark Mode の取得
+
+
 # 📝 2025/02/23
 
 ## 一ヶ月もモヤモヤ調査していたのか？
