@@ -163,6 +163,11 @@ class DatePickerController(UIViewController):
                ])
     print(f'\t{NSStringFromClass(__class__)}: viewDidDisappear_')
 
+  @objc_method
+  def didReceiveMemoryWarning(self):
+    send_super(__class__, self, 'didReceiveMemoryWarning')
+    print(f'{__class__}: didReceiveMemoryWarning')
+
   # MARK: - Configuration
   @objc_method
   def configureDatePicker(self):
