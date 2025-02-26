@@ -11,6 +11,7 @@ from rbedge.enumerations import (
   UIMenuElementAttributes,
   UIMenuOptions,
 )
+from rbedge.functions import NSStringFromClass
 from rbedge import pdbr
 
 from caseElement import CaseElement
@@ -40,7 +41,12 @@ class ButtonMenuActionIdentifiers(Enum):
 
 
 class MenuButtonViewController(BaseTableViewController):
-  
+
+  @objc_method
+  def dealloc(self):
+    # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
+    print(f'\t- {NSStringFromClass(__class__)}: dealloc')
+
   @objc_method
   def initWithStyle_(self, style: NSInteger) -> ObjCInstance:
     send_super(__class__,
@@ -51,31 +57,94 @@ class MenuButtonViewController(BaseTableViewController):
                argtypes=[
                  NSInteger,
                ])
-    self.setupPrototypes_(prototypes)
+    #print(f'\t{NSStringFromClass(__class__)}: initWithStyle_')
     return self
-  
+
+  @objc_method
+  def loadView(self):
+    send_super(__class__, self, 'loadView')
+    #print(f'\t{NSStringFromClass(__class__)}: loadView')
+    [
+      self.tableView.registerClass_forCellReuseIdentifier_(
+        prototype['cellClass'], prototype['identifier'])
+      for prototype in prototypes
+    ]
+
   @objc_method
   def viewDidLoad(self):
     send_super(__class__, self, 'viewDidLoad')  # xxx: 不要?
-    
+
+    # --- Navigation
     self.navigationItem.title = localizedString('MenuButtonsTitle') if (
-                                                                         title := self.navigationItem.title) is None else title
-    
-    self.testCells_extend([
-      CaseElement(localizedString('DropDownProgTitle'),
-                  MenuButtonKind.buttonMenuProgrammatic.value,
-                  self.configureDropDownProgrammaticButton_),
-      CaseElement(localizedString('DropDownMultiActionTitle'),
-                  MenuButtonKind.buttonMenuMultiAction.value,
-                  self.configureDropdownMultiActionButton_),
-      CaseElement(localizedString('DropDownButtonSubMenuTitle'),
-                  MenuButtonKind.buttonSubMenu.value,
-                  self.configureDropdownSubMenuButton_),
-      CaseElement(localizedString('PopupSelection'),
-                  MenuButtonKind.buttonMenuSelection.value,
-                  self.configureSelectionPopupButton_),
+      title := self.navigationItem.title) is None else title
+
+    self.testCellsAppendContentsOf_([
+      CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
+        localizedString('DropDownProgTitle'),
+        MenuButtonKind.buttonMenuProgrammatic.value,
+        'configureDropDownProgrammaticButton:'),
+      CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
+        localizedString('DropDownMultiActionTitle'),
+        MenuButtonKind.buttonMenuMultiAction.value,
+        'configureDropdownMultiActionButton:'),
+      CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
+        localizedString('DropDownButtonSubMenuTitle'),
+        MenuButtonKind.buttonSubMenu.value, 'configureDropdownSubMenuButton:'),
+      CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
+        localizedString('PopupSelection'),
+        MenuButtonKind.buttonMenuSelection.value,
+        'configureSelectionPopupButton:'),
     ])
-  
+
+  @objc_method
+  def viewWillAppear_(self, animated: bool):
+    send_super(__class__,
+               self,
+               'viewWillAppear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    #print(f'\t{NSStringFromClass(__class__)}: viewWillAppear_')
+
+  @objc_method
+  def viewDidAppear_(self, animated: bool):
+    send_super(__class__,
+               self,
+               'viewDidAppear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    #print(f'\t{NSStringFromClass(__class__)}: viewDidAppear_')
+
+  @objc_method
+  def viewWillDisappear_(self, animated: bool):
+    send_super(__class__,
+               self,
+               'viewWillDisappear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    # print(f'\t{NSStringFromClass(__class__)}: viewWillDisappear_')
+
+  @objc_method
+  def viewDidDisappear_(self, animated: bool):
+    send_super(__class__,
+               self,
+               'viewDidDisappear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    print(f'\t{NSStringFromClass(__class__)}: viewDidDisappear_')
+
+  @objc_method
+  def didReceiveMemoryWarning(self):
+    send_super(__class__, self, 'didReceiveMemoryWarning')
+    print(f'{__class__}: didReceiveMemoryWarning')
+
   # MARK: - Handlers
   @objc_method
   def menuHandler_(self, _action: ctypes.c_void_p) -> None:
@@ -90,12 +159,12 @@ class MenuButtonViewController(BaseTableViewController):
       print('Menu Action: item 3')
     else:
       print('Menu Action: None')
-  
+
   @objc_method
   def item4Handler_(self, _action: ctypes.c_void_p) -> None:
     action = ObjCInstance(_action)
     print(f'Menu Action: {action.title}')
-  
+
   # MARK: - Drop Down Menu Buttons
   @objc_method
   def configureDropDownProgrammaticButton_(self, button):
@@ -110,20 +179,20 @@ class MenuButtonViewController(BaseTableViewController):
         ButtonMenuActionIdentifiers.item2.value,
         Block(self.menuHandler_, None, ctypes.c_void_p)),
     ])
-    
+
     button.showsMenuAsPrimaryAction = True
-  
+
   @objc_method
   def configureDropdownMultiActionButton_(self, button):
     # todo: closure をblock 処理
     @Block
     def menuAction5_closure(_action: objc_id) -> None:
       print(f'Menu Action: {ObjCInstance(_action).title}')
-    
+
     @Block
     def menuAction6_closure(_action: objc_id) -> None:
       print(f'Menu Action: {ObjCInstance(_action).title}')
-    
+
     # xxx: 正規表現でやる?
     buttonMenu = UIMenu.menuWithChildren_([
       # Share a single handler for the first 3 actions.
@@ -165,31 +234,31 @@ class MenuButtonViewController(BaseTableViewController):
         UIMenuElementAttributes.disabled, UIMenuElementState.off,
         menuAction6_closure),
     ])
-    
+
     button.menu = buttonMenu
     button.showsMenuAsPrimaryAction = True
-  
+
   @objc_method
   def configureDropdownSubMenuButton_(self, button):
-    
+
     @Block
     def sortClosure(_action: objc_id) -> None:
       print(f'Sort by: {ObjCInstance(_action).title}')
-    
+
     @Block
     def refreshClosure(_action: objc_id) -> None:
       print('Refresh handler')
-    
+
     @Block
     def accountHandler(_action: objc_id) -> None:
       print('Account handler')
-    
+
     sortMenu: UIMenu
     # xxx: `#available(iOS 15, *)`
     if True:  # .singleSelection option only on iOS 15 or later
       # The sort sub menu supports a selection.
       # > 並べ替えサブメニューは選択をサポートします。
-      
+
       sortMenu = sortMenu = UIMenu.menuWithTitle_image_identifier_options_children_(
         'Sort By', None, None, UIMenuOptions.singleSelection, [
           UIAction.alloc().initWithTitle('Date',
@@ -224,7 +293,7 @@ class MenuButtonViewController(BaseTableViewController):
                                        state=UIMenuElementState.off,
                                        handler=sortClosure),
       ])
-    
+
     topMenu = UIMenu.menuWithChildren_([
       UIAction.actionWithTitle_image_identifier_handler_(
         'Refresh', None, None, refreshClosure),
@@ -236,20 +305,20 @@ class MenuButtonViewController(BaseTableViewController):
     # > これにより、ボタンがドロップダウン メニューのように動作します。
     button.showsMenuAsPrimaryAction = True
     button.menu = topMenu
-  
+
   # MARK: - Selection Popup Menu Button
-  
+
   @objc_method
   def updateColor_(self, _title: ctypes.c_void_p) -> None:
     print(f'Color selected: {ObjCInstance(_title)}')
-  
+
   @objc_method
   def configureSelectionPopupButton_(self, button):
-    
+
     @Block
     def colorClosure(_action: objc_id) -> None:
       self.updateColor_(ObjCInstance(_action).title)
-    
+
     button.menu = UIMenu.menuWithChildren_([
       UIAction.alloc().initWithTitle('Red',
                                      image=None,
@@ -276,7 +345,7 @@ class MenuButtonViewController(BaseTableViewController):
     # This makes the button behave like a drop down menu.
     # > これにより、ボタンがドロップダウン メニューのように動作します。
     button.showsMenuAsPrimaryAction = True
-    
+
     if True:  # xxx: `#available(iOS 15, *)`
       button.changesSelectionAsPrimaryAction = True
       # Select the default menu item (green).
@@ -285,18 +354,20 @@ class MenuButtonViewController(BaseTableViewController):
 
 
 if __name__ == '__main__':
-  from rbedge.functions import NSStringFromClass
+  from rbedge.app import App
   from rbedge.enumerations import (
     UITableViewStyle,
     UIModalPresentationStyle,
   )
-  from rbedge import present_viewController
-  
+
   table_style = UITableViewStyle.grouped
-  
   main_vc = MenuButtonViewController.alloc().initWithStyle_(table_style)
   _title = NSStringFromClass(MenuButtonViewController)
   main_vc.navigationItem.title = _title
-  
-  presentation_style = UIModalPresentationStyle.fullScreen
-  present_viewController(main_vc, presentation_style)
+
+  # presentation_style = UIModalPresentationStyle.fullScreen
+  presentation_style = UIModalPresentationStyle.pageSheet
+
+  app = App(main_vc, presentation_style)
+  app.present()
+
