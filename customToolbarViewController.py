@@ -42,7 +42,7 @@ class CustomToolbarViewController(UIViewController):
   def dealloc(self):
     # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
     print(f'\t- {NSStringFromClass(__class__)}: dealloc')
-    #self.navigationController.setToolbarHidden_animated_(True, False)
+    #self.navigationController.setToolbarHidden_animated_(True, True)
 
   # MARK: - View Life Cycle
   @objc_method
