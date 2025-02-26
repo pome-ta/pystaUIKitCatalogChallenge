@@ -5,8 +5,7 @@ import ctypes
 
 from pyrubicon.objc.api import ObjCClass, ObjCInstance
 from pyrubicon.objc.api import objc_method, objc_property
-from pyrubicon.objc.runtime import send_super, objc_id, SEL
-from pyrubicon.objc.types import CGRectMake
+from pyrubicon.objc.runtime import send_super, SEL
 
 from rbedge.enumerations import (
   UIButtonType,
