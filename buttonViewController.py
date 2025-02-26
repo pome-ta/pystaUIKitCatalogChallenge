@@ -233,6 +233,39 @@ class ButtonViewController(BaseTableViewController):
       ])
 
   @objc_method
+  def viewWillAppear_(self, animated: bool):
+    send_super(__class__,
+               self,
+               'viewWillAppear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    #print(f'\t{NSStringFromClass(__class__)}: viewWillAppear_')
+
+  @objc_method
+  def viewDidAppear_(self, animated: bool):
+    send_super(__class__,
+               self,
+               'viewDidAppear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    #print(f'\t{NSStringFromClass(__class__)}: viewDidAppear_')
+
+  @objc_method
+  def viewWillDisappear_(self, animated: bool):
+    send_super(__class__,
+               self,
+               'viewWillDisappear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    # print(f'\t{NSStringFromClass(__class__)}: viewWillDisappear_')
+
+  @objc_method
   def viewDidDisappear_(self, animated: bool):
     send_super(__class__,
                self,
@@ -241,7 +274,12 @@ class ButtonViewController(BaseTableViewController):
                argtypes=[
                  ctypes.c_bool,
                ])
-    # print('viewDidDisappear')
+    print(f'\t{NSStringFromClass(__class__)}: viewDidDisappear_')
+
+  @objc_method
+  def didReceiveMemoryWarning(self):
+    send_super(__class__, self, 'didReceiveMemoryWarning')
+    print(f'{__class__}: didReceiveMemoryWarning')
 
   # --- extension
   # xxx: extension 別にしたい
