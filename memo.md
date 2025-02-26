@@ -36,6 +36,12 @@
 - 書き方ガバガバなので、あとで直す
 - Dark Mode の取得
 
+## `DefaultToolbarViewController`
+
+- `self.navigationController.setToolbarHidden_animated_` 非表示設定反映が未確認
+  - まとめて表示させる時に確認
+  - a-Shell では、`viewWillDisappear:` 時だと落ちる
+
 
 # 📝 2025/02/23
 
