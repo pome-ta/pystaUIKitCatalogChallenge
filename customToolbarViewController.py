@@ -5,7 +5,7 @@ import ctypes
 
 from pyrubicon.objc.api import ObjCClass
 from pyrubicon.objc.api import objc_method
-from pyrubicon.objc.runtime import send_super, objc_id, SEL
+from pyrubicon.objc.runtime import send_super, SEL
 
 from rbedge.enumerations import (
   UIBarStyle,
@@ -128,7 +128,7 @@ class CustomToolbarViewController(UIViewController):
                argtypes=[
                  ctypes.c_bool,
                ])
-    # print('viewWillAppear')
+    #print(f'\t{NSStringFromClass(__class__)}: viewWillAppear_')
 
   @objc_method
   def viewDidAppear_(self, animated: bool):
@@ -139,7 +139,7 @@ class CustomToolbarViewController(UIViewController):
                argtypes=[
                  ctypes.c_bool,
                ])
-    # print('viewDidAppear')
+    #print(f'\t{NSStringFromClass(__class__)}: viewDidAppear_')
 
   @objc_method
   def viewWillDisappear_(self, animated: bool):
@@ -150,7 +150,7 @@ class CustomToolbarViewController(UIViewController):
                argtypes=[
                  ctypes.c_bool,
                ])
-    # print('viewWillDisappear')
+    # print(f'\t{NSStringFromClass(__class__)}: viewWillDisappear_')
     #self.navigationController.setToolbarHidden_animated_(True, False)
 
   @objc_method
@@ -162,7 +162,7 @@ class CustomToolbarViewController(UIViewController):
                argtypes=[
                  ctypes.c_bool,
                ])
-    # print('viewDidDisappear')
+    print(f'\t{NSStringFromClass(__class__)}: viewDidDisappear_')
 
   @objc_method
   def didReceiveMemoryWarning(self):
