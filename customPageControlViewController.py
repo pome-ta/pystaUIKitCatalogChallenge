@@ -102,7 +102,7 @@ class CustomPageControlViewController(UIViewController):
                argtypes=[
                  ctypes.c_bool,
                ])
-    # print('viewWillAppear')
+    #print(f'\t{NSStringFromClass(__class__)}: viewWillAppear_')
 
   @objc_method
   def viewDidAppear_(self, animated: bool):
@@ -113,7 +113,7 @@ class CustomPageControlViewController(UIViewController):
                argtypes=[
                  ctypes.c_bool,
                ])
-    # print('viewDidAppear')
+    #print(f'\t{NSStringFromClass(__class__)}: viewDidAppear_')
 
   @objc_method
   def viewWillDisappear_(self, animated: bool):
@@ -124,7 +124,7 @@ class CustomPageControlViewController(UIViewController):
                argtypes=[
                  ctypes.c_bool,
                ])
-    # print('viewWillDisappear')
+    # print(f'\t{NSStringFromClass(__class__)}: viewWillDisappear_')
 
   @objc_method
   def viewDidDisappear_(self, animated: bool):
@@ -135,7 +135,7 @@ class CustomPageControlViewController(UIViewController):
                argtypes=[
                  ctypes.c_bool,
                ])
-    # print('viewDidDisappear')
+    print(f'\t{NSStringFromClass(__class__)}: viewDidDisappear_')
 
   @objc_method
   def didReceiveMemoryWarning(self):
