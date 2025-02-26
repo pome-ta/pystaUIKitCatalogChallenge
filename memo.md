@@ -43,6 +43,13 @@
   - a-Shell では、`viewWillDisappear:` 時だと落ちる
 
 
+
+## `FontPickerViewController`
+
+- picker ってclose ボタン反応しないでいいんだっけ？
+- `UIFontDescriptorSymbolicTraits.classModernSerifs` 周りの確認
+
+
 # 📝 2025/02/23
 
 ## 一ヶ月もモヤモヤ調査していたのか？
