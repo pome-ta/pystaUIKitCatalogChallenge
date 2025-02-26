@@ -3,10 +3,11 @@
 """
 import ctypes
 
-from pyrubicon.objc.api import ObjCClass, ObjCInstance
-from pyrubicon.objc.api import objc_method
+from pyrubicon.objc.api import ObjCClass
+from pyrubicon.objc.api import objc_method, objc_property
 from pyrubicon.objc.runtime import send_super, objc_id
 
+from rbedge.functions import NSStringFromClass
 from rbedge import pdbr
 
 from pyLocalizedString import localizedString
@@ -18,14 +19,14 @@ NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
 UISearchBar = ObjCClass('UISearchBar')
 
 
-
 class DefaultSearchBarViewController(UIViewController):
+
+  searchBarView: UISearchBar = objc_property()
 
   @objc_method
   def dealloc(self):
     # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
-    #print('\tdealloc')
-    pass
+    print(f'\t- {NSStringFromClass(__class__)}: dealloc')
 
   @objc_method
   def viewDidLoad(self):
@@ -34,7 +35,7 @@ class DefaultSearchBarViewController(UIViewController):
     self.navigationItem.title = localizedString('DefaultSearchBarTitle') if (
       title := self.navigationItem.title) is None else title
     self.view.backgroundColor = UIColor.systemBackgroundColor()
-    
+
     searchBarView = UISearchBar.new()
     searchBarView.delegate = self
 
@@ -64,7 +65,7 @@ class DefaultSearchBarViewController(UIViewController):
                argtypes=[
                  ctypes.c_bool,
                ])
-    #print('viewWillAppear')
+    #print(f'\t{NSStringFromClass(__class__)}: viewWillAppear_')
 
   @objc_method
   def viewDidAppear_(self, animated: bool):
@@ -75,7 +76,7 @@ class DefaultSearchBarViewController(UIViewController):
                argtypes=[
                  ctypes.c_bool,
                ])
-    #print('viewDidAppear')
+    #print(f'\t{NSStringFromClass(__class__)}: viewDidAppear_')
 
   @objc_method
   def viewWillDisappear_(self, animated: bool):
@@ -86,7 +87,7 @@ class DefaultSearchBarViewController(UIViewController):
                argtypes=[
                  ctypes.c_bool,
                ])
-    #print('viewWillDisappear_')
+    # print(f'\t{NSStringFromClass(__class__)}: viewWillDisappear_')
 
   @objc_method
   def viewDidDisappear_(self, animated: bool):
@@ -97,7 +98,7 @@ class DefaultSearchBarViewController(UIViewController):
                argtypes=[
                  ctypes.c_bool,
                ])
-    #print('viewDidDisappear')
+    print(f'\t{NSStringFromClass(__class__)}: viewDidDisappear_')
 
   @objc_method
   def didReceiveMemoryWarning(self):
@@ -137,14 +138,16 @@ class DefaultSearchBarViewController(UIViewController):
 
 
 if __name__ == '__main__':
-  from rbedge.functions import NSStringFromClass
+  from rbedge.app import App
   from rbedge.enumerations import UIModalPresentationStyle
-  from rbedge import present_viewController
 
   main_vc = DefaultSearchBarViewController.new()
   _title = NSStringFromClass(DefaultSearchBarViewController)
   main_vc.navigationItem.title = _title
 
-  presentation_style = UIModalPresentationStyle.fullScreen
-  present_viewController(main_vc, presentation_style)
+  #presentation_style = UIModalPresentationStyle.fullScreen
+  presentation_style = UIModalPresentationStyle.pageSheet
+
+  app = App(main_vc, presentation_style)
+  app.present()
 
