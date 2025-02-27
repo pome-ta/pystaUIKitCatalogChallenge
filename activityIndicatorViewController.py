@@ -186,7 +186,6 @@ class ActivityIndicatorViewController(BaseTableViewController):
 
 if __name__ == '__main__':
   from rbedge.app import App
-
   from rbedge.enumerations import (
     UITableViewStyle,
     UIModalPresentationStyle,
