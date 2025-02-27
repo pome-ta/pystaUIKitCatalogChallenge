@@ -1,3 +1,18 @@
+# 📝 2025/02/27
+
+## `FontPickerViewController`
+
+- picker ってclose ボタン反応しないでいいんだっけ?
+- `UIFontDescriptorSymbolicTraits.classModernSerifs` 周りの確認
+
+
+## `ProgressViewController`
+
+- `dealloc` 挙動
+  - 多分コード的に呼ばれてない？
+
+
+
 # 📝 2025/02/24
 
 [pystaUIKitCatalogChallenge - Google スプレッドシート](https://docs.google.com/spreadsheets/d/1T89HXVPCAcrjSLCM0LQtge9vifG3Hhu-VwMGDD1P4vw/edit?pli=1&gid=0#gid=0)
@@ -42,12 +57,6 @@
   - まとめて表示させる時に確認
   - a-Shell では、`viewWillDisappear:` 時だと落ちる
 
-
-
-## `FontPickerViewController`
-
-- picker ってclose ボタン反応しないでいいんだっけ？
-- `UIFontDescriptorSymbolicTraits.classModernSerifs` 周りの確認
 
 
 # 📝 2025/02/23

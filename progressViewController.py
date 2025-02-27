@@ -41,6 +41,8 @@ class ProgressViewController(BaseTableViewController):
   # A repeating timer that, when fired, updates the `NSProgress` object's `completedUnitCount` property.
   updateTimer: NSTimer = objc_property()
 
+  progressViews: NSMutableArray = objc_property()
+
   @objc_method
   def dealloc(self):
     # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
@@ -70,7 +72,7 @@ class ProgressViewController(BaseTableViewController):
                ])
 
     # Accumulated progress views from all table cells for progress updating.
-    self.progressViews: list = []
+    self.progressViews = NSMutableArray.new()
     self.progress = NSProgress.progressWithTotalUnitCount_(10)
     self.progress.addObserver_forKeyPath_options_context_(
       self, at('fractionCompleted'), NSKeyValueObservingOptions.new, None)
@@ -145,7 +147,7 @@ class ProgressViewController(BaseTableViewController):
     # Stop the timer from firing.
     self.updateTimer.invalidate()
     # todo: インスタンス変数初期化のおまじない
-    self.progressViews = None
+    #self.progressViews = None
 
   @objc_method
   def didReceiveMemoryWarning(self):
@@ -159,14 +161,14 @@ class ProgressViewController(BaseTableViewController):
     progressView.progressViewStyle = UIProgressViewStyle.default
     # Reset the completed progress of the `UIProgressView`s.
     progressView.setProgress_animated_(0.0, False)
-    self.progressViews.append(progressView)
+    self.progressViews.addObject_(progressView)
 
   @objc_method
   def configureBarStyleProgressView_(self, progressView):
     progressView.progressViewStyle = UIProgressViewStyle.bar
     # Reset the completed progress of the `UIProgressView`s.
     progressView.setProgress_animated_(0.0, False)
-    self.progressViews.append(progressView)
+    self.progressViews.addObject_(progressView)
 
   @objc_method
   def configureTintedProgressView_(self, progressView):
@@ -176,7 +178,7 @@ class ProgressViewController(BaseTableViewController):
 
     # Reset the completed progress of the `UIProgressView`s.
     progressView.setProgress_animated_(0.0, False)
-    self.progressViews.append(progressView)
+    self.progressViews.addObject_(progressView)
 
 
 if __name__ == '__main__':
