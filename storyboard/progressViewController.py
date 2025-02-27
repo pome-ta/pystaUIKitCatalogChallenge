@@ -1,7 +1,10 @@
-from pyrubicon.objc.api import ObjCClass, objc_method
+from pyrubicon.objc.api import ObjCClass
+from pyrubicon.objc.api import objc_method
+from pyrubicon.objc.runtime import send_super
 from pyrubicon.objc.types import CGRectMake
 
 from rbedge.enumerations import UIProgressViewStyle
+from rbedge.functions import NSStringFromClass
 from rbedge import pdbr
 
 from ._prototype import CustomTableViewCell
@@ -21,17 +24,23 @@ def add_prototype(identifier: str):
   return _create_reuse_dict
 
 
-prototypes: list[dict[CustomTableViewCell, str]] = []
+prototypes: list[dict[CustomTableViewCell | str, str]] = []
 
 
 @add_prototype('defaultProgress')
 class DefaultProgress(CustomTableViewCell):
 
   @objc_method
-  def overrideCell(self):
+  def dealloc(self):
+    # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
+    print(f'\t\t- {NSStringFromClass(__class__)}: dealloc')
+
+  @objc_method
+  def overrideCell(self) -> None:
+    send_super(__class__, self, 'overrideCell')
     # todo: 一旦全部style は`default`
     progressView = UIProgressView.alloc().initWithProgressViewStyle_(
-      UIProgressViewStyle.default)#.autorelease()
+      UIProgressViewStyle.default)  #.autorelease()
 
     progressView.translatesAutoresizingMaskIntoConstraints = False
     self.contentView.addSubview_(progressView)
@@ -53,10 +62,16 @@ class DefaultProgress(CustomTableViewCell):
 class TintedProgress(CustomTableViewCell):
 
   @objc_method
-  def overrideCell(self):
+  def dealloc(self):
+    # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
+    print(f'\t\t- {NSStringFromClass(__class__)}: dealloc')
+
+  @objc_method
+  def overrideCell(self) -> None:
+    send_super(__class__, self, 'overrideCell')
     # todo: 一旦全部style は`default`
     progressView = UIProgressView.alloc().initWithProgressViewStyle_(
-      UIProgressViewStyle.default)#.autorelease()
+      UIProgressViewStyle.default)  #.autorelease()
 
     progressView.translatesAutoresizingMaskIntoConstraints = False
     self.contentView.addSubview_(progressView)
@@ -78,10 +93,16 @@ class TintedProgress(CustomTableViewCell):
 class BarProgress(CustomTableViewCell):
 
   @objc_method
-  def overrideCell(self):
+  def dealloc(self):
+    # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
+    print(f'\t\t- {NSStringFromClass(__class__)}: dealloc')
+
+  @objc_method
+  def overrideCell(self) -> None:
+    send_super(__class__, self, 'overrideCell')
     # todo: 一旦全部style は`default`
     progressView = UIProgressView.alloc().initWithProgressViewStyle_(
-      UIProgressViewStyle.default)#.autorelease()
+      UIProgressViewStyle.default)  #.autorelease()
 
     progressView.translatesAutoresizingMaskIntoConstraints = False
     self.contentView.addSubview_(progressView)
@@ -97,3 +118,4 @@ class BarProgress(CustomTableViewCell):
       progressView.trailingAnchor.constraintEqualToAnchor_constant_(
         self.contentView.trailingAnchor, -20.0),
     ])
+
