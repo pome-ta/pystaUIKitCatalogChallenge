@@ -8,7 +8,7 @@ __all__ = [
 ]
 #logging.basicConfig(level=logging.DEBUG)
 asyncio.set_event_loop_policy(EventLoopPolicy())
-loop = asyncio.get_event_loop()
-#loop = asyncio.new_event_loop()
+#loop = asyncio.get_event_loop()
+loop = asyncio.new_event_loop()
 #loop.set_debug(True)
 
