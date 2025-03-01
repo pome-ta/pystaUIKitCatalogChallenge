@@ -14,6 +14,9 @@ X (旧：Twitter)にて、ハッシュタグ`#UIKitCatalogChallenge` で進捗�
 
 ![image](https://github.com/user-attachments/assets/0e9d7834-1a7a-4506-b14c-ae08966a50ba)
 
+
+[rubicon-objc/LICENSE at main · beeware/rubicon-objc · GitHub](https://github.com/beeware/rubicon-objc/blob/main/LICENSE)
+
 ## 進捗状況
 
 
