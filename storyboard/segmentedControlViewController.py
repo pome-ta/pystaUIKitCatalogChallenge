@@ -1,8 +1,11 @@
-from pyrubicon.objc.api import ObjCClass, objc_method
-from pyrubicon.objc.types import CGRectMake
+from pyrubicon.objc.api import ObjCClass
+from pyrubicon.objc.api import objc_method
+from pyrubicon.objc.runtime import send_super
+
+from rbedge.functions import NSStringFromClass
+from rbedge import pdbr
 
 from ._prototype import CustomTableViewCell
-from rbedge import pdbr
 
 UISegmentedControl = ObjCClass('UISegmentedControl')
 UIView = ObjCClass('UIView')
@@ -20,7 +23,7 @@ def add_prototype(identifier: str):
   return _create_reuse_dict
 
 
-prototypes: list[dict[CustomTableViewCell, str]] = []
+prototypes: list[dict[CustomTableViewCell | str, str]] = []
 
 segments = [
   'Check',
@@ -33,11 +36,14 @@ segments = [
 class SegmentDefault(CustomTableViewCell):
 
   @objc_method
-  def overrideCell(self):
-    segmentedControl = UISegmentedControl.alloc().initWithItems_(
-      segments)#.autorelease()
-    # xxx: ベタ打ち
-    segmentedControl.frame = CGRectMake(47.5, 6.5, 280.0, 32.0)
+  def dealloc(self):
+    # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
+    print(f'\t\t- {NSStringFromClass(__class__)}: dealloc')
+
+  @objc_method
+  def overrideCell(self) -> None:
+    send_super(__class__, self, 'overrideCell')
+    segmentedControl = UISegmentedControl.alloc().initWithItems_(segments)
     segmentedControl.translatesAutoresizingMaskIntoConstraints = False
     self.contentView.addSubview_(segmentedControl)
 
@@ -55,11 +61,14 @@ class SegmentDefault(CustomTableViewCell):
 class SegmentTinted(CustomTableViewCell):
 
   @objc_method
-  def overrideCell(self):
-    segmentedControl = UISegmentedControl.alloc().initWithItems_(
-      segments)#.autorelease()
-    # xxx: ベタ打ち
-    segmentedControl.frame = CGRectMake(47.5, 6.5, 280.0, 32.0)
+  def dealloc(self):
+    # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
+    print(f'\t\t- {NSStringFromClass(__class__)}: dealloc')
+
+  @objc_method
+  def overrideCell(self) -> None:
+    send_super(__class__, self, 'overrideCell')
+    segmentedControl = UISegmentedControl.alloc().initWithItems_(segments)
     segmentedControl.translatesAutoresizingMaskIntoConstraints = False
     self.contentView.addSubview_(segmentedControl)
 
@@ -77,11 +86,14 @@ class SegmentTinted(CustomTableViewCell):
 class SegmentCustom(CustomTableViewCell):
 
   @objc_method
-  def overrideCell(self):
-    segmentedControl = UISegmentedControl.alloc().initWithItems_(
-      segments)#.autorelease()
-    # xxx: ベタ打ち
-    segmentedControl.frame = CGRectMake(47.5, 6.5, 280.0, 32.0)
+  def dealloc(self):
+    # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
+    print(f'\t\t- {NSStringFromClass(__class__)}: dealloc')
+
+  @objc_method
+  def overrideCell(self) -> None:
+    send_super(__class__, self, 'overrideCell')
+    segmentedControl = UISegmentedControl.alloc().initWithItems_(segments)
     segmentedControl.translatesAutoresizingMaskIntoConstraints = False
     self.contentView.addSubview_(segmentedControl)
 
@@ -99,11 +111,14 @@ class SegmentCustom(CustomTableViewCell):
 class SegmentCustomBackground(CustomTableViewCell):
 
   @objc_method
-  def overrideCell(self):
-    #view = UIView.alloc().init().autorelease()
+  def dealloc(self):
+    # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
+    print(f'\t\t- {NSStringFromClass(__class__)}: dealloc')
+
+  @objc_method
+  def overrideCell(self) -> None:
+    send_super(__class__, self, 'overrideCell')
     view = UIView.new()
-    # xxx: ベタ打ち
-    view.frame = CGRectMake(47.5, 6.0, 280.0, 32.0)
     view.translatesAutoresizingMaskIntoConstraints = False
     self.contentView.addSubview_(view)
 
@@ -121,10 +136,14 @@ class SegmentCustomBackground(CustomTableViewCell):
 class SegmentAction(CustomTableViewCell):
 
   @objc_method
-  def overrideCell(self):
-    segmentedControl = UISegmentedControl.alloc().initWithItems_(
-      segments)#.autorelease()
-    # xxx: ベタ打ち
+  def dealloc(self):
+    # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
+    print(f'\t\t- {NSStringFromClass(__class__)}: dealloc')
+
+  @objc_method
+  def overrideCell(self) -> None:
+    send_super(__class__, self, 'overrideCell')
+    segmentedControl = UISegmentedControl.alloc().initWithItems_(segments)
     segmentedControl.frame = CGRectMake(47.5, 6.5, 280.0, 32.0)
     segmentedControl.translatesAutoresizingMaskIntoConstraints = False
     self.contentView.addSubview_(segmentedControl)

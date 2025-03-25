@@ -7,6 +7,7 @@ from pyrubicon.objc.runtime import send_super, objc_id, SEL
 from pyrubicon.objc.types import NSInteger, CGSize, CGFloat, CGRectMake, CGSizeMake
 
 from rbedge.functions import (
+  NSStringFromClass,
   UIGraphicsBeginImageContextWithOptions,
   UIGraphicsGetImageFromCurrentImageContext,
   UIGraphicsEndImageContext,
@@ -58,7 +59,13 @@ class SegmentKind(Enum):
 
 
 class SegmentedControlViewController(BaseTableViewController):
-  
+
+  @objc_method
+  def dealloc(self):
+    # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
+    print(f'\t- {NSStringFromClass(__class__)}: dealloc')
+
+
   @objc_method
   def initWithStyle_(self, style: NSInteger) -> ObjCInstance:
     send_super(__class__,
@@ -69,8 +76,19 @@ class SegmentedControlViewController(BaseTableViewController):
                argtypes=[
                  NSInteger,
                ])
-    self.setupPrototypes_(prototypes)
+    #print(f'\t{NSStringFromClass(__class__)}: initWithStyle_')
     return self
+
+  @objc_method
+  def loadView(self):
+    send_super(__class__, self, 'loadView')
+    #print(f'\t{NSStringFromClass(__class__)}: loadView')
+    [
+      self.tableView.registerClass_forCellReuseIdentifier_(
+        prototype['cellClass'], prototype['identifier'])
+      for prototype in prototypes
+    ]
+
   
   # MARK: - View Life Cycle
   @objc_method
@@ -307,18 +325,23 @@ class SegmentedControlViewController(BaseTableViewController):
     return cell
 
 
+
+
 if __name__ == '__main__':
-  from rbedge.functions import NSStringFromClass
+  from rbedge.app import App
   from rbedge.enumerations import (
     UITableViewStyle,
     UIModalPresentationStyle,
   )
-  from rbedge import present_viewController
-  
+
   table_style = UITableViewStyle.grouped
   main_vc = SegmentedControlViewController.alloc().initWithStyle_(table_style)
   _title = NSStringFromClass(SegmentedControlViewController)
   main_vc.navigationItem.title = _title
-  
-  presentation_style = UIModalPresentationStyle.fullScreen
-  present_viewController(main_vc, presentation_style)
+
+  # presentation_style = UIModalPresentationStyle.fullScreen
+  presentation_style = UIModalPresentationStyle.pageSheet
+
+  app = App(main_vc, presentation_style)
+  app.present()
+
