@@ -349,33 +349,6 @@ class SegmentedControlViewController(BaseTableViewController):
   def selectedSegmentDidChange_(self, segmentedControl):
     print(f'The selected segment: {segmentedControl.selectedSegmentIndex}')
 
-  '''
-  # MARK: - UITableViewDataSource
-  # todo: override
-  @objc_method
-  def tableView_cellForRowAtIndexPath_(self, tableView,
-                                       indexPath) -> ObjCInstance:
-    cellTest = self.testCells[indexPath.section]
-    cell = tableView.dequeueReusableCellWithIdentifier_forIndexPath_(
-      cellTest.cellID, indexPath)
-    # The only non-segmented control cell has a placeholder UIView (for adding one as a subview).
-    # 唯一の非セグメント化コントロール セルには、プレースホルダー UIView (サブビューとして追加するため) があります。
-    # xxx: Python 上では、同じ処理
-
-    if cellTest.targetView(cell).isMemberOfClass_(UISegmentedControl):
-
-      if (segementedControl := cellTest.targetView(cell)):
-        configHandlerName = str(segementedControl.configHandlerName)
-
-        self.performSelector_withObject_(SEL(configHandlerName), view)
-    else:
-      if (placeHolderView := cellTest.targetView(cell)):
-        configHandlerName = str(placeHolderView.configHandlerName)
-
-        self.performSelector_withObject_(SEL(configHandlerName), view)
-
-    return cell
-  '''
   # MARK: - UITableViewDataSource
   @objc_method  # todo: override
   def tableView_cellForRowAtIndexPath_(self, tableView,
@@ -385,11 +358,21 @@ class SegmentedControlViewController(BaseTableViewController):
     cell = tableView.dequeueReusableCellWithIdentifier_forIndexPath_(
       cellTest.cellID, indexPath)
 
-    print(cellTest.targetView(cell).isMemberOfClass_(UISegmentedControl))
-    if (view := cellTest.targetView(cell)):
-      configHandlerName = str(cellTest.configHandlerName)
+    if cellTest.targetView(cell).isMemberOfClass_(UISegmentedControl):
+      if (segementedControl := cellTest.targetView(cell)):
+        configHandlerName = str(cellTest.configHandlerName)
 
-      self.performSelector_withObject_(SEL(configHandlerName), view)
+        self.performSelector_withObject_(SEL(configHandlerName),
+                                         segementedControl)
+    else:
+      if (placeHolderView := cellTest.targetView(cell)):
+        # The only non-segmented control cell has a placeholder UIView (for adding one as a subview).
+        # 唯一の非セグメント化コントロール セルには、プレースホルダー UIView (サブビューとして追加するため) があります。
+        # xxx: Python 上では、同じ処理
+        configHandlerName = str(cellTest.configHandlerName)
+
+        self.performSelector_withObject_(SEL(configHandlerName),
+                                         placeHolderView)
 
     return cell
 
