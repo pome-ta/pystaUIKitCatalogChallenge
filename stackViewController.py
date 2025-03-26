@@ -1,9 +1,5 @@
 """
   note: Storyboard 実装なし
-  todo:
-    - 時々落ちる、稀に無限クラッシュ
-    - 不要な呼び出しを整理
-    - `viewDidLoad` 肥大化問題
 """
 import ctypes
 
@@ -52,8 +48,8 @@ UIView = ObjCClass('UIView')
 
 class StackViewController(UIViewController):
 
-  plusButton: UIButton = objc_property()
   furtherDetailStackView: UIStackView = objc_property()
+  plusButton: UIButton = objc_property()
   addRemoveExampleStackView: UIStackView = objc_property()
   addArrangedViewButton: UIButton = objc_property()
   removeArrangedViewButton: UIButton = objc_property()
@@ -64,6 +60,12 @@ class StackViewController(UIViewController):
   def dealloc(self):
     # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
     print(f'\t- {NSStringFromClass(__class__)}: dealloc')
+
+  @objc_method
+  def loadView(self):
+    send_super(__class__, self, 'loadView')
+    #print(f'\t{NSStringFromClass(__class__)}: loadView')
+    self.maximumArrangedSubviewCount = 3
 
   # MARK: - View Life Cycle
   @objc_method
@@ -275,13 +277,11 @@ class StackViewController(UIViewController):
       # addRemoveExampleStackView.heightAnchor.constraintEqualToConstant_(42.0),  # xxx: `placeholder="YES"` ?
     ])
 
-    self.plusButton = detailPlusButton
     self.furtherDetailStackView = furtherStackView
+    self.plusButton = detailPlusButton
     self.addRemoveExampleStackView = addRemoveExampleStackView
     self.addArrangedViewButton = addbutton
     self.removeArrangedViewButton = removebutton
-
-    self.maximumArrangedSubviewCount = 3
 
   # MARK: - View Life Cycle
   @objc_method
@@ -373,7 +373,8 @@ class StackViewController(UIViewController):
     newViewSize = CGSizeMake(38.0, 38.0)
     newView = UIView.alloc().initWithFrame_(CGRect(NSZeroPoint, newViewSize))
 
-    newView.backgroundColor = self.randomColor()
+    #newView.backgroundColor = self.randomColor()
+    newView.backgroundColor = randomColor()
 
     NSLayoutConstraint.activateConstraints_([
       newView.widthAnchor.constraintEqualToConstant_(newViewSize.width),
