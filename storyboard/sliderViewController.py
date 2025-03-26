@@ -36,6 +36,7 @@ class SliderDefault(CustomTableViewCell):
   @objc_method
   def overrideCell(self) -> None:
     send_super(__class__, self, 'overrideCell')
+
     slider = UISlider.new()
     slider.value = 0.5
     slider.minimumValue = 0.0
@@ -66,6 +67,7 @@ class SliderTinted(CustomTableViewCell):
   @objc_method
   def overrideCell(self) -> None:
     send_super(__class__, self, 'overrideCell')
+
     slider = UISlider.new()
     slider.value = 0.5
     slider.minimumValue = 0.0
@@ -96,6 +98,7 @@ class SliderCustom(CustomTableViewCell):
   @objc_method
   def overrideCell(self) -> None:
     send_super(__class__, self, 'overrideCell')
+
     slider = UISlider.new()
     slider.value = 0.5
     slider.minimumValue = 0.0
@@ -127,6 +130,7 @@ class SliderMaxMinImage(CustomTableViewCell):
   @objc_method
   def overrideCell(self) -> None:
     send_super(__class__, self, 'overrideCell')
+
     slider = UISlider.new()
     slider.value = 0.5
     slider.minimumValue = 0.0
