@@ -48,6 +48,70 @@ UIView = ObjCClass('UIView')
 
 class StackViewController(UIViewController):
 
+  @objc_method
+  def dealloc(self):
+    # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
+    print(f'\t- {NSStringFromClass(__class__)}: dealloc')
+
+  @objc_method
+  def loadView(self):
+    send_super(__class__, self, 'loadView')
+    #print(f'\t{NSStringFromClass(__class__)}: loadView')
+
+  # MARK: - View Life Cycle
+  @objc_method
+  def viewDidLoad(self):
+    send_super(__class__, self, 'viewDidLoad')
+    self.navigationItem.title = localizedString('StackViewsTitle') if (
+      title := self.navigationItem.title) is None else title
+    self.view.backgroundColor = UIColor.systemBackgroundColor()
+
+    # --- Symbols
+    plusSymbol = UIImage.systemImageNamed('plus')
+    minusSymbol = UIImage.systemImageNamed('minus')
+
+    touchUpInside = UIControlEvents.touchUpInside
+
+    # --- showingHidingStackView
+    showingHidingStackView = UIStackView.alloc()
+
+    # --- --- showingHidingLabel
+    showingHidingLabel = UILabel.new()
+    showingHidingLabel.text = 'Showing/hiding views'
+    showingHidingLabel.textAlignment = NSTextAlignment.center
+    showingHidingLabel.setFont_(
+      UIFont.preferredFontForTextStyle_(UIFontTextStyle.headline))
+
+  @objc_method
+  def viewWillAppear_(self, animated: bool):
+    send_super(__class__,
+               self,
+               'viewWillAppear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+
+  @objc_method
+  def viewDidDisappear_(self, animated: bool):
+    send_super(__class__,
+               self,
+               'viewDidDisappear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    print(f'\t{NSStringFromClass(__class__)}: viewDidDisappear_')
+
+  @objc_method
+  def didReceiveMemoryWarning(self):
+    send_super(__class__, self, 'didReceiveMemoryWarning')
+    print(f'\t{NSStringFromClass(__class__)}: didReceiveMemoryWarning')
+
+
+'''
+class StackViewController(UIViewController):
+
   furtherDetailStackView: UIStackView = objc_property()
   plusButton: UIButton = objc_property()
   addRemoveExampleStackView: UIStackView = objc_property()
@@ -283,7 +347,6 @@ class StackViewController(UIViewController):
     self.addArrangedViewButton = addbutton
     self.removeArrangedViewButton = removebutton
 
-  # MARK: - View Life Cycle
   @objc_method
   def viewWillAppear_(self, animated: bool):
     send_super(__class__,
@@ -414,7 +477,7 @@ class StackViewController(UIViewController):
     green = arc4random_uniform(255) / 255.0
     blue = arc4random_uniform(255) / 255.0
     return UIColor.colorWithRed_green_blue_alpha_(red, green, blue, 1.0)
-
+'''
 
 if __name__ == '__main__':
   from rbedge.app import App
