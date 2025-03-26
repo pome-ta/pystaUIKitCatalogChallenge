@@ -108,20 +108,6 @@ class SegmentedControlViewController(BaseTableViewController):
         localizedString('CustomBackgroundTitle'),
         SegmentKind.segmentCustomBackground.value,
         'configureCustomBackgroundSegmentedControl:'),
-    ])
-    '''
-    self.testCellsAppendContentsOf_([
-      CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
-        localizedString('DefaultTitle'), SegmentKind.segmentDefault.value,
-        'configureDefaultSegmentedControl:'),
-      CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
-        localizedString('CustomSegmentsTitle'),
-        SegmentKind.segmentCustom.value,
-        'configureCustomSegmentsSegmentedControl:'),
-      CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
-        localizedString('CustomBackgroundTitle'),
-        SegmentKind.segmentCustomBackground.value,
-        'configureCustomBackgroundSegmentedControl:'),
       CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
         localizedString('ActionBasedTitle'), SegmentKind.segmentAction.value,
         'configureActionBasedSegmentedControl:'),
@@ -135,7 +121,6 @@ class SegmentedControlViewController(BaseTableViewController):
           localizedString('Tinted'), SegmentKind.segmentTinted.value,
           'configureTintedSegmentedControl:'),
       ])
-    '''
 
   @objc_method
   def viewWillAppear_(self, animated: bool):
@@ -400,6 +385,7 @@ class SegmentedControlViewController(BaseTableViewController):
     cell = tableView.dequeueReusableCellWithIdentifier_forIndexPath_(
       cellTest.cellID, indexPath)
 
+    print(cellTest.targetView(cell).isMemberOfClass_(UISegmentedControl))
     if (view := cellTest.targetView(cell)):
       configHandlerName = str(cellTest.configHandlerName)
 
