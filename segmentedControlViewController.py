@@ -65,7 +65,6 @@ class SegmentedControlViewController(BaseTableViewController):
     # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
     print(f'\t- {NSStringFromClass(__class__)}: dealloc')
 
-
   @objc_method
   def initWithStyle_(self, style: NSInteger) -> ObjCInstance:
     send_super(__class__,
@@ -89,37 +88,99 @@ class SegmentedControlViewController(BaseTableViewController):
       for prototype in prototypes
     ]
 
-  
   # MARK: - View Life Cycle
   @objc_method
   def viewDidLoad(self):
     send_super(__class__, self, 'viewDidLoad')  # xxx: 不要?
-    
+
     self.navigationItem.title = localizedString('SegmentedControlsTitle') if (
-                                                                               title := self.navigationItem.title) is None else title
-    
-    self.testCells_extend([
-      CaseElement(localizedString('DefaultTitle'),
-                  SegmentKind.segmentDefault.value,
-                  self.configureDefaultSegmentedControl_),
-      CaseElement(localizedString('CustomSegmentsTitle'),
-                  SegmentKind.segmentCustom.value,
-                  self.configureCustomSegmentsSegmentedControl_),
-      CaseElement(localizedString('CustomBackgroundTitle'),
-                  SegmentKind.segmentCustomBackground.value,
-                  self.configureCustomBackgroundSegmentedControl_),
-      CaseElement(localizedString('ActionBasedTitle'),
-                  SegmentKind.segmentAction.value,
-                  self.configureActionBasedSegmentedControl_),
+      title := self.navigationItem.title) is None else title
+
+    self.testCellsAppendContentsOf_([
+      CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
+        localizedString('DefaultTitle'), SegmentKind.segmentDefault.value,
+        'configureDefaultSegmentedControl:'),
+      CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
+        localizedString('CustomSegmentsTitle'),
+        SegmentKind.segmentCustom.value,
+        'configureCustomSegmentsSegmentedControl:'),
+      CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
+        localizedString('CustomBackgroundTitle'),
+        SegmentKind.segmentCustomBackground.value,
+        'configureCustomBackgroundSegmentedControl:'),
     ])
+    '''
+    self.testCellsAppendContentsOf_([
+      CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
+        localizedString('DefaultTitle'), SegmentKind.segmentDefault.value,
+        'configureDefaultSegmentedControl:'),
+      CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
+        localizedString('CustomSegmentsTitle'),
+        SegmentKind.segmentCustom.value,
+        'configureCustomSegmentsSegmentedControl:'),
+      CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
+        localizedString('CustomBackgroundTitle'),
+        SegmentKind.segmentCustomBackground.value,
+        'configureCustomBackgroundSegmentedControl:'),
+      CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
+        localizedString('ActionBasedTitle'), SegmentKind.segmentAction.value,
+        'configureActionBasedSegmentedControl:'),
+    ])
+
     if self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiom.mac:
       # Tinted segmented control is only available on iOS.
       # ティント・セグメンテッド・コントロールはiOSでのみ利用可能。
-      self.testCells_extend([
-        CaseElement(localizedString('Tinted'), SegmentKind.segmentTinted.value,
-                    self.configureTintedSegmentedControl_),
+      self.testCellsAppendContentsOf_([
+        CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
+          localizedString('Tinted'), SegmentKind.segmentTinted.value,
+          'configureTintedSegmentedControl:'),
       ])
-  
+    '''
+
+  @objc_method
+  def viewWillAppear_(self, animated: bool):
+    send_super(__class__,
+               self,
+               'viewWillAppear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    #print(f'\t{NSStringFromClass(__class__)}: viewWillAppear_')
+
+  @objc_method
+  def viewDidAppear_(self, animated: bool):
+    send_super(__class__,
+               self,
+               'viewDidAppear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    #print(f'\t{NSStringFromClass(__class__)}: viewDidAppear_')
+
+  @objc_method
+  def viewWillDisappear_(self, animated: bool):
+    send_super(__class__,
+               self,
+               'viewWillDisappear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    # print(f'\t{NSStringFromClass(__class__)}: viewWillDisappear_')
+
+  @objc_method
+  def viewDidDisappear_(self, animated: bool):
+    send_super(__class__,
+               self,
+               'viewDidDisappear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    print(f'\t{NSStringFromClass(__class__)}: viewDidDisappear_')
+
   # MARK: - Configuration
   @objc_method
   def configureDefaultSegmentedControl_(self, segmentedControl):
@@ -128,41 +189,41 @@ class SegmentedControlViewController(BaseTableViewController):
     segmentedControl.setEnabled_forSegmentAtIndex_(False, 0)
     segmentedControl.addTarget_action_forControlEvents_(
       self, SEL('selectedSegmentDidChange:'), UIControlEvents.valueChanged)
-  
+
   @objc_method
   def configureTintedSegmentedControl_(self, segmentedControl):
     # Use a dynamic tinted "green" color (separate one for Light Appearance and separate one for Dark Appearance).
-    # ダイナミックな色合いの "グリーン "を使用する(ライト・アピアランス用とダーク・アピアランス用に分ける)。
+    # ダイナミックな色合いの "グリーン"を使用する(ライト・アピアランス用とダーク・アピアランス用に分ける)。
     _style = self.traitCollection.userInterfaceStyle
     _srgb = get_srgb_named_style('tinted_segmented_control', _style)
-    
+
     color_named = UIColor.colorWithRed_green_blue_alpha_(*_srgb)
-    
+
     segmentedControl.selectedSegmentTintColor = color_named
     segmentedControl.selectedSegmentIndex = 1
-    
+
     segmentedControl.addTarget_action_forControlEvents_(
       self, SEL('selectedSegmentDidChange:'), UIControlEvents.valueChanged)
-  
+
   @objc_method
   def configureCustomSegmentsSegmentedControl_(self, segmentedControl):
     airplaneImage = UIImage.systemImageNamed_('airplane')
     airplaneImage.accessibilityLabel = localizedString('Airplane')
     segmentedControl.setImage_forSegmentAtIndex_(airplaneImage, 0)
-    
+
     giftImage = UIImage.systemImageNamed_('gift')
     giftImage.accessibilityLabel = localizedString('Gift')
     segmentedControl.setImage_forSegmentAtIndex_(giftImage, 1)
-    
+
     burstImage = UIImage.systemImageNamed_('burst')
     burstImage.accessibilityLabel = localizedString('Burst')
     segmentedControl.setImage_forSegmentAtIndex_(burstImage, 2)
-    
+
     segmentedControl.selectedSegmentIndex = 0
-    
+
     segmentedControl.addTarget_action_forControlEvents_(
       self, SEL('selectedSegmentDidChange:'), UIControlEvents.valueChanged)
-  
+
   # Utility function to resize an image to a particular size.
   # 画像を特定のサイズに変更するユーティリティ関数。
   @objc_method
@@ -171,9 +232,9 @@ class SegmentedControlViewController(BaseTableViewController):
     image.drawInRect_(CGRectMake(0.0, 0.0, newSize.width, newSize.height))
     newImage = UIGraphicsGetImageFromCurrentImageContext()
     UIGraphicsEndImageContext()
-    
+
     return newImage
-  
+
   # Configure the segmented control with a background image, dividers, and custom font.
   # セグメント化されたコントロールに、背景画像、仕切り、カスタム・フォントを設定する。
   # The background image first needs to be sized to match the control's size.
@@ -185,10 +246,10 @@ class SegmentedControlViewController(BaseTableViewController):
       localizedString('CheckTitle'),
       localizedString('SearchTitle'),
       localizedString('ToolsTitle'),
-    ])  # .autorelease()
-    
+    ])
+
     customBackgroundSegmentedControl.selectedSegmentIndex = 2
-    
+
     # Place this custom segmented control within the placeholder view.
     # このカスタムのセグメント化されたコントロールをプレースホルダー ビュー内に配置します。
     _width = placeHolderView.frame.size.width
@@ -196,19 +257,19 @@ class SegmentedControlViewController(BaseTableViewController):
     # todo: `=` では、反映されないので`setSize_` してる
     # customBackgroundSegmentedControl.frame.size.width = placeHolderView.frame.size.width
     customBackgroundSegmentedControl.setSize_(CGSizeMake(_width, _height))
-    
+
     # xxx: ここもか？
     customBackgroundSegmentedControl.frame.origin.y = (
-                                                          placeHolderView.bounds.size.height -
-                                                          customBackgroundSegmentedControl.bounds.size.height) / 2
-    
+      placeHolderView.bounds.size.height -
+      customBackgroundSegmentedControl.bounds.size.height) / 2
+
     placeHolderView.addSubview_(customBackgroundSegmentedControl)
-    
+
     scale = int(mainScreen_scale)
     normal_str = f'./UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/background.imageset/stepper_and_segment_background_{scale}x.png'
     highlighted_str = f'./UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/background_highlighted.imageset/stepper_and_segment_background_highlighted_{scale}x.png'
     disabled_str = f'./UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/background_disabled.imageset/stepper_and_segment_background_disabled_{scale}x.png'
-    
+
     # Set the background images for each control state.
     # 制御状態ごとに背景画像を設定します。
     normalSegmentBackgroundImage = UIImage.alloc().initWithData_scale_(
@@ -216,28 +277,28 @@ class SegmentedControlViewController(BaseTableViewController):
     # Size the background image to match the bounds of the segmented control.
     # セグメント化されたコントロールの境界に一致するように背景画像のサイズを設定します。
     backgroundImageSize = customBackgroundSegmentedControl.bounds.size
-    
+
     newBackgroundImageSize = self.scaledImage_scaledToSize_(
       normalSegmentBackgroundImage, backgroundImageSize)
     customBackgroundSegmentedControl.setBackgroundImage_forState_barMetrics_(
       newBackgroundImageSize, UIControlState.normal, UIBarMetrics.default)
-    
+
     disabledSegmentBackgroundImage = UIImage.alloc().initWithData_scale_(
       dataWithContentsOfURL(disabled_str), scale)
     customBackgroundSegmentedControl.setBackgroundImage_forState_barMetrics_(
       disabledSegmentBackgroundImage, UIControlState.disabled,
       UIBarMetrics.default)
-    
+
     highlightedSegmentBackgroundImage = UIImage.alloc().initWithData_scale_(
       dataWithContentsOfURL(highlighted_str), scale)
     customBackgroundSegmentedControl.setBackgroundImage_forState_barMetrics_(
       highlightedSegmentBackgroundImage, UIControlState.highlighted,
       UIBarMetrics.default)
-    
+
     # xxx: `x1`,`x2` と`x3` だと、ファイル名が違う
     divider_scale = 'stepper_and_segment_divider_' if scale == 3 else 'stepper_and_segment_segment_divider_'
     divider_str = f'./UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/stepper_and_segment_divider.imageset/{divider_scale}{scale}x.png'
-    
+
     # Set the divider image.
     # 分割画像を設定します。
     segmentDividerImage = UIImage.alloc().initWithData_scale_(
@@ -245,13 +306,13 @@ class SegmentedControlViewController(BaseTableViewController):
     customBackgroundSegmentedControl.setDividerImage_forLeftSegmentState_rightSegmentState_barMetrics_(
       segmentDividerImage, UIControlState.normal, UIControlState.normal,
       UIBarMetrics.default)
-    
+
     # Create a font to use for the attributed title, for both normal and highlighted states.
     # 通常状態と強調表示状態の両方で、属性付きタイトルに使用するフォントを作成します。
     font = UIFont.fontWithDescriptor_size_(
       UIFontDescriptor.preferredFontDescriptorWithTextStyle_(
         UIFontTextStyle.body), 0.0)
-    
+
     normalTextAttributes = NSDictionary.dictionaryWithObjects_forKeys_([
       UIColor.systemPurpleColor(),
       font,
@@ -259,10 +320,10 @@ class SegmentedControlViewController(BaseTableViewController):
       NSAttributedStringKey.foregroundColor,
       NSAttributedStringKey.font,
     ])
-    
+
     customBackgroundSegmentedControl.setTitleTextAttributes_forState_(
       normalTextAttributes, UIControlState.normal)
-    
+
     highlightedTextAttributes = NSDictionary.dictionaryWithObjects_forKeys_([
       UIColor.systemGreenColor(),
       font,
@@ -270,61 +331,81 @@ class SegmentedControlViewController(BaseTableViewController):
       NSAttributedStringKey.foregroundColor,
       NSAttributedStringKey.font,
     ])
-    
+
     customBackgroundSegmentedControl.setTitleTextAttributes_forState_(
       highlightedTextAttributes, UIControlState.highlighted)
-    
+
     customBackgroundSegmentedControl.addTarget_action_forControlEvents_(
       self, SEL('selectedSegmentDidChange:'), UIControlEvents.valueChanged)
-  
+
   @objc_method
   def configureActionBasedSegmentedControl_(self, segmentedControl):
     segmentedControl.selectedSegmentIndex = 0
-    
+
     @Block
     def actionHandler_(_action: objc_id) -> None:
       action = ObjCInstance(_action)
       print(f'Segment Action "{action.title}"')
-    
+
     firstAction = UIAction.actionWithHandler_(actionHandler_)
     firstAction.setTitle_(localizedString('CheckTitle'))
     segmentedControl.setAction_forSegmentAtIndex_(firstAction, 0)
-    
+
     secondAction = UIAction.actionWithHandler_(actionHandler_)
     secondAction.setTitle_(localizedString('SearchTitle'))
     segmentedControl.setAction_forSegmentAtIndex_(secondAction, 1)
-    
+
     thirdAction = UIAction.actionWithHandler_(actionHandler_)
     thirdAction.setTitle_(localizedString('ToolsTitle'))
     segmentedControl.setAction_forSegmentAtIndex_(thirdAction, 2)
-  
+
   # MARK: - Actions
   @objc_method
   def selectedSegmentDidChange_(self, segmentedControl):
     print(f'The selected segment: {segmentedControl.selectedSegmentIndex}')
-  
+
+  '''
   # MARK: - UITableViewDataSource
   # todo: override
   @objc_method
-  def tableView_cellForRowAtIndexPath_(self, tableView, indexPath) -> objc_id:
+  def tableView_cellForRowAtIndexPath_(self, tableView,
+                                       indexPath) -> ObjCInstance:
     cellTest = self.testCells[indexPath.section]
     cell = tableView.dequeueReusableCellWithIdentifier_forIndexPath_(
       cellTest.cellID, indexPath)
     # The only non-segmented control cell has a placeholder UIView (for adding one as a subview).
     # 唯一の非セグメント化コントロール セルには、プレースホルダー UIView (サブビューとして追加するため) があります。
     # xxx: Python 上では、同じ処理
-    
+
     if cellTest.targetView(cell).isMemberOfClass_(UISegmentedControl):
-      
+
       if (segementedControl := cellTest.targetView(cell)):
-        cellTest.configHandler(segementedControl)
+        configHandlerName = str(segementedControl.configHandlerName)
+
+        self.performSelector_withObject_(SEL(configHandlerName), view)
     else:
       if (placeHolderView := cellTest.targetView(cell)):
-        cellTest.configHandler(placeHolderView)
-    
+        configHandlerName = str(placeHolderView.configHandlerName)
+
+        self.performSelector_withObject_(SEL(configHandlerName), view)
+
     return cell
+  '''
+  # MARK: - UITableViewDataSource
+  @objc_method  # todo: override
+  def tableView_cellForRowAtIndexPath_(self, tableView,
+                                       indexPath) -> ObjCInstance:
 
+    cellTest = self.testCells[indexPath.section]
+    cell = tableView.dequeueReusableCellWithIdentifier_forIndexPath_(
+      cellTest.cellID, indexPath)
 
+    if (view := cellTest.targetView(cell)):
+      configHandlerName = str(cellTest.configHandlerName)
+
+      self.performSelector_withObject_(SEL(configHandlerName), view)
+
+    return cell
 
 
 if __name__ == '__main__':

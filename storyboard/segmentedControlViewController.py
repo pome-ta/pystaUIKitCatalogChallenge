@@ -1,6 +1,7 @@
 from pyrubicon.objc.api import ObjCClass
 from pyrubicon.objc.api import objc_method
 from pyrubicon.objc.runtime import send_super
+from pyrubicon.objc.types import CGRectMake
 
 from rbedge.functions import NSStringFromClass
 from rbedge import pdbr
@@ -119,6 +120,8 @@ class SegmentCustomBackground(CustomTableViewCell):
   def overrideCell(self) -> None:
     send_super(__class__, self, 'overrideCell')
     view = UIView.new()
+    # xxx: ベタ打ち
+    view.frame = CGRectMake(47.5, 6.0, 280.0, 32.0)
     view.translatesAutoresizingMaskIntoConstraints = False
     self.contentView.addSubview_(view)
 
