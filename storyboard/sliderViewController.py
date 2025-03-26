@@ -1,8 +1,11 @@
-from pyrubicon.objc.api import ObjCClass, objc_method
-from pyrubicon.objc.types import CGRectMake
+from pyrubicon.objc.api import ObjCClass
+from pyrubicon.objc.api import objc_method
+from pyrubicon.objc.runtime import send_super
+
+from rbedge.functions import NSStringFromClass
+from rbedge import pdbr
 
 from ._prototype import CustomTableViewCell
-from rbedge import pdbr
 
 UISlider = ObjCClass('UISlider')
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
@@ -19,16 +22,21 @@ def add_prototype(identifier: str):
   return _create_reuse_dict
 
 
-prototypes: list[dict[CustomTableViewCell, str]] = []
+prototypes: list[dict[CustomTableViewCell | str, str]] = []
 
 
 @add_prototype('sliderDefault')
 class SliderDefault(CustomTableViewCell):
 
   @objc_method
-  def overrideCell(self):
-    slider = UISlider.alloc().initWithFrame_(CGRectMake(
-      18.0, 7.5, 339.0, 31.0))  #.autorelease()
+  def dealloc(self):
+    # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
+    print(f'\t\t- {NSStringFromClass(__class__)}: dealloc')
+
+  @objc_method
+  def overrideCell(self) -> None:
+    send_super(__class__, self, 'overrideCell')
+    slider = UISlider.new()
     slider.value = 0.5
     slider.minimumValue = 0.0
     slider.maximumValue = 1.0
@@ -51,9 +59,14 @@ class SliderDefault(CustomTableViewCell):
 class SliderTinted(CustomTableViewCell):
 
   @objc_method
-  def overrideCell(self):
-    slider = UISlider.alloc().initWithFrame_(CGRectMake(
-      18.0, 7.5, 339.0, 31.0))  #.autorelease()
+  def dealloc(self):
+    # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
+    print(f'\t\t- {NSStringFromClass(__class__)}: dealloc')
+
+  @objc_method
+  def overrideCell(self) -> None:
+    send_super(__class__, self, 'overrideCell')
+    slider = UISlider.new()
     slider.value = 0.5
     slider.minimumValue = 0.0
     slider.maximumValue = 1.0
@@ -76,9 +89,14 @@ class SliderTinted(CustomTableViewCell):
 class SliderCustom(CustomTableViewCell):
 
   @objc_method
-  def overrideCell(self):
-    slider = UISlider.alloc().initWithFrame_(CGRectMake(
-      18.0, 7.5, 339.0, 31.0))  #.autorelease()
+  def dealloc(self):
+    # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
+    print(f'\t\t- {NSStringFromClass(__class__)}: dealloc')
+
+  @objc_method
+  def overrideCell(self) -> None:
+    send_super(__class__, self, 'overrideCell')
+    slider = UISlider.new()
     slider.value = 0.5
     slider.minimumValue = 0.0
     slider.maximumValue = 1.0
@@ -102,9 +120,14 @@ class SliderCustom(CustomTableViewCell):
 class SliderMaxMinImage(CustomTableViewCell):
 
   @objc_method
-  def overrideCell(self):
-    slider = UISlider.alloc().initWithFrame_(CGRectMake(
-      18.0, 7.5, 339.0, 31.0))  #.autorelease()
+  def dealloc(self):
+    # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
+    print(f'\t\t- {NSStringFromClass(__class__)}: dealloc')
+
+  @objc_method
+  def overrideCell(self) -> None:
+    send_super(__class__, self, 'overrideCell')
+    slider = UISlider.new()
     slider.value = 0.5
     slider.minimumValue = 0.0
     slider.maximumValue = 1.0
