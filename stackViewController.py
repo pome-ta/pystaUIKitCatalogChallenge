@@ -56,10 +56,6 @@ class StackViewController(UIViewController):
 
   maximumArrangedSubviewCount: int = objc_property(int)
 
-  plusSymbol: UIImage = objc_property()
-  minusSymbol: UIImage = objc_property()
-  touchUpInside: UIControlEvents = objc_property(int)
-
   @objc_method
   def dealloc(self):
     # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
@@ -71,24 +67,6 @@ class StackViewController(UIViewController):
     #print(f'\t{NSStringFromClass(__class__)}: loadView')
     self.maximumArrangedSubviewCount = 3
 
-    self.plusSymbol = UIImage.systemImageNamed('plus')
-    self.minusSymbol = UIImage.systemImageNamed('minus')
-    self.touchUpInside = UIControlEvents.touchUpInside
-
-  @objc_method
-  def setupFurtherDetailStackView(self):
-    pass
-
-  @objc_method
-  def setupAddRemoveExampleStackView(self):
-    addRemoveExampleStackView = UIStackView.new()
-    addRemoveExampleStackView.axis = UILayoutConstraintAxis.vertical
-    addRemoveExampleStackView.alignment = UIStackViewAlignment.center
-    addRemoveExampleStackView.spacing = 10.0
-
-    self.addRemoveExampleStackView = addRemoveExampleStackView
-    return self.addRemoveExampleStackView
-
   # MARK: - View Life Cycle
   @objc_method
   def viewDidLoad(self):
@@ -98,7 +76,7 @@ class StackViewController(UIViewController):
 
     self.view.backgroundColor = UIColor.systemBackgroundColor()
 
-    # xxx: あとで、`setup` 的なのを作る?
+    # wip: viewDidLoad 肥大化
     # --- Symbols
     plusSymbol = UIImage.systemImageNamed('plus')
     minusSymbol = UIImage.systemImageNamed('minus')
@@ -245,7 +223,10 @@ class StackViewController(UIViewController):
     ])
 
     # --- addRemoveExampleStackView
-    addRemoveExampleStackView = self.setupAddRemoveExampleStackView()
+    addRemoveExampleStackView = UIStackView.new()
+    addRemoveExampleStackView.axis = UILayoutConstraintAxis.vertical
+    addRemoveExampleStackView.alignment = UIStackViewAlignment.center
+    addRemoveExampleStackView.spacing = 10.0
 
     # --- Layout
     self.view.addSubview_(showingHidingStackView)
@@ -298,7 +279,7 @@ class StackViewController(UIViewController):
 
     self.furtherDetailStackView = furtherStackView
     self.plusButton = detailPlusButton
-    #self.addRemoveExampleStackView = addRemoveExampleStackView
+    self.addRemoveExampleStackView = addRemoveExampleStackView
     self.addArrangedViewButton = addbutton
     self.removeArrangedViewButton = removebutton
 
@@ -392,7 +373,6 @@ class StackViewController(UIViewController):
     newView = UIView.alloc().initWithFrame_(CGRect(NSZeroPoint, newViewSize))
 
     newView.backgroundColor = self.randomColor()
-    #newView.backgroundColor = randomColor()
 
     NSLayoutConstraint.activateConstraints_([
       newView.widthAnchor.constraintEqualToConstant_(newViewSize.width),
