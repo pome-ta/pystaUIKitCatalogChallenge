@@ -66,6 +66,7 @@ class StackViewController(UIViewController):
       title := self.navigationItem.title) is None else title
     self.view.backgroundColor = UIColor.systemBackgroundColor()
 
+    # xxx: あとで、`setup` 的なのを作る?
     # --- Symbols
     plusSymbol = UIImage.systemImageNamed('plus')
     minusSymbol = UIImage.systemImageNamed('minus')
@@ -81,6 +82,188 @@ class StackViewController(UIViewController):
     showingHidingLabel.textAlignment = NSTextAlignment.center
     showingHidingLabel.setFont_(
       UIFont.preferredFontForTextStyle_(UIFontTextStyle.headline))
+
+    # --- --- / detailStackView
+    detailStackView = UIStackView.alloc()
+    # --- --- ---- detailLabel
+    detailLabel = UILabel.new()
+    detailLabel.setContentHuggingPriority_forAxis_(
+      251.0, UILayoutConstraintAxis.horizontal)
+    detailLabel.setContentHuggingPriority_forAxis_(
+      251.0, UILayoutConstraintAxis.vertical)
+    detailLabel.text = 'Detail'
+    detailLabel.lineBreakMode = NSLineBreakMode.byTruncatingTail
+    detailLabel.setFont_(
+      UIFont.preferredFontForTextStyle_(UIFontTextStyle.body))
+
+    # --- --- ---- detailTextField
+    detailTextField = UITextField.new()
+    detailTextField.setContentHuggingPriority_forAxis_(
+      249.0, UILayoutConstraintAxis.horizontal)
+    detailTextField.borderStyle = UITextBorderStyle.roundedRect
+    detailTextField.setFont_(UIFont.systemFontOfSize_(14.0))
+    detailTextField.font.systemMinimumFontSize = 17.0
+
+    # --- --- ---- detailPlusButton
+    detailPlusButton = UIButton.buttonWithType_(UIButtonType.system)
+    detailPlusButton.setImage_forState_(plusSymbol, UIControlState.normal)
+    detailPlusButton.contentEdgeInsets = UIEdgeInsetsMake(0.0, 10.0, 0.0, 10.0)
+    #detailPlusButton.addTarget_action_forControlEvents_(self, SEL('showFurtherDetail:'), touchUpInside)
+
+    # --- --- arrangedSubviews
+    detailStackView.initWithArrangedSubviews_([
+      detailLabel,
+      detailTextField,
+      detailPlusButton,
+    ])
+    detailStackView.spacing = 10.0
+    # --- --- detailStackView /
+
+    # --- --- / furtherStackView
+    furtherStackView = UIStackView.alloc()
+    # --- --- --- furtherlLabel
+    furtherlLabel = UILabel.new()
+    furtherlLabel.setContentHuggingPriority_forAxis_(
+      251.0, UILayoutConstraintAxis.horizontal)
+    furtherlLabel.setContentHuggingPriority_forAxis_(
+      251.0, UILayoutConstraintAxis.vertical)
+    furtherlLabel.text = 'Further Detail'
+    furtherlLabel.lineBreakMode = NSLineBreakMode.byTruncatingTail
+    furtherlLabel.setFont_(
+      UIFont.preferredFontForTextStyle_(UIFontTextStyle.body))
+
+    # --- --- --- furtherTextField
+    furtherTextField = UITextField.new()
+    furtherTextField.setContentHuggingPriority_forAxis_(
+      249.0, UILayoutConstraintAxis.horizontal)
+    furtherTextField.borderStyle = UITextBorderStyle.roundedRect
+    furtherTextField.setFont_(UIFont.systemFontOfSize_(14.0))
+    furtherTextField.font.systemMinimumFontSize = 17.0
+
+    # --- --- --- furtherMinusButton
+    furtherMinusButton = UIButton.buttonWithType_(UIButtonType.system)
+    furtherMinusButton.setImage_forState_(minusSymbol, UIControlState.normal)
+    furtherMinusButton.contentEdgeInsets = UIEdgeInsetsMake(
+      0.0, 10.0, 0.0, 10.0)
+    #furtherMinusButton.addTarget_action_forControlEvents_(self, SEL('hideFurtherDetail:'), touchUpInside)
+
+    # --- --- arrangedSubviews
+    furtherStackView.initWithArrangedSubviews_([
+      furtherlLabel,
+      furtherTextField,
+      furtherMinusButton,
+    ])
+    furtherStackView.spacing = 10.0
+    # --- --- furtherStackView /
+
+    footerLabel = UILabel.new()
+    footerLabel.text = 'Footer Label'
+    footerLabel.textAlignment = NSTextAlignment.center
+    footerLabel.setFont_(
+      UIFont.preferredFontForTextStyle_(UIFontTextStyle.footnote))
+
+    # --- --- arrangedSubviews
+    showingHidingStackView.initWithArrangedSubviews_([
+      showingHidingLabel,
+      detailStackView,
+      furtherStackView,
+      footerLabel,
+    ])
+    showingHidingStackView.axis = UILayoutConstraintAxis.vertical
+    showingHidingStackView.spacing = 10.0
+
+    # --- addRemoveStackView
+    addRemoveStackView = UIStackView.alloc()
+    # --- --- ---- addRemoveLabel
+    addRemoveLabel = UILabel.new()
+    addRemoveLabel.setContentHuggingPriority_forAxis_(
+      251.0, UILayoutConstraintAxis.horizontal)
+    addRemoveLabel.setContentHuggingPriority_forAxis_(
+      251.0, UILayoutConstraintAxis.vertical)
+    addRemoveLabel.text = 'Add/remove views'
+    addRemoveLabel.textAlignment = NSTextAlignment.center
+    addRemoveLabel.setFont_(
+      UIFont.preferredFontForTextStyle_(UIFontTextStyle.headline))
+
+    # --- --- ---- addbutton
+    addbutton = UIButton.buttonWithType_(UIButtonType.system)
+    addbutton.setImage_forState_(plusSymbol, UIControlState.normal)
+    addbutton.setContentHuggingPriority_forAxis_(
+      252.0, UILayoutConstraintAxis.horizontal)
+    addbutton.contentEdgeInsets = UIEdgeInsetsMake(10.0, 10.0, 10.0, 10.0)
+    #addbutton.addTarget_action_forControlEvents_(self, SEL('addArrangedSubviewToStack:'), touchUpInside)
+
+    # --- --- ---- removebutton
+    removebutton = UIButton.buttonWithType_(UIButtonType.system)
+    removebutton.setImage_forState_(minusSymbol, UIControlState.normal)
+    removebutton.setContentHuggingPriority_forAxis_(
+      253.0, UILayoutConstraintAxis.horizontal)
+    removebutton.contentEdgeInsets = UIEdgeInsetsMake(10.0, 10.0, 10.0, 10.0)
+    #removebutton.addTarget_action_forControlEvents_(self, SEL('removeArrangedSubviewFromStack:'), touchUpInside)
+
+    # --- --- arrangedSubviews
+    addRemoveStackView.initWithArrangedSubviews_([
+      addRemoveLabel,
+      addbutton,
+      removebutton,
+    ])
+
+    # --- addRemoveExampleStackView
+    addRemoveExampleStackView = UIStackView.new()
+    addRemoveExampleStackView.axis = UILayoutConstraintAxis.vertical
+    addRemoveExampleStackView.alignment = UIStackViewAlignment.center
+    addRemoveExampleStackView.spacing = 10.0
+
+    # --- Layout
+    '''
+    self.view.addSubview_(showingHidingStackView)
+    self.view.addSubview_(addRemoveStackView)
+    self.view.addSubview_(addRemoveExampleStackView)
+
+    showingHidingStackView.translatesAutoresizingMaskIntoConstraints = False
+    addRemoveStackView.translatesAutoresizingMaskIntoConstraints = False
+    addRemoveExampleStackView.translatesAutoresizingMaskIntoConstraints = False
+
+    layoutMarginsGuide = self.view.layoutMarginsGuide
+    safeAreaLayoutGuide = self.view.safeAreaLayoutGuide
+
+    # --- showingHidingStackView
+    NSLayoutConstraint.activateConstraints_([
+      showingHidingStackView.leadingAnchor.constraintEqualToAnchor_(
+        layoutMarginsGuide.leadingAnchor),
+      showingHidingStackView.trailingAnchor.constraintEqualToAnchor_(
+        layoutMarginsGuide.trailingAnchor),
+      showingHidingStackView.topAnchor.constraintEqualToAnchor_constant_(
+        safeAreaLayoutGuide.topAnchor, 8.0),
+    ])
+
+    # todo: `detailLabel` と`furtherlLabel` の幅を連動
+    NSLayoutConstraint.activateConstraints_([
+      detailLabel.widthAnchor.constraintEqualToAnchor_(
+        furtherlLabel.widthAnchor),
+    ])
+
+    # --- addRemoveStackView
+    NSLayoutConstraint.activateConstraints_([
+      addRemoveStackView.topAnchor.constraintEqualToAnchor_constant_(
+        showingHidingStackView.bottomAnchor, 20.0),
+      addRemoveStackView.leadingAnchor.constraintEqualToAnchor_(
+        layoutMarginsGuide.leadingAnchor),
+      addRemoveStackView.trailingAnchor.constraintEqualToAnchor_(
+        layoutMarginsGuide.trailingAnchor),
+    ])
+
+    # --- addRemoveExampleStackView
+    NSLayoutConstraint.activateConstraints_([
+      addRemoveExampleStackView.topAnchor.constraintEqualToAnchor_constant_(
+        addRemoveStackView.bottomAnchor, 8.0),
+      addRemoveExampleStackView.leadingAnchor.constraintEqualToAnchor_(
+        layoutMarginsGuide.leadingAnchor),
+      addRemoveExampleStackView.trailingAnchor.constraintEqualToAnchor_(
+        layoutMarginsGuide.trailingAnchor),
+      # addRemoveExampleStackView.heightAnchor.constraintEqualToConstant_(42.0),  # xxx: `placeholder="YES"` ?
+    ])
+    '''
 
   @objc_method
   def viewWillAppear_(self, animated: bool):
