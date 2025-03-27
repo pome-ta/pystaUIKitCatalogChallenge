@@ -1,3 +1,16 @@
+# 📝 2025/03/27
+
+## `stackViewController.py`
+
+a-shell だと落ちる。何かのインスタンスがダメっぽい
+
+- `viewDidLoad` のみでもダメ
+  - `UIImage.systemImageNamed` 使い回しが原因でもない
+  - これかも？
+    - `detailTextField.font.systemMinimumFontSize = 17.0`
+  - 
+
+
 # 📝 2025/02/27
 
 ## `FontPickerViewController`
