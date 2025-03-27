@@ -48,135 +48,6 @@ UIView = ObjCClass('UIView')
 
 class StackViewController(UIViewController):
 
-  @objc_method
-  def dealloc(self):
-    # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
-    print(f'\t- {NSStringFromClass(__class__)}: dealloc')
-
-  @objc_method
-  def loadView(self):
-    send_super(__class__, self, 'loadView')
-    #print(f'\t{NSStringFromClass(__class__)}: loadView')
-
-  @objc_method
-  def setupFurtherDetailStackView(self):
-    pass
-
-  # MARK: - View Life Cycle
-  @objc_method
-  def viewDidLoad(self):
-    send_super(__class__, self, 'viewDidLoad')
-    self.navigationItem.title = localizedString('StackViewsTitle') if (
-      title := self.navigationItem.title) is None else title
-    self.view.backgroundColor = UIColor.systemBackgroundColor()
-
-    # xxx: あとで、`setup` 的なのを作る?
-    # --- Symbols
-
-    plusSymbol = UIImage.systemImageNamed('plus')
-    minusSymbol = UIImage.systemImageNamed('minus')
-
-    touchUpInside = UIControlEvents.touchUpInside
-
-    # --- showingHidingStackView
-    showingHidingStackView = UIStackView.alloc()
-
-    # --- --- showingHidingLabel
-    showingHidingLabel = UILabel.new()
-    showingHidingLabel.text = 'Showing/hiding views'
-    showingHidingLabel.textAlignment = NSTextAlignment.center
-    showingHidingLabel.setFont_(
-      UIFont.preferredFontForTextStyle_(UIFontTextStyle.headline))
-      
-    # --- --- / detailStackView
-    detailStackView = UIStackView.alloc()
-    # --- --- ---- detailLabel
-    detailLabel = UILabel.new()
-    detailLabel.setContentHuggingPriority_forAxis_(
-      251.0, UILayoutConstraintAxis.horizontal)
-    detailLabel.setContentHuggingPriority_forAxis_(
-      251.0, UILayoutConstraintAxis.vertical)
-    detailLabel.text = 'Detail'
-    detailLabel.lineBreakMode = NSLineBreakMode.byTruncatingTail
-    detailLabel.setFont_(
-      UIFont.preferredFontForTextStyle_(UIFontTextStyle.body))
-    
-    # --- --- ---- detailTextField
-    detailTextField = UITextField.new()
-    detailTextField.setContentHuggingPriority_forAxis_(
-      249.0, UILayoutConstraintAxis.horizontal)
-
-    #detailTextField.borderStyle = UITextBorderStyle.roundedRect
-    detailTextField.setBorderStyle_(UITextBorderStyle.roundedRect)
-    detailTextField.setFont_(UIFont.systemFontOfSize_(14.0))
-    #detailTextField.font.systemMinimumFontSize = 17.0
-    #pdbr.state(detailTextField.font, 1)
-    
-    # --- --- arrangedSubviews
-    detailStackView.initWithArrangedSubviews_([
-      detailLabel,
-      detailTextField,
-    ])
-    detailStackView.spacing = 10.0
-
-
-    # --- --- arrangedSubviews
-    showingHidingStackView.initWithArrangedSubviews_([
-      showingHidingLabel,
-      detailStackView,
-    ])
-    showingHidingStackView.axis = UILayoutConstraintAxis.vertical
-    showingHidingStackView.spacing = 10.0
-
-    # --- Layout
-
-    self.view.addSubview_(showingHidingStackView)
-
-    showingHidingStackView.translatesAutoresizingMaskIntoConstraints = False
-
-    layoutMarginsGuide = self.view.layoutMarginsGuide
-    safeAreaLayoutGuide = self.view.safeAreaLayoutGuide
-
-    # --- showingHidingStackView
-    NSLayoutConstraint.activateConstraints_([
-      showingHidingStackView.leadingAnchor.constraintEqualToAnchor_(
-        layoutMarginsGuide.leadingAnchor),
-      showingHidingStackView.trailingAnchor.constraintEqualToAnchor_(
-        layoutMarginsGuide.trailingAnchor),
-      showingHidingStackView.topAnchor.constraintEqualToAnchor_constant_(
-        safeAreaLayoutGuide.topAnchor, 8.0),
-    ])
-
-  @objc_method
-  def viewWillAppear_(self, animated: bool):
-    send_super(__class__,
-               self,
-               'viewWillAppear:',
-               animated,
-               argtypes=[
-                 ctypes.c_bool,
-               ])
-
-  @objc_method
-  def viewDidDisappear_(self, animated: bool):
-    send_super(__class__,
-               self,
-               'viewDidDisappear:',
-               animated,
-               argtypes=[
-                 ctypes.c_bool,
-               ])
-    print(f'\t{NSStringFromClass(__class__)}: viewDidDisappear_')
-
-  @objc_method
-  def didReceiveMemoryWarning(self):
-    send_super(__class__, self, 'didReceiveMemoryWarning')
-    print(f'\t{NSStringFromClass(__class__)}: didReceiveMemoryWarning')
-
-
-'''
-class StackViewController(UIViewController):
-
   furtherDetailStackView: UIStackView = objc_property()
   plusButton: UIButton = objc_property()
   addRemoveExampleStackView: UIStackView = objc_property()
@@ -184,6 +55,10 @@ class StackViewController(UIViewController):
   removeArrangedViewButton: UIButton = objc_property()
 
   maximumArrangedSubviewCount: int = objc_property(int)
+
+  plusSymbol: UIImage = objc_property()
+  minusSymbol: UIImage = objc_property()
+  touchUpInside: UIControlEvents = objc_property(int)
 
   @objc_method
   def dealloc(self):
@@ -195,6 +70,24 @@ class StackViewController(UIViewController):
     send_super(__class__, self, 'loadView')
     #print(f'\t{NSStringFromClass(__class__)}: loadView')
     self.maximumArrangedSubviewCount = 3
+
+    self.plusSymbol = UIImage.systemImageNamed('plus')
+    self.minusSymbol = UIImage.systemImageNamed('minus')
+    self.touchUpInside = UIControlEvents.touchUpInside
+
+  @objc_method
+  def setupFurtherDetailStackView(self):
+    pass
+
+  @objc_method
+  def setupAddRemoveExampleStackView(self):
+    addRemoveExampleStackView = UIStackView.new()
+    addRemoveExampleStackView.axis = UILayoutConstraintAxis.vertical
+    addRemoveExampleStackView.alignment = UIStackViewAlignment.center
+    addRemoveExampleStackView.spacing = 10.0
+
+    self.addRemoveExampleStackView = addRemoveExampleStackView
+    return self.addRemoveExampleStackView
 
   # MARK: - View Life Cycle
   @objc_method
@@ -241,7 +134,7 @@ class StackViewController(UIViewController):
       249.0, UILayoutConstraintAxis.horizontal)
     detailTextField.borderStyle = UITextBorderStyle.roundedRect
     detailTextField.setFont_(UIFont.systemFontOfSize_(14.0))
-    detailTextField.font.systemMinimumFontSize = 17.0
+    #detailTextField.font.systemMinimumFontSize = 17.0
 
     # --- --- ---- detailPlusButton
     detailPlusButton = UIButton.buttonWithType_(UIButtonType.system)
@@ -278,7 +171,7 @@ class StackViewController(UIViewController):
       249.0, UILayoutConstraintAxis.horizontal)
     furtherTextField.borderStyle = UITextBorderStyle.roundedRect
     furtherTextField.setFont_(UIFont.systemFontOfSize_(14.0))
-    furtherTextField.font.systemMinimumFontSize = 17.0
+    #furtherTextField.font.systemMinimumFontSize = 17.0
 
     # --- --- --- furtherMinusButton
     furtherMinusButton = UIButton.buttonWithType_(UIButtonType.system)
@@ -352,10 +245,7 @@ class StackViewController(UIViewController):
     ])
 
     # --- addRemoveExampleStackView
-    addRemoveExampleStackView = UIStackView.new()
-    addRemoveExampleStackView.axis = UILayoutConstraintAxis.vertical
-    addRemoveExampleStackView.alignment = UIStackViewAlignment.center
-    addRemoveExampleStackView.spacing = 10.0
+    addRemoveExampleStackView = self.setupAddRemoveExampleStackView()
 
     # --- Layout
     self.view.addSubview_(showingHidingStackView)
@@ -408,7 +298,7 @@ class StackViewController(UIViewController):
 
     self.furtherDetailStackView = furtherStackView
     self.plusButton = detailPlusButton
-    self.addRemoveExampleStackView = addRemoveExampleStackView
+    #self.addRemoveExampleStackView = addRemoveExampleStackView
     self.addArrangedViewButton = addbutton
     self.removeArrangedViewButton = removebutton
 
@@ -501,8 +391,8 @@ class StackViewController(UIViewController):
     newViewSize = CGSizeMake(38.0, 38.0)
     newView = UIView.alloc().initWithFrame_(CGRect(NSZeroPoint, newViewSize))
 
-    #newView.backgroundColor = self.randomColor()
-    newView.backgroundColor = randomColor()
+    newView.backgroundColor = self.randomColor()
+    #newView.backgroundColor = randomColor()
 
     NSLayoutConstraint.activateConstraints_([
       newView.widthAnchor.constraintEqualToConstant_(newViewSize.width),
@@ -542,7 +432,7 @@ class StackViewController(UIViewController):
     green = arc4random_uniform(255) / 255.0
     blue = arc4random_uniform(255) / 255.0
     return UIColor.colorWithRed_green_blue_alpha_(red, green, blue, 1.0)
-'''
+
 
 if __name__ == '__main__':
   from rbedge.app import App

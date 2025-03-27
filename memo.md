@@ -8,7 +8,8 @@ a-shell だと落ちる。何かのインスタンスがダメっぽい
   - `UIImage.systemImageNamed` 使い回しが原因でもない
   - これかも？
     - `detailTextField.font.systemMinimumFontSize = 17.0`
-  - 
+  - リードオンリーものに上書きしてた
+    - しかし、なぜ初動はいけるのか🤔
 
 
 # 📝 2025/02/27
