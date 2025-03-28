@@ -6,10 +6,9 @@ sys.path.append(str(pathlib.Path(__file__, '../' * parent_level).resolve()))
 
 import ctypes
 try:
-
   from pyrubicon.objc.api import ObjCClass, ObjCInstance
-  from pyrubicon.objc.api import objc_method, objc_property
-  from pyrubicon.objc.runtime import objc_id, send_super
+  from pyrubicon.objc.api import objc_method, objc_id
+  from pyrubicon.objc.runtime import send_super
   from pyrubicon.objc.types import NSInteger
 
   from rbedge.functions import NSStringFromClass
@@ -22,8 +21,7 @@ except Exception as e:
 # --- test modules
 from storyboard.activityIndicatorViewController import prototypes
 
-_test_p = prototypes
-test_prototypes = _test_p if isinstance(_test_p, list) else [_test_p]
+test_prototypes = prototypes if isinstance(prototypes, list) else [prototypes]
 
 UIColor = ObjCClass('UIColor')
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
@@ -68,9 +66,8 @@ class TableViewControllerTest(UITableViewController):
     # --- Navigation
     self.navigationItem.title = NSStringFromClass(__class__) if (
       title := self.navigationItem.title) is None else title
-
     # --- View
-    self.view.backgroundColor = UIColor.systemGreenColor()
+    self.view.backgroundColor = UIColor.systemDarkGreenColor()
 
   @objc_method
   def viewWillAppear_(self, animated: bool):
@@ -129,13 +126,12 @@ class TableViewControllerTest(UITableViewController):
     return len(test_prototypes)
 
   @objc_method
-  def tableView_cellForRowAtIndexPath_(self, tableView, indexPath) -> objc_id:
+  def tableView_cellForRowAtIndexPath_(self, tableView,
+                                       indexPath) -> ObjCInstance:
 
     identifier = test_prototypes[indexPath.row]['identifier']
-
     cell = tableView.dequeueReusableCellWithIdentifier_forIndexPath_(
       identifier, indexPath)
-
     return cell
 
 
