@@ -4,6 +4,7 @@ import pathlib
 parent_level = 3
 sys.path.append(str(pathlib.Path(__file__, '../' * parent_level).resolve()))
 
+import ctypes
 try:
 
   from pyrubicon.objc.api import ObjCClass, ObjCInstance
@@ -12,6 +13,7 @@ try:
   from pyrubicon.objc.types import NSInteger
 
   from rbedge.functions import NSStringFromClass
+  from rbedge import pdbr
 
 except Exception as e:
   # xxx: `(ModuleNotFoundError, LookupError)`
@@ -62,15 +64,62 @@ class TableViewControllerTest(UITableViewController):
 
   @objc_method
   def viewDidLoad(self):
-    send_super(__class__, self, 'viewDidLoad')  # xxx: 不要?
-    #print(f'\t{NSStringFromClass(__class__)}: viewDidLoad')
-
+    send_super(__class__, self, 'viewDidLoad')
     # --- Navigation
     self.navigationItem.title = NSStringFromClass(__class__) if (
       title := self.navigationItem.title) is None else title
 
     # --- View
     self.view.backgroundColor = UIColor.systemGreenColor()
+
+  @objc_method
+  def viewWillAppear_(self, animated: bool):
+    send_super(__class__,
+               self,
+               'viewWillAppear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    #print(f'\t{NSStringFromClass(__class__)}: viewWillAppear_')
+
+  @objc_method
+  def viewDidAppear_(self, animated: bool):
+    send_super(__class__,
+               self,
+               'viewDidAppear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    #print(f'\t{NSStringFromClass(__class__)}: viewDidAppear_')
+
+  @objc_method
+  def viewWillDisappear_(self, animated: bool):
+    send_super(__class__,
+               self,
+               'viewWillDisappear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    # print(f'\t{NSStringFromClass(__class__)}: viewWillDisappear_')
+
+  @objc_method
+  def viewDidDisappear_(self, animated: bool):
+    send_super(__class__,
+               self,
+               'viewDidDisappear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    print(f'\t{NSStringFromClass(__class__)}: viewDidDisappear_')
+
+  @objc_method
+  def didReceiveMemoryWarning(self):
+    send_super(__class__, self, 'didReceiveMemoryWarning')
+    print(f'\t{NSStringFromClass(__class__)}: didReceiveMemoryWarning')
 
   # --- UITableViewDataSource
   @objc_method
@@ -92,24 +141,19 @@ class TableViewControllerTest(UITableViewController):
 
 if __name__ == '__main__':
   from rbedge.app import App
-
   from rbedge.enumerations import (
     UITableViewStyle,
     UIModalPresentationStyle,
   )
-  print('__name__')
 
   table_style = UITableViewStyle.grouped
   main_vc = TableViewControllerTest.alloc().initWithStyle_(table_style)
   _title = NSStringFromClass(TableViewControllerTest)
   main_vc.navigationItem.title = _title
 
-  #presentation_style = UIModalPresentationStyle.fullScreen
+  # presentation_style = UIModalPresentationStyle.fullScreen
   presentation_style = UIModalPresentationStyle.pageSheet
 
-  app = App(main_vc)
-  print(app)
-  #pdbr.state(main_vc, 1)
-  app.main_loop(presentation_style)
-  print('--- end ---\n')
+  app = App(main_vc, presentation_style)
+  app.present()
 
