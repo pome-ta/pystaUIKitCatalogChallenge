@@ -1,9 +1,13 @@
-from pyrubicon.objc.api import ObjCClass, objc_method
-from pyrubicon.objc.types import CGRectMake
+from pyrubicon.objc.api import ObjCClass
+from pyrubicon.objc.api import objc_method
+from pyrubicon.objc.runtime import send_super
+
 from rbedge.enumerations import UITextBorderStyle
 
-from ._prototype import CustomTableViewCell
+from rbedge.functions import NSStringFromClass
 from rbedge import pdbr
+
+from ._prototype import CustomTableViewCell
 
 UIStepper = ObjCClass('UIStepper')
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
@@ -20,14 +24,20 @@ def add_prototype(identifier: str):
   return _create_reuse_dict
 
 
-prototypes: list[dict[CustomTableViewCell, str]] = []
+prototypes: list[dict[CustomTableViewCell | str, str]] = []
 
 
 @add_prototype('defaultStepper')
 class DefaultStepper(CustomTableViewCell):
 
   @objc_method
-  def overrideCell(self):
+  def dealloc(self):
+    # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
+    print(f'\t\t- {NSStringFromClass(__class__)}: dealloc')
+
+  @objc_method
+  def overrideCell(self) -> None:
+    send_super(__class__, self, 'overrideCell')
     stepper = UIStepper.new()
     stepper.maximumValue = 10
 
@@ -46,7 +56,13 @@ class DefaultStepper(CustomTableViewCell):
 class TintedStepper(CustomTableViewCell):
 
   @objc_method
-  def overrideCell(self):
+  def dealloc(self):
+    # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
+    print(f'\t\t- {NSStringFromClass(__class__)}: dealloc')
+
+  @objc_method
+  def overrideCell(self) -> None:
+    send_super(__class__, self, 'overrideCell')
     stepper = UIStepper.new()
     stepper.maximumValue = 10
 
@@ -65,7 +81,13 @@ class TintedStepper(CustomTableViewCell):
 class CustomStepper(CustomTableViewCell):
 
   @objc_method
-  def overrideCell(self):
+  def dealloc(self):
+    # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
+    print(f'\t\t- {NSStringFromClass(__class__)}: dealloc')
+
+  @objc_method
+  def overrideCell(self) -> None:
+    send_super(__class__, self, 'overrideCell')
     stepper = UIStepper.new()
     stepper.maximumValue = 10
 
