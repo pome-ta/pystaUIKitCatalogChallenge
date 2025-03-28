@@ -30,9 +30,15 @@ prototypes: list[dict[CustomTableViewCell | str, str]] = []
 class DefaultSwitch(CustomTableViewCell):
 
   @objc_method
-  def overrideCell(self):
+  def dealloc(self):
+    # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
+    print(f'\t\t- {NSStringFromClass(__class__)}: dealloc')
+
+  @objc_method
+  def overrideCell(self) -> None:
+    send_super(__class__, self, 'overrideCell')
     switch = UISwitch.alloc().initWithFrame_(CGRectMake(
-      163.5, 6.5, 51.0, 31.0))  #.autorelease()
+      163.5, 6.5, 51.0, 31.0))
 
     switch.translatesAutoresizingMaskIntoConstraints = False
     self.contentView.addSubview_(switch)
@@ -55,8 +61,9 @@ class CheckBoxSwitch(CustomTableViewCell):
 
   @objc_method
   def overrideCell(self) -> None:
+    send_super(__class__, self, 'overrideCell')
     switch = UISwitch.alloc().initWithFrame_(CGRectMake(
-      163.5, 6.5, 51.0, 31.0))  #.autorelease()
+      163.5, 6.5, 51.0, 31.0))
 
     switch.translatesAutoresizingMaskIntoConstraints = False
     self.contentView.addSubview_(switch)
@@ -79,8 +86,9 @@ class TintedSwitch(CustomTableViewCell):
 
   @objc_method
   def overrideCell(self) -> None:
+    send_super(__class__, self, 'overrideCell')
     switch = UISwitch.alloc().initWithFrame_(CGRectMake(
-      163.5, 6.5, 51.0, 31.0))  #.autorelease()
+      163.5, 6.5, 51.0, 31.0))
 
     switch.translatesAutoresizingMaskIntoConstraints = False
     self.contentView.addSubview_(switch)
