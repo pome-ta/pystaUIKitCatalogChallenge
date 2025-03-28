@@ -1,3 +1,9 @@
+# 📝 2025/03/28
+
+## `symbolViewController`
+
+`tableView_heightForRowAtIndexPath` 呼ぶとめちゃくちゃ`dealloc` する
+
 # 📝 2025/03/27
 
 ## `stackViewController.py`

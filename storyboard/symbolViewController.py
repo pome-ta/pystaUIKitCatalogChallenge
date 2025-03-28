@@ -1,7 +1,10 @@
-from pyrubicon.objc.api import ObjCClass, objc_method
+from pyrubicon.objc.api import ObjCClass
+from pyrubicon.objc.api import objc_method
+from pyrubicon.objc.runtime import send_super
 from pyrubicon.objc.types import CGRectMake, NSMakeSize
 
 from rbedge.enumerations import UIViewContentMode
+from rbedge.functions import NSStringFromClass
 from rbedge import pdbr
 
 from ._prototype import CustomTableViewCell
@@ -21,18 +24,24 @@ def add_prototype(identifier: str):
   return _create_reuse_dict
 
 
-prototypes: list[dict[CustomTableViewCell, str]] = []
+prototypes: list[dict[CustomTableViewCell | str, str]] = []
 
 
 @add_prototype('tintedSymbol')
 class TintedSymbol(CustomTableViewCell):
 
   @objc_method
-  def overrideCell(self):
+  def dealloc(self):
+    # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
+    print(f'\t\t- {NSStringFromClass(__class__)}: dealloc')
+
+  @objc_method
+  def overrideCell(self) -> None:
+    send_super(__class__, self, 'overrideCell')
     _width = 40.0
     _height = 40.0
     imageView = UIImageView.alloc().initWithFrame_(
-      CGRectMake(167.5, 2.0, _width, _height))#.autorelease()
+      CGRectMake(167.5, 2.0, _width, _height))
     imageView.contentMode = UIViewContentMode.scaleAspectFit
 
     imageView.translatesAutoresizingMaskIntoConstraints = False
@@ -52,11 +61,17 @@ class TintedSymbol(CustomTableViewCell):
 class PreferringMultiColorSymbol(CustomTableViewCell):
 
   @objc_method
-  def overrideCell(self):
+  def dealloc(self):
+    # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
+    print(f'\t\t- {NSStringFromClass(__class__)}: dealloc')
+
+  @objc_method
+  def overrideCell(self) -> None:
+    send_super(__class__, self, 'overrideCell')
     _width = 40.0
     _height = 40.0
     imageView = UIImageView.alloc().initWithFrame_(
-      CGRectMake(167.5, 2.0, _width, _height))#.autorelease()
+      CGRectMake(167.5, 2.0, _width, _height))
     imageView.contentMode = UIViewContentMode.scaleAspectFit
 
     imageView.translatesAutoresizingMaskIntoConstraints = False
@@ -76,11 +91,17 @@ class PreferringMultiColorSymbol(CustomTableViewCell):
 class LargeSizeSymbol(CustomTableViewCell):
 
   @objc_method
-  def overrideCell(self):
+  def dealloc(self):
+    # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
+    print(f'\t\t- {NSStringFromClass(__class__)}: dealloc')
+
+  @objc_method
+  def overrideCell(self) -> None:
+    send_super(__class__, self, 'overrideCell')
     _width = 82.0
     _height = 87.0
     imageView = UIImageView.alloc().initWithFrame_(
-      CGRectMake(146.5, 0.0, _width, _height))#.autorelease()
+      CGRectMake(146.5, 0.0, _width, _height))
     imageView.contentMode = UIViewContentMode.scaleAspectFit
 
     imageView.translatesAutoresizingMaskIntoConstraints = False
@@ -104,11 +125,17 @@ class LargeSizeSymbol(CustomTableViewCell):
 class PaletteColorsSymbol(CustomTableViewCell):
 
   @objc_method
-  def overrideCell(self):
+  def dealloc(self):
+    # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
+    print(f'\t\t- {NSStringFromClass(__class__)}: dealloc')
+
+  @objc_method
+  def overrideCell(self) -> None:
+    send_super(__class__, self, 'overrideCell')
     _width = 40.0
     _height = 40.0
     imageView = UIImageView.alloc().initWithFrame_(
-      CGRectMake(167.5, 2.0, _width, _height))#.autorelease()
+      CGRectMake(167.5, 2.0, _width, _height))
     imageView.contentMode = UIViewContentMode.scaleAspectFit
 
     imageView.translatesAutoresizingMaskIntoConstraints = False
@@ -128,11 +155,17 @@ class PaletteColorsSymbol(CustomTableViewCell):
 class PlainSymbol(CustomTableViewCell):
 
   @objc_method
-  def overrideCell(self):
+  def dealloc(self):
+    # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
+    print(f'\t\t- {NSStringFromClass(__class__)}: dealloc')
+
+  @objc_method
+  def overrideCell(self) -> None:
+    send_super(__class__, self, 'overrideCell')
     _width = 40.0
     _height = 40.0
     imageView = UIImageView.alloc().initWithFrame_(
-      CGRectMake(167.5, 2.0, _width, _height))#.autorelease()
+      CGRectMake(167.5, 2.0, _width, _height))
     imageView.contentMode = UIViewContentMode.scaleAspectFit
 
     imageView.translatesAutoresizingMaskIntoConstraints = False
@@ -152,11 +185,17 @@ class PlainSymbol(CustomTableViewCell):
 class HierarchicalColorSymbol(CustomTableViewCell):
 
   @objc_method
-  def overrideCell(self):
+  def dealloc(self):
+    # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
+    print(f'\t\t- {NSStringFromClass(__class__)}: dealloc')
+
+  @objc_method
+  def overrideCell(self) -> None:
+    send_super(__class__, self, 'overrideCell')
     _width = 40.0
     _height = 40.0
     imageView = UIImageView.alloc().initWithFrame_(
-      CGRectMake(167.5, 2.0, _width, _height))#.autorelease()
+      CGRectMake(167.5, 2.0, _width, _height))
     imageView.contentMode = UIViewContentMode.scaleAspectFit
 
     imageView.translatesAutoresizingMaskIntoConstraints = False
