@@ -96,7 +96,6 @@ class TintedTextField(CustomTableViewCell):
     ])
 
 
-"""
 @add_prototype('customTextField')
 class CustomTextField(CustomTableViewCell):
 
@@ -137,7 +136,7 @@ class CustomTextField(CustomTableViewCell):
       textField.centerYAnchor.constraintEqualToAnchor_(
         self.contentView.centerYAnchor),
     ])
-"""
+
 
 
 @add_prototype('textField')

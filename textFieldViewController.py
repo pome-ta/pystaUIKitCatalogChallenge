@@ -8,12 +8,12 @@ import ctypes
 from enum import Enum
 
 from pyrubicon.objc.api import ObjCClass, ObjCInstance
-from pyrubicon.objc.api import objc_method
+from pyrubicon.objc.api import objc_method, objc_property
 from pyrubicon.objc.runtime import send_super, objc_id, SEL
 from pyrubicon.objc.types import (
   NSInteger,
   CGRect,
-  CGFloat,
+  #CGFloat,
   CGRectMake,
   UIEdgeInsetsMake,
 )
@@ -105,15 +105,9 @@ class TextFieldViewController(BaseTableViewController):
       CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
         localizedString('DefaultTextFieldTitle'),
         TextFieldKind.textField.value, 'configureTextField:'),
-      CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
-        localizedString('TintedTextFieldTitle'),
-        TextFieldKind.tintedTextField.value, 'configureTintedTextField:'),
-      CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
-        localizedString('SecuretTextFieldTitle'),
-        TextFieldKind.secureTextField.value, 'configureSecureTextField:'),
-      CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
-        localizedString('SearchTextFieldTitle'),
-        TextFieldKind.searchTextField.value, 'configureSearchTextField:'),
+      #CaseElement.alloc().initWithTitle_cellID_configHandlerName_(localizedString('TintedTextFieldTitle'),TextFieldKind.tintedTextField.value, 'configureTintedTextField:'),
+      #CaseElement.alloc().initWithTitle_cellID_configHandlerName_(localizedString('SecuretTextFieldTitle'),TextFieldKind.secureTextField.value, 'configureSecureTextField:'),
+      #CaseElement.alloc().initWithTitle_cellID_configHandlerName_(localizedString('SearchTextFieldTitle'),TextFieldKind.searchTextField.value, 'configureSearchTextField:'),
     ])
 
     if self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiom.mac:
@@ -132,10 +126,7 @@ class TextFieldViewController(BaseTableViewController):
       ])
       '''
       self.testCellsAppendContentsOf_([
-        CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
-          localizedString('SpecificKeyboardTextFieldTitle'),
-          TextFieldKind.specificKeyboardTextField.value,
-          'configureSpecificKeyboardTextField:'),
+        #CaseElement.alloc().initWithTitle_cellID_configHandlerName_(localizedString('SpecificKeyboardTextFieldTitle'),TextFieldKind.specificKeyboardTextField.value,'configureSpecificKeyboardTextField:'),
         #CaseElement.alloc().initWithTitle_cellID_configHandlerName_(localizedString('CustomTextFieldTitle'), TextFieldKind.customTextField.value, 'configureCustomTextField:'),
       ])
 
@@ -190,15 +181,15 @@ class TextFieldViewController(BaseTableViewController):
 
   # MARK: - Configuration
   @objc_method
-  def configureTextField_(self, textField):
-    textField.delegate = self
-    textField.placeholder = localizedString('Placeholder text')
+  def configureTextField_(self, textFieldView):
+    textFieldView.delegate = self
+    textFieldView.placeholder = localizedString('Placeholder text')
 
-    textInputTraits = textField.textInputTraits()
+    textInputTraits = textFieldView.textInputTraits()
     textInputTraits.autocorrectionType = UITextAutocorrectionType.yes
     textInputTraits.returnKeyType = UIReturnKeyType.done
 
-    textField.clearButtonMode = UITextFieldViewMode.whileEditing
+    textFieldView.clearButtonMode = UITextFieldViewMode.whileEditing
 
   @objc_method
   def configureTintedTextField_(self, textField):
@@ -330,10 +321,12 @@ class TextFieldViewController(BaseTableViewController):
     # ユーザーがテキストの選択を変更しました。
     pass
 
-  '''# xxx: 落ちる
+  '''
+  # xxx: 落ちる
   @objc_method
   def textField_shouldChangeCharactersInRange_replacementString_(
-      self, range, string) -> bool:
+      self, textField, range, string) -> bool:
+    print(string)
     # Return false to not change text.
     # テキストを変更しない場合は false を返します。
     return True
@@ -343,15 +336,33 @@ class TextFieldViewController(BaseTableViewController):
 # Custom text field for controlling input text placement.
 # 入力テキストの配置を制御するためのカスタム テキスト フィールド。
 class CustomTextField(ObjCClass('UITextField')):
-  #leftMarginPadding: CGFloat = objc_property(float)
-  #rightMarginPadding: CGFloat = objc_property(float)
+  leftMarginPadding: float = objc_property(float)
+  rightMarginPadding: float = objc_property(float)
+
+  @objc_method
+  def dealloc(self):
+    # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
+    print(f'\t\t- {NSStringFromClass(__class__)}: dealloc')
 
   @objc_method
   def init(self) -> ObjCInstance:
     send_super(__class__, self, 'init')  # xxx: この返り値を返さないと意味なし?
+    print(f'\t\t{NSStringFromClass(__class__)}: init_')
     self.leftMarginPadding = 12.0
     self.rightMarginPadding = 36.0
     return self
+
+  '''
+
+  @objc_method
+  def initWithFrame_(self, frame: CGRect) -> ObjCInstance:
+    send_super(__class__, self, 'initWithFrame:', frame, argtypes=[
+      CGRect,
+    ])
+    self.leftMarginPadding = 12.0
+    self.rightMarginPadding = 36.0
+    return self
+  '''
 
   @objc_method
   def textRectForBounds_(self, bounds: CGRect) -> CGRect:
@@ -363,6 +374,7 @@ class CustomTextField(ObjCClass('UITextField')):
                  CGRect,
                ])
     rect = bounds
+    #print(f'{self.leftMarginPadding=}')
     rect.origin.x += self.leftMarginPadding
     rect.size.width -= self.rightMarginPadding
 
