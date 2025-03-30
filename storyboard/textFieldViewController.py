@@ -26,17 +26,23 @@ def add_prototype(identifier: str):
   return _create_reuse_dict
 
 
-prototypes: list[dict[CustomTableViewCell, str]] = []
+prototypes: list[dict[CustomTableViewCell | str, str]] = []
 
 
 @add_prototype('searchTextField')
 class SearchTextField(CustomTableViewCell):
 
   @objc_method
-  def overrideCell(self):
+  def dealloc(self):
+    # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
+    print(f'\t\t- {NSStringFromClass(__class__)}: dealloc')
+
+  @objc_method
+  def overrideCell(self) -> None:
+    send_super(__class__, self, 'overrideCell')
     #textField = UITextField.alloc().initWithFrame_(CGRectMake(16.0, 5.0, 343.0, 34.0)).autorelease()
     textField = UISearchTextField.alloc().initWithFrame_(
-      CGRectMake(16.0, 5.0, 343.0, 34.0))#.autorelease()
+      CGRectMake(16.0, 5.0, 343.0, 34.0))  #.autorelease()
 
     textField.minimumFontSize = 17.0
     textField.borderStyle = UITextBorderStyle.roundedRect
@@ -62,9 +68,15 @@ class SearchTextField(CustomTableViewCell):
 class TintedTextField(CustomTableViewCell):
 
   @objc_method
-  def overrideCell(self):
+  def dealloc(self):
+    # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
+    print(f'\t\t- {NSStringFromClass(__class__)}: dealloc')
+
+  @objc_method
+  def overrideCell(self) -> None:
+    send_super(__class__, self, 'overrideCell')
     textField = UITextField.alloc().initWithFrame_(
-      CGRectMake(77.5, 5.0, 220.0, 34.0))#.autorelease()
+      CGRectMake(77.5, 5.0, 220.0, 34.0))  #.autorelease()
 
     textField.minimumFontSize = 17.0
     textField.font = UIFont.systemFontOfSize_(14.0)
@@ -84,11 +96,18 @@ class TintedTextField(CustomTableViewCell):
     ])
 
 
+"""
 @add_prototype('customTextField')
 class CustomTextField(CustomTableViewCell):
 
   @objc_method
-  def overrideCell(self):
+  def dealloc(self):
+    # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
+    print(f'\t\t- {NSStringFromClass(__class__)}: dealloc')
+
+  @objc_method
+  def overrideCell(self) -> None:
+    send_super(__class__, self, 'overrideCell')
     # todo: 遅延import
     from textFieldViewController import CustomTextField as _CustomTextField
     '''
@@ -118,15 +137,22 @@ class CustomTextField(CustomTableViewCell):
       textField.centerYAnchor.constraintEqualToAnchor_(
         self.contentView.centerYAnchor),
     ])
+"""
 
 
 @add_prototype('textField')
 class TextField(CustomTableViewCell):
 
   @objc_method
-  def overrideCell(self):
+  def dealloc(self):
+    # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
+    print(f'\t\t- {NSStringFromClass(__class__)}: dealloc')
+
+  @objc_method
+  def overrideCell(self) -> None:
+    send_super(__class__, self, 'overrideCell')
     textField = UITextField.alloc().initWithFrame_(
-      CGRectMake(77.5, 5.0, 220.0, 34.0))#.autorelease()
+      CGRectMake(77.5, 5.0, 220.0, 34.0))  #.autorelease()
 
     textField.minimumFontSize = 17.0
     textField.font = UIFont.systemFontOfSize_(14.0)
@@ -150,9 +176,15 @@ class TextField(CustomTableViewCell):
 class SecureTextField(CustomTableViewCell):
 
   @objc_method
-  def overrideCell(self):
+  def dealloc(self):
+    # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
+    print(f'\t\t- {NSStringFromClass(__class__)}: dealloc')
+
+  @objc_method
+  def overrideCell(self) -> None:
+    send_super(__class__, self, 'overrideCell')
     textField = UITextField.alloc().initWithFrame_(
-      CGRectMake(77.5, 5.0, 220.0, 34.0))#.autorelease()
+      CGRectMake(77.5, 5.0, 220.0, 34.0))  #.autorelease()
 
     textField.minimumFontSize = 17.0
     textField.font = UIFont.systemFontOfSize_(14.0)
@@ -176,9 +208,15 @@ class SecureTextField(CustomTableViewCell):
 class SpecificKeyboardTextField(CustomTableViewCell):
 
   @objc_method
-  def overrideCell(self):
+  def dealloc(self):
+    # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
+    print(f'\t\t- {NSStringFromClass(__class__)}: dealloc')
+
+  @objc_method
+  def overrideCell(self) -> None:
+    send_super(__class__, self, 'overrideCell')
     textField = UITextField.alloc().initWithFrame_(
-      CGRectMake(77.5, 5.0, 220.0, 34.0))#.autorelease()
+      CGRectMake(77.5, 5.0, 220.0, 34.0))  #.autorelease()
 
     textField.minimumFontSize = 17.0
     textField.font = UIFont.systemFontOfSize_(14.0)
