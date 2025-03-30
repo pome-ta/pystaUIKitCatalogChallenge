@@ -1,9 +1,13 @@
-from pyrubicon.objc.api import ObjCClass, objc_method
+from pyrubicon.objc.api import ObjCClass
+from pyrubicon.objc.api import objc_method
+from pyrubicon.objc.runtime import send_super
 from pyrubicon.objc.types import CGRectMake
+
 from rbedge.enumerations import UITextBorderStyle
+from rbedge.functions import NSStringFromClass
+from rbedge import pdbr
 
 from ._prototype import CustomTableViewCell
-from rbedge import pdbr
 
 UISearchTextField = ObjCClass('UISearchTextField')
 UITextField = ObjCClass('UITextField')
