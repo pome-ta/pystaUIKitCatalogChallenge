@@ -2,7 +2,10 @@ from pyrubicon.objc.api import ObjCClass
 from pyrubicon.objc.api import objc_method
 from pyrubicon.objc.runtime import send_super
 
-from rbedge.enumerations import UIButtonType, UIControlState
+from rbedge.enumerations import (
+  UIButtonType,
+  UIControlState,
+)
 from rbedge.functions import NSStringFromClass
 from rbedge import pdbr
 
