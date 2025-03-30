@@ -1,5 +1,4 @@
 import sys
-import sys
 import pathlib
 
 parent_level = 3
