@@ -3,7 +3,6 @@ from pyrubicon.objc.api import objc_method
 from pyrubicon.objc.runtime import send_super
 
 from rbedge.enumerations import UITextBorderStyle
-
 from rbedge.functions import NSStringFromClass
 from rbedge import pdbr
 
