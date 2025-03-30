@@ -9,7 +9,7 @@ try:
   from pyrubicon.objc.api import ObjCClass, ObjCInstance
   from pyrubicon.objc.api import objc_method, objc_id
   from pyrubicon.objc.runtime import send_super
-  from pyrubicon.objc.types import NSInteger, CGRectMake
+  from pyrubicon.objc.types import NSInteger
 
   from rbedge.functions import NSStringFromClass
   from rbedge import pdbr
