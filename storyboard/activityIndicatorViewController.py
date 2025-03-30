@@ -1,11 +1,9 @@
 from pyrubicon.objc.api import ObjCClass
 from pyrubicon.objc.api import objc_method
-from pyrubicon.objc.runtime import objc_id, send_super
+from pyrubicon.objc.runtime import send_super
 from pyrubicon.objc.types import CGRectMake
 
-from rbedge.enumerations import (
-  UIActivityIndicatorViewStyle, )
-
+from rbedge.enumerations import UIActivityIndicatorViewStyle
 from rbedge.functions import NSStringFromClass
 from rbedge import pdbr
 
