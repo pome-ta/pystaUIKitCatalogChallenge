@@ -30,7 +30,7 @@ UITableViewController = ObjCClass('UITableViewController')
 UITableViewCell = ObjCClass('UITableViewCell')
 
 
-class TableViewControllerTest(UITableViewController):
+class ButtonViewControllerTest(UITableViewController):
 
   @objc_method
   def dealloc(self):
@@ -145,8 +145,8 @@ if __name__ == '__main__':
   )
 
   table_style = UITableViewStyle.grouped
-  main_vc = TableViewControllerTest.alloc().initWithStyle_(table_style)
-  _title = NSStringFromClass(TableViewControllerTest)
+  main_vc = ButtonViewControllerTest.alloc().initWithStyle_(table_style)
+  _title = NSStringFromClass(ButtonViewControllerTest)
   main_vc.navigationItem.title = _title
 
   # presentation_style = UIModalPresentationStyle.fullScreen
