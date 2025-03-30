@@ -4,13 +4,19 @@ note: wip 項目
   - `CustomTextField` class の`init` って機能してる？
   - 標準キーボードのみ機能するものあり
 """
-from enum import Enum
 import ctypes
+from enum import Enum
 
 from pyrubicon.objc.api import ObjCClass, ObjCInstance
 from pyrubicon.objc.api import objc_method
 from pyrubicon.objc.runtime import send_super, objc_id, SEL
-from pyrubicon.objc.types import NSInteger, CGRect, CGFloat, CGRectMake, UIEdgeInsetsMake
+from pyrubicon.objc.types import (
+  NSInteger,
+  CGRect,
+  CGFloat,
+  CGRectMake,
+  UIEdgeInsetsMake,
+)
 
 from rbedge.enumerations import (
   UITextAutocorrectionType,
@@ -28,13 +34,14 @@ from rbedge.pythonProcessUtils import (
   dataWithContentsOfURL,
 )
 
-from rbedge import pdbr
-
 from caseElement import CaseElement
 from pyLocalizedString import localizedString
 
 from baseTableViewController import BaseTableViewController
 from storyboard.textFieldViewController import prototypes
+
+from rbedge.functions import NSStringFromClass
+from rbedge import pdbr
 
 UISearchTextField = ObjCClass('UISearchTextField')  # todo: 型確認用
 UIColor = ObjCClass('UIColor')
@@ -61,8 +68,7 @@ class TextFieldViewController(BaseTableViewController):
   @objc_method
   def dealloc(self):
     # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
-    #print('\tdealloc')
-    pass
+    print(f'\t- {NSStringFromClass(__class__)}: dealloc')
 
   @objc_method
   def initWithStyle_(self, style: NSInteger) -> ObjCInstance:
@@ -74,30 +80,42 @@ class TextFieldViewController(BaseTableViewController):
                argtypes=[
                  NSInteger,
                ])
-    self.setupPrototypes_(prototypes)
+    #print(f'\t{NSStringFromClass(__class__)}: initWithStyle_')
     return self
 
   @objc_method
+  def loadView(self):
+    send_super(__class__, self, 'loadView')
+    #print(f'\t{NSStringFromClass(__class__)}: loadView')
+    [
+      self.tableView.registerClass_forCellReuseIdentifier_(
+        prototype['cellClass'], prototype['identifier'])
+      for prototype in prototypes
+    ]
+
+  @objc_method
   def viewDidLoad(self):
-    send_super(__class__, self, 'viewDidLoad')  # xxx: 不要?
+    send_super(__class__, self, 'viewDidLoad')
+    #print(f'\t{NSStringFromClass(__class__)}: viewDidLoad')
 
     self.navigationItem.title = localizedString('TextFieldsTitle') if (
       title := self.navigationItem.title) is None else title
 
-    self.testCells_extend([
-      CaseElement(localizedString('DefaultTextFieldTitle'),
-                  TextFieldKind.textField.value, self.configureTextField_),
-      CaseElement(localizedString('TintedTextFieldTitle'),
-                  TextFieldKind.tintedTextField.value,
-                  self.configureTintedTextField_),
-      CaseElement(localizedString('SecuretTextFieldTitle'),
-                  TextFieldKind.secureTextField.value,
-                  self.configureSecureTextField_),
-      CaseElement(localizedString('SearchTextFieldTitle'),
-                  TextFieldKind.searchTextField.value,
-                  self.configureSearchTextField_),
+    self.testCellsAppendContentsOf_([
+      CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
+        localizedString('DefaultTextFieldTitle'),
+        TextFieldKind.textField.value, 'configureTextField:'),
+      CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
+        localizedString('TintedTextFieldTitle'),
+        TextFieldKind.tintedTextField.value, 'configureTintedTextField:'),
+      CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
+        localizedString('SecuretTextFieldTitle'),
+        TextFieldKind.secureTextField.value, 'configureSecureTextField:'),
+      CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
+        localizedString('SearchTextFieldTitle'),
+        TextFieldKind.searchTextField.value, 'configureSearchTextField:'),
     ])
-
+    '''
     if self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiom.mac:
       self.testCells_extend([
         # Show text field with specific kind of keyboard for iOS only.
@@ -111,6 +129,7 @@ class TextFieldViewController(BaseTableViewController):
                     TextFieldKind.customTextField.value,
                     self.configureCustomTextField_),
       ])
+    '''
 
   @objc_method
   def viewWillAppear_(self, animated: bool):
@@ -121,7 +140,7 @@ class TextFieldViewController(BaseTableViewController):
                argtypes=[
                  ctypes.c_bool,
                ])
-    #print('viewWillAppear')
+    #print(f'\t{NSStringFromClass(__class__)}: viewWillAppear_')
 
   @objc_method
   def viewDidAppear_(self, animated: bool):
@@ -132,7 +151,7 @@ class TextFieldViewController(BaseTableViewController):
                argtypes=[
                  ctypes.c_bool,
                ])
-    #print('viewDidAppear')
+    #print(f'\t{NSStringFromClass(__class__)}: viewDidAppear_')
 
   @objc_method
   def viewWillDisappear_(self, animated: bool):
@@ -143,7 +162,7 @@ class TextFieldViewController(BaseTableViewController):
                argtypes=[
                  ctypes.c_bool,
                ])
-    #print('viewWillDisappear')
+    # print(f'\t{NSStringFromClass(__class__)}: viewWillDisappear_')
 
   @objc_method
   def viewDidDisappear_(self, animated: bool):
@@ -154,12 +173,12 @@ class TextFieldViewController(BaseTableViewController):
                argtypes=[
                  ctypes.c_bool,
                ])
-    #print('viewDidDisappear')
+    print(f'\t{NSStringFromClass(__class__)}: viewDidDisappear_')
 
   @objc_method
   def didReceiveMemoryWarning(self):
     send_super(__class__, self, 'didReceiveMemoryWarning')
-    print(f'{__class__}: didReceiveMemoryWarning')
+    print(f'\t{NSStringFromClass(__class__)}: didReceiveMemoryWarning')
 
   # MARK: - Configuration
   @objc_method
@@ -358,18 +377,20 @@ class CustomTextField(ObjCClass('UITextField')):
 
 
 if __name__ == '__main__':
-  from rbedge.functions import NSStringFromClass
+  from rbedge.app import App
   from rbedge.enumerations import (
     UITableViewStyle,
     UIModalPresentationStyle,
   )
-  from rbedge import present_viewController
 
   table_style = UITableViewStyle.grouped
   main_vc = TextFieldViewController.alloc().initWithStyle_(table_style)
   _title = NSStringFromClass(TextFieldViewController)
   main_vc.navigationItem.title = _title
 
-  presentation_style = UIModalPresentationStyle.fullScreen
-  present_viewController(main_vc, presentation_style)
+  # presentation_style = UIModalPresentationStyle.fullScreen
+  presentation_style = UIModalPresentationStyle.pageSheet
+
+  app = App(main_vc, presentation_style)
+  app.present()
 
