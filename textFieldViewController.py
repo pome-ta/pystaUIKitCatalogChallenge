@@ -115,8 +115,9 @@ class TextFieldViewController(BaseTableViewController):
         localizedString('SearchTextFieldTitle'),
         TextFieldKind.searchTextField.value, 'configureSearchTextField:'),
     ])
-    '''
+
     if self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiom.mac:
+      '''
       self.testCells_extend([
         # Show text field with specific kind of keyboard for iOS only.
         # iOS の場合のみ、特定の種類のキーボードを使用してテキスト フィールドを表示します。
@@ -129,7 +130,14 @@ class TextFieldViewController(BaseTableViewController):
                     TextFieldKind.customTextField.value,
                     self.configureCustomTextField_),
       ])
-    '''
+      '''
+      self.testCellsAppendContentsOf_([
+        CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
+          localizedString('SpecificKeyboardTextFieldTitle'),
+          TextFieldKind.specificKeyboardTextField.value,
+          'configureSpecificKeyboardTextField:'),
+        #CaseElement.alloc().initWithTitle_cellID_configHandlerName_(localizedString('CustomTextFieldTitle'), TextFieldKind.customTextField.value, 'configureCustomTextField:'),
+      ])
 
   @objc_method
   def viewWillAppear_(self, animated: bool):
