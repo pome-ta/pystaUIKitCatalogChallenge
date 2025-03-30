@@ -18,7 +18,7 @@ except Exception as e:
   # xxx: `(ModuleNotFoundError, LookupError)`
   print(f'{e}: error')
 
-# --- test modules
+# --- test module
 from storyboard.activityIndicatorViewController import prototypes
 
 test_prototypes = prototypes if isinstance(prototypes, list) else [prototypes]
