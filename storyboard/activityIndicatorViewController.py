@@ -1,7 +1,7 @@
 from pyrubicon.objc.api import ObjCClass
 from pyrubicon.objc.api import objc_method
 from pyrubicon.objc.runtime import objc_id, send_super
-from pyrubicon.objc.types import CGRectMake, NSInteger
+from pyrubicon.objc.types import CGRectMake
 
 from rbedge.enumerations import (
   UIActivityIndicatorViewStyle, )
