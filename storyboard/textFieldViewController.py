@@ -104,13 +104,10 @@ class CustomTextField(CustomTableViewCell):
     send_super(__class__, self, 'overrideCell')
     # todo: 遅延import
     from textFieldViewController import CustomTextField
-    
+
     textField = CustomTextField.alloc().initWithFrame_(
       CGRectMake(77.5, 7.0, 220.0, 30.0))
-    
-    # xxx: `.alloc().initWithFrame_` だと、`init` が呼べない
-    #      `objc_property` の定義位置を考慮すると
-    #      `new` or `alloc().init()` とするしかない状況
+
     #textField = CustomTextField.new()
     #textField.frame = CGRectMake(77.5, 7.0, 220.0, 30.0)
 
@@ -129,7 +126,6 @@ class CustomTextField(CustomTableViewCell):
       textField.centerYAnchor.constraintEqualToAnchor_(
         self.contentView.centerYAnchor),
     ])
-
 
 
 @add_prototype('textField')
@@ -174,7 +170,7 @@ class SecureTextField(CustomTableViewCell):
   def overrideCell(self) -> None:
     send_super(__class__, self, 'overrideCell')
     textField = UITextField.alloc().initWithFrame_(
-      CGRectMake(77.5, 5.0, 220.0, 34.0))  #.autorelease()
+      CGRectMake(77.5, 5.0, 220.0, 34.0))
 
     textField.minimumFontSize = 17.0
     textField.font = UIFont.systemFontOfSize_(14.0)
@@ -204,7 +200,7 @@ class SpecificKeyboardTextField(CustomTableViewCell):
   def overrideCell(self) -> None:
     send_super(__class__, self, 'overrideCell')
     textField = UITextField.alloc().initWithFrame_(
-      CGRectMake(77.5, 5.0, 220.0, 34.0))  #.autorelease()
+      CGRectMake(77.5, 5.0, 220.0, 34.0))
 
     textField.minimumFontSize = 17.0
     textField.font = UIFont.systemFontOfSize_(14.0)

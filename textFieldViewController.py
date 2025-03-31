@@ -1,8 +1,7 @@
 """
 note: wip 項目
-  - `ObjCProtocol` 不要？
-  - `CustomTextField` class の`init` って機能してる？
   - 標準キーボードのみ機能するものあり
+  - `textField_shouldChangeCharactersInRange_replacementString_` 落ちる
 """
 import ctypes
 from enum import Enum
@@ -13,7 +12,6 @@ from pyrubicon.objc.runtime import send_super, objc_id, SEL
 from pyrubicon.objc.types import (
   NSInteger,
   CGRect,
-  #CGFloat,
   CGRectMake,
   UIEdgeInsetsMake,
 )
@@ -105,15 +103,26 @@ class TextFieldViewController(BaseTableViewController):
       CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
         localizedString('DefaultTextFieldTitle'),
         TextFieldKind.textField.value, 'configureTextField:'),
-      #CaseElement.alloc().initWithTitle_cellID_configHandlerName_(localizedString('TintedTextFieldTitle'),TextFieldKind.tintedTextField.value, 'configureTintedTextField:'),
-      #CaseElement.alloc().initWithTitle_cellID_configHandlerName_(localizedString('SecuretTextFieldTitle'),TextFieldKind.secureTextField.value, 'configureSecureTextField:'),
-      #CaseElement.alloc().initWithTitle_cellID_configHandlerName_(localizedString('SearchTextFieldTitle'),TextFieldKind.searchTextField.value, 'configureSearchTextField:'),
+      CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
+        localizedString('TintedTextFieldTitle'),
+        TextFieldKind.tintedTextField.value, 'configureTintedTextField:'),
+      CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
+        localizedString('SecuretTextFieldTitle'),
+        TextFieldKind.secureTextField.value, 'configureSecureTextField:'),
+      CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
+        localizedString('SearchTextFieldTitle'),
+        TextFieldKind.searchTextField.value, 'configureSearchTextField:'),
     ])
 
     if self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiom.mac:
       self.testCellsAppendContentsOf_([
-        #CaseElement.alloc().initWithTitle_cellID_configHandlerName_(localizedString('SpecificKeyboardTextFieldTitle'),TextFieldKind.specificKeyboardTextField.value,'configureSpecificKeyboardTextField:'),
-        CaseElement.alloc().initWithTitle_cellID_configHandlerName_(localizedString('CustomTextFieldTitle'), TextFieldKind.customTextField.value, 'configureCustomTextField:'),
+        CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
+          localizedString('SpecificKeyboardTextFieldTitle'),
+          TextFieldKind.specificKeyboardTextField.value,
+          'configureSpecificKeyboardTextField:'),
+        CaseElement.alloc().initWithTitle_cellID_configHandlerName_(
+          localizedString('CustomTextFieldTitle'),
+          TextFieldKind.customTextField.value, 'configureCustomTextField:'),
       ])
 
   @objc_method
@@ -346,11 +355,10 @@ class CustomTextField(ObjCClass('UITextField')):
     send_super(__class__, self, 'initWithFrame:', frame, argtypes=[
       CGRect,
     ])
-    print(f'\t\t{NSStringFromClass(__class__)}: initWithFrame:')
+    #print(f'\t\t{NSStringFromClass(__class__)}: initWithFrame:')
     self.leftMarginPadding = 12.0
     self.rightMarginPadding = 36.0
     return self
-  
 
   @objc_method
   def textRectForBounds_(self, bounds: CGRect) -> CGRect:
