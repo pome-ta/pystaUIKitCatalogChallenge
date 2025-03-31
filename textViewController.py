@@ -4,7 +4,7 @@
 import ctypes
 
 from pyrubicon.objc.api import ObjCClass, Block
-from pyrubicon.objc.api import NSString
+from pyrubicon.objc.api import NSString,NSMutableArray
 from pyrubicon.objc.api import objc_method, objc_property
 from pyrubicon.objc.runtime import send_super, SEL
 from pyrubicon.objc.types import NSRange, CGRect, CGPointMake
@@ -61,6 +61,10 @@ UIImageSymbolConfiguration = ObjCClass('UIImageSymbolConfiguration')
 
 
 class TextViewController(UIViewController):
+
+  textView: UITextView = objc_property()
+  textViewBottomLayoutGuideConstraint: NSLayoutConstraint = objc_property()
+  rightBarButtonItems:NSMutableArray=objc_property()
 
   @objc_method
   def dealloc(self):
