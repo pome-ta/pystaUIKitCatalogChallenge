@@ -13,10 +13,11 @@ from rbedge.enumerations import (
   UIViewContentMode,
 )
 from rbedge.pythonProcessUtils import dataWithContentsOfURL
-from rbedge.functions import NSStringFromClass
-from rbedge import pdbr
 
 from pyLocalizedString import localizedString
+
+from rbedge.functions import NSStringFromClass
+from rbedge import pdbr
 
 UIViewController = ObjCClass('UIViewController')
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
