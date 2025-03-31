@@ -111,23 +111,9 @@ class TextFieldViewController(BaseTableViewController):
     ])
 
     if self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiom.mac:
-      '''
-      self.testCells_extend([
-        # Show text field with specific kind of keyboard for iOS only.
-        # iOS の場合のみ、特定の種類のキーボードを使用してテキスト フィールドを表示します。
-        CaseElement(localizedString('SpecificKeyboardTextFieldTitle'),
-                    TextFieldKind.specificKeyboardTextField.value,
-                    self.configureSpecificKeyboardTextField_),
-        # Show text field with custom background for iOS only.
-        # iOS のみのカスタム背景を使用してテキスト フィールドを表示します。
-        CaseElement(localizedString('CustomTextFieldTitle'),
-                    TextFieldKind.customTextField.value,
-                    self.configureCustomTextField_),
-      ])
-      '''
       self.testCellsAppendContentsOf_([
         #CaseElement.alloc().initWithTitle_cellID_configHandlerName_(localizedString('SpecificKeyboardTextFieldTitle'),TextFieldKind.specificKeyboardTextField.value,'configureSpecificKeyboardTextField:'),
-        #CaseElement.alloc().initWithTitle_cellID_configHandlerName_(localizedString('CustomTextFieldTitle'), TextFieldKind.customTextField.value, 'configureCustomTextField:'),
+        CaseElement.alloc().initWithTitle_cellID_configHandlerName_(localizedString('CustomTextFieldTitle'), TextFieldKind.customTextField.value, 'configureCustomTextField:'),
       ])
 
   @objc_method
@@ -344,10 +330,11 @@ class CustomTextField(ObjCClass('UITextField')):
     # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
     print(f'\t\t- {NSStringFromClass(__class__)}: dealloc')
 
+  '''
   @objc_method
   def init(self) -> ObjCInstance:
-    send_super(__class__, self, 'init')  # xxx: この返り値を返さないと意味なし?
-    print(f'\t\t{NSStringFromClass(__class__)}: init_')
+    send_super(__class__, self, 'init')
+    print(f'\t\t{NSStringFromClass(__class__)}: init')
     self.leftMarginPadding = 12.0
     self.rightMarginPadding = 36.0
     return self
@@ -359,10 +346,11 @@ class CustomTextField(ObjCClass('UITextField')):
     send_super(__class__, self, 'initWithFrame:', frame, argtypes=[
       CGRect,
     ])
+    print(f'\t\t{NSStringFromClass(__class__)}: initWithFrame:')
     self.leftMarginPadding = 12.0
     self.rightMarginPadding = 36.0
     return self
-  '''
+  
 
   @objc_method
   def textRectForBounds_(self, bounds: CGRect) -> CGRect:
@@ -374,10 +362,8 @@ class CustomTextField(ObjCClass('UITextField')):
                  CGRect,
                ])
     rect = bounds
-    #print(f'{self.leftMarginPadding=}')
     rect.origin.x += self.leftMarginPadding
     rect.size.width -= self.rightMarginPadding
-
     return rect
 
   @objc_method
@@ -392,7 +378,6 @@ class CustomTextField(ObjCClass('UITextField')):
     rect = bounds
     rect.origin.x += self.leftMarginPadding
     rect.size.width -= self.rightMarginPadding
-
     return rect
 
 

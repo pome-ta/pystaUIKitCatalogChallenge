@@ -40,16 +40,13 @@ class SearchTextField(CustomTableViewCell):
   @objc_method
   def overrideCell(self) -> None:
     send_super(__class__, self, 'overrideCell')
-    #textField = UITextField.alloc().initWithFrame_(CGRectMake(16.0, 5.0, 343.0, 34.0)).autorelease()
     textField = UISearchTextField.alloc().initWithFrame_(
-      CGRectMake(16.0, 5.0, 343.0, 34.0))  #.autorelease()
+      CGRectMake(16.0, 5.0, 343.0, 34.0))
 
     textField.minimumFontSize = 17.0
     textField.borderStyle = UITextBorderStyle.roundedRect
 
     textField.font = UIFont.systemFontOfSize_(14.0)
-
-    #textField.backgroundColor = ObjCClass('UIColor').systemRedColor()
 
     textField.translatesAutoresizingMaskIntoConstraints = False
     self.contentView.addSubview_(textField)
@@ -76,13 +73,11 @@ class TintedTextField(CustomTableViewCell):
   def overrideCell(self) -> None:
     send_super(__class__, self, 'overrideCell')
     textField = UITextField.alloc().initWithFrame_(
-      CGRectMake(77.5, 5.0, 220.0, 34.0))  #.autorelease()
+      CGRectMake(77.5, 5.0, 220.0, 34.0))
 
     textField.minimumFontSize = 17.0
     textField.font = UIFont.systemFontOfSize_(14.0)
     textField.borderStyle = UITextBorderStyle.roundedRect
-
-    #textField.backgroundColor = ObjCClass('UIColor').systemRedColor()
 
     textField.translatesAutoresizingMaskIntoConstraints = False
     self.contentView.addSubview_(textField)
@@ -108,22 +103,20 @@ class CustomTextField(CustomTableViewCell):
   def overrideCell(self) -> None:
     send_super(__class__, self, 'overrideCell')
     # todo: 遅延import
-    from textFieldViewController import CustomTextField as _CustomTextField
-    '''
-    textField = _CustomTextField.alloc().initWithFrame_(
-      CGRectMake(77.5, 7.0, 220.0, 30.0)).autorelease()
-    '''
+    from textFieldViewController import CustomTextField
+    
+    textField = CustomTextField.alloc().initWithFrame_(
+      CGRectMake(77.5, 7.0, 220.0, 30.0))
+    
     # xxx: `.alloc().initWithFrame_` だと、`init` が呼べない
     #      `objc_property` の定義位置を考慮すると
     #      `new` or `alloc().init()` とするしかない状況
-    textField = _CustomTextField.new()
-    textField.frame = CGRectMake(77.5, 7.0, 220.0, 30.0)
+    #textField = CustomTextField.new()
+    #textField.frame = CGRectMake(77.5, 7.0, 220.0, 30.0)
 
     textField.minimumFontSize = 17.0
     textField.font = UIFont.systemFontOfSize_(14.0)
     textField.borderStyle = UITextBorderStyle.roundedRect
-
-    #textField.backgroundColor = ObjCClass('UIColor').systemBlueColor()
 
     textField.translatesAutoresizingMaskIntoConstraints = False
     self.contentView.addSubview_(textField)
@@ -157,8 +150,6 @@ class TextField(CustomTableViewCell):
     textField.font = UIFont.systemFontOfSize_(14.0)
     textField.borderStyle = UITextBorderStyle.roundedRect
 
-    #textField.backgroundColor = ObjCClass('UIColor').systemRedColor()
-
     textField.translatesAutoresizingMaskIntoConstraints = False
     self.contentView.addSubview_(textField)
 
@@ -189,8 +180,6 @@ class SecureTextField(CustomTableViewCell):
     textField.font = UIFont.systemFontOfSize_(14.0)
     textField.borderStyle = UITextBorderStyle.roundedRect
 
-    #textField.backgroundColor = ObjCClass('UIColor').systemRedColor()
-
     textField.translatesAutoresizingMaskIntoConstraints = False
     self.contentView.addSubview_(textField)
 
@@ -220,8 +209,6 @@ class SpecificKeyboardTextField(CustomTableViewCell):
     textField.minimumFontSize = 17.0
     textField.font = UIFont.systemFontOfSize_(14.0)
     textField.borderStyle = UITextBorderStyle.roundedRect
-
-    #textField.backgroundColor = ObjCClass('UIColor').systemRedColor()
 
     textField.translatesAutoresizingMaskIntoConstraints = False
     self.contentView.addSubview_(textField)
