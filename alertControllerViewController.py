@@ -13,14 +13,12 @@ from rbedge.enumerations import (
   UIAlertControllerStyle,
   UIAlertActionStyle,
 )
-
 from rbedge.globalVariables import UITextFieldTextDidChangeNotification
 
-from rbedge.functions import NSStringFromClass
-
-from rbedge import pdbr
-
 from pyLocalizedString import localizedString
+
+from rbedge.functions import NSStringFromClass
+from rbedge import pdbr
 
 UIViewController = ObjCClass('UIViewController')
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
@@ -107,13 +105,21 @@ class AlertControllerViewController(UIViewController):
     print(f'- {NSStringFromClass(__class__)}: dealloc')
 
   @objc_method
+  def loadView(self):
+    send_super(__class__, self, 'loadView')
+    #print(f'\t{NSStringFromClass(__class__)}: loadView')
+    self.cell_identifier = 'customCell'
+
+  @objc_method
   def viewDidLoad(self):
     send_super(__class__, self, 'viewDidLoad')
+    #print(f'\t{NSStringFromClass(__class__)}: viewDidLoad')
 
     # --- Navigation
-    self.navigationItem.title = localizedString('AlertControllersTitle')
+    self.navigationItem.title = localizedString('AlertControllersTitle') if (
+      title := self.navigationItem.title) is None else title
+
     # --- Table set
-    self.cell_identifier = 'customCell'
     tableView = UITableView.alloc().initWithFrame_style_(
       self.view.bounds, UITableViewStyle.grouped)
     tableView.registerClass_forCellReuseIdentifier_(UITableViewCell,
@@ -146,7 +152,7 @@ class AlertControllerViewController(UIViewController):
                argtypes=[
                  ctypes.c_bool,
                ])
-    # print('viewWillAppear')
+    #print(f'\t{NSStringFromClass(__class__)}: viewWillAppear_')
 
   @objc_method
   def viewDidAppear_(self, animated: bool):
@@ -157,7 +163,7 @@ class AlertControllerViewController(UIViewController):
                argtypes=[
                  ctypes.c_bool,
                ])
-    # print('viewDidAppear')
+    #print(f'\t{NSStringFromClass(__class__)}: viewDidAppear_')
 
   @objc_method
   def viewWillDisappear_(self, animated: bool):
@@ -168,7 +174,7 @@ class AlertControllerViewController(UIViewController):
                argtypes=[
                  ctypes.c_bool,
                ])
-    # print('viewWillDisappear')
+    # print(f'\t{NSStringFromClass(__class__)}: viewWillDisappear_')
 
   @objc_method
   def viewDidDisappear_(self, animated: bool):
@@ -179,7 +185,7 @@ class AlertControllerViewController(UIViewController):
                argtypes=[
                  ctypes.c_bool,
                ])
-    # print('viewDidDisappear')
+    print(f'\t{NSStringFromClass(__class__)}: viewDidDisappear_')
 
   @objc_method
   def didReceiveMemoryWarning(self):
