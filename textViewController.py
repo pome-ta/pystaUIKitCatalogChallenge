@@ -4,7 +4,7 @@
 import ctypes
 
 from pyrubicon.objc.api import ObjCClass, Block
-from pyrubicon.objc.api import NSString, NSMutableArray
+from pyrubicon.objc.api import NSString
 from pyrubicon.objc.api import objc_method, objc_property
 from pyrubicon.objc.runtime import send_super, SEL
 from pyrubicon.objc.types import NSRange, CGRect, CGPointMake
@@ -64,7 +64,7 @@ class TextViewController(UIViewController):
 
   textView: UITextView = objc_property()
   textViewBottomLayoutGuideConstraint: NSLayoutConstraint = objc_property()
-  rightBarButtonItems: NSMutableArray = objc_property()
+  rightBarButtonItems: list = objc_property()
 
   @objc_method
   def dealloc(self):
@@ -89,7 +89,7 @@ class TextViewController(UIViewController):
 
     textView = UITextView.alloc().initWithFrame_(self.view.bounds)
     textView.delegate = self
-    
+
     textView.text = 'This is a UITextView that uses attributed text. You can programmatically modify the display of the text by making it bold, highlighted, underlined, tinted, symbols, and more. These attributes are defined in NSAttributedString.h. You can even embed attachments in an NSAttributedString!\n'
     textView.font = UIFont.fontWithName_size_('HelveticaNeue', 14.0)
     textView.textContainer.lineBreakMode = NSLineBreakMode.byWordWrapping
@@ -128,8 +128,8 @@ class TextViewController(UIViewController):
 
     self.textView = textView
     self.textViewBottomLayoutGuideConstraint = textViewBottomLayoutGuideConstraint
-    
-    #self.configureTextView()
+
+    self.configureTextView()
 
   @objc_method
   def viewWillAppear_(self, animated: bool):
@@ -336,7 +336,7 @@ class TextViewController(UIViewController):
       'text_view_background', self.traitCollection.userInterfaceStyle)
     self.textView.backgroundColor = UIColor.colorWithRed_green_blue_alpha_(
       *_color_named)
-    self.textView.isScrollEnabled = True
+    self.textView.setScrollEnabled_(True)
 
     # Apply different attributes to the text (bold, tinted, underline, etc.).
     # テキストにさまざまな属性 (太字、色付き、下線など) を適用します。
