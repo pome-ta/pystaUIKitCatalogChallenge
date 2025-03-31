@@ -49,6 +49,7 @@ class ImageViewController(UIViewController):
   @objc_method
   def viewDidLoad(self):
     send_super(__class__, self, 'viewDidLoad')
+    #print(f'\t{NSStringFromClass(__class__)}: viewDidLoad')
     self.navigationItem.title = localizedString('ImageViewTitle') if (
       title := self.navigationItem.title) is None else title
 
