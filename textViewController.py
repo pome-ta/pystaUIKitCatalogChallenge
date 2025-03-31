@@ -4,7 +4,7 @@
 import ctypes
 
 from pyrubicon.objc.api import ObjCClass, Block
-from pyrubicon.objc.api import NSString,NSMutableArray
+from pyrubicon.objc.api import NSString, NSMutableArray
 from pyrubicon.objc.api import objc_method, objc_property
 from pyrubicon.objc.runtime import send_super, SEL
 from pyrubicon.objc.types import NSRange, CGRect, CGPointMake
@@ -64,7 +64,7 @@ class TextViewController(UIViewController):
 
   textView: UITextView = objc_property()
   textViewBottomLayoutGuideConstraint: NSLayoutConstraint = objc_property()
-  rightBarButtonItems:NSMutableArray=objc_property()
+  rightBarButtonItems: NSMutableArray = objc_property()
 
   @objc_method
   def dealloc(self):
@@ -76,6 +76,7 @@ class TextViewController(UIViewController):
   def loadView(self):
     send_super(__class__, self, 'loadView')
     #print(f'\t{NSStringFromClass(__class__)}: loadView')
+    self.rightBarButtonItems = None
 
   # MARK: - View Life Cycle
   @objc_method
@@ -87,6 +88,8 @@ class TextViewController(UIViewController):
     self.view.backgroundColor = UIColor.systemBackgroundColor()
 
     textView = UITextView.alloc().initWithFrame_(self.view.bounds)
+    textView.delegate = self
+    
     textView.text = 'This is a UITextView that uses attributed text. You can programmatically modify the display of the text by making it bold, highlighted, underlined, tinted, symbols, and more. These attributes are defined in NSAttributedString.h. You can even embed attachments in an NSAttributedString!\n'
     textView.font = UIFont.fontWithName_size_('HelveticaNeue', 14.0)
     textView.textContainer.lineBreakMode = NSLineBreakMode.byWordWrapping
@@ -123,10 +126,10 @@ class TextViewController(UIViewController):
         safeAreaLayoutGuide, NSLayoutAttribute.leading, 1.0, 16.0),
     ])
 
-    self.textViewBottomLayoutGuideConstraint = textViewBottomLayoutGuideConstraint
     self.textView = textView
-    self.textView.delegate = self
-    self.configureTextView()
+    self.textViewBottomLayoutGuideConstraint = textViewBottomLayoutGuideConstraint
+    
+    #self.configureTextView()
 
   @objc_method
   def viewWillAppear_(self, animated: bool):
@@ -138,6 +141,7 @@ class TextViewController(UIViewController):
                  ctypes.c_bool,
                ])
     #print(f'\t{NSStringFromClass(__class__)}: viewWillAppear_')
+
     # Listen for changes to keyboard visibility so that we can adjust the text view's height accordingly.
     notificationCenter = NSNotificationCenter.defaultCenter
 
@@ -371,7 +375,8 @@ class TextViewController(UIViewController):
 
     if (image := UIImage.alloc().initWithData_scale_(
         dataWithContentsOfURL(text_view_attachment), 1)):
-      textAttachment = NSTextAttachment.alloc().init()
+      #textAttachment = NSTextAttachment.alloc().init()
+      textAttachment = NSTextAttachment.new()
       textAttachment.image = image
       textAttachment.bounds = CGRect(CGPointMake(0.0, 0.0), image.size)
       textAttachmentString = NSAttributedString.attributedStringWithAttachment_(
@@ -389,6 +394,7 @@ class TextViewController(UIViewController):
   def doneBarButtonItemClicked(self):
     # Dismiss the keyboard by removing it as the first responder.
     self.textView.resignFirstResponder()
+
     # todo: (独自実装) 全体実行と単体実行での場合分け
     if self.rightBarButtonItems is None:
       self.navigationItem.setRightBarButtonItem_animated_(None, True)
