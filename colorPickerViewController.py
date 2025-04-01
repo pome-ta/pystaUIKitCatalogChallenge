@@ -17,10 +17,11 @@ from rbedge.enumerations import (
   UIModalPresentationStyle,
   UIBarButtonItemStyle,
 )
-from rbedge.functions import NSStringFromClass
 
-from rbedge import pdbr
 from pyLocalizedString import localizedString
+
+from rbedge.functions import NSStringFromClass
+from rbedge import pdbr
 
 UIViewController = ObjCClass('UIViewController')
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
