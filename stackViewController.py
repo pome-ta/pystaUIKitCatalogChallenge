@@ -71,6 +71,9 @@ class StackViewController(UIViewController):
   @objc_method
   def viewDidLoad(self):
     send_super(__class__, self, 'viewDidLoad')
+    #print(f'\t{NSStringFromClass(__class__)}: viewDidLoad')
+    
+    # --- Navigation
     self.navigationItem.title = localizedString('StackViewsTitle') if (
       title := self.navigationItem.title) is None else title
 
