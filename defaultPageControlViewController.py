@@ -51,7 +51,9 @@ class PageControlViewController(UIViewController):
 
   @objc_method
   def viewDidLoad(self):
-    send_super(__class__, self, 'viewDidLoad')  # xxx: 不要?
+    send_super(__class__, self, 'viewDidLoad')
+    #print(f'\t{NSStringFromClass(__class__)}: viewDidLoad')
+    
     # --- Navigation
     self.navigationItem.title = localizedString('DefaultPageControlTitle') if (
       title := self.navigationItem.title) is None else title
