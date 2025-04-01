@@ -79,15 +79,16 @@ class CustomPageControlViewController(UIViewController):
   @objc_method
   def viewDidLoad(self):
     send_super(__class__, self, 'viewDidLoad')
+    #print(f'\t{NSStringFromClass(__class__)}: viewDidLoad')
 
     # --- Navigation
     self.navigationItem.title = localizedString('CustomPageControlTitle') if (
       title := self.navigationItem.title) is None else title
     self.view.backgroundColor = UIColor.systemBackgroundColor()
 
-    # xxx: あとで切り出す
+    # wip: あとで切り出す
     self.pageControl = UIPageControl.new()
-    self.colorView: UIView = UIView.new()
+    self.colorView = UIView.new()
 
     self.setlayout()
     self.configurePageControl()
