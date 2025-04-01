@@ -20,10 +20,11 @@ from rbedge.pythonProcessUtils import (
   mainScreen_scale,
   dataWithContentsOfURL,
 )
-from rbedge.functions import NSStringFromClass
-from rbedge import pdbr
 
 from pyLocalizedString import localizedString
+
+from rbedge.functions import NSStringFromClass
+from rbedge import pdbr
 
 UIViewController = ObjCClass('UIViewController')
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
@@ -43,6 +44,10 @@ class CustomToolbarViewController(UIViewController):
     # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
     print(f'\t- {NSStringFromClass(__class__)}: dealloc')
     #self.navigationController.setToolbarHidden_animated_(True, True)
+  @objc_method
+  def loadView(self):
+    send_super(__class__, self, 'loadView')
+    #print(f'\t{NSStringFromClass(__class__)}: loadView')
 
   # MARK: - View Life Cycle
   @objc_method
