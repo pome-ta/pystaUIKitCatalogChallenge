@@ -6,14 +6,14 @@ from pathlib import Path
 
 from pyrubicon.objc.api import ObjCClass
 from pyrubicon.objc.api import objc_method, objc_property
-from pyrubicon.objc.runtime import send_super, objc_id
+from pyrubicon.objc.runtime import send_super
 from pyrubicon.objc.types import CGRectMake
 
 from rbedge.enumerations import NSURLErrorNotConnectedToInternet
-from rbedge.functions import NSStringFromClass
 
 from pyLocalizedString import localizedString
 
+from rbedge.functions import NSStringFromClass
 from rbedge import pdbr
 
 UIViewController = ObjCClass('UIViewController')
@@ -39,8 +39,7 @@ class WebViewController(UIViewController):
   @objc_method
   def dealloc(self):
     # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
-    #print(f'\t - {NSStringFromClass(__class__)}: dealloc')
-    pass
+    print(f'\t- {NSStringFromClass(__class__)}: dealloc')
 
   @objc_method
   def loadView(self):
@@ -51,18 +50,19 @@ class WebViewController(UIViewController):
   @objc_method
   def viewDidLoad(self):
     send_super(__class__, self, 'viewDidLoad')
+    #print(f'\t{NSStringFromClass(__class__)}: viewDidLoad')
+
+    # --- Navigation
     self.navigationItem.title = localizedString('WebViewTitle') if (
       title := self.navigationItem.title) is None else title
     self.view.backgroundColor = UIColor.systemBackgroundColor()
-
-    _zero = CGRectMake(0.0, 0.0, 0.0, 0.0)
 
     _configuration = WKWebViewConfiguration.new()
     _configuration.setMediaPlaybackRequiresUserAction_(True)
 
     # todo: method の名前衝突を避けるため
     wkWebView = WKWebView.alloc().initWithFrame_configuration_(
-      _zero, _configuration)
+      CGRectMake(0.0, 0.0, 0.0, 0.0), _configuration)
     # So we can capture failures in "didFailProvisionalNavigation".
     wkWebView.navigationDelegate = self
 
@@ -106,11 +106,9 @@ class WebViewController(UIViewController):
                  ctypes.c_bool,
                ])
     #print(f'\t{NSStringFromClass(__class__)}: viewDidAppear_')
-    #print('\t↓ ---')
 
   @objc_method
   def viewWillDisappear_(self, animated: bool):
-    #print('\t↑ ---')
     send_super(__class__,
                self,
                'viewWillDisappear:',
@@ -129,7 +127,7 @@ class WebViewController(UIViewController):
                argtypes=[
                  ctypes.c_bool,
                ])
-    #print(f'\t{NSStringFromClass(__class__)}: viewDidDisappear_')
+    print(f'\t{NSStringFromClass(__class__)}: viewDidDisappear_')
 
   @objc_method
   def didReceiveMemoryWarning(self):
@@ -167,8 +165,9 @@ if __name__ == '__main__':
   _title = NSStringFromClass(WebViewController)
   main_vc.navigationItem.title = _title
 
-  presentation_style = UIModalPresentationStyle.fullScreen
+  #presentation_style = UIModalPresentationStyle.fullScreen
+  presentation_style = UIModalPresentationStyle.pageSheet
 
-  app = App(main_vc)
-  app.main_loop(presentation_style)
+  app = App(main_vc, presentation_style)
+  app.present()
 
