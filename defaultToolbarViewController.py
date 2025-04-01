@@ -33,7 +33,7 @@ class DefaultToolbarViewController(UIViewController):
   def dealloc(self):
     # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
     print(f'\t- {NSStringFromClass(__class__)}: dealloc')
-    #self.navigationController.setToolbarHidden_animated_(True, True)
+    
   @objc_method
   def loadView(self):
     send_super(__class__, self, 'loadView')
@@ -113,6 +113,7 @@ class DefaultToolbarViewController(UIViewController):
                  ctypes.c_bool,
                ])
     #print(f'\t{NSStringFromClass(__class__)}: viewDidAppear_')
+    
 
   @objc_method
   def viewWillDisappear_(self, animated: bool):
@@ -124,7 +125,7 @@ class DefaultToolbarViewController(UIViewController):
                  ctypes.c_bool,
                ])
     # print(f'\t{NSStringFromClass(__class__)}: viewWillDisappear_')
-    #self.navigationController.setToolbarHidden_animated_(True, False)
+    
 
   @objc_method
   def viewDidDisappear_(self, animated: bool):
@@ -136,6 +137,8 @@ class DefaultToolbarViewController(UIViewController):
                  ctypes.c_bool,
                ])
     print(f'\t{NSStringFromClass(__class__)}: viewDidDisappear_')
+    pdbr.state(self.navigationController.toolbar)
+    
 
   @objc_method
   def didReceiveMemoryWarning(self):
