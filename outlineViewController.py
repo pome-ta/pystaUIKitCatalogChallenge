@@ -1,14 +1,15 @@
 import ctypes
 
 from pyrubicon.objc.api import ObjCClass, ObjCInstance
-from pyrubicon.objc.api import objc_method
-from pyrubicon.objc.runtime import send_super, objc_id
+from pyrubicon.objc.api import objc_method, objc_property
+from pyrubicon.objc.runtime import send_super
 
 from rbedge.enumerations import (
   UITableViewStyle,
   UICollectionLayoutListAppearance,
   UICollectionLayoutListHeaderMode,
   UICellAccessoryOutlineDisclosureStyle,
+  UIUserInterfaceIdiom,
   UIUserInterfaceSizeClass,
 )
 from rbedge.globalVariables import (
@@ -17,10 +18,12 @@ from rbedge.globalVariables import (
 )
 
 from pyLocalizedString import localizedString
-from rbedge import pdbr
 
 from rbedge.rootNavigationController import RootNavigationController  # todo: 型確認
 from baseTableViewController import BaseTableViewController  # todo: 型確認
+
+from rbedge.functions import NSStringFromClass
+from rbedge import pdbr
 
 # --- UIKitCatalog ViewControllers
 # --- --- controlsOutlineItem
@@ -165,6 +168,7 @@ controlsSubItems = [
 ]
 
 # todo: traitCollection.userInterfaceIdiom != .mac
+# xxx: `self` の実態で呼べない
 if True:
   stepperItem = OutlineItem(title='SteppersTitle',
                             imageName=None,
@@ -260,21 +264,32 @@ menuItems = [
 
 class OutlineViewController(UIViewController):
 
+  listCell_identifier: str = objc_property()
+  header_identifier: str = objc_property()
+
   @objc_method
   def dealloc(self):
     # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
-    # print('\tdealloc')
-    pass
+    print(f'\t- {NSStringFromClass(__class__)}: dealloc')
 
   @objc_method
-  def viewDidLoad(self):
-    # --- Navigation
-    send_super(__class__, self, 'viewDidLoad')
-
-    # --- collection set
+  def loadView(self):
+    send_super(__class__, self, 'loadView')
+    #print(f'\t{NSStringFromClass(__class__)}: loadView')
     self.listCell_identifier = 'customListCell'
     self.header_identifier = 'customHeader'
 
+  @objc_method
+  def viewDidLoad(self):
+    send_super(__class__, self, 'viewDidLoad')
+    #print(f'\t{NSStringFromClass(__class__)}: viewDidLoad')
+
+    # --- Navigation
+    self.navigationItem.title = NSStringFromClass(__class__) if (
+      title := self.navigationItem.title) is None else title
+
+    self.view.backgroundColor = UIColor.systemBackgroundColor()
+    # --- collection set
     collectionView = UICollectionView.alloc(
     ).initWithFrame_collectionViewLayout_(self.view.bounds,
                                           self.generateLayout())
@@ -291,18 +306,18 @@ class OutlineViewController(UIViewController):
     # --- Layout
     self.view.addSubview_(collectionView)
     collectionView.translatesAutoresizingMaskIntoConstraints = False
+    layoutMarginsGuide = self.view.layoutMarginsGuide
     safeAreaLayoutGuide = self.view.safeAreaLayoutGuide
     NSLayoutConstraint.activateConstraints_([
       collectionView.centerXAnchor.constraintEqualToAnchor_(
-        safeAreaLayoutGuide.centerXAnchor),
+        layoutMarginsGuide.centerXAnchor),
       collectionView.centerYAnchor.constraintEqualToAnchor_(
-        safeAreaLayoutGuide.centerYAnchor),
+        layoutMarginsGuide.centerYAnchor),
       collectionView.widthAnchor.constraintEqualToAnchor_multiplier_(
-        safeAreaLayoutGuide.widthAnchor, 1.0),
+        layoutMarginsGuide.widthAnchor, 1.0),
       collectionView.heightAnchor.constraintEqualToAnchor_multiplier_(
-        safeAreaLayoutGuide.heightAnchor, 1.0),
+        layoutMarginsGuide.heightAnchor, 1.0),
     ])
-    self.collectionView = collectionView
 
   @objc_method
   def viewWillAppear_(self, animated: bool):
@@ -313,7 +328,7 @@ class OutlineViewController(UIViewController):
                argtypes=[
                  ctypes.c_bool,
                ])
-    # print('viewWillAppear')
+    #print(f'\t{NSStringFromClass(__class__)}: viewWillAppear_')
 
   @objc_method
   def viewDidAppear_(self, animated: bool):
@@ -324,7 +339,7 @@ class OutlineViewController(UIViewController):
                argtypes=[
                  ctypes.c_bool,
                ])
-    # print('viewDidAppear')
+    #print(f'\t{NSStringFromClass(__class__)}: viewDidAppear_')
 
   @objc_method
   def viewWillDisappear_(self, animated: bool):
@@ -335,7 +350,7 @@ class OutlineViewController(UIViewController):
                argtypes=[
                  ctypes.c_bool,
                ])
-    # print('viewWillDisappear')
+    # print(f'\t{NSStringFromClass(__class__)}: viewWillDisappear_')
 
   @objc_method
   def viewDidDisappear_(self, animated: bool):
@@ -346,7 +361,7 @@ class OutlineViewController(UIViewController):
                argtypes=[
                  ctypes.c_bool,
                ])
-    # print('viewDidDisappear')
+    print(f'\t{NSStringFromClass(__class__)}: viewDidDisappear_')
 
   @objc_method
   def didReceiveMemoryWarning(self):
@@ -365,7 +380,7 @@ class OutlineViewController(UIViewController):
 
   @objc_method
   def collectionView_cellForItemAtIndexPath_(self, collectionView,
-                                             indexPath) -> objc_id:
+                                             indexPath) -> ObjCInstance:
     cell = collectionView.dequeueReusableCellWithReuseIdentifier_forIndexPath_(
       self.listCell_identifier, indexPath)
     target_item = menuItems[indexPath.section].children[indexPath.row]
@@ -474,15 +489,16 @@ class OutlineViewController(UIViewController):
 
 
 if __name__ == '__main__':
-  from rbedge.functions import NSStringFromClass
-  from rbedge import present_viewController
+  from rbedge.app import App
   from rbedge.enumerations import UIModalPresentationStyle
 
-  vc = OutlineViewController.new()
+  main_vc = OutlineViewController.new()
   _title = NSStringFromClass(OutlineViewController)
-  vc.navigationItem.title = _title
+  main_vc.navigationItem.title = _title
 
-  style = UIModalPresentationStyle.fullScreen
-  # style = UIModalPresentationStyle.pageSheet
-  present_viewController(vc, style)
+  #presentation_style = UIModalPresentationStyle.fullScreen
+  presentation_style = UIModalPresentationStyle.pageSheet
+
+  app = App(main_vc, presentation_style)
+  app.present()
 
