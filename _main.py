@@ -1,6 +1,6 @@
 from pyrubicon.objc.api import ObjCClass
-from pyrubicon.objc.api import objc_method
-from pyrubicon.objc.runtime import send_super, objc_id
+from pyrubicon.objc.api import objc_method, objc_property
+from pyrubicon.objc.runtime import send_super
 
 from rbedge.enumerations import (
   UISplitViewControllerStyle,
@@ -8,10 +8,11 @@ from rbedge.enumerations import (
   UISplitViewControllerDisplayMode,
   UIUserInterfaceSizeClass,
 )
-from rbedge.functions import NSStringFromClass
-from rbedge import pdbr
 
 from outlineViewController import OutlineViewController
+
+from rbedge.functions import NSStringFromClass
+from rbedge import pdbr
 
 UIViewController = ObjCClass('UIViewController')
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
@@ -30,30 +31,44 @@ UIKitCatalog_title = 'UIKitCatalog'
 
 class TopViewController(UIViewController):
 
+  label: UILabel = objc_property()
+
+  @objc_method
+  def dealloc(self):
+    # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
+    print(f'\t- {NSStringFromClass(__class__)}: dealloc')
+
   @objc_method
   def viewDidLoad(self):
+    send_super(__class__, self, 'viewDidLoad')
+
     # --- View
     self.view.backgroundColor = UIColor.systemBackgroundColor()
 
-    self.label = UILabel.new()
-    self.label.text = UIKitCatalog_title
-    self.label.font = UIFont.systemFontOfSize_(26.0)
-    self.label.sizeToFit()
+    label = UILabel.new()
+    label.text = UIKitCatalog_title
+    label.font = UIFont.systemFontOfSize_(26.0)
+    label.sizeToFit()
 
-    self.view.addSubview_(self.label)
+    self.view.addSubview_(label)
 
     # --- Layout
-    self.label.translatesAutoresizingMaskIntoConstraints = False
+    label.translatesAutoresizingMaskIntoConstraints = False
 
     NSLayoutConstraint.activateConstraints_([
-      self.label.centerXAnchor.constraintEqualToAnchor_(
-        self.view.centerXAnchor),
-      self.label.centerYAnchor.constraintEqualToAnchor_(
-        self.view.centerYAnchor),
+      label.centerXAnchor.constraintEqualToAnchor_(self.view.centerXAnchor),
+      label.centerYAnchor.constraintEqualToAnchor_(self.view.centerYAnchor),
     ])
+
+    self.label = label
 
 
 class SplitViewController(UISplitViewController):
+
+  @objc_method
+  def dealloc(self):
+    # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
+    print(f'- {NSStringFromClass(__class__)}: dealloc')
 
   @objc_method
   def viewDidLoad(self):
@@ -97,10 +112,11 @@ class MainViewController(UIViewController):
 
   @objc_method
   def viewDidLoad(self):
-    # --- Navigation
     send_super(__class__, self, 'viewDidLoad')
-    title = NSStringFromClass(__class__)
-    self.navigationItem.title = title
+
+    # --- Navigation
+    self.navigationItem.title = NSStringFromClass(__class__) if (
+      title := self.navigationItem.title) is None else title
 
     # --- View
     split = SplitViewController.alloc().initWithStyle_(
@@ -114,11 +130,12 @@ if __name__ == '__main__':
   from rbedge.app import App
   from rbedge.enumerations import UIModalPresentationStyle
 
-  vc = MainViewController.new()
+  main_vc = MainViewController.new()
+  #main_vc.navigationItem.title = 'UIKit Catalog'
 
-  style = UIModalPresentationStyle.fullScreen
-  #style = UIModalPresentationStyle.pageSheet
+  #presentation_style = UIModalPresentationStyle.fullScreen
+  presentation_style = UIModalPresentationStyle.pageSheet
 
-  app = App(vc)
-  app.main_loop(style)
+  app = App(main_vc, presentation_style)
+  app.present()
 
