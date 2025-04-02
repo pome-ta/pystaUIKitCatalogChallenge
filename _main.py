@@ -108,7 +108,6 @@ class MainViewController(UIViewController):
   def dealloc(self):
     # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
     print(f'- {NSStringFromClass(__class__)}: dealloc')
-    #print('- MainViewController: dealloc')
 
   @objc_method
   def viewDidLoad(self):
