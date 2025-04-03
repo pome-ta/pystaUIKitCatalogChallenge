@@ -102,6 +102,7 @@ class DefaultToolbarViewController(UIViewController):
                  ctypes.c_bool,
                ])
     #print(f'\t{NSStringFromClass(__class__)}: viewWillAppear_')
+    
 
   @objc_method
   def viewDidAppear_(self, animated: bool):
@@ -113,6 +114,7 @@ class DefaultToolbarViewController(UIViewController):
                  ctypes.c_bool,
                ])
     #print(f'\t{NSStringFromClass(__class__)}: viewDidAppear_')
+    #self.navigationController.setToolbarHidden_animated_(True, True)
 
   @objc_method
   def viewWillDisappear_(self, animated: bool):
@@ -123,12 +125,10 @@ class DefaultToolbarViewController(UIViewController):
                argtypes=[
                  ctypes.c_bool,
                ])
-    # print(f'\t{NSStringFromClass(__class__)}: viewWillDisappear_')
-    #pdbr.state(self.navigationController,1)
-    self.navigationController.toolbar.init()
-    self.navigationController.setToolbarHidden_animated_(True, True)
-    #self.navigationController.setToolbarHidden_(True)
-    #self.navigationController.toolbar.init()
+    
+    #pdbr.state(self.navigationController)
+    #self.navigationController.setToolbarHidden_animated_(True, True)
+    
 
   @objc_method
   def viewDidDisappear_(self, animated: bool):
@@ -140,6 +140,7 @@ class DefaultToolbarViewController(UIViewController):
                  ctypes.c_bool,
                ])
     print(f'\t{NSStringFromClass(__class__)}: viewDidDisappear_')
+    
 
   @objc_method
   def didReceiveMemoryWarning(self):
