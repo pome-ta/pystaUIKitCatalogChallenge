@@ -124,6 +124,11 @@ class DefaultToolbarViewController(UIViewController):
                  ctypes.c_bool,
                ])
     # print(f'\t{NSStringFromClass(__class__)}: viewWillDisappear_')
+    #pdbr.state(self.navigationController,1)
+    self.navigationController.toolbar.init()
+    self.navigationController.setToolbarHidden_animated_(True, True)
+    #self.navigationController.setToolbarHidden_(True)
+    #self.navigationController.toolbar.init()
 
   @objc_method
   def viewDidDisappear_(self, animated: bool):
