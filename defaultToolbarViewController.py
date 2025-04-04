@@ -4,7 +4,7 @@
 import ctypes
 
 from pyrubicon.objc.api import ObjCClass, ObjCInstance, Block
-from pyrubicon.objc.api import objc_method
+from pyrubicon.objc.api import objc_method, objc_property
 from pyrubicon.objc.runtime import send_super, SEL
 
 from rbedge.enumerations import UIBarButtonSystemItem
@@ -19,12 +19,15 @@ UIViewController = ObjCClass('UIViewController')
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
 UIColor = ObjCClass('UIColor')
 
+UINavigationController = ObjCClass('UINavigationController')
+
 UIToolbar = ObjCClass('UIToolbar')
 UIToolbarAppearance = ObjCClass('UIToolbarAppearance')
 UIBarButtonItem = ObjCClass('UIBarButtonItem')
 UIImage = ObjCClass('UIImage')
 UIMenu = ObjCClass('UIMenu')
 UIAction = ObjCClass('UIAction')
+
 
 
 class DefaultToolbarViewController(UIViewController):
@@ -47,11 +50,109 @@ class DefaultToolbarViewController(UIViewController):
     self.navigationItem.title = localizedString('DefaultToolBarTitle') if (
       title := self.navigationItem.title) is None else title
 
-    self.view.backgroundColor = UIColor.systemBackgroundColor()
+    #container = UIViewController.new()
+    container = UINavigationController.alloc().initWithNavigationBarClass_toolbarClass_(None, None)
+    #pdbr.state(container.view)
 
+  @objc_method
+  def viewWillAppear_(self, animated: bool):
+    send_super(__class__,
+               self,
+               'viewWillAppear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    #print(f'\t{NSStringFromClass(__class__)}: viewWillAppear_')
+    
+
+  @objc_method
+  def viewDidAppear_(self, animated: bool):
+    send_super(__class__,
+               self,
+               'viewDidAppear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    #print(f'\t{NSStringFromClass(__class__)}: viewDidAppear_')
+
+  @objc_method
+  def viewWillDisappear_(self, animated: bool):
+    send_super(__class__,
+               self,
+               'viewWillDisappear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    #print(f'\t{NSStringFromClass(__class__)}: viewWillDisappear_')
+    
+
+  @objc_method
+  def viewDidDisappear_(self, animated: bool):
+    send_super(__class__,
+               self,
+               'viewDidDisappear:',
+               animated,
+               argtypes=[
+                 ctypes.c_bool,
+               ])
+    print(f'\t{NSStringFromClass(__class__)}: viewDidDisappear_')
+    
+
+  @objc_method
+  def didReceiveMemoryWarning(self):
+    send_super(__class__, self, 'didReceiveMemoryWarning')
+    print(f'{__class__}: didReceiveMemoryWarning')
+
+  @objc_method
+  def menuHandler_(self, _action: ctypes.c_void_p) -> None:
+    action = ObjCInstance(_action)
+    print(f'Menu Action "{action.title}"')
+
+  # MARK: - Actions
+  @objc_method
+  def barButtonItemClicked_(self, barButtonItem):
+    print(
+      f'A bar button item on the default toolbar was clicked: {barButtonItem}.'
+    )
+
+
+'''
+class DefaultToolbarViewController(UIViewController):
+  
+  #toolbar: UIToolbar = objc_property()
+
+  @objc_method
+  def dealloc(self):
+    # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
+    print(f'\t- {NSStringFromClass(__class__)}: dealloc')
+
+  @objc_method
+  def loadView(self):
+    send_super(__class__, self, 'loadView')
+    #print(f'\t{NSStringFromClass(__class__)}: loadView')
+
+  # MARK: - View Life Cycle
+  @objc_method
+  def viewDidLoad(self):
+    send_super(__class__, self, 'viewDidLoad')
+    # --- Navigation
+    self.navigationItem.title = localizedString('DefaultToolBarTitle') if (
+      title := self.navigationItem.title) is None else title
+
+    self.view.backgroundColor = UIColor.systemBackgroundColor()
+    vc = UIViewController.new()
+    pdbr.state(vc.navigationController)
+
+    
     _navToolbar = self.navigationController.toolbar
     toolbar = UIToolbar.alloc().initWithFrame_(_navToolbar.frame)
     toolbar.setAutoresizingMask_(_navToolbar.autoresizingMask)
+    
+    
+    #toolbar=self.navigationController.toolbar
 
     toolbarAppearance = UIToolbarAppearance.new()
     toolbarAppearance.configureWithDefaultBackground()
@@ -90,7 +191,12 @@ class DefaultToolbarViewController(UIViewController):
       customTitleBarButtonItem,
     ]
     self.setToolbarItems_animated_(toolbarButtonItems, True)
+    
+    #
     self.navigationController.setToolbarHidden_animated_(False, True)
+    
+    #self.toolbar = toolbar
+    #pdbr.state(self.navigationController)
 
   @objc_method
   def viewWillAppear_(self, animated: bool):
@@ -128,6 +234,7 @@ class DefaultToolbarViewController(UIViewController):
     
     #pdbr.state(self.navigationController)
     #self.navigationController.setToolbarHidden_animated_(True, True)
+    #self.navigationController.setToolbarHidden_animated_(False, True)
     
 
   @objc_method
@@ -158,7 +265,7 @@ class DefaultToolbarViewController(UIViewController):
     print(
       f'A bar button item on the default toolbar was clicked: {barButtonItem}.'
     )
-
+'''
 
 if __name__ == '__main__':
   from rbedge.app import App

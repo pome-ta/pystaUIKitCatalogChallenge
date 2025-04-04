@@ -1,3 +1,13 @@
+# 📝 2025/04/04
+
+## `self.navigationController.setToolbarHidden_animated_` で落ちる
+
+a-shell だと、close 時に落ちる。(`dealloc` が呼ばれてないみたい？)
+
+大元の`navigationController` を使いまわしてるのが悪い？
+
+
+
 # 📝 2025/03/28
 
 ## `symbolViewController`
