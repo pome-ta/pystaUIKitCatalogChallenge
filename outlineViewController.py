@@ -329,7 +329,6 @@ class OutlineViewController(UIViewController):
                  ctypes.c_bool,
                ])
     #print(f'\t{NSStringFromClass(__class__)}: viewWillAppear_')
-    self.navigationController.setToolbarHidden_animated_(True, True)
 
   @objc_method
   def viewDidAppear_(self, animated: bool):
@@ -340,7 +339,7 @@ class OutlineViewController(UIViewController):
                argtypes=[
                  ctypes.c_bool,
                ])
-    print(f'\t{NSStringFromClass(__class__)}: viewDidAppear_')
+    #print(f'\t{NSStringFromClass(__class__)}: viewDidAppear_')
 
   @objc_method
   def viewWillDisappear_(self, animated: bool):
