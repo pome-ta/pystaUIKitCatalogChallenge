@@ -44,13 +44,13 @@ class DefaultToolbarViewController(UIViewController):
     #print(f'\t{NSStringFromClass(__class__)}: loadView')
     navigationContainer = UINavigationController.alloc(
     ).initWithNavigationBarClass_toolbarClass_(None, None)
-    #navigationContainer.setNavigationBarHidden_animated_(True, True)
+    navigationContainer.setNavigationBarHidden_animated_(True, True)
     navigationContainer.setToolbarHidden_animated_(False, True)
 
     # --- toolbar setup
     toolbarAppearance = UIToolbarAppearance.new()
-    #toolbarAppearance.configureWithDefaultBackground()
-    toolbarAppearance.configureWithOpaqueBackground()
+    toolbarAppearance.configureWithDefaultBackground()
+    #toolbarAppearance.configureWithOpaqueBackground()
     #toolbarAppearance.configureWithTransparentBackground()
 
     toolbar = navigationContainer.toolbar
@@ -59,32 +59,6 @@ class DefaultToolbarViewController(UIViewController):
     toolbar.scrollEdgeAppearance = toolbarAppearance
     toolbar.compactAppearance = toolbarAppearance
     toolbar.compactScrollEdgeAppearance = toolbarAppearance
-
-    # MARK: - UIBarButtonItem Creation and Configuration
-    trashBarButtonItem = UIBarButtonItem.alloc().initWithBarButtonSystemItem(
-      UIBarButtonSystemItem.trash,
-      target=self,
-      action=SEL('barButtonItemClicked:'))
-
-    flexibleSpaceBarButtonItem = UIBarButtonItem.alloc(
-    ).initWithBarButtonSystemItem(UIBarButtonSystemItem.flexibleSpace,
-                                  target=None,
-                                  action=None)
-
-    buttonMenu = UIMenu.menuWithTitle_children_('', [
-      UIAction.actionWithTitle_image_identifier_handler_(
-        f'Option {i + 1}', None, None,
-        Block(self.menuHandler_, None, ctypes.c_void_p)) for i in range(5)
-    ])
-    customTitleBarButtonItem = UIBarButtonItem.alloc().initWithImage_menu_(
-      UIImage.systemImageNamed('list.number'), buttonMenu)
-
-    toolbarButtonItems = [
-      trashBarButtonItem,
-      flexibleSpaceBarButtonItem,
-      customTitleBarButtonItem,
-    ]
-    navigationContainer.setToolbarItems_animated_(toolbarButtonItems, True)
 
     #self.navigationController.setToolbarHidden_animated_(False, True)
     '''
@@ -149,6 +123,32 @@ class DefaultToolbarViewController(UIViewController):
 
     #container = UIViewController.new()
     # --- container
+    # MARK: - UIBarButtonItem Creation and Configuration
+    trashBarButtonItem = UIBarButtonItem.alloc().initWithBarButtonSystemItem(
+      UIBarButtonSystemItem.trash,
+      target=self,
+      action=SEL('barButtonItemClicked:'))
+
+    flexibleSpaceBarButtonItem = UIBarButtonItem.alloc(
+    ).initWithBarButtonSystemItem(UIBarButtonSystemItem.flexibleSpace,
+                                  target=None,
+                                  action=None)
+
+    buttonMenu = UIMenu.menuWithTitle_children_('', [
+      UIAction.actionWithTitle_image_identifier_handler_(
+        f'Option {i + 1}', None, None,
+        Block(self.menuHandler_, None, ctypes.c_void_p)) for i in range(5)
+    ])
+    customTitleBarButtonItem = UIBarButtonItem.alloc().initWithImage_menu_(
+      UIImage.systemImageNamed('list.number'), buttonMenu)
+
+    toolbarButtonItems = [
+      trashBarButtonItem,
+      flexibleSpaceBarButtonItem,
+      customTitleBarButtonItem,
+    ]
+    self.navigationContainer.setToolbarItems_animated_(toolbarButtonItems,
+                                                       True)
 
   @objc_method
   def viewWillAppear_(self, animated: bool):
@@ -182,7 +182,7 @@ class DefaultToolbarViewController(UIViewController):
                  ctypes.c_bool,
                ])
     #print(f'\t{NSStringFromClass(__class__)}: viewWillDisappear_')
-    pdbr.state(self.navigationContainer)
+    pdbr.state(self.navigationContainer.tabBarItem)
     self.navigationContainer.setToolbarHidden_animated_(True, True)
 
   @objc_method
