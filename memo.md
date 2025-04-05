@@ -6,6 +6,12 @@ a-shell だと、close 時に落ちる。(`dealloc` が呼ばれてないみた�
 
 大元の`navigationController` を使いまわしてるのが悪い？
 
+## UINavigationController を作る？
+
+大元のUINavigationController ではなく、ViewController 上に新規のUINavigationController を生成してつけることでクラッシュが防げるか？
+
+土台はできたみたいだが、アイテム関係がうまく表示されていないかもしれない
+
 
 
 # 📝 2025/03/28
