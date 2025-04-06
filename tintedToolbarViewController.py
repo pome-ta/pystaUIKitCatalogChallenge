@@ -54,28 +54,12 @@ class TintedToolbarViewController(UIViewController):
     navigationContainer.setNavigationBarHidden_(True)
     navigationContainer.setToolbarHidden_animated_(False, True)
 
-    # --- toolbarAppearance setup
-    toolbarAppearance = UIToolbarAppearance.new()
-    toolbarAppearance.configureWithDefaultBackground()
-    #toolbarAppearance.configureWithOpaqueBackground()
-    #toolbarAppearance.configureWithTransparentBackground()
-    toolbarAppearance.setBackgroundColor_(UIColor.systemBlueColor())
-
-    # xxx: 変数化してあげた方が、表示速度速い?
-    toolbar = navigationContainer.toolbar
-
-    toolbar.standardAppearance = toolbarAppearance
-    toolbar.scrollEdgeAppearance = toolbarAppearance
-    toolbar.compactAppearance = toolbarAppearance
-    toolbar.compactScrollEdgeAppearance = toolbarAppearance
-
-    
-
     self.addChildViewController_(navigationContainer)
     self.view.addSubview_(navigationContainer.view)
     navigationContainer.didMoveToParentViewController_(self)
 
-    self.toolbar = toolbar
+    # xxx: 変数化してあげた方が、表示速度速い?
+    self.toolbar = navigationContainer.toolbar
     self.navigationContainer = navigationContainer
 
   # MARK: - View Life Cycle
@@ -90,10 +74,24 @@ class TintedToolbarViewController(UIViewController):
 
     self.view.backgroundColor = UIColor.systemBackgroundColor()
 
+    # --- toolbarAppearance setup
+    toolbarAppearance = UIToolbarAppearance.new()
+    toolbarAppearance.configureWithDefaultBackground()
+    #toolbarAppearance.configureWithOpaqueBackground()
+    #toolbarAppearance.configureWithTransparentBackground()
+
+    # xxx: `toolbar.backgroundColor = UIColor.systemBlue` では色付かない
+    toolbarAppearance.setBackgroundColor_(UIColor.systemBlueColor())
+
+    self.toolbar.standardAppearance = toolbarAppearance
+    self.toolbar.scrollEdgeAppearance = toolbarAppearance
+    self.toolbar.compactAppearance = toolbarAppearance
+    self.toolbar.compactScrollEdgeAppearance = toolbarAppearance
+
     # See the `UIBarStyle` enum for more styles, including `.Default`.
     self.toolbar.setBarStyle_(UIBarStyle.black)
     self.toolbar.setTranslucent_(False)
-    
+
     self.toolbar.setTintColor_(UIColor.systemGreenColor())
 
     # MARK: - `UIBarButtonItem` Creation and Configuration
