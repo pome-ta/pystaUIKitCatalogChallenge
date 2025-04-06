@@ -30,7 +30,6 @@ class RootNavigationController(UINavigationController):
   def loadView(self):
     send_super(__class__, self, 'loadView')
     #print(f'{NSStringFromClass(__class__)}: loadView')
-    #pdbr.state(self.toolbar)
 
   @objc_method
   def viewDidLoad(self):
