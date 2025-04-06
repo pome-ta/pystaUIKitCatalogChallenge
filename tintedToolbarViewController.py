@@ -40,7 +40,6 @@ class TintedToolbarViewController(UIViewController):
   def dealloc(self):
     # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
     print(f'\t- {NSStringFromClass(__class__)}: dealloc')
-    #self.navigationController.setToolbarHidden_animated_(True, True)
 
   @objc_method
   def loadView(self):
@@ -70,8 +69,7 @@ class TintedToolbarViewController(UIViewController):
     toolbar.compactAppearance = toolbarAppearance
     toolbar.compactScrollEdgeAppearance = toolbarAppearance
 
-    toolbar.setTintColor_(UIColor.systemGreenColor())
-    #toolbar.setBackgroundColor_(UIColor.systemBlueColor())
+    
 
     self.addChildViewController_(navigationContainer)
     self.view.addSubview_(navigationContainer.view)
@@ -95,6 +93,8 @@ class TintedToolbarViewController(UIViewController):
     # See the `UIBarStyle` enum for more styles, including `.Default`.
     self.toolbar.setBarStyle_(UIBarStyle.black)
     self.toolbar.setTranslucent_(False)
+    
+    self.toolbar.setTintColor_(UIColor.systemGreenColor())
 
     # MARK: - `UIBarButtonItem` Creation and Configuration
     refreshBarButtonItem = UIBarButtonItem.alloc().initWithBarButtonSystemItem(
