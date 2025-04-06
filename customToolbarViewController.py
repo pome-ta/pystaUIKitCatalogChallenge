@@ -62,34 +62,12 @@ class CustomToolbarViewController(UIViewController):
     navigationContainer.setNavigationBarHidden_(True)
     navigationContainer.setToolbarHidden_animated_(False, True)
 
-    scale = int(mainScreen_scale)
-
-    image_path = f'./UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/toolbar_background.imageset/toolbar_background_{scale}x.png'
-
-    toolbarBackgroundImage = UIImage.alloc().initWithData_scale_(
-      dataWithContentsOfURL(image_path), scale)
-
-    # --- toolbarAppearance setup
-    toolbarAppearance = UIToolbarAppearance.new()
-    toolbarAppearance.configureWithDefaultBackground()
-    #toolbarAppearance.configureWithOpaqueBackground()
-    #toolbarAppearance.configureWithTransparentBackground()
-
-    toolbarAppearance.setBackgroundImage_(toolbarBackgroundImage)
-
-    # xxx: 変数化してあげた方が、表示速度速い?
-    toolbar = navigationContainer.toolbar
-
-    toolbar.standardAppearance = toolbarAppearance
-    toolbar.scrollEdgeAppearance = toolbarAppearance
-    toolbar.compactAppearance = toolbarAppearance
-    toolbar.compactScrollEdgeAppearance = toolbarAppearance
-
     self.addChildViewController_(navigationContainer)
     self.view.addSubview_(navigationContainer.view)
     navigationContainer.didMoveToParentViewController_(self)
 
-    self.toolbar = toolbar
+    # xxx: 変数化してあげた方が、表示速度速い?
+    self.toolbar = navigationContainer.toolbar
     self.navigationContainer = navigationContainer
 
   # MARK: - View Life Cycle
@@ -104,9 +82,27 @@ class CustomToolbarViewController(UIViewController):
 
     self.view.backgroundColor = UIColor.systemBackgroundColor()
 
+    # --- toolbarAppearance setup
+    toolbarAppearance = UIToolbarAppearance.new()
+    toolbarAppearance.configureWithDefaultBackground()
+    #toolbarAppearance.configureWithOpaqueBackground()
+    #toolbarAppearance.configureWithTransparentBackground()
+
+    scale = int(mainScreen_scale)
+    image_path = f'./UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/toolbar_background.imageset/toolbar_background_{scale}x.png'
+
+    toolbarBackgroundImage = UIImage.alloc().initWithData_scale_(
+      dataWithContentsOfURL(image_path), scale)
+
+    toolbarAppearance.setBackgroundImage_(toolbarBackgroundImage)
+
+    self.toolbar.standardAppearance = toolbarAppearance
+    self.toolbar.scrollEdgeAppearance = toolbarAppearance
+    self.toolbar.compactAppearance = toolbarAppearance
+    self.toolbar.compactScrollEdgeAppearance = toolbarAppearance
+
     # xxx: ? `toolbar` からは変化が確認できない
-    # toolbar.setShadowImage_forToolbarPosition_(toolbarBackgroundImage, UIBarPosition.any)
-    # toolbar.setBackgroundImage_forToolbarPosition_barMetrics_(toolbarBackgroundImage, UIBarPosition.bottom, UIBarMetrics.default)
+    #self.toolbar.setBackgroundImage_forToolbarPosition_barMetrics_(toolbarBackgroundImage, UIBarPosition.bottom, UIBarMetrics.default)
 
     # MARK: - `UIBarButtonItem` Creation and Configuration
     customBarButtonItemImage = UIImage.systemImageNamed_(
