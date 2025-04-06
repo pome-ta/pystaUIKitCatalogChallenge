@@ -90,7 +90,7 @@ class CustomToolbarViewController(UIViewController):
 
     scale = int(mainScreen_scale)
     image_path = f'./UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/toolbar_background.imageset/toolbar_background_{scale}x.png'
-
+    
     toolbarBackgroundImage = UIImage.alloc().initWithData_scale_(
       dataWithContentsOfURL(image_path), scale)
 
