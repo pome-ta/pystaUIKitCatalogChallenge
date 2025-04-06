@@ -1,5 +1,5 @@
-from pyrubicon.objc.api import objc_method, objc_property
 from pyrubicon.objc.api import NSObject, NSString
+from pyrubicon.objc.api import objc_method, objc_property
 from pyrubicon.objc.runtime import send_super
 
 from rbedge.functions import NSStringFromClass
@@ -7,12 +7,12 @@ from rbedge import pdbr
 
 
 class CaseElement(NSObject):
+
   # セルの視覚的なタイトル (テーブル セクションのヘッダー タイトル)
   title: NSString = objc_property()
   # nib ファイル内でセルを検索するためのテーブルビューのセルの識別子
   cellID: NSString = objc_property()
   # セルのサブビューを設定するための構成ハンドラー。（は、面倒なのでハンドラ名の文字列）
-  # xxx: ガバガバ
   configHandlerName: NSString = objc_property()
 
   @objc_method
