@@ -132,8 +132,8 @@ if __name__ == '__main__':
   main_vc = MainViewController.new()
   #main_vc.navigationItem.title = 'UIKit Catalog'
 
-  #presentation_style = UIModalPresentationStyle.fullScreen
-  presentation_style = UIModalPresentationStyle.pageSheet
+  presentation_style = UIModalPresentationStyle.fullScreen
+  #presentation_style = UIModalPresentationStyle.pageSheet
 
   app = App(main_vc, presentation_style)
   app.present()
