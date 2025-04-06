@@ -4,7 +4,7 @@
 import ctypes
 
 from pyrubicon.objc.api import ObjCClass
-from pyrubicon.objc.api import objc_method
+from pyrubicon.objc.api import objc_method, objc_property
 from pyrubicon.objc.runtime import send_super, SEL
 
 from rbedge.enumerations import (
@@ -30,7 +30,9 @@ UIViewController = ObjCClass('UIViewController')
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
 UIColor = ObjCClass('UIColor')
 
-UIToolbar = ObjCClass('UIToolbar')
+UINavigationController = ObjCClass('UINavigationController')
+
+UIToolbar = ObjCClass('UIToolbar')  # todo: 型
 UIToolbarAppearance = ObjCClass('UIToolbarAppearance')
 UIBarButtonItem = ObjCClass('UIBarButtonItem')
 UIImage = ObjCClass('UIImage')
@@ -39,15 +41,56 @@ NSDictionary = ObjCClass('NSDictionary')
 
 class CustomToolbarViewController(UIViewController):
 
+  toolbar: UIToolbar = objc_property()
+  navigationContainer: UINavigationController = objc_property()
+
   @objc_method
   def dealloc(self):
     # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
     print(f'\t- {NSStringFromClass(__class__)}: dealloc')
-    #self.navigationController.setToolbarHidden_animated_(True, True)
+
   @objc_method
   def loadView(self):
     send_super(__class__, self, 'loadView')
     #print(f'\t{NSStringFromClass(__class__)}: loadView')
+
+    # --- navigationContainer
+    navigationContainer = UINavigationController.alloc(
+    ).initWithNavigationBarClass_toolbarClass_(None, None)
+    # todo: `setToolbarHidden` は先に指定
+    # xxx: `setItems` 後だと、items 出てこない
+    navigationContainer.setNavigationBarHidden_(True)
+    navigationContainer.setToolbarHidden_animated_(False, True)
+
+    scale = int(mainScreen_scale)
+
+    image_path = f'./UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/toolbar_background.imageset/toolbar_background_{scale}x.png'
+
+    toolbarBackgroundImage = UIImage.alloc().initWithData_scale_(
+      dataWithContentsOfURL(image_path), scale)
+
+    # --- toolbarAppearance setup
+    toolbarAppearance = UIToolbarAppearance.new()
+    toolbarAppearance.configureWithDefaultBackground()
+    #toolbarAppearance.configureWithOpaqueBackground()
+    #toolbarAppearance.configureWithTransparentBackground()
+
+    toolbarAppearance.setBackgroundImage_(toolbarBackgroundImage)
+
+    # xxx: 変数化してあげた方が、表示速度速い?
+    toolbar = navigationContainer.toolbar
+
+    toolbar.standardAppearance = toolbarAppearance
+    toolbar.scrollEdgeAppearance = toolbarAppearance
+    toolbar.compactAppearance = toolbarAppearance
+    toolbar.compactScrollEdgeAppearance = toolbarAppearance
+
+    self.addChildViewController_(navigationContainer)
+    self.view.addSubview_(navigationContainer.view)
+    navigationContainer.didMoveToParentViewController_(self)
+
+    self.toolbar = toolbar
+    self.navigationContainer = navigationContainer
 
   # MARK: - View Life Cycle
   @objc_method
@@ -61,34 +104,9 @@ class CustomToolbarViewController(UIViewController):
 
     self.view.backgroundColor = UIColor.systemBackgroundColor()
 
-    scale = int(mainScreen_scale)
-
-    image_path = f'./UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Assets.xcassets/toolbar_background.imageset/toolbar_background_{scale}x.png'
-
-    toolbarBackgroundImage = UIImage.alloc().initWithData_scale_(
-      dataWithContentsOfURL(image_path), scale)
-
-    _navToolbar = self.navigationController.toolbar
-    toolbar = UIToolbar.alloc().initWithFrame_(_navToolbar.frame)
-    toolbar.setAutoresizingMask_(_navToolbar.autoresizingMask)
-
-    toolbarAppearance = UIToolbarAppearance.new()
-    toolbarAppearance.configureWithDefaultBackground()
-    # toolbarAppearance.configureWithOpaqueBackground()
-    # toolbarAppearance.configureWithTransparentBackground()
-
-    toolbarAppearance.setBackgroundImage_(toolbarBackgroundImage)
-
-    toolbar.standardAppearance = toolbarAppearance
-    toolbar.scrollEdgeAppearance = toolbarAppearance
-    toolbar.compactAppearance = toolbarAppearance
-    toolbar.compactScrollEdgeAppearance = toolbarAppearance
-
     # xxx: ? `toolbar` からは変化が確認できない
     # toolbar.setShadowImage_forToolbarPosition_(toolbarBackgroundImage, UIBarPosition.any)
     # toolbar.setBackgroundImage_forToolbarPosition_barMetrics_(toolbarBackgroundImage, UIBarPosition.bottom, UIBarMetrics.default)
-
-    self.navigationController.setToolbar_(toolbar)
 
     # MARK: - `UIBarButtonItem` Creation and Configuration
     customBarButtonItemImage = UIImage.systemImageNamed_(
@@ -122,8 +140,7 @@ class CustomToolbarViewController(UIViewController):
       flexibleSpaceBarButtonItem,
       customBarButtonItem,
     ]
-    self.setToolbarItems_animated_(toolbarButtonItems, True)
-    self.navigationController.setToolbarHidden_animated_(False, False)
+    self.toolbar.setItems_animated_(toolbarButtonItems, True)
 
   @objc_method
   def viewWillAppear_(self, animated: bool):
@@ -157,7 +174,7 @@ class CustomToolbarViewController(UIViewController):
                  ctypes.c_bool,
                ])
     # print(f'\t{NSStringFromClass(__class__)}: viewWillDisappear_')
-    #self.navigationController.setToolbarHidden_animated_(True, False)
+    self.navigationContainer.setToolbarHidden_animated_(True, True)
 
   @objc_method
   def viewDidDisappear_(self, animated: bool):
