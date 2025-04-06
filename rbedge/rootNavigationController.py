@@ -87,10 +87,6 @@ class RootNavigationController(UINavigationController):
     print(f'{NSStringFromClass(__class__)}: didReceiveMemoryWarning')
 
   @objc_method
-  def doneButtonTapped_(self, sender):
-    self.dismissViewControllerAnimated_completion_(True, None)
-
-  @objc_method
   def navigationController_willShowViewController_animated_(
       self, navigationController, viewController, animated: bool):
     # xxx: layout 範囲の制限
@@ -120,4 +116,8 @@ class RootNavigationController(UINavigationController):
                                                       True)
     else:
       navigationItem.rightBarButtonItem = closeButtonItem
+
+  @objc_method
+  def doneButtonTapped_(self, sender):
+    self.dismissViewControllerAnimated_completion_(True, None)
 
