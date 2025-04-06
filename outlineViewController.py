@@ -306,17 +306,17 @@ class OutlineViewController(UIViewController):
     # --- Layout
     self.view.addSubview_(collectionView)
     collectionView.translatesAutoresizingMaskIntoConstraints = False
-    layoutMarginsGuide = self.view.layoutMarginsGuide
+
     safeAreaLayoutGuide = self.view.safeAreaLayoutGuide
     NSLayoutConstraint.activateConstraints_([
       collectionView.centerXAnchor.constraintEqualToAnchor_(
-        layoutMarginsGuide.centerXAnchor),
+        safeAreaLayoutGuide.centerXAnchor),
       collectionView.centerYAnchor.constraintEqualToAnchor_(
-        layoutMarginsGuide.centerYAnchor),
+        safeAreaLayoutGuide.centerYAnchor),
       collectionView.widthAnchor.constraintEqualToAnchor_multiplier_(
-        layoutMarginsGuide.widthAnchor, 1.0),
+        safeAreaLayoutGuide.widthAnchor, 1.0),
       collectionView.heightAnchor.constraintEqualToAnchor_multiplier_(
-        layoutMarginsGuide.heightAnchor, 1.0),
+        safeAreaLayoutGuide.heightAnchor, 1.0),
     ])
 
   @objc_method
