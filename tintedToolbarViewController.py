@@ -4,7 +4,7 @@
 import ctypes
 
 from pyrubicon.objc.api import ObjCClass
-from pyrubicon.objc.api import objc_method
+from pyrubicon.objc.api import objc_method, objc_property
 from pyrubicon.objc.runtime import send_super, SEL
 
 from rbedge.enumerations import (
@@ -22,7 +22,9 @@ UIViewController = ObjCClass('UIViewController')
 NSLayoutConstraint = ObjCClass('NSLayoutConstraint')
 UIColor = ObjCClass('UIColor')
 
-UIToolbar = ObjCClass('UIToolbar')
+UINavigationController = ObjCClass('UINavigationController')
+
+UIToolbar = ObjCClass('UIToolbar')  # todo: 型
 UIToolbarAppearance = ObjCClass('UIToolbarAppearance')
 UIBarButtonItem = ObjCClass('UIBarButtonItem')
 UIImage = ObjCClass('UIImage')
@@ -30,6 +32,9 @@ UIActivityViewController = ObjCClass('UIActivityViewController')
 
 
 class TintedToolbarViewController(UIViewController):
+
+  toolbar: UIToolbar = objc_property()
+  navigationContainer: UINavigationController = objc_property()
 
   @objc_method
   def dealloc(self):
@@ -41,6 +46,39 @@ class TintedToolbarViewController(UIViewController):
   def loadView(self):
     send_super(__class__, self, 'loadView')
     #print(f'\t{NSStringFromClass(__class__)}: loadView')
+
+    # --- navigationContainer
+    navigationContainer = UINavigationController.alloc(
+    ).initWithNavigationBarClass_toolbarClass_(None, None)
+    # todo: `setToolbarHidden` は先に指定
+    # xxx: `setItems` 後だと、items 出てこない
+    navigationContainer.setNavigationBarHidden_(True)
+    navigationContainer.setToolbarHidden_animated_(False, True)
+
+    # --- toolbarAppearance setup
+    toolbarAppearance = UIToolbarAppearance.new()
+    toolbarAppearance.configureWithDefaultBackground()
+    #toolbarAppearance.configureWithOpaqueBackground()
+    #toolbarAppearance.configureWithTransparentBackground()
+    toolbarAppearance.setBackgroundColor_(UIColor.systemBlueColor())
+
+    # xxx: 変数化してあげた方が、表示速度速い?
+    toolbar = navigationContainer.toolbar
+
+    toolbar.standardAppearance = toolbarAppearance
+    toolbar.scrollEdgeAppearance = toolbarAppearance
+    toolbar.compactAppearance = toolbarAppearance
+    toolbar.compactScrollEdgeAppearance = toolbarAppearance
+
+    toolbar.setTintColor_(UIColor.systemGreenColor())
+    #toolbar.setBackgroundColor_(UIColor.systemBlueColor())
+
+    self.addChildViewController_(navigationContainer)
+    self.view.addSubview_(navigationContainer.view)
+    navigationContainer.didMoveToParentViewController_(self)
+
+    self.toolbar = toolbar
+    self.navigationContainer = navigationContainer
 
   # MARK: - View Life Cycle
   @objc_method
@@ -54,28 +92,9 @@ class TintedToolbarViewController(UIViewController):
 
     self.view.backgroundColor = UIColor.systemBackgroundColor()
 
-    _navToolbar = self.navigationController.toolbar
-    toolbar = UIToolbar.alloc().initWithFrame_(_navToolbar.frame)
-    toolbar.setAutoresizingMask_(_navToolbar.autoresizingMask)
-
-    toolbarAppearance = UIToolbarAppearance.new()
-    toolbarAppearance.configureWithDefaultBackground()
-    # toolbarAppearance.configureWithOpaqueBackground()
-    # toolbarAppearance.configureWithTransparentBackground()
-    toolbarAppearance.setBackgroundColor_(UIColor.systemBlueColor())
-
-    toolbar.standardAppearance = toolbarAppearance
-    toolbar.scrollEdgeAppearance = toolbarAppearance
-    toolbar.compactAppearance = toolbarAppearance
-    toolbar.compactScrollEdgeAppearance = toolbarAppearance
-
-    self.navigationController.setToolbar_(toolbar)
-
     # See the `UIBarStyle` enum for more styles, including `.Default`.
-    toolbar.setBarStyle_(UIBarStyle.black)
-    toolbar.setTranslucent_(False)
-    toolbar.setTintColor_(UIColor.systemGreenColor())
-    toolbar.setBackgroundColor_(UIColor.systemBlueColor())
+    self.toolbar.setBarStyle_(UIBarStyle.black)
+    self.toolbar.setTranslucent_(False)
 
     # MARK: - `UIBarButtonItem` Creation and Configuration
     refreshBarButtonItem = UIBarButtonItem.alloc().initWithBarButtonSystemItem(
@@ -99,8 +118,7 @@ class TintedToolbarViewController(UIViewController):
       flexibleSpaceBarButtonItem,
       actionBarButtonItem,
     ]
-    self.setToolbarItems_animated_(toolbarButtonItems, True)
-    self.navigationController.setToolbarHidden_animated_(False, False)
+    self.toolbar.setItems_animated_(toolbarButtonItems, True)
 
   @objc_method
   def viewWillAppear_(self, animated: bool):
@@ -134,7 +152,7 @@ class TintedToolbarViewController(UIViewController):
                  ctypes.c_bool,
                ])
     # print(f'\t{NSStringFromClass(__class__)}: viewWillDisappear_')
-    #self.navigationController.setToolbarHidden_animated_(True, False)
+    self.navigationContainer.setToolbarHidden_animated_(True, True)
 
   @objc_method
   def viewDidDisappear_(self, animated: bool):
