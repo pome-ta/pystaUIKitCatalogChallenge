@@ -52,25 +52,12 @@ class DefaultToolbarViewController(UIViewController):
     navigationContainer.setNavigationBarHidden_(True)
     navigationContainer.setToolbarHidden_animated_(False, True)
 
-    # --- toolbarAppearance setup
-    toolbarAppearance = UIToolbarAppearance.new()
-    toolbarAppearance.configureWithDefaultBackground()
-    #toolbarAppearance.configureWithOpaqueBackground()
-    #toolbarAppearance.configureWithTransparentBackground()
-
-    # xxx: 変数化してあげた方が、表示速度速い？
-    toolbar = navigationContainer.toolbar
-
-    toolbar.standardAppearance = toolbarAppearance
-    toolbar.scrollEdgeAppearance = toolbarAppearance
-    toolbar.compactAppearance = toolbarAppearance
-    toolbar.compactScrollEdgeAppearance = toolbarAppearance
-
     self.addChildViewController_(navigationContainer)
     self.view.addSubview_(navigationContainer.view)
     navigationContainer.didMoveToParentViewController_(self)
 
-    self.toolbar = toolbar
+    # xxx: 変数化してあげた方が、表示速度速い?
+    self.toolbar = navigationContainer.toolbar
     self.navigationContainer = navigationContainer
 
   # MARK: - View Life Cycle
@@ -82,6 +69,17 @@ class DefaultToolbarViewController(UIViewController):
       title := self.navigationItem.title) is None else title
 
     self.view.backgroundColor = UIColor.systemBackgroundColor()
+
+    # --- toolbarAppearance setup
+    toolbarAppearance = UIToolbarAppearance.new()
+    toolbarAppearance.configureWithDefaultBackground()
+    #toolbarAppearance.configureWithOpaqueBackground()
+    #toolbarAppearance.configureWithTransparentBackground()
+
+    self.toolbar.standardAppearance = toolbarAppearance
+    self.toolbar.scrollEdgeAppearance = toolbarAppearance
+    self.toolbar.compactAppearance = toolbarAppearance
+    self.toolbar.compactScrollEdgeAppearance = toolbarAppearance
 
     # MARK: - UIBarButtonItem Creation and Configuration
     trashBarButtonItem = UIBarButtonItem.alloc().initWithBarButtonSystemItem(
