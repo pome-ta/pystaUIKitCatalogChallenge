@@ -45,6 +45,24 @@ Google 検索結果での確認。なのでどれが最新か？といった部�
 まるっと、`Mac Catalyst` ツリーにリポジトリ参照も変えていく。。。
 
 
+## XCode ビルド
+
+- とりあえず自分の端末のiPhone11 のsimulator 入れる
+- ダークモードとかする
+- ビルド一発で通ったぽい
+  - 相変わらず（？）以下エラーは出る
+  - `textView` は相変わらず落ちる
+
+```
+warning: (arm64)
+
+...(略)/Library/Developer/Xcode/DerivedData/UIKitCatalog-froytkzvtmjrheewevcvsttbfpxz/Build/Products/Debug-iphonesimulator/UIKitCatalog.app/UIKitCatalog empty dSYM file detected, dSYM was created with an executable with no debug info.
+```
+
+- コードの書き換えをメモせんとあかんな
+
+
+
 
 # 📝 2025/04/04
 
