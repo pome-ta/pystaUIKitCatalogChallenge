@@ -18,16 +18,14 @@ UIListContentConfiguration = ObjCClass('UIListContentConfiguration')
 
 
 class BaseTableViewController(UITableViewController):
-  
+
   testCells: NSMutableArray = objc_property()
   headerFooterViewIdentifier: NSString = objc_property()
 
   @objc_method
-  def dealloc(self):
+  def dealloc(self) -> None:
     # xxx: 呼ばない-> `send_super(__class__, self, 'dealloc')`
     print(f'\t\t- {NSStringFromClass(__class__)}: dealloc')
-
-
 
   @objc_method
   def initWithStyle_(self, style: NSInteger) -> ObjCInstance:
@@ -49,7 +47,6 @@ class BaseTableViewController(UITableViewController):
     #print(f'\t\t{NSStringFromClass(__class__)}: loadView')
     self.testCells = NSMutableArray.new()
     self.headerFooterViewIdentifier = 'customHeaderFooterView'
-
 
   @objc_method
   def viewDidLoad(self):
@@ -108,11 +105,11 @@ class BaseTableViewController(UITableViewController):
     send_super(__class__, self, 'didReceiveMemoryWarning')
     print(f'\t{NSStringFromClass(__class__)}: didReceiveMemoryWarning')
 
-  
   @objc_method
   def testCellsAppendContentsOf_(self, addingCells) -> None:
     """`@available(iOS 15.0, *)` で弾く用
     """
+    # wip
     for cell in addingCells:
       '''
       if not isinstance(addCell, CaseElement):
@@ -121,7 +118,6 @@ class BaseTableViewController(UITableViewController):
         continue
       '''
       self.testCells.addObject_(cell)
-  
 
   @objc_method
   def centeredHeaderView_(self, title) -> objc_id:
