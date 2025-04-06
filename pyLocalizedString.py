@@ -5,29 +5,29 @@ localizable_url = './UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCat
 
 
 class PyLocalizedString:
-  
+
   def __init__(self, url: str | Path = localizable_url):
     localizable_path = Path(url)
     splitlines_list = localizable_path.read_text(encoding='utf-8').splitlines()
-    
+
     # xxx: すごく雑に`Localizable.strings` format 確認してる
     pre_processing = [
       line for line in splitlines_list
       if len(line) and (line[0] == '"') and (line[-1] == ';')
     ]
     re_compile = re.compile('"(.*?)"')
-    
+
     self.localizable_dic = dict([
       reg_result for line in pre_processing
       if (reg_result := re_compile.findall(line))
     ])
-  
-  def __get_dict_value(self, key):
+
+  def __get_dict_value(self, key) -> str:
     # xxx: 特定の文字記号は置き換えを考えておく
-    # value = self.localizable_dic.get(key, '🙅‍♀️')
+    #value = self.localizable_dic.get(key, '🙅‍♀️')
     value = self.localizable_dic.get(key, key)
     return value
-  
+
   @classmethod
   def new(cls, url: str | Path = localizable_url):
     this = cls(url)
@@ -35,3 +35,4 @@ class PyLocalizedString:
 
 
 localizedString = PyLocalizedString.new(localizable_url)
+
