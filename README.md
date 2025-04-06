@@ -1,6 +1,6 @@
 # pystaUIKitCatalogChallenge
 
-[UIKit Catalog: Creating and Customizing Views and Controls | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/mac_catalyst/uikit_catalog_creating_and_customizing_views_and_controls?language=objc)
+[UIKit Catalog: Creating and customizing views and controls | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uikit-catalog-creating-and-customizing-views-and-controls?language=objc)
 
 Pythonista3 とRubicon objc で、UIKitCatalog を実装するリポジトリ（[a-Shell](https://holzschu.github.io/a-Shell_iOS/) 対応実装中）
 

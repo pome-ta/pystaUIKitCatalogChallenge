@@ -1,3 +1,51 @@
+# 📝 2025/04/06
+
+## 挙動確認のために、サンプルをビルド
+
+- M4 になってから、やってないのでテスト
+  - マシンとして、どれだけ快適になっているか確認したさある
+- 毎回、XCode のやり方モヤモヤするのでメモる
+- `toobar` の挙動確認
+- サンプルリンクが2種あった気がするから差分も見てみる
+
+
+## サンプル先調査。。。
+
+Google 検索結果での確認。なのでどれが最新か？といった部分は不明
+
+
+- `Views and controls` ツリー
+  - [UIKit Catalog: Creating and Customizing Views and Controls | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/mac_catalyst/uikit_catalog_creating_and_customizing_views_and_controls?language=objc)
+
+  - [UIKit Catalog: Creating and Customizing Views and Controls | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/mac_catalyst/uikit_catalog_creating_and_customizing_views_and_controls?changes=l_8_3_8&language=objc)
+    - 本文中の文字変更とかあったのかな？
+
+- `Mac Catalyst` ツリー
+  - [UIKit Catalog: Creating and customizing views and controls | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uikit-catalog-creating-and-customizing-views-and-controls?language=objc)
+
+
+
+`.git` があったので、確認できた。
+
+`Mac Catalyst` ツリーが、最新ぽい。
+
+`Republish sample code project.`
+`287bf6e12683f34c1c505bb7b7f12b3875ab0213`
+
+で、基本的に
+
+- `README.md` の大文字小文字の書き換え
+- 各コードの頭のコメント書き換え
+  - `See the LICENSE.txt file for this sample’s licensing information.`
+- `OutlineViewController.swift`
+  - `NotificationCenter.default.addObserver` がちょっと変わってる(50行あたり)
+
+
+
+まるっと、`Mac Catalyst` ツリーにリポジトリ参照も変えていく。。。
+
+
+
 # 📝 2025/04/04
 
 ## `self.navigationController.setToolbarHidden_animated_` で落ちる
