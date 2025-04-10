@@ -1,3 +1,5 @@
+from typing import Union
+
 from pyrubicon.objc.api import ObjCClass
 
 from .lifeCycle import loop
@@ -21,10 +23,11 @@ class App:
       break
   rootViewController = __windowScene.keyWindow.rootViewController
 
-  def __init__(self,
-               viewController: UIViewController,
-               modalPresentationStyle: UIModalPresentationStyle
-               | int = UIModalPresentationStyle.pageSheet):
+  def __init__(
+    self,
+    viewController: UIViewController,
+    modalPresentationStyle: Union[UIModalPresentationStyle,
+                                  int] = UIModalPresentationStyle.pageSheet):
     self.viewController = viewController
     # xxx: style 指定を力技で確認
     _automatic = UIModalPresentationStyle.automatic  # -2

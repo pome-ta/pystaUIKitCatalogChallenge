@@ -1,3 +1,5 @@
+from typing import Union
+
 from pyrubicon.objc.api import ObjCClass
 from pyrubicon.objc.api import objc_method
 from pyrubicon.objc.runtime import send_super
@@ -23,7 +25,7 @@ def add_prototype(identifier: str):
   return _create_reuse_dict
 
 
-prototypes: list[dict[CustomTableViewCell | str, str]] = []
+prototypes: list[dict[Union[CustomTableViewCell, str], str]] = []
 
 
 @add_prototype('defaultProgress')

@@ -1,4 +1,5 @@
 import ctypes
+from typing import Union
 
 from pyrubicon.objc.api import ObjCClass, ObjCInstance
 from pyrubicon.objc.api import objc_method, objc_property
@@ -87,8 +88,8 @@ class OutlineItem:
 
   def __init__(self,
                title: str,
-               imageName: str | None = None,
-               storyboardName: UIViewController | None = None,
+               imageName: Union[str, None] = None,
+               storyboardName: Union[UIViewController, None] = None,
                subitems: list = []):
     self.title = localizedString(title)
     self.imageName = imageName
