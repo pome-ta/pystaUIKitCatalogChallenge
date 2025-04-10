@@ -1,12 +1,13 @@
 import re
 from pathlib import Path
+from typing import Union
 
 localizable_url = './UIKitCatalogCreatingAndCustomizingViewsAndControls/UIKitCatalog/Base.lproj/Localizable.strings'
 
 
 class PyLocalizedString:
 
-  def __init__(self, url: str | Path = localizable_url):
+  def __init__(self, url: Union[str, Path] = localizable_url):
     localizable_path = Path(url)
     splitlines_list = localizable_path.read_text(encoding='utf-8').splitlines()
 
@@ -29,10 +30,11 @@ class PyLocalizedString:
     return value
 
   @classmethod
-  def new(cls, url: str | Path = localizable_url):
+  def new(cls, url: Union[str, Path] = localizable_url):
     this = cls(url)
     return this.__get_dict_value
 
 
 localizedString = PyLocalizedString.new(localizable_url)
+
 
