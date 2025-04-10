@@ -1,5 +1,6 @@
 from pathlib import Path
 import json
+from typing import Union
 
 from pyrubicon.objc.api import ObjCClass, NSData
 from .enumerations import UIUserInterfaceStyle
@@ -14,7 +15,7 @@ UIScreen = ObjCClass('UIScreen')
 mainScreen_scale: float = UIScreen.mainScreen.scale
 
 
-def dataWithContentsOfURL(path_str: str | Path) -> NSData:
+def dataWithContentsOfURL(path_str: Union[str, Path]) -> NSData:
   """file path を`NSData` `(ObjCInstance)` で返す
   
   `UIImage(named: "")` 等、Bundle で呼ぶAssets をPython 側で取得
