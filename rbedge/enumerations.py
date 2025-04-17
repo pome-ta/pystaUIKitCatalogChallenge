@@ -37,6 +37,7 @@ class UIBarButtonSystemItem:
   done: int = 0
   cancel: int = 1
   edit: int = 2
+  save: int = 3
   add: int = 4
   flexibleSpace: int = 5
   fixedSpace: int = 6
@@ -48,6 +49,7 @@ class UIBarButtonSystemItem:
   search: int = 12
   refresh: int = 13
   stop: int = 14
+  camera: int = 15
   trash: int = 16
   play: int = 17
   pause: int = 18
@@ -57,6 +59,7 @@ class UIBarButtonSystemItem:
   redo: int = 22
   pageCurl: int = 23  # Deprecated
   close: int = 24
+  writingTools: int = 25
 
 
 # ref: [UIButtonType | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uibuttontype?language=objc)
