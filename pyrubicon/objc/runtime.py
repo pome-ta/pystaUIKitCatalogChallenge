@@ -160,8 +160,8 @@ class SEL(c_void_p):
         return libobjc.sel_getName(self)
 
     def __new__(cls, init=None):
-        """The constructor can be called with a :class:`bytes` or :class:`str`
-        object to obtain a selector with that value.
+        """The constructor can be called with a :class:`bytes` or :class:`str` object to
+        obtain a selector with that value.
 
         (The normal arguments supported by :class:`~ctypes.c_void_p` are
         still accepted.)
@@ -194,7 +194,7 @@ class Class(objc_id):
 
 
 class IMP(c_void_p):
-    """The `IMP <https://developer.apple.com/documentation/objectivec/objective-c_runtime/imp?language=objc>`__
+    """The `IMP <https://developer.apple.com/documentation/objectivec/imp?language=objc>`__
     type from ``<objc/objc.h>``.
 
     An :class:`IMP` cannot be called directly --- it must be cast to the
@@ -222,9 +222,10 @@ class objc_property_t(c_void_p):
 
 
 class objc_property_attribute_t(Structure):
-    """The `objc_property_attribute_t <https://developer.apple.com/documentation/objectivec/objc_property_attribute_t?language=objc>`__
+    """
+    The `objc_property_attribute_t <https://developer.apple.com/documentation/objectivec/objc_property_attribute_t?language=objc>`__
     structure from ``<objc/runtime.h>``.
-    """  # noqa: E501
+    """
 
     _fields_ = [
         ("name", c_char_p),
@@ -238,7 +239,8 @@ class objc_property_attribute_t(Structure):
 libc.free.restype = None
 libc.free.argtypes = [c_void_p]
 
-# BOOL class_addIvar(Class cls, const char *name, size_t size, uint8_t alignment, const char *types)
+# BOOL class_addIvar(Class cls, const char *name, size_t size,
+#     uint8_t alignment, const char *types)
 libobjc.class_addIvar.restype = c_bool
 libobjc.class_addIvar.argtypes = [Class, c_char_p, c_size_t, c_uint8, c_char_p]
 
@@ -246,8 +248,8 @@ libobjc.class_addIvar.argtypes = [Class, c_char_p, c_size_t, c_uint8, c_char_p]
 libobjc.class_addMethod.restype = c_bool
 libobjc.class_addMethod.argtypes = [Class, SEL, IMP, c_char_p]
 
-# BOOL class_addProperty(Class cls, const char *name, const objc_property_attribute_t *attributes,
-#     unsigned int attributeCount)
+# BOOL class_addProperty(Class cls, const char *name, const objc_property_attribute_t
+#     *attributes, unsigned int attributeCount)
 libobjc.class_addProperty.restype = c_bool
 libobjc.class_addProperty.argtypes = [
     Class,
@@ -475,7 +477,8 @@ libobjc.objc_registerClassPair.argtypes = [Class]
 libobjc.objc_removeAssociatedObjects.restype = None
 libobjc.objc_removeAssociatedObjects.argtypes = [objc_id]
 
-# void objc_setAssociatedObject(id object, void *key, id value, objc_AssociationPolicy policy)
+# void objc_setAssociatedObject(id object, void *key, id value,
+#     objc_AssociationPolicy policy)
 libobjc.objc_setAssociatedObject.restype = None
 libobjc.objc_setAssociatedObject.argtypes = [objc_id, c_void_p, objc_id, c_int]
 
@@ -492,12 +495,10 @@ try:
 except AttributeError:
 
     def object_isClass(obj):
-        """Return whether the given Objective-C object is a class (or a
-        metaclass).
+        """Return whether the given Objective-C object is a class (or a metaclass).
 
-        This is the emulated version of the object_isClass runtime
-        function, for systems older than OS X 10.10 or iOS 8, where the
-        real function doesn't exist yet.
+        This is the emulated version of the object_isClass runtime function, for systems
+        older than OS X 10.10 or iOS 8, where the real function doesn't exist yet.
         """
 
         return libobjc.class_isMetaClass(libobjc.object_getClass(obj))
@@ -512,9 +513,10 @@ libobjc.object_getClassName.restype = c_char_p
 libobjc.object_getClassName.argtypes = [objc_id]
 
 # Note: The following functions only work for exactly pointer-sized ivars.
-# To use non-pointer-sized ivars reliably, the memory location must be calculated manually (using ivar_getOffset)
-# and then used as a pointer. This "manual" way can be used for all ivars except weak object ivars - these must be
-# accessed through the runtime functions in order to work correctly.
+# To use non-pointer-sized ivars reliably, the memory location must be calculated
+# manually (using ivar_getOffset) and then used as a pointer. This "manual" way
+# can be used for all ivars except weak object ivars - these must be accessed
+# through the runtime functions in order to work correctly.
 
 # id object_getIvar(id object, Ivar ivar)
 libobjc.object_getIvar.restype = objc_id
@@ -535,7 +537,8 @@ libobjc.property_getAttributes.argtypes = [objc_property_t]
 libobjc.property_getName.restype = c_char_p
 libobjc.property_getName.argtypes = [objc_property_t]
 
-# objc_property_attribute_t *property_copyAttributeList(objc_property_t property, unsigned int *outCount)
+# objc_property_attribute_t *property_copyAttributeList(objc_property_t property,
+#     unsigned int *outCount)
 libobjc.property_copyAttributeList.restype = POINTER(objc_property_attribute_t)
 libobjc.property_copyAttributeList.argtypes = [objc_property_t, POINTER(c_uint)]
 
@@ -545,7 +548,7 @@ libobjc.property_copyAttributeList.argtypes = [objc_property_t, POINTER(c_uint)]
 class objc_method_description(Structure):
     """The `objc_method_description <https://developer.apple.com/documentation/objectivec/objc_method_description?language=objc>`__
     structure from ``<objc/runtime.h>``.
-    """  # noqa: E501
+    """
 
     _fields_ = [
         ("name", SEL),
@@ -568,8 +571,9 @@ libobjc.protocol_addMethodDescription.argtypes = [
 libobjc.protocol_addProtocol.restype = None
 libobjc.protocol_addProtocol.argtypes = [objc_id, objc_id]
 
-# void protocol_addProperty(Protocol *proto, const char *name, const objc_property_attribute_t *attributes,
-#     unsigned int attributeCount, BOOL isRequiredProperty, BOOL isInstanceProperty)
+# void protocol_addProperty(Protocol *proto, const char *name, const
+#     objc_property_attribute_t *attributes, unsigned int attributeCount,
+#     BOOL isRequiredProperty, BOOL isInstanceProperty)
 libobjc.protocol_addProperty.restype = None
 libobjc.protocol_addProperty.argtypes = [
     objc_id,
@@ -599,7 +603,8 @@ libobjc.protocol_copyMethodDescriptionList.argtypes = [
     POINTER(c_uint),
 ]
 
-# objc_property_t * protocol_copyPropertyList(Protocol *protocol, unsigned int *outCount)
+# objc_property_t * protocol_copyPropertyList(Protocol *protocol,
+#     unsigned int *outCount)
 libobjc.protocol_copyPropertyList.restype = POINTER(objc_property_t)
 libobjc.protocol_copyPropertyList.argtypes = [objc_id, POINTER(c_uint)]
 
@@ -656,8 +661,7 @@ def ensure_bytes(x):
 
 
 def get_class(name):
-    """Get the Objective-C class with the given name as a :class:`Class`
-    object.
+    """Get the Objective-C class with the given name as a :class:`Class` object.
 
     If no class with the given name is loaded, ``None`` is returned, and
     the Objective-C runtime will log a warning message.
@@ -667,7 +671,8 @@ def get_class(name):
 
 
 # https://www.sealiesoftware.com/blog/archive/2008/10/30/objc_explain_objc_msgSend_stret.html
-# https://web.archive.org/web/20160810184034/http://www.x86-64.org/documentation/abi-0.99.pdf  (pp.17-23)
+# https://web.archive.org/web/20160810184034/http://www.x86-64.org/documentation/abi-0.99.pdf
+# (pp.17-23)
 # executive summary: on x86-64, who knows?
 def should_use_stret(restype):
     """Return whether a method returning the given type must be called using
@@ -675,22 +680,24 @@ def should_use_stret(restype):
 
     if type(restype) is not type(Structure):
         # Not needed when restype is not a structure.
-        return False
+        retval = False
     elif __i386__:
-        # On i386: Use for structures not sized exactly like an integer (1, 2, 4, or 8 bytes).
-        return sizeof(restype) not in (1, 2, 4, 8)
+        # On i386: Use for structures not sized exactly like an integer
+        # (1, 2, 4, or 8 bytes).
+        retval = sizeof(restype) not in (1, 2, 4, 8)
     elif __x86_64__:
         # On x86_64: Use for structures larger than 16 bytes.
         # (The ABI docs say that there are some special cases
         # for vector types, but those can't really be used
         # with ctypes anyway.)
-        return sizeof(restype) > 16
+        retval = sizeof(restype) > 16
     elif __arm__:
         # On ARM32: Use for all structures, regardless of size.
-        return True
+        retval = True
     else:
         # Other platforms: Doesn't exist.
-        return False
+        retval = False
+    return retval
 
 
 # https://www.sealiesoftware.com/blog/archive/2008/11/16/objc_explain_objc_msgSend_fpret.html
@@ -713,8 +720,8 @@ _msg_send_cache = {}
 
 
 def _msg_send_for_types(restype, argtypes):
-    """Get the appropriate variant of ``objc_msgSend`` for calling a method
-    with the given return and argument types.
+    """Get the appropriate variant of ``objc_msgSend`` for calling a method with the
+    given return and argument types.
 
     :param restype: The return type of the method to be called.
     :param argtypes: The argument types of the method to be called, excluding
@@ -726,7 +733,8 @@ def _msg_send_for_types(restype, argtypes):
     """
 
     try:
-        # Looking up a C function is relatively slow, so use an existing cached function if possible.
+        # Looking up a C function is relatively slow, so use an existing cached
+        # function if possible.
         return _msg_send_cache[(restype, *argtypes)]
     except KeyError:
         # Choose the correct version of objc_msgSend based on return type.
@@ -749,7 +757,8 @@ def _msg_send_for_types(restype, argtypes):
         send.restype = restype
         send.argtypes = [objc_id, SEL] + argtypes
 
-        # Cache the fully set up objc_msgSend function object to speed up future calls with the same types.
+        # Cache the fully set up objc_msgSend function object to speed up future calls
+        # with the same types.
         _msg_send_cache[(restype, *argtypes)] = send
         return send
 
@@ -762,7 +771,7 @@ def send_message(receiver, selector, *args, restype, argtypes=None, varargs=None
     .. note::
 
         Some Objective-C methods take variadic arguments (``varargs``), for example
-        `+[NSString stringWithFormat:] <https://developer.apple.com/documentation/foundation/nsstring/1497275-stringwithformat?language=objc>`_.
+        `+[NSString stringWithFormat:] <https://developer.apple.com/documentation/foundation/nsstring/stringwithformat:?language=objc>`_.
         When using :func:`send_message`, variadic arguments are treated
         differently from regular arguments: they are not passed as normal
         function arguments in ``*args``, but as a list in a separate ``varargs``
@@ -804,7 +813,7 @@ def send_message(receiver, selector, *args, restype, argtypes=None, varargs=None
     :param varargs: Variadic arguments for the method, as a :class:`list`.
         Defaults to ``[]``. These arguments are converted according to the
         default :mod:`ctypes` conversion rules.
-    """  # noqa: E501
+    """
 
     try:
         receiver = receiver._as_parameter_
@@ -828,7 +837,8 @@ def send_message(receiver, selector, *args, restype, argtypes=None, varargs=None
 
     if len(args) != len(argtypes):
         raise TypeError(
-            f"Inconsistent number of arguments ({len(args)}) and argument types ({len(argtypes)})"
+            f"Inconsistent number of arguments ({len(args)}) and argument "
+            f"types ({len(argtypes)})"
         )
 
     send = _msg_send_for_types(restype, argtypes)
@@ -870,8 +880,8 @@ def send_super(
     varargs=None,
     _allow_dealloc=False,
 ):
-    """In the context of the given class, call a superclass method on the
-    receiver with the given selector and arguments.
+    """In the context of the given class, call a superclass method on the receiver with
+    the given selector and arguments.
 
     This is the equivalent of an Objective-C method call like
     ``[super sel:args]`` in the class ``cls``.
@@ -928,7 +938,8 @@ def send_super(
 
     if len(args) != len(argtypes):
         raise TypeError(
-            f"Inconsistent number of arguments ({len(args)}) and argument types ({len(argtypes)})"
+            f"Inconsistent number of arguments ({len(args)}) and argument "
+            f"types ({len(argtypes)})"
         )
 
     if not isinstance(cls, Class):
@@ -936,14 +947,16 @@ def send_super(
         raise TypeError(
             f"Missing or invalid cls argument: expected an ObjCClass or Class, "
             f"not {type(cls).__module__}.{type(cls).__qualname__}\n"
-            f"send_super requires the current class to be passed explicitly as the first argument. "
-            f"To fix this error, pass the special name __class__ as the first argument to send_super."
+            f"send_super requires the current class to be passed explicitly as the "
+            f"first argument. To fix this error, pass the special name __class__ as "
+            f"the first argument to send_super."
         )
 
     if not _allow_dealloc and selector.name == b"dealloc":
         warnings.warn(
-            "You should not call the superclass dealloc manually when overriding dealloc. Rubicon-objc "
-            "will call it for you after releasing objects stored in properties and ivars.",
+            "You should not call the superclass dealloc manually when "
+            "overriding dealloc. Rubicon-objc will call it for you after releasing "
+            "objects stored in properties and ivars.",
             stacklevel=2,
         )
         return
@@ -959,14 +972,16 @@ def send_super(
         receiver = cast(receiver, objc_id)
     else:
         raise TypeError(
-            f"Invalid type for receiver: {type(receiver).__module__}.{type(receiver).__qualname__}"
+            f"Invalid type for receiver: "
+            f"{type(receiver).__module__}.{type(receiver).__qualname__}"
         )
 
     super_ptr = libobjc.class_getSuperclass(cls)
     if super_ptr.value is None:
         class_name = libobjc.class_getName(cls).decode("utf-8")
         raise ValueError(
-            f"The specified class {class_name!r} is a root class, it cannot be used with send_super"
+            f"The specified class {class_name!r} is a root class, it cannot be used "
+            f"with send_super"
         )
     super_struct = objc_super(receiver, super_ptr)
 
@@ -1133,16 +1148,16 @@ def set_ivar(obj, varname, value, weak=False):
 
 @contextmanager
 def autoreleasepool():
-    """A context manager that has the same effect as a @autoreleasepool block
-    in Objective-C.
+    """A context manager that has the same effect as a @autoreleasepool block in
+    Objective-C.
 
-    Any objects that are autoreleased within the context will receive a release
-    message when exiting the context. When running an event loop, AppKit will
-    create an autorelease pool at the beginning of each cycle of the event loop
-    and drain it at the end. You therefore do not need to use @autoreleasepool
-    blocks when running an event loop. However, they may be still be useful when
-    your code temporarily allocates large amounts of memory which you want to
-    explicitly free before the end of a cycle.
+    Any objects that are autoreleased within the context will receive a release message
+    when exiting the context. When running an event loop, AppKit will create an
+    autorelease pool at the beginning of each cycle of the event loop and drain it at
+    the end. You therefore do not need to use @autoreleasepool blocks when running an
+    event loop. However, they may be still be useful when your code temporarily
+    allocates large amounts of memory which you want to explicitly free before the end
+    of a cycle.
     """
     pool = libobjc.objc_autoreleasePoolPush()
 

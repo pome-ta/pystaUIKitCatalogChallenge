@@ -91,11 +91,11 @@ __all__ = [
 __LP64__ = 8 * struct.calcsize("P") == 64
 
 # platform.processor() describes the CPU on which the code is running.
-#   * On a 64-bit Intel machine it is always "x86_64", even if Python is built as 32-bit.
+#   * On a 64-bit Intel machine it is always "x86_64", even if Python is built as 32-bit
 #   * M1 MacBooks return "arm"
 #   * iPhones (as of the late 2022 support packages) return "arm64"
 # This *won't* work on older iOS support builds, as it relies on the customized
-# platform values added in https://github.com/beeware/Python-Apple-support/commit/2f42105838ab8f6f7e703ddb929d97758a36145e  # noqa: E501
+# platform values added in https://github.com/beeware/Python-Apple-support/commit/2f42105838ab8f6f7e703ddb929d97758a36145e
 _processor = platform.processor()
 _any_x86 = _processor in ("i386", "x86_64")
 __i386__ = _any_x86 and not __LP64__
@@ -106,8 +106,9 @@ if _processor:
 else:
     # Fallback when running on iOS without the support package,
     # where platform.processor() is an empty string
-    # and the "model" field of uname/platform doesn't indicate the processor architecture.
-    # In that case, look for the architecture in the kernel version string.
+    # and the "model" field of uname/platform doesn't indicate the processor
+    # architecture. In that case, look for the architecture in the kernel
+    # version string.
     _any_arm = "ARM" in platform.version()
 __arm64__ = _any_arm and __LP64__
 __arm__ = _any_arm and not __LP64__
@@ -163,9 +164,8 @@ _encoding_for_ctype_map = {}
 def _end_of_encoding(encoding, start):
     """Find the end index of the encoding starting at index start.
 
-    The encoding is not validated very extensively. There are no
-    guarantees what happens for invalid encodings; an error may be
-    raised, or a bogus end index may be returned.
+    The encoding is not validated very extensively. There are no guarantees what happens
+    for invalid encodings; an error may be raised, or a bogus end index may be returned.
     """
 
     if start < 0 or start >= len(encoding):
@@ -178,7 +178,8 @@ def _end_of_encoding(encoding, start):
         c = encoding[i : i + 1]
         if c in b"([{<":
             # Opening parenthesis of some type, wait for a corresponding closing paren.
-            # This doesn't check that the parenthesis *types* match (only the *number* of closing parens has to match).
+            # This doesn't check that the parenthesis *types* match (only the *number*
+            # of closing parens has to match).
             paren_depth += 1
             i += 1
         elif paren_depth > 0:
@@ -193,12 +194,14 @@ def _end_of_encoding(encoding, start):
             # Encodings with exactly one character.
             return i + 1
         elif c in b"^ANORVjnor":
-            # Simple prefix (qualifier, pointer, etc.), skip it but count it towards the length.
+            # Simple prefix (qualifier, pointer, etc.), skip it but count it towards
+            # the length.
             i += 1
         elif c == b"@":
             if encoding[i + 1 : i + 3] == b"?<":
                 # Encoding @?<...> (block with signature).
-                # Skip the @? and continue at the < which is treated as an opening paren.
+                # Skip the @? and continue at the < which is treated as an
+                # opening paren.
                 i += 2
             elif encoding[i + 1 : i + 2] == b"?":
                 # Encoding @? (block).
@@ -222,7 +225,8 @@ def _end_of_encoding(encoding, start):
 
     if paren_depth > 0:
         raise ValueError(
-            f"Incomplete encoding, missing {paren_depth} closing parentheses: {encoding}"
+            f"Incomplete encoding, missing {paren_depth} closing parentheses: "
+            f"{encoding}"
         )
     else:
         raise ValueError(
@@ -233,8 +237,8 @@ def _end_of_encoding(encoding, start):
 def _create_structish_type_for_encoding(encoding, *, base):
     """Create a structish type from the given encoding.
 
-    ("structish" = "structure or union")
-    The base kwarg controls which base class is used. It should be either ctypes.Structure or ctypes.Union.
+    ("structish" = "structure or union") The base kwarg controls which base class is
+    used. It should be either ctypes.Structure or ctypes.Union.
     """
 
     # Split name and fields.
@@ -245,8 +249,8 @@ def _create_structish_type_for_encoding(encoding, *, base):
     if not eq:
         # If the fields are not present, we can't create a meaningful structish.
         # We also know that there is no known structish with this name,
-        # because in that case that structish would have been found by ctype_for_encoding.
-        # So we pretend that this structish is a void (None).
+        # because in that case that structish would have been found by
+        # ctype_for_encoding. So we pretend that this structish is a void (None).
         # This causes pointers to it to become void pointers.
         return None
 
@@ -260,13 +264,15 @@ def _create_structish_type_for_encoding(encoding, *, base):
     # marker so that we can easily identify anonymous structures.
     py_name = "_Anonymous" if name is None else name.decode("utf-8")
     structish_type = type(py_name, (base,), {"__anonymous__": name is None})
-    # Register the structish for its own encoding, so the same type is used in the future.
+    # Register the structish for its own encoding, so the same type
+    # is used in the future.
     register_encoding(encoding, structish_type)
     if name is not None:
         # If not anonymous, also register for the corresponding name-only encoding.
         register_encoding(begin + name + end, structish_type)
 
-    # Convert the field encodings to a sequence of tuples, as needed for the _fields_ attribute.
+    # Convert the field encodings to a sequence of tuples, as needed for
+    # the _fields_ attribute.
     ctypes_fields = []
     start = 0  # Start of the next field.
     i = 0  # Field counter, used when naming unnamed fields.
@@ -304,10 +310,10 @@ def _ctype_for_unknown_encoding(encoding):
         register_encoding(encoding, pointer_type)
         return pointer_type
     elif encoding.startswith(b"[") and encoding.endswith(b"]"):
-        # Resolve array types recursively.
-        for i, c in enumerate(encoding[1:], start=1):
-            if c not in b"0123456789":
-                break
+        # Resolve array types recursively
+        i = 1
+        while encoding[i] in b"0123456789":
+            i += 1
         assert i != 1
         array_length = int(encoding[1:i].decode("utf-8"))
         array_type = ctype_for_encoding(encoding[i:-1]) * array_length
@@ -393,13 +399,13 @@ def encoding_for_ctype(ctype):
     except KeyError:
         try:
             return b"^" + encoding_for_ctype(ctype._type_)
-        except KeyError:
-            raise ValueError(f"No type encoding known for ctype {ctype}")
+        except KeyError as exc:
+            raise ValueError(f"No type encoding known for ctype {ctype}") from exc
 
 
 def register_preferred_encoding(encoding, ctype):
-    """Register a preferred conversion between an Objective-C type encoding and
-    a C type.
+    """Register a preferred conversion between an Objective-C type encoding and a C
+    type.
 
     "Preferred" means that any existing conversions in each direction are
     overwritten with the new conversion. To register an encoding without
@@ -411,8 +417,8 @@ def register_preferred_encoding(encoding, ctype):
 
 
 def with_preferred_encoding(encoding):
-    """Register a preferred conversion between an Objective-C type encoding and
-    the decorated C type.
+    """Register a preferred conversion between an Objective-C type encoding and the
+    decorated C type.
 
     This is equivalent to calling :func:`register_preferred_encoding` on the
     decorated C type.
@@ -426,8 +432,8 @@ def with_preferred_encoding(encoding):
 
 
 def register_encoding(encoding, ctype):
-    """Register an additional conversion between an Objective-C type encoding
-    and a C type.
+    """Register an additional conversion between an Objective-C type encoding and a C
+    type.
 
     "Additional" means that any existing conversions in either direction are
     *not* overwritten with the new conversion. To register an encoding and
@@ -439,8 +445,8 @@ def register_encoding(encoding, ctype):
 
 
 def with_encoding(encoding):
-    """Register an additional conversion between an Objective-C type encoding
-    and the decorated C type.
+    """Register an additional conversion between an Objective-C type encoding and the
+    decorated C type.
 
     This is equivalent to calling :func:`register_encoding` on the
     decorated C type.
@@ -454,8 +460,8 @@ def with_encoding(encoding):
 
 
 def unregister_encoding(encoding):
-    """Unregister the conversion from an Objective-C type encoding to its
-    corresponding C type.
+    """Unregister the conversion from an Objective-C type encoding to its corresponding
+    C type.
 
     Note that this does not remove any conversions in the other direction (from
     a C type to this encoding). These conversions may be replaced with
@@ -485,8 +491,8 @@ def unregister_encoding_all(encoding):
 
 
 def unregister_ctype(ctype):
-    """Unregister the conversion from a C type to its corresponding
-    Objective-C type encoding.
+    """Unregister the conversion from a C type to its corresponding Objective-C type
+    encoding.
 
     Note that this does not remove any conversions in the other direction (from
     an encoding to this C type). These conversions may be replaced with
@@ -500,8 +506,8 @@ def unregister_ctype(ctype):
 
 
 def unregister_ctype_all(ctype):
-    """Unregister all conversions between a C type and all corresponding
-    Objective-C type encodings.
+    """Unregister all conversions between a C type and all corresponding Objective-C
+    type encodings.
 
     All conversions from any type encoding to this C type are removed
     recursively using :func:`unregister_encoding_all`.
@@ -516,15 +522,15 @@ def unregister_ctype_all(ctype):
 
 
 def get_ctype_for_encoding_map():
-    """Get a copy of all currently registered encoding-to-C type conversions
-    as a map."""
+    """Get a copy of all currently registered encoding-to-C type conversions as a
+    map."""
 
     return dict(_ctype_for_encoding_map)
 
 
 def get_encoding_for_ctype_map():
-    """Get a copy of all currently registered C type-to-encoding conversions
-    as a map."""
+    """Get a copy of all currently registered C type-to-encoding conversions as a
+    map."""
 
     return dict(_encoding_for_ctype_map)
 
@@ -532,12 +538,12 @@ def get_encoding_for_ctype_map():
 def split_method_encoding(encoding):
     """Split a method signature encoding into a sequence of type encodings.
 
-    The first type encoding represents the return type, all remaining type
-    encodings represent the argument types.
+    The first type encoding represents the return type, all remaining type encodings
+    represent the argument types.
 
-    If there are any numbers after a type encoding, they are ignored. On
-    PowerPC, these numbers indicated each argument/return value's offset on the
-    stack. These numbers are meaningless on modern architectures.
+    If there are any numbers after a type encoding, they are ignored. On PowerPC, these
+    numbers indicated each argument/return value's offset on the stack. These numbers
+    are meaningless on modern architectures.
     """
 
     encodings = []
@@ -568,12 +574,13 @@ def ctypes_for_method_encoding(encoding):
 def _struct_for_sequence(seq, struct_type):
     if len(seq) != len(struct_type._fields_):
         raise ValueError(
-            f"Struct type {struct_type.__module__}.{struct_type.__qualname__} has {len(struct_type._fields_)} fields, "
-            f"but a sequence of length {len(seq)} was given"
+            f"Struct type {struct_type.__module__}.{struct_type.__qualname__} has "
+            f"{len(struct_type._fields_)} fields, but a sequence of length "
+            f"{len(seq)} was given"
         )
 
     values = []
-    for value, (field_name, field_type, *_) in zip(seq, struct_type._fields_):
+    for value, (_field_name, field_type, *_) in zip(seq, struct_type._fields_):
         if issubclass(field_type, (Structure, Array)) and isinstance(
             value, collections.abc.Iterable
         ):
@@ -587,8 +594,9 @@ def _struct_for_sequence(seq, struct_type):
 def _array_for_sequence(seq, array_type):
     if len(seq) != array_type._length_:
         raise ValueError(
-            f"Array type {array_type.__module__}.{array_type.__qualname__} has {array_type._length_} fields, "
-            f"but a sequence of length {len(seq)} was given"
+            f"Array type {array_type.__module__}.{array_type.__qualname__} has "
+            f"{array_type._length_} fields, but a sequence of length {len(seq)} "
+            f"was given"
         )
 
     if issubclass(array_type._type_, (Structure, Array)):
@@ -605,8 +613,8 @@ def _array_for_sequence(seq, array_type):
 
 
 def compound_value_for_sequence(seq, tp):
-    """Create a C structure or array of type ``tp``, initialized with values
-    from ``seq``.
+    """Create a C structure or array of type ``tp``, initialized with values from
+    ``seq``.
 
     If ``tp`` is a :class:`~ctypes.Structure` type, the newly created
     structure's fields are initialized in declaration order with the values from
@@ -627,7 +635,8 @@ def compound_value_for_sequence(seq, tp):
         return _array_for_sequence(seq, tp)
     else:
         raise TypeError(
-            f"Don't know how to convert a sequence to a {tp.__module__}.{tp.__qualname__}"
+            f"Don't know how to convert a sequence to a "
+            f"{tp.__module__}.{tp.__qualname__}"
         )
 
 
@@ -693,7 +702,7 @@ register_preferred_encoding(b"^v", c_void_p)
 
 
 # Note CGBase.h located at
-# /System/Library/Frameworks/ApplicationServices.framework/Frameworks/CoreGraphics.framework/Headers/CGBase.h
+# /System/Library/Frameworks/ApplicationServices.framework/Frameworks/CoreGraphics.framework/Headers/CGBase.h  # noqa: E501
 # defines CGFloat as double if __LP64__, otherwise it's a float.
 if __LP64__:
     c_ptrdiff_t = c_long
@@ -732,8 +741,7 @@ register_preferred_encoding(_PyObjectEncoding, py_object)
 @with_encoding(b"^{?}")
 @with_encoding(b"^(?)")
 class UnknownPointer(c_void_p):
-    """Placeholder for the "unknown pointer" types ``^?``, ``^{?}`` and
-    ``^(?)``.
+    """Placeholder for the "unknown pointer" types ``^?``, ``^{?}`` and ``^(?)``.
 
     Not to be confused with a ``^v`` void pointer.
 
@@ -890,7 +898,10 @@ class UIEdgeInsets(Structure):
         return f"<UIEdgeInsets({self.top}, {self.left}, {self.bottom}, {self.right})>"
 
     def __str__(self):
-        return f"top={self.top}, left={self.left}, bottom={self.bottom}, right={self.right}"
+        return (
+            f"top={self.top}, left={self.left}, bottom={self.bottom}, "
+            f"right={self.right}"
+        )
 
 
 def UIEdgeInsetsMake(top, left, bottom, right):
@@ -914,7 +925,10 @@ class NSEdgeInsets(Structure):
         return f"<NSEdgeInsets({self.top}, {self.left}, {self.bottom}, {self.right})>"
 
     def __str__(self):
-        return f"top={self.top}, left={self.left}, bottom={self.bottom}, right={self.right}"
+        return (
+            f"top={self.top}, left={self.left}, bottom={self.bottom}, "
+            f"right={self.right}"
+        )
 
 
 def NSEdgeInsetsMake(top, left, bottom, right):
