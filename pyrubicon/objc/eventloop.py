@@ -1,10 +1,11 @@
 """PEP 3156 event loop based on CoreFoundation."""
 
 import contextvars
+import inspect
 import sys
 import threading
+import warnings
 from asyncio import (
-    DefaultEventLoopPolicy,
     coroutines,
     events,
     tasks,
@@ -17,13 +18,33 @@ from .runtime import load_library, objc_id
 from .types import CFIndex
 
 if sys.version_info < (3, 14):
-    from asyncio import SafeChildWatcher
+    from asyncio import (
+        AbstractEventLoopPolicy,
+        DefaultEventLoopPolicy,
+        SafeChildWatcher,
+        set_event_loop_policy,
+    )
+elif sys.version_info < (3, 16):
+    # Python 3.14 finalized the deprecation of SafeChildWatcher. There's no
+    # replacement API; the feature can be removed.
+    #
+    # Python 3.14 also started the deprecation of event loop policies, to be
+    # finalized in Python 3.16. In the 3.14 betas, the symbols were prefixed
+    # with an underscore; that was reverted for RC1. See
+    # https://github.com/python/cpython/issues/127949 and
+    # https://github.com/python/cpython/issues/134657 for details.
+    from asyncio import (  # noqa: I001
+        AbstractEventLoopPolicy,
+        DefaultEventLoopPolicy,
+    )
 
 __all__ = [
     "EventLoopPolicy",
     "CocoaLifecycle",
+    "RubiconEventLoop",
     "iOSLifecycle",
 ]
+
 
 ###########################################################################
 # CoreFoundation types and constants needed for async handlers
@@ -249,9 +270,9 @@ class CFSocketHandle(events.Handle):
             callback(*args)
 
     def __init__(self, *, loop, fd):
-        """Register a file descriptor with the CFRunLoop, or modify its state
-        so that it's listening for both notifications (read and write) rather
-        than just one; used to implement add_reader and add_writer."""
+        """Register a file descriptor with the CFRunLoop, or modify its state so that
+        it's listening for both notifications (read and write) rather than just one;
+        used to implement add_reader and add_writer."""
         super().__init__(CFSocketCallback(self._cf_socket_callback), None, loop)
 
         # Retain a reference to the Handle
@@ -364,8 +385,8 @@ class CFEventLoop(unix_events.SelectorEventLoop):
     def add_reader(self, fd, callback, *args):
         """Add a reader callback.
 
-        Method is a direct call through to _add_reader to reflect an
-        internal implementation detail added in Python3.5.
+        Method is a direct call through to _add_reader to reflect an internal
+        implementation detail added in Python3.5.
         """
         self._add_reader(fd, callback, *args)
 
@@ -379,8 +400,8 @@ class CFEventLoop(unix_events.SelectorEventLoop):
     def remove_reader(self, fd):
         """Remove a reader callback.
 
-        Method is a direct call through to _remove_reader to reflect an
-        internal implementation detail added in Python3.5.
+        Method is a direct call through to _remove_reader to reflect an internal
+        implementation detail added in Python3.5.
         """
         self._remove_reader(fd)
 
@@ -396,8 +417,8 @@ class CFEventLoop(unix_events.SelectorEventLoop):
     def add_writer(self, fd, callback, *args):
         """Add a writer callback.
 
-        Method is a direct call through to _add_writer to reflect an
-        internal implementation detail added in Python3.5.
+        Method is a direct call through to _add_writer to reflect an internal
+        implementation detail added in Python3.5.
         """
         self._add_writer(fd, callback, *args)
 
@@ -411,8 +432,8 @@ class CFEventLoop(unix_events.SelectorEventLoop):
     def remove_writer(self, fd):
         """Remove a writer callback.
 
-        Method is a direct call through to _remove_writer to reflect an
-        internal implementation detail added in Python3.5.
+        Method is a direct call through to _remove_writer to reflect an internal
+        implementation detail added in Python3.5.
         """
         self._remove_writer(fd)
 
@@ -421,7 +442,7 @@ class CFEventLoop(unix_events.SelectorEventLoop):
     ######################################################################
     def _check_not_coroutine(self, callback, name):
         """Check whether the given callback is a coroutine or not."""
-        if coroutines.iscoroutine(callback) or coroutines.iscoroutinefunction(callback):
+        if coroutines.iscoroutine(callback) or inspect.iscoroutinefunction(callback):
             raise TypeError(f"coroutines cannot be used with {name}()")
 
     def is_running(self):
@@ -429,8 +450,7 @@ class CFEventLoop(unix_events.SelectorEventLoop):
         return self._running
 
     def run(self):
-        """Internal implementation of run using the CoreFoundation event
-        loop."""
+        """Internal implementation of run using the CoreFoundation event loop."""
         recursive = self.is_running()
         if (
             not recursive
@@ -502,10 +522,10 @@ class CFEventLoop(unix_events.SelectorEventLoop):
     def run_forever_cooperatively(self, lifecycle=None):
         """A non-blocking version of :meth:`run_forever`.
 
-        This may seem like nonsense; however, an iOS app is not expected to
-        invoke a blocking "main event loop" method. As a result, we need to
-        be able to *start* Python event loop handling, but then return control
-        to the main app to start the actual event loop.
+        This may seem like nonsense; however, an iOS app is not expected to invoke a
+        blocking "main event loop" method. As a result, we need to be able to *start*
+        Python event loop handling, but then return control to the main app to start the
+        actual event loop.
 
         The implementation is effectively all the parts of a call to
         :meth:`run_forever()`, but without any of the shutdown/cleanup logic.
@@ -595,17 +615,16 @@ class CFEventLoop(unix_events.SelectorEventLoop):
     def time(self):
         """Return the time according to the event loop's clock.
 
-        This is a float expressed in seconds since an epoch, but the
-        epoch, precision, accuracy and drift are unspecified and may
-        differ per event loop.
+        This is a float expressed in seconds since an epoch, but the epoch, precision,
+        accuracy and drift are unspecified and may differ per event loop.
         """
         return libcf.CFAbsoluteTimeGetCurrent()
 
     def stop(self):
         """Stop running the event loop.
 
-        Every callback already scheduled will still run.  This simply
-        informs run_forever to stop looping after a complete iteration.
+        Every callback already scheduled will still run.  This simply informs
+        run_forever to stop looping after a complete iteration.
         """
         super().stop()
         self._lifecycle.stop()
@@ -613,8 +632,8 @@ class CFEventLoop(unix_events.SelectorEventLoop):
     def close(self):
         """Close the event loop.
 
-        This clears the queues and shuts down the executor,
-        but does not wait for the executor to finish.
+        This clears the queues and shuts down the executor, but does not wait for the
+        executor to finish.
 
         The event loop must not be running.
         """
@@ -637,100 +656,138 @@ class CFEventLoop(unix_events.SelectorEventLoop):
                 "You can't set a lifecycle on a loop that's already running."
             )
         self._lifecycle = lifecycle
-        self._policy._lifecycle = lifecycle
+        if sys.version_info < (3, 14):
+            self._policy._lifecycle = lifecycle
 
     def _add_callback(self, handle):
         """Add a callback to be invoked ASAP.
 
-        The inherited behavior uses a self-pipe to wake up the event loop
-        in a thread-safe fashion, which causes the logic in run_once() to
-        empty the list of handlers that are awaiting invocation.
+        The inherited behavior uses a self-pipe to wake up the event loop in a thread-
+        safe fashion, which causes the logic in run_once() to empty the list of handlers
+        that are awaiting invocation.
 
-        CFEventLoop doesn't use run_once(), so adding handlers to
-        self._ready results in handlers that aren't invoked. Instead, we
-        create a 0-interval timer to invoke the callback as soon as
-        possible.
+        CFEventLoop doesn't use run_once(), so adding handlers to self._ready results in
+        handlers that aren't invoked. Instead, we create a 0-interval timer to invoke
+        the callback as soon as possible.
         """
         if handle._cancelled:
             return
         self.call_soon(handle._callback, *handle._args)
 
 
-class EventLoopPolicy(events.AbstractEventLoopPolicy):
-    """Rubicon event loop policy.
+if sys.version_info < (3, 16):
 
-    In this policy, each thread has its own event loop. However, we only
-    automatically create an event loop by default for the main thread;
-    other threads by default have no event loop.
-    """
+    class EventLoopPolicy(AbstractEventLoopPolicy):
+        """Rubicon event loop policy.
 
-    def __init__(self):
-        self._lifecycle = None
-        self._default_loop = None
-        self._watcher_lock = threading.Lock()
-        self._watcher = None
-        self._policy = DefaultEventLoopPolicy()
-        self._policy.new_event_loop = self.new_event_loop
-        self.get_event_loop = self._policy.get_event_loop
-        self.set_event_loop = self._policy.set_event_loop
+        In this policy, each thread has its own event loop. However, we only
+        automatically create an event loop by default for the main thread; other
+        threads by default have no event loop.
 
-    def new_event_loop(self):
-        """Create a new event loop and return it."""
-        if (
-            not self._default_loop
-            and threading.current_thread() == threading.main_thread()
-        ):
-            loop = self.get_default_loop()
-        else:
+        **DEPRECATED** - Python 3.14 deprecated the concept of manually creating
+        EventLoopPolicies. Create and use a ``RubiconEventLoop`` instance instead of
+        installing an event loop policy and calling ``asyncio.new_event_loop()``.
+        """
+
+        def __init__(self):
+            warnings.warn(
+                "Custom EventLoopPolicy instances have been deprecated by Python 3.14. "
+                "Create and use a `RubiconEventLoop` instance directly instead of "
+                "installing an event loop policy and calling "
+                "`asyncio.new_event_loop()`.",
+                DeprecationWarning,
+                stacklevel=2,
+            )
+
+            self._lifecycle = None
+            self._default_loop = None
+            if sys.version_info < (3, 14):
+                self._watcher_lock = threading.Lock()
+                self._watcher = None
+            self._policy = DefaultEventLoopPolicy()
+            self._policy.new_event_loop = self.new_event_loop
+            self.get_event_loop = self._policy.get_event_loop
+            self.set_event_loop = self._policy.set_event_loop
+
+        def new_event_loop(self):
+            """Create a new event loop and return it."""
+            if (
+                not self._default_loop
+                and threading.current_thread() == threading.main_thread()
+            ):
+                loop = self.get_default_loop()
+            else:
+                loop = CFEventLoop(self._lifecycle)
+            loop._policy = self
+
+            return loop
+
+        def get_default_loop(self):
+            """Get the default event loop."""
+            if not self._default_loop:
+                self._default_loop = self._new_default_loop()
+            return self._default_loop
+
+        def _new_default_loop(self):
             loop = CFEventLoop(self._lifecycle)
-        loop._policy = self
+            loop._policy = self
+            return loop
 
-        return loop
+        if sys.version_info < (3, 14):
 
-    def get_default_loop(self):
-        """Get the default event loop."""
-        if not self._default_loop:
-            self._default_loop = self._new_default_loop()
-        return self._default_loop
+            def _init_watcher(self):
+                with events._lock:
+                    if self._watcher is None:  # pragma: no branch
+                        self._watcher = SafeChildWatcher()
+                        if threading.current_thread() == threading.main_thread():
+                            self._watcher.attach_loop(self._default_loop)
 
-    def _new_default_loop(self):
-        loop = CFEventLoop(self._lifecycle)
-        loop._policy = self
-        return loop
+            def get_child_watcher(self):
+                """Get the watcher for child processes.
 
-    if sys.version_info < (3, 14):
+                If not yet set, a :class:`~asyncio.SafeChildWatcher` object is
+                automatically created.
 
-        def _init_watcher(self):
-            with events._lock:
-                if self._watcher is None:  # pragma: no branch
-                    self._watcher = SafeChildWatcher()
-                    if threading.current_thread() == threading.main_thread():
-                        self._watcher.attach_loop(self._default_loop)
+                .. note::
+                    Child watcher support was removed in Python 3.14
+                """
+                if self._watcher is None:
+                    self._init_watcher()
 
-        def get_child_watcher(self):
-            """Get the watcher for child processes.
+                return self._watcher
 
-            If not yet set, a :class:`~asyncio.SafeChildWatcher` object is
-            automatically created.
+            def set_child_watcher(self, watcher):
+                """Set the watcher for child processes.
 
-            .. note::
-                Child watcher support was removed in Python 3.14
-            """
-            if self._watcher is None:
-                self._init_watcher()
+                .. note::
+                    Child watcher support was removed in Python 3.14
+                """
+                if self._watcher is not None:
+                    self._watcher.close()
 
-            return self._watcher
+                self._watcher = watcher
 
-        def set_child_watcher(self, watcher):
-            """Set the watcher for child processes.
 
-            .. note::
-                Child watcher support was removed in Python 3.14
-            """
-            if self._watcher is not None:
-                self._watcher.close()
+if sys.version_info < (3, 14):
 
-            self._watcher = watcher
+    def RubiconEventLoop():
+        """Create a new Rubicon CFEventLoop instance."""
+        # If they're using RubiconEventLoop(), they've done the necessary adaptation.
+        with warnings.catch_warnings():
+            warnings.filterwarnings(
+                "ignore",
+                message=(
+                    r"^Custom EventLoopPolicy instances have been "
+                    r"deprecated by Python 3.14"
+                ),
+                category=DeprecationWarning,
+            )
+            policy = EventLoopPolicy()
+        set_event_loop_policy(policy)
+        return policy.new_event_loop()
+
+else:
+    RubiconEventLoop = CFEventLoop
 
 
 class CFLifecycle:

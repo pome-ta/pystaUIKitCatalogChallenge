@@ -1,12 +1,12 @@
-"""This module provides a workaround to allow callback functions to return
-composite types (most importantly structs).
+"""This module provides a workaround to allow callback functions to return composite
+types (most importantly structs).
 
 Currently, ctypes callback functions (created by passing a Python callable to a
 CFUNCTYPE object) are only able to return what ctypes considers a "simple" type. This
 includes void (None), scalars (c_int, c_float, etc.), c_void_p, c_char_p, c_wchar_p, and
 py_object. Returning "composite" types (structs, unions, and non-"simple" pointers) is
-not possible. This issue has been reported on the Python bug tracker
-(https://github.com/python/cpython/issues/49960).
+not possible. This issue has been reported on the Python bug tracker (
+https://github.com/python/cpython/issues/49960).
 
 For pointers, the easiest workaround is to return a c_void_p instead of the correctly
 typed pointer, and to cast the value on both sides. For structs and unions there is no
@@ -24,15 +24,17 @@ import warnings
 if sys.version_info < (3, 6) or sys.version_info >= (3, 15):
     v = sys.version_info
     warnings.warn(
-        "rubicon.objc.ctypes_patch has only been tested with Python 3.6 through 3.15. "
+        "rubicon.objc.ctypes_patch has only been tested with Python 3.6 through 3.14. "
         f"You are using Python {v.major}.{v.minor}.{v.micro}. Most likely things will "
         "work properly, but you may experience crashes if Python's internals have "
-        "changed significantly."
+        "changed significantly.",
+        stacklevel=2,
     )
 
 
 # The PyTypeObject struct from "Include/object.h".
-# This is a forward declaration, fields are set later once PyVarObject has been declared.
+# This is a forward declaration, fields are set later once PyVarObject
+# has been declared.
 class PyTypeObject(ctypes.Structure):
     pass
 
@@ -82,9 +84,10 @@ ffi_type._fields_ = [
 # The GETFUNC and SETFUNC typedefs from "Modules/_ctypes/ctypes.h".
 GETFUNC = ctypes.PYFUNCTYPE(ctypes.py_object, ctypes.c_void_p, ctypes.c_ssize_t)
 if sys.version_info < (3, 10):
-    # The return type of SETFUNC is declared here as a c_void_p instead of py_object to work
-    # around a ctypes bug (https://github.com/python/cpython/issues/81061). See the comment
-    # in make_callback_returnable's setfunc for details. This bug was fixed in 3.10.
+    # The return type of SETFUNC is declared here as a c_void_p instead of py_object
+    # to work around a ctypes bug (https://github.com/python/cpython/issues/81061).
+    # See the comment in make_callback_returnable's setfunc for details. This bug was
+    # fixed in 3.10.
     SETFUNC = ctypes.PYFUNCTYPE(
         ctypes.c_void_p, ctypes.c_void_p, ctypes.py_object, ctypes.c_ssize_t
     )
@@ -147,13 +150,12 @@ if sys.version_info < (3, 13):
         return mappingproxyobject.from_address(id(proxy)).mapping
 
     def get_stgdict_of_type(tp):
-        """Return the given ctypes type's StgDict object. If the object's dict is
-        not a StgDict, an error is raised.
+        """Return the given ctypes type's StgDict object. If the object's dict is not a
+        StgDict, an error is raised.
 
-        This function is roughly equivalent to the PyType_stgdict function in the
-        ctypes source code. We cannot use that function directly, because it is not
-        part of CPython's public C API, and thus not accessible on some systems (see
-        #113).
+        This function is roughly equivalent to the PyType_stgdict function in the ctypes
+        source code. We cannot use that function directly, because it is not part of
+        CPython's public C API, and thus not accessible on some systems (see #113).
         """
 
         if not isinstance(tp, type):
@@ -206,11 +208,11 @@ else:
         """Return the given ctypes type's StgInfo object.
 
         This function is roughly equivalent to the PyStgInfo_FromType function in the
-        ctypes source code. We cannot use that function directly, because it is not
-        part of CPython's public C API, and thus not accessible).
+        ctypes source code. We cannot use that function directly, because it is not part
+        of CPython's public C API, and thus not accessible).
         """
         # Original code:
-        #     if (!PyObject_IsInstance((PyObject *)type, (PyObject *)state->PyCType_Type))
+        #   if (!PyObject_IsInstance((PyObject *)type, (PyObject *)state->PyCType_Type))
         if not isinstance(tp, type(ctypes.Structure).__base__):
             raise TypeError(
                 "Expected a ctypes structure type, "
@@ -221,7 +223,7 @@ else:
         # type data stored on ctypes.CType_Type (which is the base class of
         # ctypes.Structure).
         # Original code:
-        #     StgInfo *info = PyObject_GetTypeData((PyObject *)type, state->PyCType_Type);
+        #   StgInfo *info = PyObject_GetTypeData((PyObject *)type, state->PyCType_Type);
         info = ctypes.pythonapi.PyObject_GetTypeData(
             id(tp),
             id(type(ctypes.Structure).__base__),
@@ -241,13 +243,12 @@ ctypes.pythonapi.Py_IncRef.argtypes = [ctypes.POINTER(PyObject)]
 
 
 def make_callback_returnable(ctype):
-    """Modify the given ctypes type so it can be returned from a callback
-    function.
+    """Modify the given ctypes type so it can be returned from a callback function.
 
     This function may be used as a decorator on a struct/union declaration.
 
-    The method is idempotent; it only modifies the type the first time it
-    is invoked on a type.
+    The method is idempotent; it only modifies the type the first time it is invoked on
+    a type.
     """
     # The presence of the _rubicon_objc_ctypes_patch_getfunc attribute is a
     # sentinel for whether the type has been modified previously.
@@ -296,11 +297,11 @@ def make_callback_returnable(ctype):
         if sys.version_info < (3, 10):
             # Because of a ctypes bug (https://github.com/python/cpython/issues/81061),
             # returning None from a callback with restype py_object causes a reference
-            # counting error that can crash Python. To work around this bug, the restype of
-            # SETFUNC is declared as c_void_p instead. This way ctypes performs no automatic
-            # reference counting for the returned object, which avoids the bug. However,
-            # this way we have to manually convert the Python object to a pointer and adjust
-            # its reference count. This bug was fixed in 3.10.
+            # counting error that can crash Python. To work around this bug, the restype
+            # of SETFUNC is declared as c_void_p instead. This way ctypes performs no
+            # automatic reference counting for the returned object, which avoids the
+            # bug. However, this way we have to manually convert the Python object to a
+            # pointer and adjust its reference count. This bug was fixed in 3.10.
             none_ptr = ctypes.cast(id(None), ctypes.POINTER(PyObject))
             # The return value of a SETFUNC is expected to have an extra reference
             # (which will be owned by the caller of the SETFUNC).
