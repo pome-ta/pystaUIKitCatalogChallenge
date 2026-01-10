@@ -1,632 +1,553 @@
-from dataclasses import dataclass
+from enum import IntEnum, IntFlag
 
 # ref: [NSURLErrorNotConnectedToInternet | Apple Developer Documentation](https://developer.apple.com/documentation/foundation/1508628-url_loading_system_error_codes/nsurlerrornotconnectedtointernet?language=objc)
 NSURLErrorNotConnectedToInternet = -1009
 
 
 # ref: [UIModalPresentationStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uimodalpresentationstyle)
-#@dataclass
-class UIModalPresentationStyle:
-  automatic: int = -2
-  none: int = -1
-  fullScreen: int = 0
-  pageSheet: int = 1
-  formSheet: int = 2
-  currentContext: int = 3
-  custom: int = 4
-  overFullScreen: int = 5
-  overCurrentContext: int = 6
-  popover: int = 7
-  blurOverFullScreen: int = 8
+class UIModalPresentationStyle(IntEnum):
+  automatic = -2
+  none = -1
+  fullScreen = 0
+  pageSheet = 1
+  formSheet = 2
+  currentContext = 3
+  custom = 4
+  overFullScreen = 5
+  overCurrentContext = 6
+  popover = 7
+  blurOverFullScreen = 8
 
 
 # ref: [UIRectEdge | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uirectedge?language=objc)
-@dataclass
-class UIRectEdge:
-  none: int = 0
-  top: int = 1 << 0
-  left: int = 1 << 1
-  bottom: int = 1 << 2
-  right: int = 1 << 3
-  all: int = top | left | bottom | right
+class UIRectEdge(IntEnum):
+  none = 0
+  top = 1 << 0
+  left = 1 << 1
+  bottom = 1 << 2
+  right = 1 << 3
+  all = top | left | bottom | right
 
 
 # ref: [UIBarButtonSystemItem | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uibarbuttonsystemitem?language=objc)
-#@dataclass
-class UIBarButtonSystemItem:
-  done: int = 0
-  cancel: int = 1
-  edit: int = 2
-  save: int = 3
-  add: int = 4
-  flexibleSpace: int = 5
-  fixedSpace: int = 6
-  compose: int = 7
-  reply: int = 8
-  action: int = 9
-  organize: int = 10
-  bookmarks: int = 11
-  search: int = 12
-  refresh: int = 13
-  stop: int = 14
-  camera: int = 15
-  trash: int = 16
-  play: int = 17
-  pause: int = 18
-  rewind: int = 19
-  fastForward: int = 20
-  undo: int = 21
-  redo: int = 22
-  pageCurl: int = 23  # Deprecated
-  close: int = 24
-  writingTools: int = 25
+class UIBarButtonSystemItem(IntEnum):
+  done = 0
+  cancel = 1
+  edit = 2
+  save = 3
+  add = 4
+  flexibleSpace = 5
+  fixedSpace = 6
+  compose = 7
+  reply = 8
+  action = 9
+  organize = 10
+  bookmarks = 11
+  search = 12
+  refresh = 13
+  stop = 14
+  camera = 15
+  trash = 16
+  play = 17
+  pause = 18
+  rewind = 19
+  fastForward = 20
+  undo = 21
+  redo = 22
+  pageCurl = 23  # Deprecated
+  close = 24
+  writingTools = 25
 
 
 # ref: [UIButtonType | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uibuttontype?language=objc)
-#@dataclass
-class UIButtonType:
-  custom: int = 0
-  system: int = 1
-  detailDisclosure: int = 2
-  infoLight: int = 3
-  infoDark: int = 4
-  contactAdd: int = 5
-  plain: int = 6
-  close: int = 7
+class UIButtonType(IntEnum):
+  custom = 0
+  system = 1
+  detailDisclosure = 2
+  infoLight = 3
+  infoDark = 4
+  contactAdd = 5
+  plain = 6
+  close = 7
 
 
 # ref: [UIControlState | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uicontrolstate?language=objc)
-@dataclass
-class UIControlState:
-  normal: int = 0
-  highlighted: int = 1 << 0
-  disabled: int = 1 << 1
-  selected: int = 1 << 2
-  focused: int = 1 << 3
-  application: int = 0x00FF0000
-  reserved: int = 0xFF000000
+class UIControlState(IntFlag):
+  normal = 0
+  highlighted = 1 << 0
+  disabled = 1 << 1
+  selected = 1 << 2
+  focused = 1 << 3
+  application = 0x00FF0000
+  reserved = 0xFF000000
 
 
 # ref: [UIControlEvents | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uicontrolevents?language=objc)
-@dataclass
-class UIControlEvents:
-  touchDown: int = 1 << 0
-  touchDownRepeat: int = 1 << 1
-  touchDragInside: int = 1 << 2
-  touchDragOutside: int = 1 << 3
-  touchDragEnter: int = 1 << 4
-  touchDragExit: int = 1 << 5
-  touchUpInside: int = 1 << 6
-  touchUpOutside: int = 1 << 7
-  touchCancel: int = 1 << 8
-  valueChanged: int = 1 << 12
-  menuActionTriggered: int = 1 << 14
-  primaryActionTriggered: int = 1 << 13
-  editingDidBegin: int = 1 << 16
-  editingChanged: int = 1 << 17
-  editingDidEnd: int = 1 << 18
-  editingDidEndOnExit: int = 1 << 19
-  allTouchEvents: int = 0x00000FFF
-  allEditingEvents: int = 0x000F0000
-  applicationReserved: int = 0x0F000000
-  systemReserved: int = 0xF0000000
-  allEvents: int = 0xFFFFFFFF
+class UIControlEvents(IntFlag):
+  touchDown = 1 << 0
+  touchDownRepeat = 1 << 1
+  touchDragInside = 1 << 2
+  touchDragOutside = 1 << 3
+  touchDragEnter = 1 << 4
+  touchDragExit = 1 << 5
+  touchUpInside = 1 << 6
+  touchUpOutside = 1 << 7
+  touchCancel = 1 << 8
+  valueChanged = 1 << 12
+  menuActionTriggered = 1 << 14
+  primaryActionTriggered = 1 << 13
+  editingDidBegin = 1 << 16
+  editingChanged = 1 << 17
+  editingDidEnd = 1 << 18
+  editingDidEndOnExit = 1 << 19
+  allTouchEvents = 0x00000FFF
+  allEditingEvents = 0x000F0000
+  applicationReserved = 0x0F000000
+  systemReserved = 0xF0000000
+  allEvents = 0xFFFFFFFF
 
 
 # ref: [UIListContentTextAlignment | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uilistcontenttextalignment)
-#@dataclass
-class UIListContentTextAlignment:
+class UIListContentTextAlignment(IntEnum):
   # todo: `Enumeration Case` に値表記が無いので独自に調査
-  natural: int = 0
-  center: int = 1
-  justified: int = 2
+  natural = 0
+  center = 1
+  justified = 2
 
 
 # ref: [UITableViewStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uitableviewstyle?language=objc)
-#@dataclass
-class UITableViewStyle:
-  plain: int = 0
-  grouped: int = 1
-  insetGrouped: int = 2
+class UITableViewStyle(IntEnum):
+  plain = 0
+  grouped = 1
+  insetGrouped = 2
 
 
 # ref: [UIButtonConfigurationCornerStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uibuttonconfigurationcornerstyle?language=objc)
-#@dataclass
-class UIButtonConfigurationCornerStyle:
+class UIButtonConfigurationCornerStyle(IntEnum):
   # todo: `Enumeration Case` に値表記が無いので独自に調査
-  dynamic: int = 0
-  fixed: int = -1
-  capsule: int = 4
-  large: int = 3
-  medium: int = 2
-  small: int = 1
+  dynamic = 0
+  fixed = -1
+  capsule = 4
+  large = 3
+  medium = 2
+  small = 1
 
 
 # ref: [UIImageRenderingMode | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uiimagerenderingmode?language=objc)
-#@dataclass
-class UIImageRenderingMode:
-  automatic: int = 0
-  alwaysOriginal: int = 1
-  alwaysTemplate: int = 2
+class UIImageRenderingMode(IntEnum):
+  automatic = 0
+  alwaysOriginal = 1
+  alwaysTemplate = 2
 
 
 # ref: [NSUnderlineStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/nsunderlinestyle?language=objc)
-@dataclass
-class NSUnderlineStyle:
+class NSUnderlineStyle(IntFlag):
   # ref: [NSAttributedString.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/NSAttributedString.rs.html#87)
-  none: int = 0x00  # xxx: patternSolid ?
-  single: int = 0x01
-  thick: int = 0x02
-  double: int = 0x09
-  patternSolid: int = 0x0000  # xxx: none ?
-  patternDot: int = 0x0100
-  patternDash: int = 0x0200
-  patternDashDot: int = 0x0300
-  patternDashDotDot: int = 0x0400
-  byWord: int = 0x8000
+  none = 0x00  # xxx: patternSolid ?
+  single = 0x01
+  thick = 0x02
+  double = 0x09
+  patternSolid = 0x0000  # xxx: none ?
+  patternDot = 0x0100
+  patternDash = 0x0200
+  patternDashDot = 0x0300
+  patternDashDotDot = 0x0400
+  byWord = 0x8000
 
 
 # ref: [UIImageSymbolScale | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uiimagesymbolscale?language=objc)
-#@dataclass
-class UIImageSymbolScale:
-  default: int = -1
-  unspecified: int = 0
-  small: int = 1
-  medium: int = 2
-  large: int = 3
+class UIImageSymbolScale(IntEnum):
+  default = -1
+  unspecified = 0
+  small = 1
+  medium = 2
+  large = 3
 
 
 # ref: [UIImageSymbolWeight | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uiimagesymbolweight?language=objc)
-#@dataclass
-class UIImageSymbolWeight:
-  unspecified: int = 0
-  ultraLight: int = 1
-  thin: int = 2
-  light: int = 3
-  regular: int = 4
-  medium: int = 5
-  semibold: int = 6
-  bold: int = 7
-  heavy: int = 8
-  black: int = 9
+class UIImageSymbolWeight(IntEnum):
+  unspecified = 0
+  ultraLight = 1
+  thin = 2
+  light = 3
+  regular = 4
+  medium = 5
+  semibold = 6
+  bold = 7
+  heavy = 8
+  black = 9
 
 
 # ref: [NSDirectionalRectEdge | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/nsdirectionalrectedge?language=objc)
-@dataclass
-class NSDirectionalRectEdge:
-  none: int = 0  # ref: [NSDirectionalRectEdgeNone | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/nsdirectionalrectedge/nsdirectionalrectedgenone?language=objc)
-  top: int = 1 << 0
-  leading: int = 1 << 1
-  bottom: int = 1 << 2
-  trailing: int = 1 << 3
-  all: int = top | leading | bottom | trailing
+class NSDirectionalRectEdge(IntFlag):
+  none = 0  # ref: [NSDirectionalRectEdgeNone | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/nsdirectionalrectedge/nsdirectionalrectedgenone?language=objc)
+  top = 1 << 0
+  leading = 1 << 1
+  bottom = 1 << 2
+  trailing = 1 << 3
+  all = top | leading | bottom | trailing
 
 
 # ref: [UIButtonConfigurationSize | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uibuttonconfigurationsize)
-#@dataclass
-class UIButtonConfigurationSize:
+class UIButtonConfigurationSize(IntEnum):
   # todo: `Enumeration Case` に値表記が無いので独自に調査
-  medium: int = 0
-  small: int = 1
-  mini: int = 2
-  large: int = 3
+  medium = 0
+  small = 1
+  mini = 2
+  large = 3
 
 
 # ref: [UIMenuElementState | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uimenuelementstate?language=objc)
-#@dataclass
-class UIMenuElementState:
-  off: int = 0
-  on: int = 1
-  mixed: int = 2
+class UIMenuElementState(IntEnum):
+  off = 0
+  on = 1
+  mixed = 2
 
 
 # ref: [UIMenuElementAttributes | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uimenuelementattributes)
-@dataclass
-class UIMenuElementAttributes:
-  destructive: int = 1 << 1
-  disabled: int = 1 << 0
-  hidden: int = 1 << 2
-  keepsMenuPresented: int = 1 << 3
+class UIMenuElementAttributes(IntFlag):
+  destructive = 1 << 1
+  disabled = 1 << 0
+  hidden = 1 << 2
+  keepsMenuPresented = 1 << 3
 
 
 # ref: [UIMenuOptions | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uimenuoptions?language=objc)
-@dataclass
-class UIMenuOptions:
-  displayInline: int = 1 << 0
-  destructive: int = 1 << 1
-  singleSelection: int = 1 << 5
-  displayAsPalette: int = 1 << 7
+class UIMenuOptions(IntFlag):
+  displayInline = 1 << 0
+  destructive = 1 << 1
+  singleSelection = 1 << 5
+  displayAsPalette = 1 << 7
 
 
 # ref: [UISplitViewControllerStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uisplitviewcontrollerstyle?language=objc)
-#@dataclass
-class UISplitViewControllerStyle:
-  doubleColumn: int = 1
-  tripleColumn: int = 2
+class UISplitViewControllerStyle(IntEnum):
+  doubleColumn = 1
+  tripleColumn = 2
 
 
 # ref: [UISplitViewControllerColumn | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uisplitviewcontrollercolumn?language=objc)
-#@dataclass
-class UISplitViewControllerColumn:
-  primary: int = 0
-  supplementary: int = 1
-  secondary: int = 2
-  compact: int = 3
+class UISplitViewControllerColumn(IntEnum):
+  primary = 0
+  supplementary = 1
+  secondary = 2
+  compact = 3
 
 
 # ref: [UICollectionLayoutListAppearance | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uicollectionlayoutlistappearance?language=objc)
-#@dataclass
-class UICollectionLayoutListAppearance:
+class UICollectionLayoutListAppearance(IntEnum):
   # ref: [UICollectionLayoutList.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UICollectionLayoutList.rs.html#16)
-  plain: int = 0
-  grouped: int = 1
-  insetGrouped: int = 2
-  sidebar: int = 3
-  sidebarPlain: int = 4
+  plain = 0
+  grouped = 1
+  insetGrouped = 2
+  sidebar = 3
+  sidebarPlain = 4
 
 
 # ref: [UICollectionLayoutListHeaderMode | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uicollectionlayoutlistheadermode)
-#@dataclass
-class UICollectionLayoutListHeaderMode:
+class UICollectionLayoutListHeaderMode(IntEnum):
   # xxx: 独自調査 a.k.a: 勘
   # ref: [UICollectionLayoutList.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UICollectionLayoutList.rs.html)
-  none: int = 0
-  supplementary: int = 1
-  firstItemInSection: int = 2
+  none = 0
+  supplementary = 1
+  firstItemInSection = 2
 
 
 # ref: [UIViewAutoresizing | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uiviewautoresizing?language=objc)
-@dataclass
-class UIViewAutoresizing:
-  none: int = 0  # ref: [UIViewAutoresizingNone | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uiviewautoresizing/uiviewautoresizingnone?language=objc)
-  flexibleLeftMargin: int = 1 << 0
-  flexibleWidth: int = 1 << 1
-  flexibleRightMargin: int = 1 << 2
-  flexibleTopMargin: int = 1 << 3
-  flexibleHeight: int = 1 << 4
-  flexibleBottomMargin: int = 1 << 5
+class UIViewAutoresizing(IntFlag):
+  none = 0  # ref: [UIViewAutoresizingNone | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uiviewautoresizing/uiviewautoresizingnone?language=objc)
+  flexibleLeftMargin = 1 << 0
+  flexibleWidth = 1 << 1
+  flexibleRightMargin = 1 << 2
+  flexibleTopMargin = 1 << 3
+  flexibleHeight = 1 << 4
+  flexibleBottomMargin = 1 << 5
 
 
 # ref: [UIViewContentMode | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uiviewcontentmode?language=objc)
-#@dataclass
-class UIViewContentMode:
-  scaleToFill: int = 0
-  scaleAspectFit: int = 1
-  scaleAspectFill: int = 2
-  redraw: int = 3
-  center: int = 4
-  top: int = 5
-  bottom: int = 6
-  left: int = 7
-  right: int = 8
-  topLeft: int = 9
-  topRight: int = 10
-  bottomLeft: int = 11
-  bottomRight: int = 12
+class UIViewContentMode(IntEnum):
+  scaleToFill = 0
+  scaleAspectFit = 1
+  scaleAspectFill = 2
+  redraw = 3
+  center = 4
+  top = 5
+  bottom = 6
+  left = 7
+  right = 8
+  topLeft = 9
+  topRight = 10
+  bottomLeft = 11
+  bottomRight = 12
 
 
 # ref: [UIControlContentHorizontalAlignment | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uicontrolcontenthorizontalalignment?language=objc)
-#@dataclass
-class UIControlContentHorizontalAlignment:
-  center: int = 0
-  left: int = 1
-  right: int = 2
-  fill: int = 3
-  leading: int = 4
-  trailing: int = 5
+class UIControlContentHorizontalAlignment(IntEnum):
+  center = 0
+  left = 1
+  right = 2
+  fill = 3
+  leading = 4
+  trailing = 5
 
 
 # ref: [UIControlContentVerticalAlignment | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uicontrolcontentverticalalignment?language=objc)
-#@dataclass
-class UIControlContentVerticalAlignment:
-  center: int = 0
-  top: int = 1
-  bottom: int = 2
-  fill: int = 3
+class UIControlContentVerticalAlignment(IntEnum):
+  center = 0
+  top = 1
+  bottom = 2
+  fill = 3
 
 
 # ref: [UIPageControlBackgroundStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uipagecontrolbackgroundstyle?language=objc)
-#@dataclass
-class UIPageControlBackgroundStyle:
-  automatic: int = 0
-  prominent: int = 1
-  minimal: int = 2
+class UIPageControlBackgroundStyle(IntEnum):
+  automatic = 0
+  prominent = 1
+  minimal = 2
 
 
 # ref: [UISearchBarIcon | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uisearchbaricon?language=objc)
-#@dataclass
-class UISearchBarIcon:
-  search: int = 0
-  clear: int = 1
-  bookmark: int = 2
-  resultsList: int = 3
+class UISearchBarIcon(IntEnum):
+  search = 0
+  clear = 1
+  bookmark = 2
+  resultsList = 3
 
 
 # ref: [UIUserInterfaceIdiom | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uiuserinterfaceidiom?language=objc)
-#@dataclass
-class UIUserInterfaceIdiom:
-  unspecified: int = -1
-  phone: int = 0
-  pad: int = 1
-  tv: int = 2
-  carPlay: int = 3
-  mac: int = 5
-  vision: int = 6
+class UIUserInterfaceIdiom(IntEnum):
+  unspecified = -1
+  phone = 0
+  pad = 1
+  tv = 2
+  carPlay = 3
+  mac = 5
+  vision = 6
 
 
 # ref: [UIUserInterfaceStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uiuserinterfacestyle?language=objc)
-#@dataclass
-class UIUserInterfaceStyle:
-  unspecified: int = 0
-  light: int = 1
-  dark: int = 2
+class UIUserInterfaceStyle(IntEnum):
+  unspecified = 0
+  light = 1
+  dark = 2
 
 
 # ref: [UIBarMetrics | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uibarmetrics?language=objc)
-@dataclass
-class UIBarMetrics:
-  default: int = 0  # xxx: '`' で囲まれてる
-  compact: int = 1
-  defaultPrompt: int = 101
-  compactPrompt: int = 102
-  landscapePhone: int = compact  # todo: Deprecated
-  landscapePhonePrompt: int = compactPrompt  # todo: Deprecated
+class UIBarMetrics(IntFlag):
+  default = 0  # xxx: '`' で囲まれてる
+  compact = 1
+  defaultPrompt = 101
+  compactPrompt = 102
+  landscapePhone = compact  # todo: Deprecated
+  landscapePhonePrompt = compactPrompt  # todo: Deprecated
 
 
 # ref: [UIBehavioralStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uibehavioralstyle?language=objc)
-#@dataclass
-class UIBehavioralStyle:
-  automatic: int = 0
-  pad: int = 1
-  mac: int = 2
+class UIBehavioralStyle(IntEnum):
+  automatic = 0
+  pad = 1
+  mac = 2
 
 
 # ref: [UISwitchStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uiswitchstyle?language=objc&language=objc)
-#@dataclass
-class UISwitchStyle:
-  automatic: int = 0
-  checkbox: int = 1
-  sliding: int = 2
+class UISwitchStyle(IntEnum):
+  automatic = 0
+  checkbox = 1
+  sliding = 2
 
 
 # ref: [UITextBorderStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uitextborderstyle?language=objc)
-#@dataclass
-class UITextBorderStyle:
-  none: int = 0
-  line: int = 1
-  bezel: int = 2
-  roundedRect: int = 3
+class UITextBorderStyle(IntEnum):
+  none = 0
+  line = 1
+  bezel = 2
+  roundedRect = 3
 
 
 # ref: [UITextAutocorrectionType | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uitextautocorrectiontype?language=objc)
-#@dataclass
-class UITextAutocorrectionType:
-  default: int = 0
-  no: int = 1
-  yes: int = 2
+class UITextAutocorrectionType(IntEnum):
+  default = 0
+  no = 1
+  yes = 2
 
 
 # ref: [UIReturnKeyType | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uireturnkeytype?language=objc)
-#@dataclass
-class UIReturnKeyType:
-  default: int = 0
-  go: int = 1
-  google: int = 2
-  join: int = 3
-  next: int = 4
-  route: int = 5
-  search: int = 6
-  send: int = 7
-  yahoo: int = 8
-  done: int = 9
-  emergencyCall: int = 10
-  _continue: int = 11  # todo: 予約語のため
+class UIReturnKeyType(IntEnum):
+  default = 0
+  go = 1
+  google = 2
+  join = 3
+  next = 4
+  route = 5
+  search = 6
+  send = 7
+  yahoo = 8
+  done = 9
+  emergencyCall = 10
+  _continue = 11  # todo: 予約語のため
 
 
 # ref: [UITextFieldViewMode | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uitextfieldviewmode?language=objc)
-#@dataclass
-class UITextFieldViewMode:
-  never: int = 0
-  whileEditing: int = 1
-  unlessEditing: int = 2
-  always: int = 3
+class UITextFieldViewMode(IntEnum):
+  never = 0
+  whileEditing = 1
+  unlessEditing = 2
+  always = 3
 
 
 # ref: [UIKeyboardType | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uikeyboardtype?language=objc)
-#@dataclass
-class UIKeyboardType:
-  default: int = 0
-  asciiCapable: int = 1
-  numbersAndPunctuation: int = 2
-  URL: int = 3
-  numberPad: int = 4
-  phonePad: int = 5
-  namePhonePad: int = 6
-  emailAddress: int = 7
-  decimalPad: int = 8
-  twitter: int = 9
-  webSearch: int = 10
-  asciiCapableNumberPad: int = 11
+class UIKeyboardType(IntEnum):
+  default = 0
+  asciiCapable = 1
+  numbersAndPunctuation = 2
+  URL = 3
+  numberPad = 4
+  phonePad = 5
+  namePhonePad = 6
+  emailAddress = 7
+  decimalPad = 8
+  twitter = 9
+  webSearch = 10
+  asciiCapableNumberPad = 11
 
 
 # ref: [UISplitViewControllerDisplayMode | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uisplitviewcontrollerdisplaymode?language=objc)
-#@dataclass
-class UISplitViewControllerDisplayMode:
-  automatic: int = 0
-  secondaryOnly: int = 1
-  oneBesideSecondary: int = 2
-  oneOverSecondary: int = 3
-  twoBesideSecondary: int = 4
-  twoOverSecondary: int = 5
-  twoDisplaceSecondary: int = 6
+class UISplitViewControllerDisplayMode(IntEnum):
+  automatic = 0
+  secondaryOnly = 1
+  oneBesideSecondary = 2
+  oneOverSecondary = 3
+  twoBesideSecondary = 4
+  twoOverSecondary = 5
+  twoDisplaceSecondary = 6
 
 
 # ref: [UIUserInterfaceSizeClass | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uiuserinterfacesizeclass?language=objc)
-#@dataclass
-class UIUserInterfaceSizeClass:
-  unspecified: int = 0
-  compact: int = 1
-  regular: int = 2
+class UIUserInterfaceSizeClass(IntEnum):
+  unspecified = 0
+  compact = 1
+  regular = 2
 
 
 # ref: [UICellAccessoryOutlineDisclosureStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uicellaccessoryoutlinedisclosurestyle?language=objc)
-#@dataclass
-class UICellAccessoryOutlineDisclosureStyle:
+class UICellAccessoryOutlineDisclosureStyle(IntEnum):
   # ref: [UICellAccessory.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UICellAccessory.rs.html#467)
-  automatic: int = 0
-  header: int = 1
-  cell: int = 2
+  automatic = 0
+  header = 1
+  cell = 2
 
 
 # ref: [UITableViewRowAnimation | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uitableview/rowanimation?language=objc)
-#@dataclass
-class UITableViewRowAnimation:
+class UITableViewRowAnimation(IntEnum):
   # ref: [UITableView.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UITableView.rs.html#59)
-  fade: int = 0
-  right: int = 1
-  left: int = 2
-  top: int = 3
-  bottom: int = 4
-  none: int = 5
-  middle: int = 6
-  automatic: int = 100
+  fade = 0
+  right = 1
+  left = 2
+  top = 3
+  bottom = 4
+  none = 5
+  middle = 6
+  automatic = 100
 
 
 # ref: [UIActivityIndicatorViewStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uiactivityindicatorview/style-swift.enum?language=objc)
-#@dataclass
-class UIActivityIndicatorViewStyle:
+class UIActivityIndicatorViewStyle(IntEnum):
   # ref: [UIActivityIndicatorView.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UIActivityIndicatorView.rs.html#14)
-  large: int = 101
-  medium: int = 100
-  whiteLarge: int = 0  # todo: Deprecated
-  white: int = 1  # todo: Deprecated
-  gray: int = 2  # todo: Deprecated
+  large = 101
+  medium = 100
+  whiteLarge = 0  # todo: Deprecated
+  white = 1  # todo: Deprecated
+  gray = 2  # todo: Deprecated
 
 
 # ref: [UIAlertControllerStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uialertcontroller/style?language=objc)
-#@dataclass
-class UIAlertControllerStyle:
+class UIAlertControllerStyle(IntEnum):
   # ref: [UIAlertController.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UIAlertController.rs.html#31)
-  actionSheet: int = 0
-  alert: int = 1
+  actionSheet = 0
+  alert = 1
 
 
 # ref: [UIAlertActionStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uialertaction/style-swift.enum?language=objc)
-#@dataclass
-class UIAlertActionStyle:
+class UIAlertActionStyle(IntEnum):
   # ref: [UIAlertController.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UIAlertController.rs.html#11)
-  default: int = 0
-  cancel: int = 1
-  destructive: int = 2
+  default = 0
+  cancel = 1
+  destructive = 2
 
 
 # ref: [NSLineBreakMode | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/nslinebreakmode?language=objc)
-#@dataclass
-class NSLineBreakMode:
+class NSLineBreakMode(IntEnum):
   # ref: [NSParagraphStyle.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/NSParagraphStyle.rs.html#11)
-  byWordWrapping: int = 0
-  byCharWrapping: int = 1
-  byClipping: int = 2
-  byTruncatingHead: int = 3
-  byTruncatingTail: int = 4
-  byTruncatingMiddle: int = 5
-
-
-# ref: [UIFontDescriptorSymbolicTraits | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uifontdescriptor/symbolictraits-swift.struct?language=objc)
-@dataclass
-class UIFontDescriptorSymbolicTraits:
-  # ref: [UIFontDescriptor.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UIFontDescriptor.rs.html#11)
-  traitItalic: int = 1 << 0
-  traitBold: int = 1 << 1
-  traitExpanded: int = 1 << 5
-  traitCondensed: int = 1 << 6
-  traitMonoSpace: int = 1 << 10
-  traitVertical: int = 1 << 11
-  traitUIOptimized: int = 1 << 12
-  traitTightLeading: int = 1 << 15
-  traitLooseLeading: int = 1 << 16
-  classMask: int = 0xF0000000
-  classUnknown: int = 0 << 28  # xxx: ?
-  classOldStyleSerifs: int = 1 << 28
-  classTransitionalSerifs: int = 2 << 28
-  classModernSerifs: int = 3 << 28
-  classClarendonSerifs: int = 4 << 28
-  classSlabSerifs: int = 5 << 28
-  classFreeformSerifs: int = 7 << 28
-  classSansSerif: int = 8 << 28
-  classOrnamentals: int = 9 << 28
-  classScripts: int = 10 << 28
-  classSymbolic: int = 12 << 28
+  byWordWrapping = 0
+  byCharWrapping = 1
+  byClipping = 2
+  byTruncatingHead = 3
+  byTruncatingTail = 4
+  byTruncatingMiddle = 5
 
 
 # ref: [NSLayoutAttribute | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/nslayoutconstraint/attribute?language=objc)
-#@dataclass
-class NSLayoutAttribute:
+class NSLayoutAttribute(IntEnum):
   # ref [NSLayoutConstraint.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/NSLayoutConstraint.rs.html#49)
-  left: int = 1
-  right: int = 2
-  top: int = 3
-  bottom: int = 4
-  leading: int = 5
-  trailing: int = 6
-  width: int = 7
-  height: int = 8
-  centerX: int = 9
-  centerY: int = 10
-  lastBaseline: int = 11
-  firstBaseline: int = 12
-  leftMargin: int = 13
-  rightMargin: int = 14
-  topMargin: int = 15
-  bottomMargin: int = 16
-  leadingMargin: int = 17
-  trailingMargin: int = 18
-  centerXWithinMargins: int = 19
-  centerYWithinMargins: int = 20
-  notAnAttribute: int = 0
+  left = 1
+  right = 2
+  top = 3
+  bottom = 4
+  leading = 5
+  trailing = 6
+  width = 7
+  height = 8
+  centerX = 9
+  centerY = 10
+  lastBaseline = 11
+  firstBaseline = 12
+  leftMargin = 13
+  rightMargin = 14
+  topMargin = 15
+  bottomMargin = 16
+  leadingMargin = 17
+  trailingMargin = 18
+  centerXWithinMargins = 19
+  centerYWithinMargins = 20
+  notAnAttribute = 0
 
 
 # ref: [NSLayoutRelation | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/nslayoutconstraint/relation-swift.enum?language=objc)
-#@dataclass
-class NSLayoutRelation:
+class NSLayoutRelation(IntEnum):
   # ref: [NSLayoutConstraint.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/NSLayoutConstraint.rs.html#28)
-  lessThanOrEqual: int = -1
-  equal: int = 0
-  greaterThanOrEqual: int = 1
+  lessThanOrEqual = -1
+  equal = 0
+  greaterThanOrEqual = 1
 
 
 # ref: [UIViewAnimationCurve | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uiview/animationcurve?language=objc)
-#@dataclass
-class UIViewAnimationCurve:
+class UIViewAnimationCurve(IntEnum):
   # ref: [UIView.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UIView.rs.html#14)
-  easeInOut: int = 0
-  easeIn: int = 1
-  easeOut: int = 2
-  linear: int = 3
+  easeInOut = 0
+  easeIn = 1
+  easeOut = 2
+  linear = 3
 
 
 # ref: [UIProgressViewStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uiprogressview/style?language=objc)
-#@dataclass
-class UIProgressViewStyle:
-  default: int = 0
-  bar: int = 1
+class UIProgressViewStyle(IntEnum):
+  default = 0
+  bar = 1
 
 
 # ref: [NSKeyValueObservingOptions | Apple Developer Documentation](https://developer.apple.com/documentation/foundation/nskeyvalueobservingoptions?language=objc)
-@dataclass
-class NSKeyValueObservingOptions:
-  new: int = 0x01
-  old: int = 0x02
-  initial: int = 0x04
-  prior: int = 0x08
+class NSKeyValueObservingOptions(IntFlag):
+  new = 0x01
+  old = 0x02
+  initial = 0x04
+  prior = 0x08
 
 
 # ref: [UILayoutConstraintAxis | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/nslayoutconstraint/axis?language=objc)
-#@dataclass
-class UILayoutConstraintAxis:
+class UILayoutConstraintAxis(IntEnum):
   # ref: [UIView.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UIView.rs.html#1002)
-  horizontal: int = 0
-  vertical: int = 1
+  horizontal = 0
+  vertical = 1
 
 
 # wip: [text.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/text.rs.html#8)
@@ -640,253 +561,204 @@ const TARGET_ABI_USES_IOS_VALUES: bool =
 
 
 # ref: [NSTextAlignment | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/nstextalignment?language=objc)
-#@dataclass
-class NSTextAlignment:
+class NSTextAlignment(IntEnum):
   # ref: [text.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/text.rs.html#26)
-  left: int = 0
-  right: int = 2  # wip: `TARGET_ABI_USES_IOS_VALUES`
-  center: int = 1  # wip: `TARGET_ABI_USES_IOS_VALUES`
-  justified: int = 3
-  natural: int = 4
-
-
-# ref: [UIControlContentVerticalAlignment | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uicontrol/contentverticalalignment-swift.enum?language=objc)
-#@dataclass
-class UIControlContentVerticalAlignment:
-  # ref: [UIControl.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UIControl.rs.html#52)
-  center: int = 0
-  top: int = 1
-  bottom: int = 2
-  fill: int = 3
-
-
-# ref: [UIControlContentHorizontalAlignment | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uicontrol/contenthorizontalalignment-swift.enum?language=objc)
-#@dataclass
-class UIControlContentHorizontalAlignment:
-  # ref: [UIControl.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UIControl.rs.html#75)
-  center: int = 0
-  left: int = 1
-  right: int = 2
-  fill: int = 3
-  leading: int = 4
-  trailing: int = 5
+  left = 0
+  right = 2  # wip: `TARGET_ABI_USES_IOS_VALUES`
+  center = 1  # wip: `TARGET_ABI_USES_IOS_VALUES`
+  justified = 3
+  natural = 4
 
 
 # ref: [UIStackViewAlignment | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uistackview/alignment-swift.enum?language=objc)
-#@dataclass
-class UIStackViewAlignment:
+class UIStackViewAlignment(IntEnum):
   # ref: [UIStackView.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UIStackView.rs.html#39)
-  fill: int = 0
-  leading: int = 1
-  top: int = 1  # xxx: [UIStackViewAlignment Enum (UIKit) | Microsoft Learn](https://learn.microsoft.com/en-us/dotnet/api/uikit.uistackviewalignment?view=xamarin-ios-sdk-12)
-  firstBaseline: int = 2
-  center: int = 3
-  trailing: int = 4
-  bottom: int = 4  # xxx: [UIStackViewAlignment Enum (UIKit) | Microsoft Learn](https://learn.microsoft.com/en-us/dotnet/api/uikit.uistackviewalignment?view=xamarin-ios-sdk-12)
-  lastBaseline: int = 5
+  fill = 0
+  leading = 1
+  top = 1  # xxx: [UIStackViewAlignment Enum (UIKit) | Microsoft Learn](https://learn.microsoft.com/en-us/dotnet/api/uikit.uistackviewalignment?view=xamarin-ios-sdk-12)
+  firstBaseline = 2
+  center = 3
+  trailing = 4
+  bottom = 4  # xxx: [UIStackViewAlignment Enum (UIKit) | Microsoft Learn](https://learn.microsoft.com/en-us/dotnet/api/uikit.uistackviewalignment?view=xamarin-ios-sdk-12)
+  lastBaseline = 5
 
 
 # ref: [UIBarStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uibarstyle?language=objc)
-#@dataclass
-class UIBarStyle:
+class UIBarStyle(IntEnum):
   # ref: [UIInterface.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UIInterface.rs.html#12)
-  default: int = 0
-  black: int = 1
-  blackOpaque: int = 1  # xxx: deprecated
-  blackTranslucent: int = 2  # xxx: deprecated
+  default = 0
+  black = 1
+  blackOpaque = 1  # xxx: deprecated
+  blackTranslucent = 2  # xxx: deprecated
 
 
 # ref: [UIBarPosition | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uibarposition?language=objc)
-#@dataclass
-class UIBarPosition:
+class UIBarPosition(IntEnum):
   # ref: [UIBarCommon.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UIBarCommon.rs.html#40)
-  any: int = 0
-  bottom: int = 1
-  top: int = 2
-  topAttached: int = 3
-
-
-# ref: [UIBarMetrics | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uibarmetrics?language=objc)
-@dataclass
-class UIBarMetrics:
-  # ref: [UIBarCommon.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UIBarCommon.rs.html#11)
-  default: int = 0
-  compact: int = 1
-  defaultPrompt: int = 101
-  compactPrompt: int = 102
-  landscapePhone: int = default  # xxx: deprecated
-  landscapePhonePrompt: int = default  # xxx: deprecated
+  any = 0
+  bottom = 1
+  top = 2
+  topAttached = 3
 
 
 # ref: [UIBlurEffectStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uiblureffect/style?language=objc)
-#@dataclass
-class UIBlurEffectStyle:
+class UIBlurEffectStyle(IntEnum):
   # ref: [UIBlurEffect.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UIBlurEffect.rs.html#12)
-  extraLight: int = 0
-  light: int = 1
-  dark: int = 2
-  extraDark: int = 3
-  regular: int = 4
-  prominent: int = 5
-  systemUltraThinMaterial: int = 6
-  systemThinMaterial: int = 7
-  systemMaterial: int = 8
-  systemThickMaterial: int = 9
-  systemChromeMaterial: int = 10
-  systemUltraThinMaterialLight: int = 11
-  systemThinMaterialLight: int = 12
-  systemMaterialLight: int = 13
-  systemThickMaterialLight: int = 14
-  systemChromeMaterialLight: int = 15
-  systemUltraThinMaterialDark: int = 16
-  systemThinMaterialDark: int = 17
-  systemMaterialDark: int = 18
-  systemThickMaterialDark: int = 19
-  systemChromeMaterialDark: int = 20
+  extraLight = 0
+  light = 1
+  dark = 2
+  extraDark = 3
+  regular = 4
+  prominent = 5
+  systemUltraThinMaterial = 6
+  systemThinMaterial = 7
+  systemMaterial = 8
+  systemThickMaterial = 9
+  systemChromeMaterial = 10
+  systemUltraThinMaterialLight = 11
+  systemThinMaterialLight = 12
+  systemMaterialLight = 13
+  systemThickMaterialLight = 14
+  systemChromeMaterialLight = 15
+  systemUltraThinMaterialDark = 16
+  systemThinMaterialDark = 17
+  systemMaterialDark = 18
+  systemThickMaterialDark = 19
+  systemChromeMaterialDark = 20
 
 
 # ref: [UIDatePickerMode | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uidatepicker/mode?language=objc)
-#@dataclass
-class UIDatePickerMode:
+class UIDatePickerMode(IntEnum):
   # ref: [UIDatePicker.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UIDatePicker.rs.html#15)
-  time: int = 0
-  date: int = 1
-  dateAndTime: int = 2
-  countDownTimer: int = 3
-  yearAndMonth: int = 4
+  time = 0
+  date = 1
+  dateAndTime = 2
+  countDownTimer = 3
+  yearAndMonth = 4
 
 
 # ref: [UIDatePickerStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uidatepickerstyle?language=objc)
-#@dataclass
-class UIDatePickerStyle:
+class UIDatePickerStyle(IntEnum):
   # ref: [UIDatePicker.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UIDatePicker.rs.html#40)
-  automatic: int = 0
-  wheels: int = 1
-  compact: int = 2
-  inline: int = 3
+  automatic = 0
+  wheels = 1
+  compact = 2
+  inline = 3
 
 
 # ref: [NSDateFormatterStyle | Apple Developer Documentation](https://developer.apple.com/documentation/foundation/nsdateformatterstyle?language=objc)
-#@dataclass
-class NSDateFormatterStyle:
-  none: int = 0
-  short: int = 1
-  medium: int = 2
-  long: int = 3
-  full: int = 4
+class NSDateFormatterStyle(IntEnum):
+  none = 0
+  short = 1
+  medium = 2
+  long = 3
+  full = 4
 
 
 # ref: [NSCalendarUnit | Apple Developer Documentation](https://developer.apple.com/documentation/foundation/nscalendarunit)
-#@dataclass
-class NSCalendarUnit:
+class NSCalendarUnit(IntEnum):
   # ref: [NSCalendar.rs - source](https://docs.rs/objc2-foundation/0.2.2/aarch64-apple-ios/src/objc2_foundation/generated/NSCalendar.rs.html#94)
-  era: int = 2
-  year: int = 4
-  month: int = 8
-  day: int = 16
-  hour: int = 32
-  minute: int = 64
-  second: int = 128
-  weekday: int = 512
-  weekdayOrdinal: int = 1024
-  quarter: int = 2048
-  weekOfMonth: int = 4096
-  weekOfYear: int = 8192
-  yearForWeekOfYear: int = 16384
-  nanosecond: int = 32768
-  calendar: int = 1048576
-  timeZone: int = 2097152
+  era = 2
+  year = 4
+  month = 8
+  day = 16
+  hour = 32
+  minute = 64
+  second = 128
+  weekday = 512
+  weekdayOrdinal = 1024
+  quarter = 2048
+  weekOfMonth = 4096
+  weekOfYear = 8192
+  yearForWeekOfYear = 16384
+  nanosecond = 32768
+  calendar = 1048576
+  timeZone = 2097152
   # deprecated ---
-  NSEraCalendarUnit: int = 2
-  NSYearCalendarUnit: int = 4
-  NSMonthCalendarUnit: int = 8
-  NSDayCalendarUnit: int = 16
-  NSHourCalendarUnit: int = 32
-  NSMinuteCalendarUnit: int = 64
-  NSSecondCalendarUnit: int = 128
+  NSEraCalendarUnit = 2
+  NSYearCalendarUnit = 4
+  NSMonthCalendarUnit = 8
+  NSDayCalendarUnit = 16
+  NSHourCalendarUnit = 32
+  NSMinuteCalendarUnit = 64
+  NSSecondCalendarUnit = 128
   # `NSCalendarUnitWeekOfMonth` or `NSCalendarUnitWeekOfYear` , depending on which you mean
-  NSWeekCalendarUnit: int = 256
-  NSWeekdayCalendarUnit: int = 512
-  NSWeekdayOrdinalCalendarUnit: int = 1024
-  NSQuarterCalendarUnit: int = 2048
-  NSWeekOfMonthCalendarUnit: int = 4096
-  NSWeekOfYearCalendarUnit: int = 8192
-  NSYearForWeekOfYearCalendarUnit: int = 16384
-  NSCalendarCalendarUnit: int = 1048576
-  NSTimeZoneCalendarUnit: int = 2097152
+  NSWeekCalendarUnit = 256
+  NSWeekdayCalendarUnit = 512
+  NSWeekdayOrdinalCalendarUnit = 1024
+  NSQuarterCalendarUnit = 2048
+  NSWeekOfMonthCalendarUnit = 4096
+  NSWeekOfYearCalendarUnit = 8192
+  NSYearForWeekOfYearCalendarUnit = 16384
+  NSCalendarCalendarUnit = 1048576
+  NSTimeZoneCalendarUnit = 2097152
   # --- deprecated
 
 
 # ref: [UIBarButtonItemStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uibarbuttonitem/style-swift.enum?language=objc)
-#@dataclass
-class UIBarButtonItemStyle:
+class UIBarButtonItemStyle(IntEnum):
   # ref: [UIBarButtonItem.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UIBarButtonItem.rs.html#14)
-  plain: int = 0
-  bordered: int = 1  # Deprecated
-  done: int = 2
+  plain = 0
+  bordered = 1  # Deprecated
+  done = 2
 
 
 # ref: [UIFontDescriptorSymbolicTraits | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uifontdescriptor/symbolictraits-swift.struct?language=objc)
-@dataclass
-class UIFontDescriptorSymbolicTraits:
+class UIFontDescriptorSymbolicTraits(IntFlag):
   # ref: [UIFontDescriptor.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UIFontDescriptor.rs.html#11)
-  traitItalic: int = 1 << 0
-  traitBold: int = 1 << 1
-  traitExpanded: int = 1 << 5
-  traitCondensed: int = 1 << 6
-  traitMonoSpace: int = 1 << 10
-  traitVertical: int = 1 << 11
-  traitUIOptimized: int = 1 << 12
-  traitTightLeading: int = 1 << 15
-  traitLooseLeading: int = 1 << 16
-  classMask: int = 0xF0000000
-  UIFontDescriptorClassUnknown: int = 0 << 28  # xxx: Swift ?
-  classOldStyleSerifs: int = 1 << 28
-  classTransitionalSerifs: int = 2 << 28
-  classModernSerifs: int = 3 << 28
-  classClarendonSerifs: int = 4 << 28
-  classSlabSerifs: int = 5 << 28
-  classFreeformSerifs: int = 7 << 28
-  classSansSerif: int = 8 << 28
-  classOrnamentals: int = 9 << 28
-  classScripts: int = 10 << 28
-  classSymbolic: int = 12 << 28
+  traitItalic = 1 << 0
+  traitBold = 1 << 1
+  traitExpanded = 1 << 5
+  traitCondensed = 1 << 6
+  traitMonoSpace = 1 << 10
+  traitVertical = 1 << 11
+  traitUIOptimized = 1 << 12
+  traitTightLeading = 1 << 15
+  traitLooseLeading = 1 << 16
+  classMask = 0xF0000000
+  UIFontDescriptorClassUnknown = 0 << 28  # xxx: Swift ?
+  classOldStyleSerifs = 1 << 28
+  classTransitionalSerifs = 2 << 28
+  classModernSerifs = 3 << 28
+  classClarendonSerifs = 4 << 28
+  classSlabSerifs = 5 << 28
+  classFreeformSerifs = 7 << 28
+  classSansSerif = 8 << 28
+  classOrnamentals = 9 << 28
+  classScripts = 10 << 28
+  classSymbolic = 12 << 28
 
 
 # ref: [UIImagePickerControllerSourceType | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uiimagepickercontroller/sourcetype-swift.enum?language=objc)
-#@dataclass
-class UIImagePickerControllerSourceType:
+class UIImagePickerControllerSourceType(IntEnum):
   # ref: [UIImagePickerController.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UIImagePickerController.rs.html#12)
-  photoLibrary: int = 0  # todo: deprecated
-  camera: int = 1
-  savedPhotosAlbum: int = 2  # todo: deprecated
+  photoLibrary = 0  # todo: deprecated
+  camera = 1
+  savedPhotosAlbum = 2  # todo: deprecated
 
 
 # ref: [NSURLRequestCachePolicy | Apple Developer Documentation](https://developer.apple.com/documentation/foundation/nsurlrequestcachepolicy)
-@dataclass
-class NSURLRequestCachePolicy:
-  useProtocolCachePolicy: int = 0
-  reloadIgnoringLocalCacheData: int = 1
-  reloadIgnoringLocalAndRemoteCacheData: int = 4
-  reloadIgnoringCacheData: int = reloadIgnoringLocalCacheData
-  returnCacheDataElseLoad: int = 2
-  returnCacheDataDontLoad: int = 3
-  reloadRevalidatingCacheData: int = 5
+class NSURLRequestCachePolicy(IntFlag):
+  useProtocolCachePolicy = 0
+  reloadIgnoringLocalCacheData = 1
+  reloadIgnoringLocalAndRemoteCacheData = 4
+  reloadIgnoringCacheData = reloadIgnoringLocalCacheData
+  returnCacheDataElseLoad = 2
+  returnCacheDataDontLoad = 3
+  reloadRevalidatingCacheData = 5
 
 
 # ref: [WKNavigationActionPolicy | Apple Developer Documentation](https://developer.apple.com/documentation/webkit/wknavigationactionpolicy?language=objc)
-#@dataclass
-class WKNavigationActionPolicy:
-  cancel: int = 0
-  allow: int = 1
-  download: int = 2
+class WKNavigationActionPolicy(IntEnum):
+  cancel = 0
+  allow = 1
+  download = 2
 
 
 # ref: [UISceneActivationState | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uiscene/activationstate-swift.enum?language=objc)
-class UISceneActivationState:
+class UISceneActivationState(IntEnum):
   # ref: [UISceneDefinitions.rs - source](https://docs.rs/objc2-ui-kit/latest/src/objc2_ui_kit/generated/UISceneDefinitions.rs.html#12)
-  unattached: int = -1
-  foregroundActive: int = 0
-  foregroundInactive: int = 1
-  background: int = 2
-
+  unattached = -1
+  foregroundActive = 0
+  foregroundInactive = 1
+  background = 2

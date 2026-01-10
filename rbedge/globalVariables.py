@@ -18,7 +18,6 @@ UIKeyboardFrameEndUserInfoKey = constUIKit('UIKeyboardFrameEndUserInfoKey')
 
 UICollectionElementKindSectionHeader = constUIKit('UICollectionElementKindSectionHeader')
 
-#print()
 
 # ref: [UIFontTextStyle | Apple Developer Documentation](https://developer.apple.com/documentation/uikit/uifont/textstyle?language=objc)
 @dataclass
@@ -64,31 +63,31 @@ class NSAttributedStringKey:
   replacementIndex: str = constUIKit('NSReplacementIndexAttributeName')
   shadow: str = constUIKit('NSShadowAttributeName')
   spellingState: str = constUIKit('NSSpellingStateAttributeName')
-  #suggestionHighlight: str = constUIKit('CSSuggestionHighlightAttributeName')
+  # suggestionHighlight: str = constUIKit('CSSuggestionHighlightAttributeName')
   textAlternatives: str = constUIKit('NSTextAlternativesAttributeName')
   textEffect: str = constUIKit('NSTextEffectAttributeName')
-  #textHighlightColorScheme: str = constUIKit('NSTextHighlightColorSchemeAttributeName')
-  #textHighlightStyle: str = constUIKit('NSTextHighlightStyleAttributeName')
+  # textHighlightColorScheme: str = constUIKit('NSTextHighlightColorSchemeAttributeName')
+  # textHighlightStyle: str = constUIKit('NSTextHighlightStyleAttributeName')
   textItemTag: str = constUIKit('UITextItemTagAttributeName')
   toolTip: str = constUIKit('NSToolTipAttributeName')
-  #adaptiveImageGlyph: str = constUIKit('NSAdaptiveImageGlyphAttributeName')
+  # adaptiveImageGlyph: str = constUIKit('NSAdaptiveImageGlyphAttributeName')
   attachment: str = constUIKit('NSAttachmentAttributeName')
-  #accessibilityAlignment: str = constUIKit('NSAccessibilityTextAlignmentAttribute')
-  #accessibilityAnnotationTextAttribute: str = constUIKit('NSAccessibilityAnnotationTextAttribute')
-  #accessibilityAttachment: str = constUIKit('NSAccessibilityAttachmentTextAttribute')
-  #accessibilityAutocorrected: str = constUIKit('NSAccessibilityAutocorrectedTextAttribute')
-  #accessibilityBackgroundColor: str = constUIKit('NSAccessibilityBackgroundColorTextAttribute')
-  #accessibilityCustomText: str = constUIKit('NSAccessibilityCustomTextAttribute')
-  #accessibilityFont: str = constUIKit('NSAccessibilityFontTextAttribute')
-  #accessibilityForegroundColor: str = constUIKit('NSAccessibilityForegroundColorTextAttribute')
-  #accessibilityLanguage: str = constUIKit('NSAccessibilityLanguageTextAttribute')
-  #accessibilityLink: str = constUIKit('NSAccessibilityLinkTextAttribute')
-  #accessibilityListItemIndex: str = constUIKit('NSAccessibilityListItemIndexTextAttribute')
-  #accessibilityListItemLevel: str = constUIKit('NSAccessibilityListItemLevelTextAttribute')
-  #accessibilityListItemPrefix: str = constUIKit('NSAccessibilityListItemPrefixTextAttribute')
-  #accessibilityMarkedMisspelled: str = constUIKit('NSAccessibilityMarkedMisspelledTextAttribute')
-  #accessibilityMisspelled: str = constUIKit('NSAccessibilityMisspelledTextAttribute')
-  #accessibilityShadow: str = constUIKit('NSAccessibilityShadowTextAttribute')
+  # accessibilityAlignment: str = constUIKit('NSAccessibilityTextAlignmentAttribute')
+  # accessibilityAnnotationTextAttribute: str = constUIKit('NSAccessibilityAnnotationTextAttribute')
+  # accessibilityAttachment: str = constUIKit('NSAccessibilityAttachmentTextAttribute')
+  # accessibilityAutocorrected: str = constUIKit('NSAccessibilityAutocorrectedTextAttribute')
+  # accessibilityBackgroundColor: str = constUIKit('NSAccessibilityBackgroundColorTextAttribute')
+  # accessibilityCustomText: str = constUIKit('NSAccessibilityCustomTextAttribute')
+  # accessibilityFont: str = constUIKit('NSAccessibilityFontTextAttribute')
+  # accessibilityForegroundColor: str = constUIKit('NSAccessibilityForegroundColorTextAttribute')
+  # accessibilityLanguage: str = constUIKit('NSAccessibilityLanguageTextAttribute')
+  # accessibilityLink: str = constUIKit('NSAccessibilityLinkTextAttribute')
+  # accessibilityListItemIndex: str = constUIKit('NSAccessibilityListItemIndexTextAttribute')
+  # accessibilityListItemLevel: str = constUIKit('NSAccessibilityListItemLevelTextAttribute')
+  # accessibilityListItemPrefix: str = constUIKit('NSAccessibilityListItemPrefixTextAttribute')
+  # accessibilityMarkedMisspelled: str = constUIKit('NSAccessibilityMarkedMisspelledTextAttribute')
+  # accessibilityMisspelled: str = constUIKit('NSAccessibilityMisspelledTextAttribute')
+  # accessibilityShadow: str = constUIKit('NSAccessibilityShadowTextAttribute')
   accessibilitySpeechAnnouncementPriority: str = constUIKit(
     'UIAccessibilitySpeechAttributeAnnouncementPriority')
   accessibilitySpeechIPANotation: str = constUIKit(
@@ -107,11 +106,11 @@ class NSAttributedStringKey:
     'UIAccessibilityTextAttributeCustom')
   accessibilityTextHeadingLevel: str = constUIKit(
     'UIAccessibilityTextAttributeHeadingLevel')
-  #accessibilityStrikethrough: str = constUIKit('NSAccessibilityStrikethroughTextAttribute')
-  #accessibilityStrikethroughColor: str = constUIKit('NSAccessibilityStrikethroughColorTextAttribute')
-  #accessibilitySuperscript: str = constUIKit('NSAccessibilitySuperscriptTextAttribute')
-  #accessibilityUnderline: str = constUIKit('NSAccessibilityUnderlineTextAttribute')
-  #accessibilityUnderlineColor: str = constUIKit('NSAccessibilityUnderlineColorTextAttribute')
+  # accessibilityStrikethrough: str = constUIKit('NSAccessibilityStrikethroughTextAttribute')
+  # accessibilityStrikethroughColor: str = constUIKit('NSAccessibilityStrikethroughColorTextAttribute')
+  # accessibilitySuperscript: str = constUIKit('NSAccessibilitySuperscriptTextAttribute')
+  # accessibilityUnderline: str = constUIKit('NSAccessibilityUnderlineTextAttribute')
+  # accessibilityUnderlineColor: str = constUIKit('NSAccessibilityUnderlineColorTextAttribute')
   UIAccessibilityTextAttributeContext: str = constUIKit(
     'UIAccessibilityTextAttributeContext')
   inlinePresentationIntent: str = constUIKit(
@@ -132,13 +131,13 @@ class NSAttributedStringKey:
   agreeWithConcept: str = constUIKit(
     'NSInflectionAgreementConceptAttributeName')
   referentConcept: str = constUIKit('NSInflectionReferentConceptAttributeName')
-  #localizedNumberFormat: str = constUIKit('NSLocalizedNumberFormatAttributeName')
+  # localizedNumberFormat: str = constUIKit('NSLocalizedNumberFormatAttributeName')
   expansion: str = constUIKit('NSExpansionAttributeName')
   obliqueness: str = constUIKit('NSObliquenessAttributeName')
   verticalGlyphForm: str = constUIKit('NSVerticalGlyphFormAttributeName')
   characterShapeAttributeName: str = constUIKit(
     'NSCharacterShapeAttributeName')
-  #usesScreenFontsDocumentAttribute: str = constUIKit('NSUsesScreenFontsDocumentAttribute')
+  # usesScreenFontsDocumentAttribute: str = constUIKit('NSUsesScreenFontsDocumentAttribute')
 
 
 # ref: [NSNotificationName | Apple Developer Documentation](https://developer.apple.com/documentation/foundation/nsnotificationname?language=objc)
@@ -154,4 +153,3 @@ class NSNotificationName:
 @dataclass
 class UIImagePickerControllerInfoKey:
   originalImage: str = constUIKit('UIImagePickerControllerOriginalImage')
-
